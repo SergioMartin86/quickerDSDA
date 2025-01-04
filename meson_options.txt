@@ -1,0 +1,13 @@
+option('buildPlayer',
+  type : 'boolean',
+  value : false,
+  description : 'Build playback tool',
+  yield: true
+)
+
+option('onlyOpenSource',
+  type : 'boolean',
+  value : false,
+  description : 'Test using only open source games (for cloud CI)',
+  yield: true
+)
