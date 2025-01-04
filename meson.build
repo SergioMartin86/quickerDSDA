@@ -22,15 +22,15 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
 
 if get_option('buildPlayer') == true
 
-  newPlayer = executable('newPlayer',
-    'source/player.cpp',
-    cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
-    dependencies        : [ newDependency,
-                            jaffarCommonDependency
-                          ],
-    include_directories : include_directories(['source']),
-    link_args           : [ '-lncurses' ],
-  )
+  #newPlayer = executable('newPlayer',
+  #  'source/player.cpp',
+  #  cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
+  #  dependencies        : [ newDependency,
+  #                          jaffarCommonDependency
+  #                        ],
+  #  include_directories : include_directories(['source']),
+  #  link_args           : [ '-lncurses' ],
+  #)
 
   basePlayer = executable('basePlayer',
     'source/player.cpp',
@@ -46,11 +46,11 @@ endif
 
 # Building tester tool
 
-newTester = executable('newTester',
-  'source/tester.cpp',
-  cpp_args            : [ commonCompileArgs ], 
-  dependencies        : [ newDependency, jaffarCommonDependency ],
-)
+#newTester = executable('newTester',
+#  'source/tester.cpp',
+#  cpp_args            : [ commonCompileArgs ], 
+#  dependencies        : [ newDependency, jaffarCommonDependency ],
+#)
 
 # Building tester tool for the original emulator
 
@@ -61,6 +61,6 @@ baseTester = executable('baseTester',
 )
 
 # Building tests
-subdir('tests')
+#subdir('tests')
 
 endif # If not subproject

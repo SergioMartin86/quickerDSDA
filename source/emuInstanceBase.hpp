@@ -14,6 +14,11 @@
 #define VIDEO_HORIZONTAL_PIXELS 160
 #define	VIDEO_VERTICAL_PIXELS 144
 
+extern "C"
+{
+  int old_main(int argc, char **argv);
+}
+
 namespace jaffar
 {
 
@@ -67,18 +72,20 @@ class EmuInstanceBase
 
   void initializeVideoOutput()
   {
-    SDL_Init(SDL_INIT_VIDEO);
-    _renderWindow = SDL_CreateWindow("QuickerDSDA",  SDL_WINDOWPOS_UNDEFINED,  SDL_WINDOWPOS_UNDEFINED, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS, 0);
-    _renderer = SDL_CreateRenderer(_renderWindow, -1, SDL_RENDERER_ACCELERATED);
-    _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS);
+    char* argv[] = { "dsda", "-iwad", "wads/freedoom1.wad" };
+    old_main(3, argv);
+    // SDL_Init(SDL_INIT_VIDEO);
+    // _renderWindow = SDL_CreateWindow("QuickerDSDA",  SDL_WINDOWPOS_UNDEFINED,  SDL_WINDOWPOS_UNDEFINED, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS, 0);
+    // _renderer = SDL_CreateRenderer(_renderWindow, -1, SDL_RENDERER_ACCELERATED);
+    // _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS);
   }
 
   void finalizeVideoOutput()
   {
-    SDL_DestroyTexture(_texture);
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_renderWindow);
-    SDL_Quit();
+    // SDL_DestroyTexture(_texture);
+    // SDL_DestroyRenderer(_renderer);
+    // SDL_DestroyWindow(_renderWindow);
+    // SDL_Quit();
   }
 
   void enableRendering()
@@ -93,19 +100,19 @@ class EmuInstanceBase
 
   void updateRenderer()
   {
-    void *pixels = nullptr;
-    int pitch = 0;
+    // void *pixels = nullptr;
+    // int pitch = 0;
 
-    SDL_Rect srcRect  = { 0, 0, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS };
-    SDL_Rect destRect = { 0, 0, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS };
+    // SDL_Rect srcRect  = { 0, 0, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS };
+    // SDL_Rect destRect = { 0, 0, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS };
 
-    if (SDL_LockTexture(_texture, nullptr, &pixels, &pitch) < 0) return;
-    memcpy(pixels, _videoBuffer, sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
-    // memset(pixels, (32 << 24) + (32 << 16) + (32 << 8) + 32, sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
-    SDL_UnlockTexture(_texture);
-    SDL_RenderClear(_renderer);
-    SDL_RenderCopy(_renderer, _texture, &srcRect, &destRect);
-    SDL_RenderPresent(_renderer);
+    // if (SDL_LockTexture(_texture, nullptr, &pixels, &pitch) < 0) return;
+    // memcpy(pixels, _videoBuffer, sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
+    // // memset(pixels, (32 << 24) + (32 << 16) + (32 << 8) + 32, sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
+    // SDL_UnlockTexture(_texture);
+    // SDL_RenderClear(_renderer);
+    // SDL_RenderCopy(_renderer, _texture, &srcRect, &destRect);
+    // SDL_RenderPresent(_renderer);
   }
 
   inline size_t getStateSize() const 
