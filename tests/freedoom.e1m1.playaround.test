@@ -1,5 +1,5 @@
 {
-  "IWAD": "wads/freedom1.wad",
+  "IWAD File Path": "wads/freedoom1.wad",
   "Expected IWAD SHA1": "97BB88094A51457A8DCAD98C58BE22A2D0FA9A37",
   "Demo LMP File": "freedoom.e1m1.playaround.lmp"
 }

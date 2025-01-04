@@ -55,25 +55,8 @@ int main(int argc, char *argv[])
   // Parsing script
   const auto configJs = nlohmann::json::parse(configJsRaw);
 
-  // Getting rom file path
-  const auto romFilePath = jaffarCommon::json::getString(configJs, "Rom File Path");
-
-  // Getting initial state file path
-  const auto initialStateFilePath = jaffarCommon::json::getString(configJs, "Initial State File");
-
   // Getting sequence file path
   std::string sequenceFilePath = program.get<std::string>("sequenceFile");
-
-    // Getting expected Rom SHA1 hash
-  const auto expectedRomSHA1 = jaffarCommon::json::getString(configJs, "Expected Rom SHA1");
-
-  // Parsing disabled blocks in lite state serialization
-  const auto stateDisabledBlocks = jaffarCommon::json::getArray<std::string>(configJs, "Disable State Blocks");
-  std::string stateDisabledBlocksOutput;
-  for (const auto& entry : stateDisabledBlocks) stateDisabledBlocksOutput += entry + std::string(" ");
-  
-  // Getting Controller type
-  const auto controllerType = jaffarCommon::json::getString(configJs, "Controller Type");
 
   // Getting reproduce flag
   bool isReproduce = program.get<bool>("--reproduce");
@@ -93,23 +76,11 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::initializeTerminal();
 
   // Printing provided parameters
-  jaffarCommon::logger::log("[] Rom File Path:      '%s'\n", romFilePath.c_str());
   jaffarCommon::logger::log("[] Sequence File Path: '%s'\n", sequenceFilePath.c_str());
   jaffarCommon::logger::log("[] Sequence Length:    %lu\n", sequence.size());
-  jaffarCommon::logger::log("[] State File Path:    '%s'\n", initialStateFilePath.empty() ? "<Boot Start>" : initialStateFilePath.c_str());
   jaffarCommon::logger::log("[] Generating Sequence...\n");
 
   jaffarCommon::logger::refreshTerminal();
-
-  // Loading Rom File
-  std::string romFileData;
-  if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
-
-  // Calculating Rom SHA1
-  auto romSHA1 = jaffarCommon::hash::getSHA1String(romFileData);
-
-  // Checking with the expected SHA1 hash
-  if (romSHA1 != expectedRomSHA1) JAFFAR_THROW_LOGIC("Wrong Rom SHA1. Found: '%s', Expected: '%s'\n", romSHA1.c_str(), expectedRomSHA1.c_str());
 
   // Creating emulator instance  
   auto e = jaffar::EmuInstance(configJs);
@@ -122,15 +93,6 @@ int main(int argc, char *argv[])
 
   // If rendering enabled, then initailize it now
   if (disableRender == false) e.enableRendering();
-
-  // If an initial state is provided, load it now
-  if (initialStateFilePath != "")
-  {
-    std::string stateFileData;
-    if (jaffarCommon::file::loadStringFromFile(stateFileData, initialStateFilePath) == false) JAFFAR_THROW_LOGIC("Could not initial state file: %s\n", initialStateFilePath.c_str());
-    jaffarCommon::deserializer::Contiguous d(stateFileData.data());
-    e.deserializeState(d);
-  }
 
   // Creating playback instance
   auto p = PlaybackInstance(&e, sequence, cycleType);

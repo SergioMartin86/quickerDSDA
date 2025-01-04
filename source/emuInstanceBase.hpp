@@ -23,9 +23,20 @@ class EmuInstanceBase
 
   EmuInstanceBase(const nlohmann::json &config)
   {
+    // Getting IWAD File Path
+    _IWADFilePath = jaffarCommon::json::getString(config, "IWAD File Path");
+
+    // Getting expected IWAD SHA1 hash
+    _expectedIWADSHA1 = jaffarCommon::json::getString(config, "Expected IWAD SHA1");
+
+    // Allocating video buffer
+    _videoBuffer = (uint32_t*)malloc(sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
   }
 
-  virtual ~EmuInstanceBase() = default;
+  virtual ~EmuInstanceBase() 
+  {
+    free(_videoBuffer);
+  }
 
   virtual void advanceState(const jaffar::input_t &input)
   {
@@ -43,6 +54,15 @@ class EmuInstanceBase
 
   void initialize()
   {
+    // Loading IWAD File
+    std::string IWADFileData;
+    if (jaffarCommon::file::loadStringFromFile(IWADFileData, _IWADFilePath) == false) JAFFAR_THROW_LOGIC("Could not IWAD file: %s\n", _IWADFilePath.c_str());
+
+    // Calculating IWAD SHA1
+    auto IWADSHA1 = jaffarCommon::hash::getSHA1String(IWADFileData);
+
+    // Checking with the expected SHA1 hash
+    if (IWADSHA1 != _expectedIWADSHA1) JAFFAR_THROW_LOGIC("Wrong IWAD SHA1. Found: '%s', Expected: '%s'\n", IWADSHA1.c_str(), _expectedIWADSHA1.c_str());
   }
 
   void initializeVideoOutput()
@@ -88,28 +108,6 @@ class EmuInstanceBase
     SDL_RenderPresent(_renderer);
   }
 
-  size_t getEmulatorStateSize()
-  {
-    return 0;
-  }
-
-  void enableStateBlock(const std::string& block) 
-  {
-    enableStateBlockImpl(block);
-  }
-
-  void disableStateBlock(const std::string& block)
-  {
-     disableStateBlockImpl(block);
-    _stateSize = getEmulatorStateSize();
-  }
-
-  virtual void setWorkRamSerializationSize(const size_t size)
-  {
-    setWorkRamSerializationSizeImpl(size);
-    _stateSize = getEmulatorStateSize();
-  }
-
   inline size_t getStateSize() const 
   {
     return _stateSize;
@@ -145,6 +143,9 @@ class EmuInstanceBase
   size_t _stateSize;
 
   private:
+
+  std::string _IWADFilePath;
+  std::string _expectedIWADSHA1;
 
   std::unique_ptr<jaffar::InputParser> _inputParser;
   static uint32_t InputGetter(void* inputValue) { return *(uint32_t*)inputValue; }
