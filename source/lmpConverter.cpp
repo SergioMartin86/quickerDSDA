@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
   {
     for (uint8_t playerId = 0; playerId < playerCount; playerId++)
     {
-      printf("|%3d,%3d,%3d,%s%s%1u",
+      printf("|%4d,%4d,%4d,%s%s%1u",
        _inputVector[ticIdx][playerId].forwardSpeed,
        _inputVector[ticIdx][playerId].strafingSpeed,
        _inputVector[ticIdx][playerId].turningSpeed,

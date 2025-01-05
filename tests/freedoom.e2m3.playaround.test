@@ -5,8 +5,12 @@
   "Skill Level": 4,
   "Episode": 2, 
   "Map": 3,
-  "Compatibility Level": 4,
+  "Compatibility Level": 3,
   "Fast Monsters": false,
   "Monsters Respawn": false,
-  "No Monsters": false
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false
 }

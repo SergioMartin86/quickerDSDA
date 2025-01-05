@@ -53,6 +53,23 @@ class EmuInstanceBase
     _fastMonsters = jaffarCommon::json::getBoolean(config, "Fast Monsters");
     _monstersRespawn = jaffarCommon::json::getBoolean(config, "Monsters Respawn");
     _noMonsters = jaffarCommon::json::getBoolean(config, "No Monsters");
+
+    _player1Present = jaffarCommon::json::getBoolean(config, "Player 1 Present");
+    _player2Present = jaffarCommon::json::getBoolean(config, "Player 2 Present");
+    _player3Present = jaffarCommon::json::getBoolean(config, "Player 3 Present");
+    _player4Present = jaffarCommon::json::getBoolean(config, "Player 4 Present");
+
+    _playerCount = 0;
+    if (_player1Present == true) _playerCount++;
+    if (_player2Present == true) _playerCount++;
+    if (_player3Present == true) _playerCount++;
+    if (_player4Present == true) _playerCount++;
+
+    // Initializing input parser
+    nlohmann::json inputParserConfig;
+    inputParserConfig["Player Count"] = _playerCount;
+    inputParserConfig["Controller Type"] = "Jaffar";
+    _inputParser = std::make_unique<jaffar::InputParser>(inputParserConfig);
   }
 
   virtual ~EmuInstanceBase() 
@@ -63,13 +80,23 @@ class EmuInstanceBase
   {
     // Setting inputs
     headlessClearTickCommand();
-    //headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon = -1);
-    headlessSetTickCommand(0, 50, 0, 0, 0, 0, 0);
+    for (int i = 0; i < _playerCount; i++)
+      headlessSetTickCommand
+      (
+        i,
+        input[i].forwardSpeed,
+        input[i].strafingSpeed,
+        input[i].turningSpeed,
+        input[i].fire ? 1 : 0,
+        input[i].action ? 1 : 0,
+        input[i].weapon
+      );
 
 
+    // Running a single tick
     headlessRunSingleTick();
 
-    // If rendering is enabled, update vid
+    // If rendering is enabled, update vid now
     if(_renderingEnabled == true) headlessUpdateVideo();
   }
 
@@ -246,7 +273,6 @@ class EmuInstanceBase
   std::string _IWADFilePath;
   std::string _expectedIWADSHA1;
 
-
   unsigned int _skill; 
   unsigned int _episode;
   unsigned int _map;
@@ -254,6 +280,11 @@ class EmuInstanceBase
   bool _fastMonsters;
   bool _monstersRespawn;
   bool _noMonsters;
+  bool _player1Present;  
+  bool _player2Present;  
+  bool _player3Present;  
+  bool _player4Present;  
+  uint8_t _playerCount;
 
   std::unique_ptr<jaffar::InputParser> _inputParser;
   static uint32_t InputGetter(void* inputValue) { return *(uint32_t*)inputValue; }

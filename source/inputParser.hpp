@@ -12,15 +12,25 @@
 namespace jaffar
 {
 
-struct input_t
+#define _MAX_PLAYERS 4
+
+struct playerInput_t
 {
+  int8_t forwardSpeed = 0;
+  int8_t strafingSpeed = 0;
+  int8_t turningSpeed = 0;
+  bool fire = false;
+  bool action = false;
+  uint8_t weapon = 0;
 };
+
+typedef std::array<playerInput_t, _MAX_PLAYERS> input_t;
 
 class InputParser
 {
 public:
 
-  enum controller_t { lmp, jaffar };
+  enum controller_t { jaffar };
 
   InputParser(const nlohmann::json &config)
   {
@@ -29,10 +39,11 @@ public:
       bool isTypeRecognized = false;
 
       const auto controllerType = jaffarCommon::json::getString(config, "Controller Type");
-      if (controllerType == "Demo LMP") { _controllerType = controller_t::lmp; isTypeRecognized = true; }
       if (controllerType == "Jaffar")   { _controllerType = controller_t::jaffar;  isTypeRecognized = true; }
       
       if (isTypeRecognized == false) JAFFAR_THROW_LOGIC("Controller type not recognized: '%s'\n", controllerType.c_str()); 
+
+      _playerCount = jaffarCommon::json::getNumber<uint8_t>(config, "Player Count");
    }
   }
 
@@ -41,19 +52,93 @@ public:
     // Storage for the input
     input_t input;
 
+    // Converting input into a stream for parsing
+    std::istringstream ss(inputString);
+
+    // Parsing controller 1 inputs
+    for (uint8_t i = 0; i < _playerCount; i++) parsePlayerInputs(input[i], ss, inputString);
+
+    // End separator
+    char c = ss.get();
+    if (c != '|') reportBadInputString(inputString, c);
+
+    // If its not the end of the stream, then extra values remain and its invalid
+    c = ss.get();
+    if (ss.eof() == false) reportBadInputString(inputString, c);
+
     // Returning input
     return input;
   };
 
   private:
 
+  static inline void parsePlayerInputs(playerInput_t& input, std::istringstream& ss, const std::string& inputString)
+  {
+    // Controller separator
+    char c = ss.get();
+    if (c != '|') reportBadInputString(inputString, c);
+
+    // Parsing forward speed
+    char forwardSpeedString[5];
+    forwardSpeedString[0] = ss.get();
+    forwardSpeedString[1] = ss.get();
+    forwardSpeedString[2] = ss.get();
+    forwardSpeedString[3] = ss.get();
+    forwardSpeedString[4] = '\0';
+    input.forwardSpeed = atoi(forwardSpeedString);
+
+    // Parsing comma
+    c = ss.get();
+    if (c != ',') reportBadInputString(inputString, c);
+
+    // Parsing strafing speed
+    char strafingSpeedString[5];
+    strafingSpeedString[0] = ss.get();
+    strafingSpeedString[1] = ss.get();
+    strafingSpeedString[2] = ss.get();
+    strafingSpeedString[3] = ss.get();
+    strafingSpeedString[4] = '\0';
+    input.strafingSpeed = atoi(strafingSpeedString);
+    
+    // Parsing comma
+    c = ss.get();
+    if (c != ',') reportBadInputString(inputString, c);
+
+    // Parsing turning speed
+    char turningSpeedString[5];
+    turningSpeedString[0] = ss.get();
+    turningSpeedString[1] = ss.get();
+    turningSpeedString[2] = ss.get();
+    turningSpeedString[3] = ss.get();
+    turningSpeedString[4] = '\0';
+    input.turningSpeed = atoi(turningSpeedString);
+
+    // Parsing comma
+    c = ss.get();
+    if (c != ',') reportBadInputString(inputString, c);
+    
+    // Fire
+    c = ss.get();
+    if (c != '.' && c != 'F') reportBadInputString(inputString, c);
+    if (c == 'F') input.fire = true;
+
+    // Action
+    c = ss.get();
+    if (c != '.' && c != 'A') reportBadInputString(inputString, c);
+    if (c == 'A') input.action = true;
+
+    // Parsing weapon
+    c = ss.get(); 
+    if (c != ' ' && c < 48 && c > 57) reportBadInputString(inputString, c);
+    if (c != ' ') input.weapon += (uint8_t)c - 48;
+  }
 
   static inline void reportBadInputString(const std::string &inputString, const char c)
   {
-    JAFFAR_THROW_LOGIC("Could not decode input string: '%s' - Read: '%c'\n", inputString.c_str(), c);
+    JAFFAR_THROW_LOGIC("Could not decode input string: '%s' - Read: '%c' (%u)\n", inputString.c_str(), c, (uint8_t)c);
   }
 
-  input_t _input;
+  uint8_t _playerCount;
   controller_t _controllerType;
 }; // class InputParser
 
