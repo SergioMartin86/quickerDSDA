@@ -24,6 +24,8 @@ extern "C"
   int headlessGetVideoWidth();
   int headlessGetVideoHeight();
   SDL_Surface* headlessGetVideoSurface();
+  void headlessEnableRendering();
+  void headlessDisableRendering();
 }
 
 namespace jaffar
@@ -109,11 +111,13 @@ class EmuInstanceBase
 
   void enableRendering()
   {
+    headlessEnableRendering();
     _renderingEnabled = true;
   }
 
   void disableRendering()
   {
+    headlessDisableRendering();
     _renderingEnabled = false;
   }
 
