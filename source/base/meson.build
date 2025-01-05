@@ -29,7 +29,7 @@ DSDASrc =  [
  'core/prboom2/src/dsda/font.c',
  'core/prboom2/src/dsda/game_controller.c',
  'core/prboom2/src/dsda/ghost.c',
- 'core/prboom2/src/dsda/gl/render_scale.c',
+ #'core/prboom2/src/dsda/gl/render_scale.c',
  'core/prboom2/src/dsda/global.c',
  'core/prboom2/src/dsda/hud_components/ammo_text.c',
  'core/prboom2/src/dsda/hud_components/armor_text.c',
@@ -119,7 +119,7 @@ DSDASrc =  [
  'core/prboom2/src/dsda/utility.c',
  'core/prboom2/src/dsda/utility/string_view.c',
  'core/prboom2/src/dsda/wad_stats.c',
- 'core/prboom2/src/dsda/zipfile.c',
+ #'core/prboom2/src/dsda/zipfile.c',
  'core/prboom2/src/dstrings.c',
  'core/prboom2/src/d_deh.c',
  'core/prboom2/src/d_items.c',
@@ -228,21 +228,21 @@ DSDASrc =  [
  'core/prboom2/src/MUSIC/opl_queue.c',
  'core/prboom2/src/MUSIC/portmidiplayer.c',
  'core/prboom2/src/MUSIC/vorbisplayer.c',
- 'core/prboom2/src/gl_clipper.c',
- 'core/prboom2/src/gl_drawinfo.c',
- 'core/prboom2/src/gl_fbo.c',
- 'core/prboom2/src/gl_light.c',
- 'core/prboom2/src/gl_main.c',
- 'core/prboom2/src/gl_map.c',
- 'core/prboom2/src/gl_missingtexture.c',
- 'core/prboom2/src/gl_opengl.c',
- 'core/prboom2/src/gl_preprocess.c',
- 'core/prboom2/src/gl_progress.c',
- 'core/prboom2/src/gl_shader.c',
- 'core/prboom2/src/gl_sky.c',
- 'core/prboom2/src/gl_texture.c',
- 'core/prboom2/src/gl_vertex.c',
- 'core/prboom2/src/gl_wipe.c',
+ #'core/prboom2/src/gl_clipper.c',
+ #'core/prboom2/src/gl_drawinfo.c',
+ #'core/prboom2/src/gl_fbo.c',
+ #'core/prboom2/src/gl_light.c',
+ #'core/prboom2/src/gl_main.c',
+ #'core/prboom2/src/gl_map.c',
+ #'core/prboom2/src/gl_missingtexture.c',
+ #'core/prboom2/src/gl_opengl.c',
+ #'core/prboom2/src/gl_preprocess.c',
+ #'core/prboom2/src/gl_progress.c',
+ #'core/prboom2/src/gl_shader.c',
+ #'core/prboom2/src/gl_sky.c',
+ #'core/prboom2/src/gl_texture.c',
+ #'core/prboom2/src/gl_vertex.c',
+ #'core/prboom2/src/gl_wipe.c',
 ]
 
 DSDAIncludeDirs = [
@@ -263,22 +263,22 @@ DSDACompileArgs = [
 	'-Wno-pointer-sign',
 	'-Wno-sign-compare',
 	'-Wno-stringop-overflow',
-	'-Wno-format-truncation'
+	'-Wno-format-truncation',
+	'-Wno-unused-but-set-variable',
+	'-Wno-unused-variable'
+
 ]
 
 # DSDA dependency
 
  DSDADependency = declare_dependency(
   compile_args        : [  DSDACompileArgs ],
-		link_args        : [  '-lz' ],
+		link_args        : [  ],
   include_directories : include_directories(DSDAIncludeDirs),
   sources             : [ DSDASrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
-																										dependency('sdl2_mixer',  required : true),
-																										dependency('glu',  required : true),
-																										dependency('gl',  required : true),
-																										dependency('libzip',  required : true)
+																										dependency('sdl2_mixer',  required : true)
                         ]
  )
 

@@ -51,7 +51,7 @@ class EmuInstance : public EmuInstanceBase
   {
   }
 
-  std::string getCoreName() const override { return "Gambatte"; }
+  std::string getCoreName() const override { return "Base DSDA"; }
 
 
   private:

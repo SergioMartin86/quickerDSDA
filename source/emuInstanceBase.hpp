@@ -28,10 +28,16 @@ extern "C"
   SDL_Surface* headlessGetVideoSurface();
   void headlessEnableRendering();
   void headlessDisableRendering();
+
+  void headlessSetSaveStatePointer(void* savePtr, int saveStateSize);
+  void dsda_ArchiveAll(void);
+  void dsda_UnArchiveAll(void);
 }
 
 namespace jaffar
 {
+
+#define SAVEGAMESIZE 0x40000
 
 class EmuInstanceBase
 {
@@ -103,6 +109,11 @@ class EmuInstanceBase
   inline jaffarCommon::hash::hash_t getStateHash() const
   {
     MetroHash128 hash;
+
+    // uint8_t memBlock[SAVEGAMESIZE];
+    // jaffarCommon::serializer::Contiguous s(memBlock);
+    // serializeState(s);
+    // hash.Update(memBlock, SAVEGAMESIZE);
     
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
@@ -188,6 +199,9 @@ class EmuInstanceBase
     // Calculating video buffer size
     int pixelBytes = 4; // RGB32
     _videoBufferSize = _videoWidth * _videoHeight * pixelBytes;
+
+    // Setting save state size
+    _stateSize = SAVEGAMESIZE;
   }
 
   void initializeVideoOutput()
@@ -243,10 +257,14 @@ class EmuInstanceBase
   
   void serializeState(jaffarCommon::serializer::Base& s) const
   {
+    headlessSetSaveStatePointer(s.getOutputDataBuffer(), _stateSize);
+    dsda_ArchiveAll();
   }
 
   void deserializeState(jaffarCommon::deserializer::Base& d) 
   {
+    headlessSetSaveStatePointer((void*)((uint64_t)d.getInputDataBuffer()), _stateSize);
+    dsda_UnArchiveAll();
   }
 
   size_t getVideoBufferSize() const { return _videoBufferSize; }
