@@ -60,6 +60,14 @@ baseTester = executable('baseTester',
   dependencies        : [ baseDependency, jaffarCommonDependency ],
 )
 
+# Building converter tool
+
+lmpConverter = executable('lmpConverter',
+  'source/lmpConverter.cpp',
+  cpp_args            : [ commonCompileArgs ],
+  dependencies        : [ baseDependency, jaffarCommonDependency ],
+)
+
 # Building tests
 #subdir('tests')
 

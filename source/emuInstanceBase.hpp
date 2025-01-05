@@ -16,7 +16,9 @@ extern "C"
   int headlessMain(int argc, char **argv);
   void headlessRunSingleTick();
   void headlessUpdateSounds(void);
-  
+  void headlessClearTickCommand();
+  void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon);
+
   // Video-related functions
   void headlessUpdateVideo(void);
   void* headlessGetVideoBuffer();
@@ -42,6 +44,15 @@ class EmuInstanceBase
 
     // Getting expected IWAD SHA1 hash
     _expectedIWADSHA1 = jaffarCommon::json::getString(config, "Expected IWAD SHA1");
+ 
+    // Getting Doom parameters
+    _skill  = jaffarCommon::json::getNumber<unsigned int>(config, "Skill Level");
+    _episode  = jaffarCommon::json::getNumber<unsigned int>(config, "Episode");
+    _map  = jaffarCommon::json::getNumber<unsigned int>(config, "Map");
+    _compatibilityLevel  = jaffarCommon::json::getNumber<unsigned int>(config, "Compatibility Level");
+    _fastMonsters = jaffarCommon::json::getBoolean(config, "Fast Monsters");
+    _monstersRespawn = jaffarCommon::json::getBoolean(config, "Monsters Respawn");
+    _noMonsters = jaffarCommon::json::getBoolean(config, "No Monsters");
   }
 
   virtual ~EmuInstanceBase() 
@@ -50,6 +61,12 @@ class EmuInstanceBase
 
   virtual void advanceState(const jaffar::input_t &input)
   {
+    // Setting inputs
+    headlessClearTickCommand();
+    //headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon = -1);
+    headlessSetTickCommand(0, 50, 0, 0, 0, 0, 0);
+
+
     headlessRunSingleTick();
 
     // If rendering is enabled, update vid
@@ -77,9 +94,62 @@ class EmuInstanceBase
     // Checking with the expected SHA1 hash
     if (IWADSHA1 != _expectedIWADSHA1) JAFFAR_THROW_LOGIC("Wrong IWAD SHA1. Found: '%s', Expected: '%s'\n", IWADSHA1.c_str(), _expectedIWADSHA1.c_str());
 
+    // Creating arguments
+    int argc = 0;
+    char** argv = (char**) malloc (sizeof(char*) * 512);
+    
+    // Specifying executable name
+    char arg0[] = "dsda";
+    argv[argc++] = arg0;
+
+    // Specifying IWAD
+    char arg1[] = "-iwad";
+    argv[argc++] = arg1;
+    char* iwadPath = (char*)((uint64_t)_IWADFilePath.c_str());
+    argv[argc++] = iwadPath;
+
+    // Eliminating restrictions to TAS inputs
+    char arg2[] = "-tas";
+    argv[argc++] = arg2;
+
+    // Specifying skill level
+    char arg3[] = "-skill";
+    argv[argc++] = arg3;
+    char argSkill[512];
+    sprintf(argSkill, "%d", _skill);
+    argv[argc++] = argSkill;
+
+    // Specifying episode and map
+    char arg4[] = "-warp";
+    argv[argc++] = arg4;
+    char argEpisode[512];
+    sprintf(argEpisode, "%d", _episode);
+    argv[argc++] = argEpisode;
+    char argMap[512];
+    sprintf(argMap, "%d", _map);
+    argv[argc++] = argMap;
+
+    // Specifying comp level
+    char arg5[] = "-complevel";
+    argv[argc++] = arg5;
+    char argCompatibilityLevel[512];
+    sprintf(argCompatibilityLevel, "%d", _compatibilityLevel);
+    argv[argc++] = argCompatibilityLevel;
+
+    // Specifying fast monsters
+    char arg6[] = "-fast";
+    if (_fastMonsters) argv[argc++] = arg6;
+
+    // Specifying monsters respawn
+    char arg7[] = "-respawn";
+    if (_monstersRespawn) argv[argc++] = arg7;
+
+    // Specifying no monsters
+    char arg8[] = "-nomonsters";
+    if (_noMonsters) argv[argc++] = arg8;
+
     // Initializing DSDA core
-    char* argv[] = { "dsda", "-iwad", "wads/freedoom1.wad" };
-    headlessMain(3, argv);
+    headlessMain(argc, argv);
 
     // Getting video information
     _baseSurface = headlessGetVideoSurface();
@@ -175,6 +245,15 @@ class EmuInstanceBase
 
   std::string _IWADFilePath;
   std::string _expectedIWADSHA1;
+
+
+  unsigned int _skill; 
+  unsigned int _episode;
+  unsigned int _map;
+  unsigned int _compatibilityLevel;
+  bool _fastMonsters;
+  bool _monstersRespawn;
+  bool _noMonsters;
 
   std::unique_ptr<jaffar::InputParser> _inputParser;
   static uint32_t InputGetter(void* inputValue) { return *(uint32_t*)inputValue; }
