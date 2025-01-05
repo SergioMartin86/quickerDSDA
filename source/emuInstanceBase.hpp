@@ -11,12 +11,19 @@
 #include "inputParser.hpp"
 #include <SDL.h>
 
-#define VIDEO_HORIZONTAL_PIXELS 160
-#define	VIDEO_VERTICAL_PIXELS 144
-
 extern "C"
 {
-  int old_main(int argc, char **argv);
+  int headlessMain(int argc, char **argv);
+  void headlessRunSingleTick();
+  void headlessUpdateSounds(void);
+  
+  // Video-related functions
+  void headlessUpdateVideo(void);
+  void* headlessGetVideoBuffer();
+  int headlessGetVideoPitch();
+  int headlessGetVideoWidth();
+  int headlessGetVideoHeight();
+  SDL_Surface* headlessGetVideoSurface();
 }
 
 namespace jaffar
@@ -33,19 +40,18 @@ class EmuInstanceBase
 
     // Getting expected IWAD SHA1 hash
     _expectedIWADSHA1 = jaffarCommon::json::getString(config, "Expected IWAD SHA1");
-
-    // Allocating video buffer
-    _videoBuffer = (uint32_t*)malloc(sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
   }
 
   virtual ~EmuInstanceBase() 
   {
-    free(_videoBuffer);
   }
 
   virtual void advanceState(const jaffar::input_t &input)
   {
+    headlessRunSingleTick();
 
+    // If rendering is enabled, update vid
+    if(_renderingEnabled == true) headlessUpdateVideo();
   }
 
   inline jaffarCommon::hash::hash_t getStateHash() const
@@ -68,24 +74,37 @@ class EmuInstanceBase
 
     // Checking with the expected SHA1 hash
     if (IWADSHA1 != _expectedIWADSHA1) JAFFAR_THROW_LOGIC("Wrong IWAD SHA1. Found: '%s', Expected: '%s'\n", IWADSHA1.c_str(), _expectedIWADSHA1.c_str());
+
+    // Initializing DSDA core
+    char* argv[] = { "dsda", "-iwad", "wads/freedoom1.wad" };
+    headlessMain(3, argv);
+
+    // Getting video information
+    _baseSurface = headlessGetVideoSurface();
+    _videoBuffer = _baseSurface->pixels;
+    _videoWidth = _baseSurface->w;
+    _videoHeight = _baseSurface->h;
+    _videoPitch = _baseSurface->pitch;
+
+    // Calculating video buffer size
+    int pixelBytes = 4; // RGB32
+    _videoBufferSize = _videoWidth * _videoHeight * pixelBytes;
   }
 
   void initializeVideoOutput()
   {
-    char* argv[] = { "dsda", "-iwad", "wads/freedoom1.wad" };
-    old_main(3, argv);
-    // SDL_Init(SDL_INIT_VIDEO);
-    // _renderWindow = SDL_CreateWindow("QuickerDSDA",  SDL_WINDOWPOS_UNDEFINED,  SDL_WINDOWPOS_UNDEFINED, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS, 0);
-    // _renderer = SDL_CreateRenderer(_renderWindow, -1, SDL_RENDERER_ACCELERATED);
-    // _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS);
+    SDL_Init(SDL_INIT_VIDEO);
+    _renderWindow = SDL_CreateWindow("QuickerDSDA",  SDL_WINDOWPOS_UNDEFINED,  SDL_WINDOWPOS_UNDEFINED, _videoWidth, _videoHeight, 0);
+    _renderer = SDL_CreateRenderer(_renderWindow, -1, SDL_RENDERER_ACCELERATED);
+    _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING, _videoWidth, _videoHeight);
   }
 
   void finalizeVideoOutput()
   {
-    // SDL_DestroyTexture(_texture);
-    // SDL_DestroyRenderer(_renderer);
-    // SDL_DestroyWindow(_renderWindow);
-    // SDL_Quit();
+    SDL_DestroyTexture(_texture);
+    SDL_DestroyRenderer(_renderer);
+    SDL_DestroyWindow(_renderWindow);
+    SDL_Quit();
   }
 
   void enableRendering()
@@ -100,19 +119,18 @@ class EmuInstanceBase
 
   void updateRenderer()
   {
-    // void *pixels = nullptr;
-    // int pitch = 0;
+    void *pixels = nullptr;
+    int pitch = _videoPitch;
 
-    // SDL_Rect srcRect  = { 0, 0, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS };
-    // SDL_Rect destRect = { 0, 0, VIDEO_HORIZONTAL_PIXELS, VIDEO_VERTICAL_PIXELS };
+    SDL_Rect srcRect  = { 0, 0, _videoWidth, _videoHeight };
+    SDL_Rect destRect = { 0, 0, _videoWidth, _videoHeight };
 
-    // if (SDL_LockTexture(_texture, nullptr, &pixels, &pitch) < 0) return;
-    // memcpy(pixels, _videoBuffer, sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
-    // // memset(pixels, (32 << 24) + (32 << 16) + (32 << 8) + 32, sizeof(uint32_t) * VIDEO_VERTICAL_PIXELS * VIDEO_HORIZONTAL_PIXELS);
-    // SDL_UnlockTexture(_texture);
-    // SDL_RenderClear(_renderer);
-    // SDL_RenderCopy(_renderer, _texture, &srcRect, &destRect);
-    // SDL_RenderPresent(_renderer);
+    if (SDL_LockTexture(_texture, nullptr, &pixels, &pitch) < 0) return;
+    memcpy(pixels, _videoBuffer, 4 * _videoHeight * _videoWidth);
+    SDL_UnlockTexture(_texture);
+    SDL_RenderClear(_renderer);
+    SDL_RenderCopy(_renderer, _texture, &srcRect, &destRect);
+    SDL_RenderPresent(_renderer);
   }
 
   inline size_t getStateSize() const 
@@ -158,10 +176,14 @@ class EmuInstanceBase
   static uint32_t InputGetter(void* inputValue) { return *(uint32_t*)inputValue; }
 
   // Rendering stuff
+  int _videoWidth;
+  int _videoHeight;
+  int _videoPitch;
   SDL_Window* _renderWindow;
   SDL_Renderer* _renderer;
   SDL_Texture* _texture;
-  uint32_t* _videoBuffer;
+  SDL_Surface* _baseSurface;
+  void* _videoBuffer;
   size_t _videoBufferSize;
   bool _renderingEnabled = false;
 };

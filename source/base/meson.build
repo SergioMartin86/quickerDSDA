@@ -213,7 +213,7 @@ DSDASrc =  [
  'core/prboom2/src/w_mmap.c',
  'core/prboom2/src/memio.c',
  'core/prboom2/src/mus2mid.c',
- 'i_main.c',
+ 'core/prboom2/src/SDL/i_main.c',
  'core/prboom2/src/SDL/i_sound.c',
  'core/prboom2/src/SDL/i_sshot.c',
  'core/prboom2/src/SDL/i_system.c',
