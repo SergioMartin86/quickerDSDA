@@ -125,6 +125,10 @@ int main(int argc, char *argv[])
     // Getting state data
     const auto stateData = p.getStateData(currentStep);
 
+    // Deserializing state
+    jaffarCommon::deserializer::Contiguous d(stateData);
+    e.deserializeState(d);
+
     // Printing data and commands
     if (showFrameInfo)
     {
@@ -134,6 +138,9 @@ int main(int argc, char *argv[])
       jaffarCommon::logger::log("[] Current Step #: %lu / %lu\n", currentStep + 1, sequenceLength);
       jaffarCommon::logger::log("[] Input:          %s\n", inputString.c_str());
       jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
+
+      // Printing emulator information
+      e.printInformation();
 
       // Only print commands if not in reproduce mode
       if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | q: quit\n");

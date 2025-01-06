@@ -10,6 +10,7 @@
 #include <jaffarCommon/deserializers/contiguous.hpp>
 #include "inputParser.hpp"
 #include <SDL.h>
+#include <d_player.h>
 
 extern "C"
 {
@@ -33,6 +34,9 @@ extern "C"
   void dsda_ArchiveAll(void);
   void dsda_UnArchiveAll(void);
 }
+
+// Players information
+extern "C" player_t players[MAX_MAXPLAYERS];
 
 namespace jaffar
 {
@@ -129,6 +133,15 @@ class EmuInstanceBase
     // serializeState(s);
     // hash.Update(memBlock, SAVEGAMESIZE);
     
+    hash.Update(players[0].mo->x);
+    hash.Update(players[0].mo->y);
+    hash.Update(players[0].mo->z);
+    hash.Update(players[0].mo->angle);
+    hash.Update(players[0].mo->momx);
+    hash.Update(players[0].mo->momy);
+    hash.Update(players[0].mo->momz);
+    hash.Update(players[0].mo->health);
+
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
     return result;
@@ -218,6 +231,14 @@ class EmuInstanceBase
 
     // Setting save state size
     _stateSize = SAVEGAMESIZE;
+  }
+  
+  void printInformation()
+  {
+    jaffarCommon::logger::log("[] Player 1 Coordinates:    (%d, %d, %d)\n", players[0].mo->x, players[0].mo->y, players[0].mo->z);
+    jaffarCommon::logger::log("[] Player 1 Angle:           %u\n", players[0].mo->angle);
+    jaffarCommon::logger::log("[] Player 1 Momenta:        (%d, %d, %d)\n", players[0].mo->momx, players[0].mo->momy, players[0].mo->momz);
+    jaffarCommon::logger::log("[] Player 1 Health:          %d\n", players[0].mo->health);
   }
 
   void initializeVideoOutput()

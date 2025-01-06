@@ -171,11 +171,14 @@ int main(int argc, char *argv[])
   char hashStringBuffer[256];
   sprintf(hashStringBuffer, "0x%lX%lX", result.first, result.second);
 
+  // Final game information
+  e.printInformation();
+
   // Printing time information
   printf("[] Elapsed time:                           %3.3fs\n", (double)dt * 1.0e-9);
   printf("[] Performance:                            %.3f inputs / s\n", (double)sequenceLength / elapsedTimeSeconds);
   printf("[] Final State Hash:                       %s\n", hashStringBuffer);
-  
+
   // If saving hash, do it now
   if (hashOutputFile != "") jaffarCommon::file::saveStringToFile(std::string(hashStringBuffer), hashOutputFile.c_str());
 
