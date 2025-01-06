@@ -277,7 +277,6 @@ DSDACompileArgs = [
   include_directories : include_directories(DSDAIncludeDirs),
   sources             : [ DSDASrc ],
   dependencies        : [  
-                          dependency('sdl2',  required : true),
 																										dependency('sdl2_mixer',  required : true)
                         ]
  )

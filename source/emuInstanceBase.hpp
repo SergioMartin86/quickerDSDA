@@ -27,6 +27,7 @@ extern "C"
   int headlessGetVideoHeight();
   void headlessEnableRendering();
   void headlessDisableRendering();
+  uint32_t* headlessGetPallette();
 
   void headlessSetSaveStatePointer(void* savePtr, int saveStateSize);
   void dsda_ArchiveAll(void);
@@ -102,7 +103,13 @@ class EmuInstanceBase
     headlessRunSingleTick();
 
     // If rendering is enabled, update vid now
-    if(_renderingEnabled == true) headlessUpdateVideo();
+    if(_renderingEnabled == true) 
+    {
+      headlessUpdateVideo();
+
+      auto palette = headlessGetPallette();
+      for (size_t i = 0; i < _videoWidth * _videoHeight; i++) _videoBuffer[i] = palette[_videoSource[i]];
+    }
   }
 
   inline jaffarCommon::hash::hash_t getStateHash() const
@@ -189,7 +196,7 @@ class EmuInstanceBase
     headlessMain(argc, argv);
 
     // Getting video information
-    _videoBuffer = (uint8_t*)headlessGetVideoBuffer();
+    _videoSource = (uint8_t*)headlessGetVideoBuffer();
     _videoWidth  = headlessGetVideoWidth();
     _videoHeight = headlessGetVideoHeight();
     _videoPitch  = headlessGetVideoPitch();
@@ -197,6 +204,9 @@ class EmuInstanceBase
     // Calculating video buffer size
     int pixelBytes = 4; // RGB32
     _videoBufferSize = _videoWidth * _videoHeight * pixelBytes;
+
+    // Allocating buffer
+    _videoBuffer = (uint32_t*) malloc (_videoBufferSize);
 
     // Setting save state size
     _stateSize = SAVEGAMESIZE;
@@ -207,7 +217,7 @@ class EmuInstanceBase
     SDL_Init(SDL_INIT_VIDEO);
     _renderWindow = SDL_CreateWindow("QuickerDSDA",  SDL_WINDOWPOS_UNDEFINED,  SDL_WINDOWPOS_UNDEFINED, _videoWidth, _videoHeight, 0);
     _renderer = SDL_CreateRenderer(_renderWindow, -1, SDL_RENDERER_ACCELERATED);
-    _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING, _videoWidth, _videoHeight);
+    _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_STREAMING, _videoWidth, _videoHeight);
   }
 
   void finalizeVideoOutput()
@@ -238,7 +248,7 @@ class EmuInstanceBase
     void *pixels = nullptr;
     int pitch = _videoPitch;
     if (SDL_LockTexture(_texture, nullptr, &pixels, &pitch) < 0) return;
-    memcpy(pixels, _videoBuffer, 4 * _videoHeight * _videoWidth);
+    memcpy(pixels, _videoBuffer, _videoBufferSize);
     SDL_UnlockTexture(_texture);
     SDL_RenderClear(_renderer);
     SDL_RenderCopy(_renderer, _texture, &srcRect, &destRect);
@@ -265,7 +275,7 @@ class EmuInstanceBase
   }
 
   size_t getVideoBufferSize() const { return _videoBufferSize; }
-  uint8_t* getVideoBufferPtr() const { return _videoBuffer; }
+  uint8_t* getVideoBufferPtr() const { return (uint8_t*)_videoBuffer; }
 
   // Virtual functions
 
@@ -311,7 +321,8 @@ class EmuInstanceBase
   SDL_Window* _renderWindow;
   SDL_Renderer* _renderer;
   SDL_Texture* _texture;
-  uint8_t* _videoBuffer;
+  uint8_t* _videoSource;
+  uint32_t* _videoBuffer;
   size_t _videoBufferSize;
   bool _renderingEnabled = false;
 };
