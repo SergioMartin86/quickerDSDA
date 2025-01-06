@@ -108,7 +108,15 @@ class EmuInstanceBase
       headlessUpdateVideo();
 
       auto palette = headlessGetPallette();
-      for (size_t i = 0; i < _videoWidth * _videoHeight; i++) _videoBuffer[i] = palette[_videoSource[i]];
+      for (size_t i = 0; i < _videoWidth * _videoHeight; i++)
+      {
+       uint8_t* color = (uint8_t*)&palette[_videoSource[i]];
+       uint8_t* video = (uint8_t*)&_videoBuffer[i];
+       video[0] = color[2];
+       video[1] = color[1];
+       video[2] = color[0];
+       video[3] = color[3];
+      } 
     }
   }
 
