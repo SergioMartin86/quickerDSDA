@@ -25,7 +25,6 @@ extern "C"
   int headlessGetVideoPitch();
   int headlessGetVideoWidth();
   int headlessGetVideoHeight();
-  SDL_Surface* headlessGetVideoSurface();
   void headlessEnableRendering();
   void headlessDisableRendering();
 
@@ -190,11 +189,10 @@ class EmuInstanceBase
     headlessMain(argc, argv);
 
     // Getting video information
-    _baseSurface = headlessGetVideoSurface();
-    _videoBuffer = _baseSurface->pixels;
-    _videoWidth = _baseSurface->w;
-    _videoHeight = _baseSurface->h;
-    _videoPitch = _baseSurface->pitch;
+    _videoBuffer = (uint8_t*)headlessGetVideoBuffer();
+    _videoWidth  = headlessGetVideoWidth();
+    _videoHeight = headlessGetVideoHeight();
+    _videoPitch  = headlessGetVideoPitch();
 
     // Calculating video buffer size
     int pixelBytes = 4; // RGB32
@@ -234,12 +232,11 @@ class EmuInstanceBase
 
   void updateRenderer()
   {
-    void *pixels = nullptr;
-    int pitch = _videoPitch;
-
     SDL_Rect srcRect  = { 0, 0, _videoWidth, _videoHeight };
     SDL_Rect destRect = { 0, 0, _videoWidth, _videoHeight };
 
+    void *pixels = nullptr;
+    int pitch = _videoPitch;
     if (SDL_LockTexture(_texture, nullptr, &pixels, &pitch) < 0) return;
     memcpy(pixels, _videoBuffer, 4 * _videoHeight * _videoWidth);
     SDL_UnlockTexture(_texture);
@@ -268,7 +265,7 @@ class EmuInstanceBase
   }
 
   size_t getVideoBufferSize() const { return _videoBufferSize; }
-  uint8_t* getVideoBufferPtr() const { return (uint8_t*)_videoBuffer; }
+  uint8_t* getVideoBufferPtr() const { return _videoBuffer; }
 
   // Virtual functions
 
@@ -314,8 +311,7 @@ class EmuInstanceBase
   SDL_Window* _renderWindow;
   SDL_Renderer* _renderer;
   SDL_Texture* _texture;
-  SDL_Surface* _baseSurface;
-  void* _videoBuffer;
+  uint8_t* _videoBuffer;
   size_t _videoBufferSize;
   bool _renderingEnabled = false;
 };
