@@ -37,6 +37,7 @@ if get_option('buildPlayer') == true
     cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
     dependencies        : [ baseDependency,
                             jaffarCommonDependency,
+                            dependency('sdl2',  required : true)
                           ],
     include_directories : include_directories(['source']),
     link_args           : [ '-lncurses' ],
@@ -57,7 +58,9 @@ endif
 baseTester = executable('baseTester',
   'source/tester.cpp',
   cpp_args            : [ commonCompileArgs ],
-  dependencies        : [ baseDependency, jaffarCommonDependency ],
+  dependencies        : [ baseDependency,
+                          jaffarCommonDependency,
+                          dependency('sdl2',  required : true) ],
 )
 
 # Building converter tool
