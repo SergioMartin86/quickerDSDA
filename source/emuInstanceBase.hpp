@@ -18,7 +18,7 @@ extern "C"
   void headlessRunSingleTick();
   void headlessUpdateSounds(void);
   void headlessClearTickCommand();
-  void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon);
+  void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon, int altWeapon);
 
   // Video-related functions
   void headlessUpdateVideo(void);
@@ -33,6 +33,7 @@ extern "C"
   void headlessSetSaveStatePointer(void* savePtr, int saveStateSize);
   void dsda_ArchiveAll(void);
   void dsda_UnArchiveAll(void);
+  void headlessGetMapName(char* outString);
 }
 
 // Players information
@@ -99,7 +100,8 @@ class EmuInstanceBase
         input[i].turningSpeed,
         input[i].fire ? 1 : 0,
         input[i].action ? 1 : 0,
-        input[i].weapon
+        input[i].weapon,
+        input[i].altWeapon ? 1 : 0
       );
 
 
@@ -238,10 +240,17 @@ class EmuInstanceBase
   
   void printInformation()
   {
-    jaffarCommon::logger::log("[] Player 1 Coordinates:    (%d, %d, %d)\n", players[0].mo->x, players[0].mo->y, players[0].mo->z);
-    jaffarCommon::logger::log("[] Player 1 Angle:           %u\n", players[0].mo->angle);
-    jaffarCommon::logger::log("[] Player 1 Momenta:        (%d, %d, %d)\n", players[0].mo->momx, players[0].mo->momy, players[0].mo->momz);
-    jaffarCommon::logger::log("[] Player 1 Health:          %d\n", players[0].mo->health);
+    char mapName[512];
+    headlessGetMapName(mapName);
+    jaffarCommon::logger::log("[] Map: %s\n", mapName);
+
+    if (players[0].mo != nullptr)
+    {
+      jaffarCommon::logger::log("[] Player 1 Coordinates:    (%d, %d, %d)\n", players[0].mo->x, players[0].mo->y, players[0].mo->z);
+      jaffarCommon::logger::log("[] Player 1 Angle:           %u\n", players[0].mo->angle);
+      jaffarCommon::logger::log("[] Player 1 Momenta:        (%d, %d, %d)\n", players[0].mo->momx, players[0].mo->momy, players[0].mo->momz);
+      jaffarCommon::logger::log("[] Player 1 Health:          %d\n", players[0].mo->health);
+    }
   }
 
   void initializeVideoOutput()

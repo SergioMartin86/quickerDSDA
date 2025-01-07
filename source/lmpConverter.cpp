@@ -14,7 +14,7 @@ struct playerInput_t
   bool fire;
   bool action;
   uint8_t weapon;
-  bool special;
+  bool altWeapon;
 };
 
 int main(int argc, char *argv[])
@@ -117,12 +117,10 @@ int main(int argc, char *argv[])
      newInput[playerId].turningSpeed  = (int8_t)input[curPos++];
 
      uint8_t bits = input[curPos++];
-     newInput[playerId].fire    = ((bits >> 0) & 0b00000001) > 0; 
-     newInput[playerId].action  = ((bits >> 1) & 0b00000001) > 0; 
-     newInput[playerId].weapon  = ((bits >> 2) & 0b00000111); 
-     newInput[playerId].special = ((bits >> 7) & 0b00000001) > 0; 
-
-     if (newInput[playerId].special == true) printf("Detected special action\n");
+     newInput[playerId].fire       = ((bits >> 0) & 0b00000001) > 0; 
+     newInput[playerId].action     = ((bits >> 1) & 0b00000001) > 0; 
+     newInput[playerId].weapon     = ((bits >> 2) & 0b00000111); 
+     newInput[playerId].altWeapon  = ((bits >> 5) & 0b00000001) > 0; 
    }
 
    // Pushing new tic input
@@ -140,13 +138,14 @@ int main(int argc, char *argv[])
   {
     for (uint8_t playerId = 0; playerId < playerCount; playerId++)
     {
-      printf("|%4d,%4d,%4d,%s%s%1u",
+      printf("|%4d,%4d,%4d,%s%s%1u%s",
        _inputVector[ticIdx][playerId].forwardSpeed,
        _inputVector[ticIdx][playerId].strafingSpeed,
        _inputVector[ticIdx][playerId].turningSpeed,
        _inputVector[ticIdx][playerId].fire ? "F" : ".",
        _inputVector[ticIdx][playerId].action ? "A" : ".",
-       _inputVector[ticIdx][playerId].weapon
+       _inputVector[ticIdx][playerId].weapon,
+       _inputVector[ticIdx][playerId].altWeapon ? "W" : "."
       );
     }
 

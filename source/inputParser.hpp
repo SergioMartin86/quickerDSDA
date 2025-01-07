@@ -22,6 +22,7 @@ struct playerInput_t
   bool fire = false;
   bool action = false;
   uint8_t weapon = 0;
+  bool altWeapon = false;
 };
 
 typedef std::array<playerInput_t, _MAX_PLAYERS> input_t;
@@ -131,6 +132,11 @@ public:
     c = ss.get(); 
     if (c != ' ' && c < 48 && c > 57) reportBadInputString(inputString, c);
     if (c != ' ') input.weapon += (uint8_t)c - 48;
+
+    // Alt Weapon indicator
+    c = ss.get();
+    if (c != '.' && c != 'W') reportBadInputString(inputString, c);
+    if (c == 'W') input.altWeapon = true;
   }
 
   static inline void reportBadInputString(const std::string &inputString, const char c)
