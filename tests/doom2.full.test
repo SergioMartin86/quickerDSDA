@@ -1,9 +1,9 @@
 {
-  "IWAD File Path": "wads/freedoom1.wad",
-  "Expected IWAD SHA1": "97BB88094A51457A8DCAD98C58BE22A2D0FA9A37",
+  "IWAD File Path": "wads/DOOM2.WAD",
+  "Expected IWAD SHA1": "7EC7652FCFCE8DDC6E801839291F0E28EF1D5AE7",
   "Skill Level": 4,
-  "Episode": 2, 
-  "Map": 3,
+  "Episode": 1, 
+  "Map": 1,
   "Compatibility Level": 3,
   "Fast Monsters": false,
   "Monsters Respawn": false,

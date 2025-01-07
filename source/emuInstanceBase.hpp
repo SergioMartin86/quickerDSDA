@@ -133,14 +133,17 @@ class EmuInstanceBase
     // serializeState(s);
     // hash.Update(memBlock, SAVEGAMESIZE);
     
-    hash.Update(players[0].mo->x);
-    hash.Update(players[0].mo->y);
-    hash.Update(players[0].mo->z);
-    hash.Update(players[0].mo->angle);
-    hash.Update(players[0].mo->momx);
-    hash.Update(players[0].mo->momy);
-    hash.Update(players[0].mo->momz);
-    hash.Update(players[0].mo->health);
+    if (players[0].mo != nullptr)
+    {
+      hash.Update(players[0].mo->x);
+      hash.Update(players[0].mo->y);
+      hash.Update(players[0].mo->z);
+      hash.Update(players[0].mo->angle);
+      hash.Update(players[0].mo->momx);
+      hash.Update(players[0].mo->momy);
+      hash.Update(players[0].mo->momz);
+      hash.Update(players[0].mo->health);
+    }
 
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
