@@ -1,0 +1,26 @@
+{
+  "IWAD File Path": "wads/PLUTONIA.WAD",
+  "Expected IWAD SHA1": "327F8C41EBD4138354E9FCA63CEBBBD1B9489749",
+  "PWADS": [],
+  "Skill Level": 4,
+  "Episode": 0, 
+  "Map": 1,
+  "Compatibility Level": 4,
+  "Fast Monsters": false,
+  "Monsters Respawn": false,
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false,
+  "Prevent Level Exit": true,
+  "Prevent Game End": true,
+
+  "Expected Result":
+  {
+    "Map Number": 30,
+    "Is Level Exit": true, 
+    "Is Game End": true
+  }
+
+}

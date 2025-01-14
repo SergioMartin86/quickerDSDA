@@ -1,0 +1,25 @@
+{
+  "IWAD File Path": "wads/freedoom1.wad",
+  "Expected IWAD SHA1": "9E38DCC0D1E9FBD20382BA19A6BDF11F7A2B0502",
+  "PWADS": [ ],
+  "Skill Level": 1,
+  "Episode": 1, 
+  "Map": 2,
+  "Compatibility Level": 3,
+  "Fast Monsters": false,
+  "Monsters Respawn": false,
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false,
+  "Prevent Level Exit": true,
+  "Prevent Game End": false,
+
+  "Expected Result":
+  {
+    "Map Number": 2,
+    "Is Level Exit": true, 
+    "Is Game End": false
+  }
+}

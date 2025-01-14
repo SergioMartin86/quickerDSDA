@@ -1,0 +1,25 @@
+{
+  "IWAD File Path": "wads/DOOM.WAD",
+  "Expected IWAD SHA1": "117015379C529573510BE08CF59810AA10BB934E",
+  "PWADS": [ ],
+  "Skill Level": 4,
+  "Episode": 4, 
+  "Map": 1,
+  "Compatibility Level": 3,
+  "Fast Monsters": false,
+  "Monsters Respawn": false,
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false,
+  "Prevent Level Exit": false,
+  "Prevent Game End": false,
+
+  "Expected Result":
+  {
+    "Map Number": 8,
+    "Is Level Exit": true, 
+    "Is Game End": true
+  }
+}

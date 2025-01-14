@@ -1,0 +1,31 @@
+{
+  "IWAD File Path": "wads/TNT.WAD",
+  "Expected IWAD SHA1": "139E26D801A64B404B8D898DEFCA10227A61867B",
+  "PWADS":
+   [
+     { 
+	   "File Path": "wads/tnt31.wad",
+	   "Expected SHA1": "D292445192DD1ECB6E6E5350443755B9B2073255"
+	 }
+   ],
+  "Skill Level": 4,
+  "Episode": 0, 
+  "Map": 1,
+  "Compatibility Level": 4,
+  "Fast Monsters": false,
+  "Monsters Respawn": false,
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false,
+  "Prevent Level Exit": false,
+  "Prevent Game End": true,
+
+  "Expected Result":
+  {
+    "Map Number": 30,
+    "Is Level Exit": true, 
+    "Is Game End": true
+  }
+}

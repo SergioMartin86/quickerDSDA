@@ -37,12 +37,19 @@ extern "C"
 }
 
 // Players information
+extern "C" int enableOutput;
 extern "C" player_t players[MAX_MAXPLAYERS];
+extern "C" int preventLevelExit;
+extern "C" int preventGameEnd;
+extern "C" int reachedLevelExit;
+extern "C" int reachedGameEnd;
+extern "C" int gamemap;
+extern "C" int gametic;
 
 namespace jaffar
 {
 
-#define SAVEGAMESIZE 0x40000
+#define SAVEGAMESIZE 0x100000
 
 class EmuInstanceBase
 {
@@ -65,6 +72,9 @@ class EmuInstanceBase
     _monstersRespawn = jaffarCommon::json::getBoolean(config, "Monsters Respawn");
     _noMonsters = jaffarCommon::json::getBoolean(config, "No Monsters");
 
+    _preventLevelExit  = jaffarCommon::json::getBoolean(config, "Prevent Level Exit");
+    _preventGameEnd  = jaffarCommon::json::getBoolean(config, "Prevent Game End");
+
     _player1Present = jaffarCommon::json::getBoolean(config, "Player 1 Present");
     _player2Present = jaffarCommon::json::getBoolean(config, "Player 2 Present");
     _player3Present = jaffarCommon::json::getBoolean(config, "Player 3 Present");
@@ -76,6 +86,16 @@ class EmuInstanceBase
     if (_player3Present == true) _playerCount++;
     if (_player4Present == true) _playerCount++;
 
+    // Parsing PWAD list
+    auto pwadsJs = jaffarCommon::json::getArray<nlohmann::json>(config, "PWADS");
+    for (auto entry : pwadsJs)
+    {
+      auto pwadFilePath = jaffarCommon::json::getString(entry, "File Path");
+      auto pwadExpectedSHA1 = jaffarCommon::json::getString(entry, "Expected SHA1");
+      _PWADFilePaths.push_back(pwadFilePath);
+      _PWADExpectedSHA1s.push_back(pwadExpectedSHA1);
+    }
+
     // Initializing input parser
     nlohmann::json inputParserConfig;
     inputParserConfig["Player Count"] = _playerCount;
@@ -85,6 +105,127 @@ class EmuInstanceBase
 
   virtual ~EmuInstanceBase() 
   {
+  }
+
+  void initialize()
+  {
+    // Loading IWAD File
+    std::string IWADFileData;
+    if (jaffarCommon::file::loadStringFromFile(IWADFileData, _IWADFilePath) == false) JAFFAR_THROW_LOGIC("Could not IWAD file: %s\n", _IWADFilePath.c_str());
+
+    // Calculating IWAD SHA1
+    auto IWADSHA1 = jaffarCommon::hash::getSHA1String(IWADFileData);
+
+    // Checking with the expected SHA1 hash
+    if (IWADSHA1 != _expectedIWADSHA1) JAFFAR_THROW_LOGIC("Wrong IWAD SHA1. Found: '%s', Expected: '%s'\n", IWADSHA1.c_str(), _expectedIWADSHA1.c_str());
+
+    // Loading PWAD Files
+    for (size_t i = 0; i < _PWADFilePaths.size(); i++)
+    {
+      // Loading PWAD File
+      std::string PWADFileData;
+      if (jaffarCommon::file::loadStringFromFile(PWADFileData, _PWADFilePaths[i]) == false) JAFFAR_THROW_LOGIC("Could not PWAD file: %s\n", _PWADFilePaths[i].c_str());
+
+      // Calculating IWAD SHA1
+      auto PWADSHA1 = jaffarCommon::hash::getSHA1String(PWADFileData);
+
+      // Checking with the expected SHA1 hash
+      if (PWADSHA1 != _PWADExpectedSHA1s[i]) JAFFAR_THROW_LOGIC("Wrong PWAD SHA1. Found: '%s', Expected: '%s'\n", PWADSHA1.c_str(), _PWADExpectedSHA1s[i].c_str());
+    }
+
+    // Creating arguments
+    int argc = 0;
+    char** argv = (char**) malloc (sizeof(char*) * 512);
+    
+    // Specifying executable name
+    char arg0[] = "dsda";
+    argv[argc++] = arg0;
+
+    // Specifying IWAD
+    char arg1[] = "-iwad";
+    argv[argc++] = arg1;
+    char* iwadPath = (char*)((uint64_t)_IWADFilePath.c_str());
+    argv[argc++] = iwadPath;
+
+    // Eliminating restrictions to TAS inputs
+    char arg2[] = "-tas";
+    argv[argc++] = arg2;
+
+    // Specifying skill level
+    char arg3[] = "-skill";
+    argv[argc++] = arg3;
+    char argSkill[512];
+    sprintf(argSkill, "%d", _skill);
+    argv[argc++] = argSkill;
+
+    // Specifying episode and map
+    char arg4[] = "-warp";
+    argv[argc++] = arg4;
+    char argEpisode[512];
+    if (_episode > 0)
+    {
+      sprintf(argEpisode, "%d", _episode);
+      argv[argc++] = argEpisode;
+    }
+    char argMap[512];
+    sprintf(argMap, "%d", _map);
+    argv[argc++] = argMap;
+
+    // Specifying comp level
+    char arg5[] = "-complevel";
+    argv[argc++] = arg5;
+    char argCompatibilityLevel[512];
+    sprintf(argCompatibilityLevel, "%d", _compatibilityLevel);
+    argv[argc++] = argCompatibilityLevel;
+
+    // Specifying fast monsters
+    char arg6[] = "-fast";
+    if (_fastMonsters) argv[argc++] = arg6;
+
+    // Specifying monsters respawn
+    char arg7[] = "-respawn";
+    if (_monstersRespawn) argv[argc++] = arg7;
+
+    // Specifying no monsters
+    char arg8[] = "-nomonsters";
+    if (_noMonsters) argv[argc++] = arg8;
+
+    // Specifying PWAD Files
+    char arg9[] = "-file";
+    for (size_t i = 0; i < _PWADFilePaths.size(); i++)
+    {
+     argv[argc++] = arg9;
+     char* pwadPath = (char*)((uint64_t)_PWADFilePaths[i].c_str());
+     argv[argc++] = pwadPath;
+    }
+
+    // Initializing DSDA core
+    headlessMain(argc, argv);
+
+    // Getting video information
+    _videoSource = (uint8_t*)headlessGetVideoBuffer();
+    _videoWidth  = headlessGetVideoWidth();
+    _videoHeight = headlessGetVideoHeight();
+    _videoPitch  = headlessGetVideoPitch();
+
+    // Calculating video buffer size
+    int pixelBytes = 4; // RGB32
+    _videoBufferSize = _videoWidth * _videoHeight * pixelBytes;
+
+    // Allocating buffer
+    _videoBuffer = (uint32_t*) malloc (_videoBufferSize);
+
+    // Setting save state size
+    _stateSize = SAVEGAMESIZE;
+
+    // Setting level exit prevention flag
+    if (_preventLevelExit == true) preventLevelExit = 1;
+
+    // Setting level exit prevention flag
+    if (_preventGameEnd == true) preventGameEnd = 1;
+
+    // Enabling DSDA output, for debugging
+    enableOutput = 1;
   }
 
   virtual void advanceState(const jaffar::input_t &input)
@@ -124,16 +265,19 @@ class EmuInstanceBase
        video[3] = color[3];
       } 
     }
+
+    if (reachedLevelExit == 1) jaffarCommon::logger::log("[] Level Exit detected on tic:   %d\n", gametic);
+    if (reachedGameEnd   == 1) jaffarCommon::logger::log("[] Gane End detected on tic:   %d\n", gametic);
   }
 
   inline jaffarCommon::hash::hash_t getStateHash() const
   {
     MetroHash128 hash;
 
-    // uint8_t memBlock[SAVEGAMESIZE];
-    // jaffarCommon::serializer::Contiguous s(memBlock);
-    // serializeState(s);
-    // hash.Update(memBlock, SAVEGAMESIZE);
+    hash.Update(reachedLevelExit);
+    hash.Update(reachedGameEnd);
+    hash.Update(gamemap);
+    hash.Update(gametic);
     
     if (players[0].mo != nullptr)
     {
@@ -152,98 +296,19 @@ class EmuInstanceBase
     return result;
   }
 
-  void initialize()
-  {
-    // Loading IWAD File
-    std::string IWADFileData;
-    if (jaffarCommon::file::loadStringFromFile(IWADFileData, _IWADFilePath) == false) JAFFAR_THROW_LOGIC("Could not IWAD file: %s\n", _IWADFilePath.c_str());
+  int getMapNumber () const { return gamemap; }
+  bool isLevelExit () const { return reachedLevelExit == 1; }
+  bool isGameEnd () const { return reachedGameEnd == 1; }
 
-    // Calculating IWAD SHA1
-    auto IWADSHA1 = jaffarCommon::hash::getSHA1String(IWADFileData);
-
-    // Checking with the expected SHA1 hash
-    if (IWADSHA1 != _expectedIWADSHA1) JAFFAR_THROW_LOGIC("Wrong IWAD SHA1. Found: '%s', Expected: '%s'\n", IWADSHA1.c_str(), _expectedIWADSHA1.c_str());
-
-    // Creating arguments
-    int argc = 0;
-    char** argv = (char**) malloc (sizeof(char*) * 512);
-    
-    // Specifying executable name
-    char arg0[] = "dsda";
-    argv[argc++] = arg0;
-
-    // Specifying IWAD
-    char arg1[] = "-iwad";
-    argv[argc++] = arg1;
-    char* iwadPath = (char*)((uint64_t)_IWADFilePath.c_str());
-    argv[argc++] = iwadPath;
-
-    // Eliminating restrictions to TAS inputs
-    char arg2[] = "-tas";
-    argv[argc++] = arg2;
-
-    // Specifying skill level
-    char arg3[] = "-skill";
-    argv[argc++] = arg3;
-    char argSkill[512];
-    sprintf(argSkill, "%d", _skill);
-    argv[argc++] = argSkill;
-
-    // Specifying episode and map
-    char arg4[] = "-warp";
-    argv[argc++] = arg4;
-    char argEpisode[512];
-    sprintf(argEpisode, "%d", _episode);
-    argv[argc++] = argEpisode;
-    char argMap[512];
-    sprintf(argMap, "%d", _map);
-    argv[argc++] = argMap;
-
-    // Specifying comp level
-    char arg5[] = "-complevel";
-    argv[argc++] = arg5;
-    char argCompatibilityLevel[512];
-    sprintf(argCompatibilityLevel, "%d", _compatibilityLevel);
-    argv[argc++] = argCompatibilityLevel;
-
-    // Specifying fast monsters
-    char arg6[] = "-fast";
-    if (_fastMonsters) argv[argc++] = arg6;
-
-    // Specifying monsters respawn
-    char arg7[] = "-respawn";
-    if (_monstersRespawn) argv[argc++] = arg7;
-
-    // Specifying no monsters
-    char arg8[] = "-nomonsters";
-    if (_noMonsters) argv[argc++] = arg8;
-
-    // Initializing DSDA core
-    headlessMain(argc, argv);
-
-    // Getting video information
-    _videoSource = (uint8_t*)headlessGetVideoBuffer();
-    _videoWidth  = headlessGetVideoWidth();
-    _videoHeight = headlessGetVideoHeight();
-    _videoPitch  = headlessGetVideoPitch();
-
-    // Calculating video buffer size
-    int pixelBytes = 4; // RGB32
-    _videoBufferSize = _videoWidth * _videoHeight * pixelBytes;
-
-    // Allocating buffer
-    _videoBuffer = (uint32_t*) malloc (_videoBufferSize);
-
-    // Setting save state size
-    _stateSize = SAVEGAMESIZE;
-  }
-  
   void printInformation()
   {
     char mapName[512];
     headlessGetMapName(mapName);
-    jaffarCommon::logger::log("[] Map: %s\n", mapName);
-
+    jaffarCommon::logger::log("[] Map:        %s\n", mapName);
+    jaffarCommon::logger::log("[] Game Tic:   %d\n", gametic);
+    jaffarCommon::logger::log("[] Level Exit: %s\n", reachedLevelExit == 1 ? "Yes" : "No");
+    jaffarCommon::logger::log("[] Game End:   %s\n", reachedGameEnd   == 1 ? "Yes" : "No");
+ 
     if (players[0].mo != nullptr)
     {
       jaffarCommon::logger::log("[] Player 1 Coordinates:    (%d, %d, %d)\n", players[0].mo->x, players[0].mo->y, players[0].mo->z);
@@ -339,6 +404,9 @@ class EmuInstanceBase
   std::string _IWADFilePath;
   std::string _expectedIWADSHA1;
 
+  std::vector<std::string> _PWADFilePaths;
+  std::vector<std::string> _PWADExpectedSHA1s;
+
   unsigned int _skill; 
   unsigned int _episode;
   unsigned int _map;
@@ -346,6 +414,8 @@ class EmuInstanceBase
   bool _fastMonsters;
   bool _monstersRespawn;
   bool _noMonsters;
+  bool _preventLevelExit;
+  bool _preventGameEnd;
   bool _player1Present;  
   bool _player2Present;  
   bool _player3Present;  
