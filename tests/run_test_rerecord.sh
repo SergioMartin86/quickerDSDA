@@ -20,8 +20,8 @@ folder=`basename $PWD`
 pid=$$
 
 # Hash files
-baseHashFile="/tmp/baseMGBA.${folder}.${script}.${pid}.hash"
-newHashFile="/tmp/newMGBA.${folder}.${script}.${pid}.hash"
+baseHashFile="/tmp/baseDSDA.${folder}.${script}.${pid}.hash"
+newHashFile="/tmp/newDSDA.${folder}.${script}.${pid}.hash"
 
 # Removing them if already present
 rm -f ${baseHashFile}
@@ -29,17 +29,17 @@ rm -f ${newHashFile}.simple
 rm -f ${newHashFile}.rerecord
 
 set -x
-# Running script on base MGBA
+# Running script on base DSDA
 ${baseExecutable} ${script} --hashOutputFile ${baseHashFile}.simple ${testerArgs} --cycleType Simple
 
-# Running script on new MGBA (Simple)
+# Running script on new DSDA (Simple)
 ${newExecutable} ${script} --hashOutputFile ${newHashFile}.simple ${testerArgs} --cycleType Simple
 
-# Running script on base MGBA (Rerecord)
-${newExecutable} ${script} --hashOutputFile ${baseHashFile}.rerecord ${testerArgs} --cycleType Rerecord
+# Running script on base DSDA (Rerecord)
+${newExecutable} ${script} --hashOutputFile ${baseHashFile}.rerecord ${testerArgs} --cycleType Rerecord --rerecordDepth 16
 
-# Running script on new MGBA (Rerecord)
-${newExecutable} ${script} --hashOutputFile ${newHashFile}.rerecord ${testerArgs} --cycleType Rerecord
+# Running script on new DSDA (Rerecord)
+${newExecutable} ${script} --hashOutputFile ${newHashFile}.rerecord ${testerArgs} --cycleType Rerecord --rerecordDepth 16
 set +x
 
 # Comparing hashes
