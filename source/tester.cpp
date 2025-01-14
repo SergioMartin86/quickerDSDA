@@ -223,6 +223,7 @@ int main(int argc, char *argv[])
   printf("[] Elapsed time:                           %3.3fs\n", (double)dt * 1.0e-9);
   printf("[] Performance:                            %.3f inputs / s\n", (double)sequenceLength / elapsedTimeSeconds);
   printf("[] Final State Hash:                       %s\n", hashStringBuffer);
+  printf("[] Effective Save State Size:              %lu bytes\n", e.getEffectiveSaveStateSize());
 
   // Checking expected consitions
   auto mapNumber = e.getMapNumber ();

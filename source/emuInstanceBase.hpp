@@ -31,6 +31,7 @@ extern "C"
   uint32_t* headlessGetPallette();
 
   void headlessSetSaveStatePointer(void* savePtr, int saveStateSize);
+  size_t headlessGetEffectiveSaveSize();
   void dsda_ArchiveAll(void);
   void dsda_UnArchiveAll(void);
   void headlessGetMapName(char* outString);
@@ -382,6 +383,7 @@ class EmuInstanceBase
 
   size_t getVideoBufferSize() const { return _videoBufferSize; }
   uint8_t* getVideoBufferPtr() const { return (uint8_t*)_videoBuffer; }
+  size_t getEffectiveSaveStateSize() const { return headlessGetEffectiveSaveSize(); }
 
   // Virtual functions
 
