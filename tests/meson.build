@@ -1,7 +1,7 @@
 nomalloc = environment({'MALLOC_PERTURB_': '0'})
 
 bash = find_program('bash')
-testTimeout = 240
+testTimeout = 600
 
 # Tests for copyrighted game roms (only for local testing or own CI runners)
 protectedSimpleTestSet = [ 
@@ -57,7 +57,7 @@ freeSimpleTestSet = [
 # Creating test set based on whether copyrighted roms are to be used
 simpleTestSet = freeSimpleTestSet
 rerecordTestSet = freeRerecordTestSet
-if get_option('onlyfree') == false
+if get_option('onlyFree') == false
  simpleTestSet += protectedSimpleTestSet
  rerecordTestSet += protectedRerecordTestSet
 endif

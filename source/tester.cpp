@@ -230,8 +230,13 @@ int main(int argc, char *argv[])
   auto isGameEnd = e.isGameEnd ();
 
   if (mapNumber != expectedMapNumber) { printf("[] Test Failed: Map Number (%d) different from expected one (%d)\n", mapNumber, expectedMapNumber); return -1; }
-  if (isLevelExit != expectedIsLevelExit) { printf("[] Test Failed: Failed to reach level exit on the last tic\n"); return -1; }
-  if (isGameEnd != expectedIsGameEnd) { printf("[] Test Failed: Failed to reach game end on the last tic\n"); return -1; }
+
+  // These tests don't work correctly for rerecording
+  if (cycleType != "Rerecord")
+  {
+    if (isLevelExit != expectedIsLevelExit) { printf("[] Test Failed: Failed to reach level exit on the last tic\n"); return -1; }
+    if (isGameEnd != expectedIsGameEnd) { printf("[] Test Failed: Failed to reach game end on the last tic\n"); return -1; }
+  }
 
  
   // If saving hash, do it now

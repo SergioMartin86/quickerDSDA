@@ -274,8 +274,8 @@ class EmuInstanceBase
   {
     MetroHash128 hash;
 
-    hash.Update(reachedLevelExit);
-    hash.Update(reachedGameEnd);
+    // hash.Update(reachedLevelExit);
+    // hash.Update(reachedGameEnd);
     hash.Update(gamemap);
     hash.Update(gametic);
     

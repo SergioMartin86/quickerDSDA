@@ -13,7 +13,7 @@
   "Player 2 Present": false,
   "Player 3 Present": false,
   "Player 4 Present": false,
-  "Prevent Level Exit": true,
+  "Prevent Level Exit": false,
   "Prevent Game End": true,
 
   "Expected Result":

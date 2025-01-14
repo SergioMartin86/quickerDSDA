@@ -5,9 +5,9 @@ option('buildPlayer',
   yield: true
 )
 
-option('onlyOpenSource',
+option('onlyFree',
   type : 'boolean',
   value : false,
-  description : 'Test using only open source games (for cloud CI)',
+  description : 'Test using only free wads (for cloud CI)',
   yield: true
 )
