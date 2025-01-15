@@ -52,7 +52,6 @@
 #include "hexen/sn_sonix.h"
 #include "hexen/sv_save.h"
 
-#include "dsda/ambient.h"
 #include "dsda/map_format.h"
 #include "dsda/msecnode.h"
 #include "dsda/scroll.h"
@@ -1025,15 +1024,6 @@ void P_ArchiveThinkers(void) {
       continue;
     }
 
-    if (th->function == dsda_UpdateAmbientSource)
-    {
-      ambient_source_t *ambient_source;
-      P_SAVE_BYTE(tc_ambient_source);
-      P_SAVE_TYPE_REF(th, ambient_source, ambient_source_t);
-      P_ReplaceMobjWithIndex(&ambient_source->mobj);
-      continue;
-    }
-
     if (P_IsMobjThinker(th))
     {
       mobj_t *mobj;
@@ -1175,7 +1165,6 @@ void P_UnArchiveThinkers(void) {
         tc == tc_poly_move      ? sizeof(polyevent_t)      :
         tc == tc_poly_door      ? sizeof(polydoor_t)       :
         tc == tc_quake          ? sizeof(quake_t)          :
-        tc == tc_ambient_source ? sizeof(ambient_source_t) :
         tc == tc_mobj           ? sizeof(mobj_t)           :
       0;
     }
@@ -1550,15 +1539,6 @@ void P_UnArchiveThinkers(void) {
           break;
         }
 
-      case tc_ambient_source:
-        {
-          ambient_source_t *ambient_source = Z_MallocLevel(sizeof(*ambient_source));
-          P_LOAD_P(ambient_source);
-          ambient_source->thinker.function = dsda_UpdateAmbientSource;
-          P_AddThinker(&ambient_source->thinker);
-          break;
-        }
-
       case tc_mobj:
         {
           mobj_t *mobj = Z_MallocLevel(sizeof(mobj_t));
@@ -1627,10 +1607,6 @@ void P_UnArchiveThinkers(void) {
     else if (th->function == dsda_UpdateQuake)
     {
       P_ReplaceIndexWithMobj(&((quake_t *) th)->location, mobj_p, mobj_count);
-    }
-    else if (th->function == dsda_UpdateAmbientSource)
-    {
-      P_ReplaceIndexWithMobj(&((ambient_source_t *) th)->mobj, mobj_p, mobj_count);
     }
     else if (P_IsMobjThinker(th))
     {

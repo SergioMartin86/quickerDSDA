@@ -5,7 +5,6 @@ quickerDSDASrc =  [
  'core/doomstat.c',
  'core/dsda.c',
  'core/dsda/aim.c',
- 'core/dsda/ambient.cpp',
  'core/dsda/analysis.c',
  'core/dsda/args.c',
  'core/dsda/compatibility.c',

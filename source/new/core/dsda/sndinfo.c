@@ -22,7 +22,6 @@
 #include "sc_man.h"
 #include "sounds.h"
 
-#include "dsda/ambient.h"
 #include "dsda/map_format.h"
 
 #include "sndinfo.h"
@@ -46,6 +45,5 @@ const char* dsda_SndInfoMapSongLumpName(int map) {
 void dsda_LoadSndInfo(void) {
   int i;
 
-    dsda_LoadAmbientSndInfo();
     return;
 }

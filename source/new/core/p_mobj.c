@@ -56,7 +56,6 @@
 
 #include "dsda.h"
 #include "dsda/aim.h"
-#include "dsda/ambient.h"
 #include "dsda/excmd.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
@@ -2141,10 +2140,6 @@ spawnit:
   if (options & MTF_AMBUSH)
     mobj->flags |= MF_AMBUSH;
 
-  if (thingtype == 14064)
-  {
-    dsda_SpawnAmbientSource(mobj);
-  }
 
   return mobj;
 }
