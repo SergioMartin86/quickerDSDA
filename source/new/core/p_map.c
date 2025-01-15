@@ -1440,7 +1440,7 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
 
   if (!P_CheckPosition(thing, x, y))
   {                           // Solid wall or thing
-    if (heretic || !BlockingMobj || BlockingMobj->player || !thing->player)
+    if ( !BlockingMobj || BlockingMobj->player || !thing->player)
       map_format.check_impact(thing);
     return false;
   }
@@ -1502,7 +1502,6 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
 
     if (
       !(thing->flags & MF_TELEPORT) &&
-      (!heretic || thing->type != HERETIC_MT_MNTRFX2) &&
       tmfloorz - thing->z > 24*FRACUNIT
     )
     {
@@ -1512,11 +1511,6 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
       return tmunstuck
         && !(ceilingline && untouched(ceilingline))
         && !(  floorline && untouched(  floorline));
-    }
-
-    if (heretic && tmfloorz > thing->z)
-    {
-      map_format.check_impact(thing);
     }
 
     /* killough 3/15/98: Allow certain objects to drop off
@@ -2184,13 +2178,6 @@ dboolean PTR_AimTraverse (intercept_t* in)
   if (!(th->flags&MF_SHOOTABLE))
     return true;    // corpse or something
 
-  if (heretic && th->type == HERETIC_MT_POD)
-    return true;    // Can't auto-aim at pods
-
-  if (hexen && th->player && netgame && !deathmatch)
-  {                           // don't aim at fellow co-op players
-      return true;
-  }
 
   /* killough 7/19/98, 8/2/98:
    * friends don't aim at friends (except players), at least not first
@@ -2225,7 +2212,6 @@ dboolean PTR_AimTraverse (intercept_t* in)
   return false;   // don't go any farther
 }
 
-// heretic
 extern mobjtype_t PuffType;
 
 //
@@ -2369,9 +2355,6 @@ dboolean PTR_ShootTraverse (intercept_t* in)
   if (!(th->flags&MF_SHOOTABLE))
     return true;  // corpse or something
 
-  if (heretic && th->flags & MF_SHADOW && shootthing->player->readyweapon == wp_staff)
-    return true;
-
   // check angles to see if the thing can be aimed at
 
   dist = FixedMul (attackrange, in->frac);
@@ -2396,19 +2379,10 @@ dboolean PTR_ShootTraverse (intercept_t* in)
 
   // Spawn bullet puffs or blod spots,
   // depending on target type.
-  if (heretic && PuffType == HERETIC_MT_BLASTERPUFF1)
-  {                           // Make blaster big puff
-    mobj_t* mo;
-    mo = P_SpawnMobj(x, y, z, HERETIC_MT_BLASTERPUFF2);
-    S_StartMobjSound(mo, heretic_sfx_blshit);
-  }
-  else
-  {
     if (in->d.thing->flags & MF_NOBLOOD)
       P_SpawnPuff (x,y,z);
     else
       P_SpawnBlood (x,y,z, la_damage, th);
-  }
 
   if (la_damage)
   {
@@ -2567,7 +2541,7 @@ dboolean PTR_UseTraverse (intercept_t* in)
         }
         S_StartMobjSound(usething, sound);
       }
-      else if (!heretic)
+      else
       {
         S_StartSound (usething, sfx_noway);
       }

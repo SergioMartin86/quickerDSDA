@@ -383,15 +383,6 @@ void G_SetSpeed(dboolean reset)
 
 static dboolean WeaponSelectable(weapontype_t weapon)
 {
-  if (heretic)
-  {
-    return weapon != wp_beak && players[consoleplayer].weaponowned[weapon];
-  }
-  else if (hexen)
-  {
-    return weapon < HEXEN_NUMWEAPONS && players[consoleplayer].weaponowned[weapon];
-  }
-
   if (gamemode == shareware)
   {
     if (weapon == wp_plasma || weapon == wp_bfg)
@@ -927,9 +918,6 @@ static void G_SetInitialInventory(player_t *p)
     p->readyweapon = p->pendingweapon = g_wp_pistol;
     p->weaponowned[g_wp_fist] = true;
     p->weaponowned[g_wp_pistol] = true;
-    if (heretic)
-      p->ammo[am_goldwand] = 50;
-    else
       p->ammo[am_clip] = initial_bullets; // Ty 03/12/98 - use dehacked values
   }
 
@@ -1484,23 +1472,10 @@ static void G_FinishLevelBehaviour(finish_level_behaviour_t *flb, player_t *p)
   else
     flb->flight_carryover = 0;
 
-  flb->set_one_artifact = heretic;
+  flb->set_one_artifact = 0;
 
-  if (heretic && !deathmatch)
-  {
-    flb->use_flight_artifact = arti_fly;
-    flb->use_flight_count = 16;
-  }
-  else if (hexen && !deathmatch && different_cluster)
-  {
-    flb->use_flight_artifact = hexen_arti_fly;
-    flb->use_flight_count = 25;
-  }
-  else
-  {
     flb->use_flight_artifact = arti_none;
     flb->use_flight_count = 0;
-  }
 
   flb->remove_cards = (!hexen || different_cluster);
 }
@@ -2463,21 +2438,6 @@ void G_RefreshFastMonsters(void)
 
   fast_pending = !!(skill_info.flags & SI_FAST_MONSTERS);
 
-  if (hexen)
-  {
-    return;
-  }
-
-  if (heretic)
-  {
-    for (i = 0; MonsterMissileInfo[i].type != -1; i++)
-    {
-      mobjinfo[MonsterMissileInfo[i].type].speed =
-        MonsterMissileInfo[i].speed[fast_pending] << FRACBITS;
-    }
-
-    return;
-  }
 
   if (fast != fast_pending) {     /* only change if necessary */
     for (i = 0; i < num_mobj_types; ++i)
@@ -2567,16 +2527,7 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
 
   if (!W_LumpNameExists(dsda_MapLumpName(episode, map)))
   {
-    if (heretic)
-    {
-      if (episode > 9)
-        episode = 9;
-      if (map < 1)
-        map = 1;
-      if (map > 9)
-        map = 9;
-    }
-    else if (map_format.map99)
+   if (map_format.map99)
     {
       if (map < 1)
         map = 1;

@@ -209,7 +209,6 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
         // e6y: "Tagged doors don't trigger special lighting" handled wrong
         // http://sourceforge.net/tracker/index.php?func=detail&aid=1411400&group_id=148658&atid=772943
         if (
-          !heretic &&
           door->lighttag &&
           door->topheight - door->sector->floorheight &&
           compatibility_level < mbf_compatibility
@@ -315,7 +314,6 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
         // e6y: "Tagged doors don't trigger special lighting" handled wrong
         // http://sourceforge.net/tracker/index.php?func=detail&aid=1411400&group_id=148658&atid=772943
         if (
-          !heretic &&
           door->lighttag &&
           door->topheight - door->sector->floorheight &&
           compatibility_level < mbf_compatibility
@@ -612,9 +610,6 @@ int EV_VerticalDoor
   player_t* player;
   sector_t* sec;
   vldoor_t* door;
-
-  // heretic_note: I don't see where the return value is used...keeping heretic signature
-  if (heretic) { Heretic_EV_VerticalDoor(line, thing); return 0; }
 
   //  Check for locks
   player = thing->player;

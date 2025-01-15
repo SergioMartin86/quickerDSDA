@@ -838,17 +838,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
     {
       source->player->frags[target->player-players]++;
 
-      if (heretic && target != source)
-      {
-        if (source->player == &players[consoleplayer])
-        {
-          S_StartVoidSound(heretic_sfx_gfrag);
-        }
-        if (source->player->chickenTics)
-        {               // Make a super chicken
-          P_GivePower(source->player, pw_weaponlevel2);
-        }
-      }
     }
   }
   else
@@ -1099,7 +1088,7 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
   }
   else
   {
-    xdeath_limit = heretic ? (P_MobjSpawnHealth(target) >> 1) : P_MobjSpawnHealth(target);
+    xdeath_limit = P_MobjSpawnHealth(target);
     if (target->health < -xdeath_limit && target->info->xdeathstate)
       P_SetMobjState (target, target->info->xdeathstate);
     else
@@ -1218,7 +1207,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 
   if (target->flags & MF_SKULLFLY)
   {
-    if (heretic && target->type == HERETIC_MT_MINOTAUR) return;
     target->momx = target->momy = target->momz = 0;
   }
 
@@ -1309,9 +1297,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
       {
         int saved;
 
-        if (heretic)
-          saved = player->armortype == 1 ? (damage >> 1) : (damage >> 1) + (damage >> 2);
-        else
           saved = player->armortype == 1 ? damage / 3 : damage / 2;
 
         if (player->armorpoints[ARMOR_ARMOR] <= saved)
@@ -1342,61 +1327,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
   target->health -= damage;
   if (target->health <= 0)
   {
-    if (heretic) {
-      target->special1.i = damage;
-      if (target->type == HERETIC_MT_POD && source && source->type != HERETIC_MT_POD)
-      {                       // Make sure players get frags for chain-reaction kills
-        P_SetTarget(&target->target, source);
-      }
-      if (player && inflictor && !player->chickenTics)
-      {                       // Check for flame death
-        if ((inflictor->flags2 & MF2_FIREDAMAGE)
-            || ((inflictor->type == HERETIC_MT_PHOENIXFX1)
-                && (target->health > -50) && (damage > 25)))
-        {
-          target->flags2 |= MF2_FIREDAMAGE;
-        }
-      }
-    }
-    else if (hexen)
-    {
-      if (inflictor)
-      {                       // check for special fire damage or ice damage deaths
-        if (inflictor->flags2 & MF2_FIREDAMAGE)
-        {
-          if (player && !player->morphTics)
-          {               // Check for flame death
-            if (target->health > -50 && damage > 25)
-            {
-              target->flags2 |= MF2_FIREDAMAGE;
-            }
-          }
-          else
-          {
-            target->flags2 |= MF2_FIREDAMAGE;
-          }
-        }
-        else if (inflictor->flags2 & MF2_ICEDAMAGE)
-        {
-          target->flags2 |= MF2_ICEDAMAGE;
-        }
-      }
-      if (source && (source->type == HEXEN_MT_MINOTAUR))
-      {                       // Minotaur's kills go to his master
-        mobj_t *master = source->special1.m;
-        // Make sure still alive and not a pointer to fighter head
-        if (master->player && (master->player->mo == master))
-        {
-          source = master;
-        }
-      }
-      if (source && (source->player) &&
-          (source->player->readyweapon == wp_fourth))
-      {
-        // Always extreme death from fourth weapon
-        target->health = -5000;
-      }
-    }
 
     P_KillMobj (source, target);
     return;

@@ -239,11 +239,6 @@ void T_MoveCompatibleFloor(floormove_t * floor)
 
   if (res == pastdest)    // if destination height is reached
   {
-    if (heretic && floor->type == buildStair)
-    {
-        S_StartSectorSound(floor->sector, heretic_sfx_pstop);
-    }
-
     if (floor->type == floorBuildStair)
       floor->type = floorWaitStair;
 
