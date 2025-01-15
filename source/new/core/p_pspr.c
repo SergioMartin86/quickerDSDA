@@ -391,9 +391,6 @@ dboolean P_CheckAmmo(player_t *player)
   ammotype_t ammo;
   int count;  // Regular
 
-  if (heretic) return Heretic_P_CheckAmmo(player);
-  if (hexen) return P_CheckMana(player);
-
   ammo = weaponinfo[player->readyweapon].ammo;
   if (mbf21)
     count = weaponinfo[player->readyweapon].ammopershot;
@@ -476,32 +473,12 @@ static void P_FireWeapon(player_t *player)
 
   P_SetMobjState(player->mo, pclass.fire_weapon_state);
 
-  if (heretic)
-  {
-    weaponinfo_t *wpinfo;
-
-    wpinfo = player->powers[pw_weaponlevel2] ? &wpnlev2info[0]
-                                             : &weaponinfo[0];
-    newstate = player->refire ? wpinfo[player->readyweapon].holdatkstate
-                              : wpinfo[player->readyweapon].atkstate;
-  }
-  else
-  {
     newstate = weaponinfo[player->readyweapon].atkstate;
-  }
 
   P_SetPsprite(player, ps_weapon, newstate);
   if (hexen || !(weaponinfo[player->readyweapon].flags & WPF_SILENT))
     P_NoiseAlert(player->mo, player->mo);
 
-  // heretic_note: does the order matter? can we move it up?
-  if (heretic)
-  {
-    if (player->readyweapon == wp_gauntlets && !player->refire)
-    {                           // Play the sound for the initial gauntlet attack
-        S_StartMobjSound(player->mo, heretic_sfx_gntuse);
-    }
-  }
 }
 
 //
@@ -546,20 +523,6 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
       && player->mo->state <= &states[pclass.attack_end_state])
     P_SetMobjState(player->mo, pclass.normal_state);
 
-  if (heretic)
-  {
-    if (player->readyweapon == wp_staff
-        && psp->state == &states[HERETIC_S_STAFFREADY2_1]
-        && P_Random(pr_heretic) < 128)
-    {
-        S_StartMobjSound(player->mo, heretic_sfx_stfcrk);
-    }
-  }
-  else if (hexen)
-  {
-    // hexen does nothing here
-  }
-  else
     if (player->readyweapon == wp_chainsaw && psp->state == &states[S_SAW])
       S_StartMobjSound(player->mo, sfx_sawidl);
 

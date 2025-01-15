@@ -147,14 +147,6 @@ dboolean P_SetMobjState(mobj_t* mobj,statenum_t state)
 
 void P_ExplodeMissile (mobj_t* mo)
 {
-  if (heretic && mo->type == HERETIC_MT_WHIRLWIND)
-  {
-    if (++mo->special2.i < 60)
-    {
-      return;
-    }
-  }
-
   mo->momx = mo->momy = mo->momz = 0;
 
   P_SetMobjState (mo, mobjinfo[mo->type].deathstate);
@@ -635,15 +627,6 @@ static void P_XYMovement (mobj_t* mo)
         mo->momx = FixedMul(mo->momx, FRICTION_FLY);
         mo->momy = FixedMul(mo->momy, FRICTION_FLY);
       }
-      else if (
-        hexen ? P_GetThingFloorType(mo) == FLOOR_ICE :
-        heretic ? special == 15 :
-        false
-      )
-      {
-        mo->momx = FixedMul(mo->momx, FRICTION_LOW);
-        mo->momy = FixedMul(mo->momy, FRICTION_LOW);
-      }
       else
       {
         // phares 3/17/98
@@ -897,7 +880,7 @@ floater:
           return;
         }
         // heretic_note: probably not necessary?
-        if (!heretic && mo->player)
+        if (mo->player)
             mo->player->jumpTics = 7;
         if (
           mo->player && /* killough 5/12/98: exclude voodoo dolls */
@@ -921,45 +904,7 @@ floater:
           // and utter appropriate sound.
 
           mo->player->deltaviewheight = mo->momz >> 3;
-
-          if (heretic)
-          {
-            S_StartMobjSound(mo, heretic_sfx_plroof);
-            P_AutoCorrectLookDir(mo->player);
-          }
-          else if (hexen)
-          {
-            if (mo->momz < -23 * FRACUNIT)
-            {
-              P_FallingDamage(mo->player);
-              P_NoiseAlert(mo, mo);
-            }
-            else if (mo->momz < -gravity * 12 && !mo->player->morphTics)
-            {
-              S_StartMobjSound(mo, hexen_sfx_player_land);
-              switch (mo->player->pclass)
-              {
-                case PCLASS_FIGHTER:
-                  S_StartMobjSound(mo, hexen_sfx_player_fighter_grunt);
-                  break;
-                case PCLASS_CLERIC:
-                  S_StartMobjSound(mo, hexen_sfx_player_cleric_grunt);
-                  break;
-                case PCLASS_MAGE:
-                  S_StartMobjSound(mo, hexen_sfx_player_mage_grunt);
-                  break;
-                default:
-                  break;
-              }
-            }
-            else if (P_GetThingFloorType(mo) < FLOOR_LIQUID && !mo->player->morphTics)
-            {
-              S_StartMobjSound(mo, hexen_sfx_player_land);
-            }
-            P_AutoCorrectLookDir(mo->player);
-          }
-          //e6y: compatibility optioned
-          else if (comp[comp_sound] || (mo->health > 0)) /* cph - prevent "oof" when dead */
+        if (comp[comp_sound] || (mo->health > 0)) /* cph - prevent "oof" when dead */
             S_StartSound (mo, sfx_oof);
         }
         else if (hexen && mo->type >= HEXEN_MT_POTTERY1 && mo->type <= HEXEN_MT_POTTERY3)
@@ -1124,16 +1069,6 @@ static void P_NightmareRespawn(mobj_t* mobj)
   mo->spawnpoint = mobj->spawnpoint;
   mo->angle = ANG45 * (mthing->angle/45);
   mo->index = mobj->index;
-
-  // "bug" in the respawn code for heretic
-  // the chicken's return type is stored in special2.i
-  // that value didn't exist in doom so is left uninitialized on respawn
-  // we have to set this to the MT zero value for heretic
-  if (heretic && mo->type == HERETIC_MT_CHICKEN)
-    mo->special2.i = HERETIC_MT_ZERO;
-
-  if (hexen && mo->type == HEXEN_MT_PIG)
-    mo->special2.i = HEXEN_MT_ZERO;
 
   if (mthing->options & MTF_AMBUSH)
     mo->flags |= MF_AMBUSH;
@@ -2312,25 +2247,6 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
     return NULL;
   }
 
-  // MAP_FORMAT_TODO: need to verify heretic types
-  if (heretic)
-  {
-    // Ambient sound sequences
-    if (mthing->type >= 1200 && mthing->type < 1300)
-    {
-      P_AddAmbientSfx(mthing->type - 1200);
-      return NULL;
-    }
-
-    // Check for boss spots
-    if (mthing->type == 56)     // Monster_BossSpot
-    {
-      P_AddBossSpot(mthing->x, mthing->y,
-                    ANG45 * (mthing->angle / 45));
-      return NULL;
-    }
-  }
-
   if (map_format.hexen)
   {
     if (mthing->type >= 1400 && mthing->type < 1410)
@@ -2397,12 +2313,6 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
   // spawn it
 spawnit:
 
-  if (heretic && i == HERETIC_MT_WMACE)
-  {
-    P_AddMaceSpot(mthing);
-    return NULL;
-  }
-
   x = mthing->x;
   y = mthing->y;
 
@@ -2453,7 +2363,7 @@ spawnit:
   else
     mobj->tranmap = NULL;
 
-  mobj->spawnpoint = *mthing; // heretic_note: this is only done with totalkills++ in heretic
+  mobj->spawnpoint = *mthing; 
   mobj->index = index;//e6y
   mobj->iden_nums = iden_num;
 
@@ -2621,17 +2531,9 @@ dboolean P_CheckMissileSpawn (mobj_t* th)
   // move a little forward so an angle can
   // be computed if it immediately explodes
 
-  if (heretic && th->type == HERETIC_MT_BLASTERFX1) {
-    // Ultra-fast ripper spawning missile
-    th->x += (th->momx >> 3);
-    th->y += (th->momy >> 3);
-    th->z += (th->momz >> 3);
-  }
-  else {
     th->x += (th->momx>>1);
     th->y += (th->momy>>1);
     th->z += (th->momz>>1);
-  }
 
   // killough 8/12/98: for non-missile objects (e.g. grenades)
   if (!(th->flags & MF_MISSILE) && mbf_features)
@@ -2713,10 +2615,9 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
 
     z = source->z + 4 * 8 * FRACUNIT + aim.z_offset;
 
-  // heretic global MissileMobj
   MissileMobj = th = P_SpawnMobj(x, y, z, type);
 
-  if (!hexen && th->info->seesound)
+  if (th->info->seesound)
     S_StartMobjSound(th, th->info->seesound);
 
   P_SetTarget(&th->target, source);
@@ -2760,11 +2661,9 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
     return (th);
   }
 
-  // heretic - return missile if it's ok
   return P_CheckMissileSpawn(th) ? th : NULL;
 }
 
-// heretic
 
 #include "p_spec.h"
 

@@ -567,25 +567,6 @@ dboolean PIT_CheckLine (line_t* ld)
   // killough 7/24/98: allow player to move out of 1s wall, to prevent sticking
   if (!ld->backsector) // one sided line
   {
-    if (heretic)
-    {
-      if (tmthing->flags & MF_MISSILE)
-      {                       // Missiles can trigger impact specials
-        if (ld->special)
-        {
-          P_AppendSpecHit(ld);
-        }
-      }
-    }
-    else if (map_format.hexen)
-    {
-      if (tmthing->flags2 & MF2_BLASTED)
-      {
-        P_DamageMobj(tmthing, NULL, NULL, tmthing->info->mass >> 5);
-      }
-      CheckForPushSpecial(ld, 0, tmthing);
-      CheckForDamageSpecial(ld, tmthing);
-    }
     blockline = ld;
     return tmunstuck && !untouched(ld) &&
            FixedMul(tmx-tmthing->x,ld->dy) > FixedMul(tmy-tmthing->y,ld->dx);
@@ -629,8 +610,7 @@ dboolean PIT_CheckLine (line_t* ld)
           ld->flags & ML_BLOCKMONSTERS ||
           (mbf21 && ld->flags & ML_BLOCKLANDMONSTERS && !(tmthing->flags & MF_FLOAT)) ||
           (ld->flags & ML_BLOCKFLOATERS && tmthing->flags & MF_FLOAT)
-        ) &&
-        (!heretic || tmthing->type != HERETIC_MT_POD)
+        ) 
       )
       {
         if (tmthing->flags2 & MF2_BLASTED)
@@ -2873,14 +2853,7 @@ void P_RadiusAttack(mobj_t* spot,mobj_t* source, int damage, int distance, int f
   xl = P_GetSafeBlockX(spot->x - dist - bmaporgx);
 
   bomb.spot = spot;
-  if (heretic && spot->type == HERETIC_MT_POD && spot->target)
-  {
-    bomb.source = spot->target;
-  }
-  else
-  {
     bomb.source = source;
-  }
   bomb.damage = damage;
   bomb.distance = distance;
   bomb.flags = flags;
@@ -2911,30 +2884,7 @@ dboolean PIT_ChangeSector (mobj_t* thing)
 
   if (thing->health <= 0)
   {
-    if (hexen)
-    {
-      if ((thing->flags & MF_CORPSE))
-      {
-        if (thing->flags & MF_NOBLOOD)
-        {
-          P_RemoveMobj(thing);
-        }
-        else
-        {
-          if (thing->state != &states[HEXEN_S_GIBS1])
-          {
-            P_SetMobjState(thing, HEXEN_S_GIBS1);
-            thing->height = 0;
-            thing->radius = 0;
-            S_StartMobjSound(thing, hexen_sfx_player_falling_splat);
-          }
-        }
-        return true;            // keep checking
-      }
-    }
-    else
-    {
-      if (!heretic) P_SetMobjState (thing, S_GIBS);
+      P_SetMobjState (thing, S_GIBS);
 
       if (compatibility_level != doom_12_compatibility)
       {
@@ -2944,7 +2894,6 @@ dboolean PIT_ChangeSector (mobj_t* thing)
       thing->radius = 0;
       thing->color = thing->info->bloodcolor;
       return true; // keep checking
-    }
   }
 
   // crunch dropped items
@@ -3429,8 +3378,6 @@ void P_MapStart(void) {
 void P_MapEnd(void) {
 	tmthing = NULL;
 }
-
-// heretic
 
 mobj_t *onmobj; // generic global onmobj...used for landing on pods/players
 

@@ -107,21 +107,10 @@ void P_InitSwitchList(void)
                  2 : gamemode == commercial ? 3 : 1;
 
   // MAP_FORMAT_TODO: switch list?
-  if (heretic)
-  {
-    alphSwitchList = heretic_alphSwitchList;
-  }
-  else if (hexen)
-  {
-    alphSwitchList = hexen_alphSwitchList;
-  }
-  else
-  {
     lump = W_GetNumForName("SWITCHES"); // cph - new wad lump handling
 
     //jff 3/23/98 read the switch table from a predefined lump
     alphSwitchList = (const switchlist_t *)W_LumpByNum(lump);
-  }
 
   for (i=0;;i++)
   {
@@ -432,8 +421,6 @@ P_UseSpecialLine
   if ((demoplayback ? (demover != 201) : (compatibility_level != boom_201_compatibility)))
     if (side) //jff 6/1/98 fix inadvertent deletion of side test
       return false;
-
-  if (heretic) return Heretic_P_UseSpecialLine(thing, line, side, bossaction);
 
   //jff 02/04/98 add check here for generalized floor/ceil mover
   if (!demo_compatibility)
@@ -1372,11 +1359,9 @@ P_UseSpecialLine
   return !bossaction;
 }
 
-// heretic
 
 dboolean Heretic_P_UseSpecialLine(mobj_t * thing, line_t * line, int side, dboolean bossaction)
 {
-    // This condition never reached in heretic
     if (side || bossaction) return false;
 
     //

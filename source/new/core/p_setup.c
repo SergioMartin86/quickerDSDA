@@ -2315,7 +2315,6 @@ void P_PostProcessCompatibleLineSpecial(line_t *ld)
 
 void P_PostProcessHereticLineSpecial(line_t *ld)
 {
-  // nothing in heretic
 }
 
 void P_PostProcessHexenLineSpecial(line_t *ld)
@@ -3407,12 +3406,6 @@ static void P_UpdateMapFormat()
 {
   if (udmf_map)
   {
-    if (heretic)
-      I_Error("UDMF maps are not supported in Heretic yet");
-
-    if (hexen)
-      I_Error("UDMF maps are not supported in Hexen yet");
-
     dsda_ApplyZDoomMapFormat();
   }
   else
@@ -3424,9 +3417,6 @@ static void P_UpdateMapFormat()
 
     if (has_behavior && !hexen)
     {
-      if (heretic)
-        I_Error("Hexen format maps are not supported in Heretic yet");
-
       dsda_ApplyZDoomMapFormat();
     }
     else
@@ -3841,13 +3831,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   P_MapStart();
 
-  if (heretic)
-  {
-    P_InitAmbientSound();
-    P_InitMonsters();
-    P_OpenWeapons();
-  }
-
   if (map_format.polyobjs)
   {
     PO_ResetBlockMap(true);
@@ -3863,11 +3846,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   if (map_format.acs)
   {
     P_LoadACScripts(level_components.behavior);     // ACS object code
-  }
-
-  if (heretic)
-  {
-    P_CloseWeapons();
   }
 
   // if deathmatch, randomly spawn the active players

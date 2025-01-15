@@ -1352,30 +1352,7 @@ void A_Chase(mobj_t *actor)
   // make active sound
   if (actor->info->activesound && P_Random(pr_see) < 3)
   {
-    if (heretic && actor->type == HERETIC_MT_WIZARD && P_Random(pr_heretic) < 128)
-    {
-      S_StartMobjSound(actor, actor->info->seesound);
-    }
-    else if (heretic && actor->type == HERETIC_MT_SORCERER2)
-    {
-      S_StartVoidSound(actor->info->activesound);
-    }
-    else if (hexen && actor->type == HEXEN_MT_BISHOP && P_Random(pr_hexen) < 128)
-    {
-      S_StartMobjSound(actor, actor->info->seesound);
-    }
-    else if (hexen && actor->type == HEXEN_MT_PIG)
-    {
-      S_StartMobjSound(actor, hexen_sfx_pig_active1 + (P_Random(pr_hexen) & 1));
-    }
-    else if (hexen && actor->flags2 & MF2_BOSS)
-    {
-      S_StartVoidSound(actor->info->activesound);
-    }
-    else
-    {
       S_StartMobjSound(actor, actor->info->activesound);
-    }
   }
 }
 
@@ -1568,61 +1545,13 @@ void A_HeadAttack(mobj_t * actor)
 
   if (P_CheckMeleeRange(actor))
   {
-    int damage = heretic ? HITDICE(6) : (P_Random(pr_headattack) % 6 + 1) * 10;
+    int damage = (P_Random(pr_headattack) % 6 + 1) * 10;
     P_DamageMobj(target, actor, actor, damage);
     return;
   }
 
-  if (!heretic) {
     P_SpawnMissile(actor, target, MT_HEADSHOT);
     return;
-  }
-
-  dist = P_AproxDistance(actor->x - target->x, actor->y - target->y)
-         > 8 * 64 * FRACUNIT;
-  randAttack = P_Random(pr_heretic);
-  if (randAttack < atkResolve1[dist])
-  {                           // Ice ball
-    P_SpawnMissile(actor, target, HERETIC_MT_HEADFX1);
-    S_StartMobjSound(actor, heretic_sfx_hedat2);
-  }
-  else if (randAttack < atkResolve2[dist])
-  {                           // Fire column
-    baseFire = P_SpawnMissile(actor, target, HERETIC_MT_HEADFX3);
-    if (baseFire != NULL)
-    {
-      P_SetMobjState(baseFire, HERETIC_S_HEADFX3_4);      // Don't grow
-      for (i = 0; i < 5; i++)
-      {
-        fire = P_SpawnMobj(baseFire->x, baseFire->y,
-                           baseFire->z, HERETIC_MT_HEADFX3);
-        if (i == 0)
-        {
-          S_StartMobjSound(actor, heretic_sfx_hedat1);
-        }
-        P_SetTarget(&fire->target, baseFire->target);
-        fire->angle = baseFire->angle;
-        fire->momx = baseFire->momx;
-        fire->momy = baseFire->momy;
-        fire->momz = baseFire->momz;
-        fire->damage = 0;
-        fire->health = (i + 1) * 2;
-        P_CheckMissileSpawn(fire);
-      }
-    }
-  }
-  else
-  {                           // Whirlwind
-    mo = P_SpawnMissile(actor, target, HERETIC_MT_WHIRLWIND);
-    if (mo != NULL)
-    {
-      mo->z -= 32 * FRACUNIT;
-      P_SetTarget(&mo->special1.m, target);
-      mo->special2.i = 50;  // Timer for active sound
-      mo->health = 20 * TICRATE;       // Duration
-      S_StartMobjSound(actor, heretic_sfx_hedat3);
-    }
-  }
 }
 
 void A_CyberAttack(mobj_t *actor)
@@ -2371,9 +2300,6 @@ void A_Scream(mobj_t *actor)
 {
   int sound;
 
-  if (heretic) return Heretic_A_Scream(actor);
-  if (hexen) return Hexen_A_Scream(actor);
-
   switch (actor->info->deathsound)
     {
     case 0:
@@ -2466,14 +2392,6 @@ void A_Explode(mobj_t *thingy)
   flags = BF_DAMAGESOURCE;
 
   P_RadiusAttack(thingy, thingy->target, damage, distance, flags);
-  if (
-    heretic ||
-    (
-      hexen &&
-      thingy->z <= thingy->floorz + (distance << FRACBITS) &&
-      thingy->type != HEXEN_MT_POISONCLOUD
-    )
-  ) P_HitFloor(thingy);
 }
 
 //
@@ -2511,9 +2429,6 @@ dboolean P_CheckBossDeath(mobj_t *mo)
 void A_BossDeath(mobj_t *mo)
 {
   line_t junk;
-
-  // heretic_note: probably we can adopt the clean heretic style and merge
-  if (heretic) return Heretic_A_BossDeath(mo);
 
   if (dsda_BossAction(mo))
   {
@@ -4187,10 +4102,6 @@ void A_MinotaurAtk1(mobj_t * actor)
     if (P_CheckMeleeRange(actor))
     {
         P_DamageMobj(actor->target, actor, actor, HITDICE(4));
-        if (heretic && (player = actor->target->player) != NULL)
-        {                       // Squish the player
-            player->deltaviewheight = -16 * FRACUNIT;
-        }
     }
 }
 
@@ -4205,28 +4116,7 @@ void A_MinotaurDecide(mobj_t * actor)
     {
         return;
     }
-    if (heretic)
-      S_StartMobjSound(actor, heretic_sfx_minsit);
-    dist = P_AproxDistance(actor->x - target->x, actor->y - target->y);
-    if (target->z + target->height > actor->z
-        && target->z + target->height < actor->z + actor->height
-        && dist < g_mntr_decide_range * 64 * FRACUNIT
-        && dist > 1 * 64 * FRACUNIT && P_Random(pr_heretic) < g_mntr_charge_rng)
-    {                           // Charge attack
-        // Don't call the state function right away
-        P_SetMobjStateNF(actor, g_mntr_charge_state);
-        actor->flags |= MF_SKULLFLY;
-        A_FaceTarget(actor);
-        angle = actor->angle >> ANGLETOFINESHIFT;
-        actor->momx = FixedMul(g_mntr_charge_speed, finecosine[angle]);
-        actor->momy = FixedMul(g_mntr_charge_speed, finesine[angle]);
-        // Charge duration
-        if (hexen)
-          actor->special_args[4] = 35 / 2;
-        else
-          actor->special1.i = 35 / 2;
-    }
-    else if (target->z == target->floorz
+ if (target->z == target->floorz
              && dist < 9 * 64 * FRACUNIT && P_Random(pr_heretic) < g_mntr_fire_rng)
     {                           // Floor fire attack
         P_SetMobjState(actor, g_mntr_fire_state);
@@ -4282,8 +4172,6 @@ void A_MinotaurAtk2(mobj_t * actor)
     mo = P_SpawnMissile(actor, actor->target, g_mntr_atk2_missile);
     if (mo)
     {
-        if (heretic)
-          S_StartMobjSound(mo, g_mntr_atk2_sfx);
         momz = mo->momz;
         angle = mo->angle;
         P_SpawnMissileAngle(actor, g_mntr_atk2_missile, angle - (ANG45 / 8), momz);
@@ -4793,14 +4681,6 @@ void A_FreeTargMobj(mobj_t * mo)
     mo->flags |= MF_CORPSE | MF_DROPOFF | MF_NOGRAVITY;
     mo->flags2 &= ~(MF2_PASSMOBJ | MF2_LOGRAV);
     mo->player = NULL;
-
-    // hexen_note: can we do this in heretic too?
-    if (hexen)
-    {
-      mo->flags &= ~(MF_COUNTKILL);
-      mo->flags2 |= MF2_DONTDRAW;
-      mo->health = -1000;         // Don't resurrect
-    }
 }
 
 static int bodyqueslot, bodyquesize;

@@ -529,7 +529,6 @@ dboolean P_BlockLinesIterator(int x, int y, dboolean func(line_t*))
 // There is a bug in P_CheckPosition where the validcount is not
 // incremented at the correct time. The bug is exposed in MBF.
 // Under most cases, this is irrelevant, but sometimes it matters.
-// Ripper projectiles in mbf21, heretic, and hexen require decoupling.
 dboolean P_BlockLinesIterator2(int x, int y, dboolean func(line_t*))
 {
   int        offset;

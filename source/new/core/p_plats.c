@@ -70,11 +70,6 @@ void T_CompatiblePlatRaise(plat_t * plat)
     case up: // plat moving up
       res = T_MoveFloorPlane(plat->sector, plat->speed, plat->high, plat->crush, 1, false);
 
-      if (heretic && !(leveltime & 31))
-      {
-        S_LoopSectorSound(plat->sector, g_sfx_stnmov_plats, 32);
-      }
-
       // if a pure raise type, make the plat moving sound
       if (plat->type == raiseAndChange
           || plat->type == raiseToNearestAndChange)
@@ -129,7 +124,6 @@ void T_CompatiblePlatRaise(plat_t * plat)
             case raiseAndChange:
             case raiseToNearestAndChange:
             case genLift:
-              if (heretic && plat->type == raiseToNearestAndChange) break;
               P_RemoveActivePlat(plat);     // killough
             default:
               break;
@@ -173,10 +167,6 @@ void T_CompatiblePlatRaise(plat_t * plat)
               break;
           }
         }
-      }
-      else if (heretic && !(leveltime & 31))
-      {
-        S_LoopSectorSound(plat->sector, g_sfx_stnmov_plats, 32);
       }
       break;
 
@@ -523,7 +513,7 @@ int EV_DoPlat
 
     //jff 1/26/98 Avoid raise plat bouncing a head off a ceiling and then
     //going down forever -- default low to plat height when triggered
-    plat->low = sec->floorheight; // heretic_note: not in heretic
+    plat->low = sec->floorheight; // heretic_note: not 
 
     // set up plat according to type
     switch(type)

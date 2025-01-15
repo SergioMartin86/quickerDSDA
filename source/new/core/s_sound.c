@@ -855,7 +855,7 @@ static void Raven_S_StartSoundAtVolume(void *_origin, int sound_id, int volume, 
 
   sfx = &S_sfx[sound_id];
 
-  params.ambient = heretic && sound_id >= heretic_sfx_wind;
+  params.ambient = 0;
   params.attenuation = 0;
   params.volume_factor = 0;
   params.loop = loop_timeout > 0;

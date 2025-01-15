@@ -945,8 +945,6 @@ static void WI_drawTime(int x, int y, int t)
 //
 void WI_End(void)
 {
-  if (heretic) return;
-
   if (deathmatch)
     WI_endDeathmatchStats();
   else if (netgame)
@@ -1992,9 +1990,6 @@ void WI_checkForAccelerate(void)
 //
 void WI_Ticker(void)
 {
-  if (heretic) return IN_Ticker();
-  if (hexen) return Hexen_IN_Ticker();
-
   // counter for general background animation
   bcnt++;
 
@@ -2098,9 +2093,6 @@ void WI_loadData(void)
 //
 void WI_Drawer (void)
 {
-  if (heretic) return IN_Drawer();
-  if (hexen) return Hexen_IN_Drawer();
-
   switch (state)
   {
     case StatCount:
@@ -2173,9 +2165,6 @@ void WI_initVariables(wbstartstruct_t* wbstartstruct)
 //
 void WI_Start(wbstartstruct_t* wbstartstruct)
 {
-  if (heretic) return IN_Start(wbstartstruct);
-  if (hexen) return Hexen_IN_Start(wbstartstruct);
-
   WI_initVariables(wbstartstruct);
   WI_loadData();
 

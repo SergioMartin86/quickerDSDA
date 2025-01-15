@@ -200,21 +200,11 @@ void P_InitPicAnims (void)
     return;
   }
 
-  if (heretic)
-  {
-    lump = W_CheckNumForName("ANIMATED");
 
-    if (lump != LUMP_NOT_FOUND && lumpinfo[lump].source != source_auto_load)
-      animdefs = (const animdef_t *) W_LumpByNum(lump);
-    else
-      animdefs = heretic_animdefs;
-  }
-  else
-  {
     lump = W_GetNumForName("ANIMATED"); // cph - new wad lump handling
     //jff 3/23/98 read from predefined or wad lump instead of table
     animdefs = (const animdef_t *)W_LumpByNum(lump);
-  }
+  
 
   lastanim = anims;
   for (i=0 ; animdefs[i].istexture != -1 ; i++)
@@ -831,7 +821,7 @@ sector_t *P_FindModelFloorSector(fixed_t floordestheight,int secnum)
       else
           sec = getSector(secnum,i,0);
 
-      if (heretic || sec->floorheight == floordestheight)
+      if (sec->floorheight == floordestheight)
         return sec;
     }
   }
@@ -3135,9 +3125,7 @@ void P_SpawnCompatibleSectorSpecial(sector_t *sector, int i)
     case 4:
       // strobe fast/death slime
       P_SpawnStrobeFlash(sector, FASTDARK, 0);
-      if (heretic)
-        sector->special = 4;
-      else
+
         sector->special |= 3 << DAMAGE_SHIFT; //jff 3/14/98 put damage bits in
       break;
 
@@ -3385,7 +3373,6 @@ static void P_SpawnVanillaExtras(void)
   int i;
 
   // allow MBF sky transfers in all complevels
-  if (!heretic)
     for (i = 0; i < numlines; ++i)
       switch (lines[i].special)
       {
@@ -3611,7 +3598,6 @@ void P_SpawnSpecials (void)
 
   P_InitSectorSpecials();
 
-  if (heretic) P_SpawnLineSpecials();
 
   P_RemoveAllActiveCeilings();  // jff 2/22/98 use killough's scheme
   P_RemoveAllActivePlats();     // killough
@@ -6365,7 +6351,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
             type = platRaiseAndStayLockout;
             break;
           default:
-            type = (heretic ? platRaiseAndStayLockout : platRaiseAndStay);
+            type = platRaiseAndStay;
             break;
         }
 

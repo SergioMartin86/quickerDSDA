@@ -391,6 +391,7 @@ int dsda_DoomStartFinale(void) {
 }
 
 int dsda_DoomFTicker(void) {
+
   void WI_checkForAccelerate(void);
   float Get_TextSpeed(void);
 
