@@ -114,9 +114,6 @@ void dsda_PlayerAimBad(mobj_t* source, angle_t angle, aim_t* aim, uint64_t targe
         aim->angle -= 2 << 26;
         aim->slope = P_AimLineAttack(source, aim->angle, 16 * 64 * FRACUNIT, target_mask);
       }
-
-      if (heretic && !linetarget)
-        aim->slope = ((source->player->lookdir) << FRACBITS) / 173;
     }
     while (target_mask && (target_mask = 0, !linetarget));  // killough 8/2/98
   }

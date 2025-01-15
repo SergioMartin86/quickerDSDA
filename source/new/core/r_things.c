@@ -837,40 +837,7 @@ static void R_ProjectSprite (mobj_t* thing, int lightlevel)
   vis->scale = FixedDiv(projectiony, tz);
   vis->gzt = gzt;                          // killough 3/27/98
 
-  if (heretic)
-  {
-    if (thing->flags2 & MF2_FEETARECLIPPED
-        && vis->gz <= thing->subsector->sector->floorheight)
-    {
-      vis->floorclip = 10 << FRACBITS;
-    }
-    else
-      vis->floorclip = 0;
-  }
-  else if (hexen)
-  {
-    if (thing->flags & MF_TRANSLATION)
-    {
-      if (thing->player)
-      {
-        vis->pclass = thing->player->pclass;
-      }
-      else
-      {
-        vis->pclass = thing->special1.i;
-      }
-      if (vis->pclass > 3)
-      {
-        vis->pclass = 1;
-      }
-    }
-    // foot clipping
-    vis->floorclip = thing->floorclip;
-  }
-  else
-  {
     vis->floorclip = 0;
-  }
 
   vis->texturemid = vis->gzt - viewz - vis->floorclip;
   vis->x1 = x1 < 0 ? 0 : x1;
@@ -1161,15 +1128,7 @@ static void R_DrawPSprite (pspdef_t *psp)
   if (viewplayer->powers[pw_invisibility] > 4*32
       || viewplayer->powers[pw_invisibility] & 8)
   {
-    if (heretic)
-    {
-      vis->mobjflags |= MF_SHADOW;
-      vis->colormap = spritelights[MAXLIGHTSCALE-1];
-    }
-    else
-    {
       vis->colormap = NULL;                    // shadow draw
-    }
   }
   else if (viewplayer->powers[pw_invulnerability] && viewplayer->pclass == PCLASS_CLERIC)
   {

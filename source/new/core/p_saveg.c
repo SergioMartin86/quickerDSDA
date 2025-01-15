@@ -1602,9 +1602,6 @@ void P_UnArchiveThinkers(void) {
           mobj->thinker.function = P_MobjThinker;
           P_AddThinker (&mobj->thinker);
 
-          if (heretic && mobj->type == HERETIC_MT_BLASTERFX1)
-            mobj->thinker.function = P_BlasterMobjThinker;
-
           if (!((mobj->flags ^ MF_COUNTKILL) & (MF_FRIEND | MF_COUNTKILL | MF_CORPSE)))
             totallive++;
           break;
@@ -1940,44 +1937,10 @@ void P_UnArchiveSounds(void)
 
 void P_ArchiveAmbientSound(void)
 {
-  if (!heretic) return;
-
-  P_SAVE_X(AmbSfxTics);
-  P_SAVE_X(AmbSfxVolume);
-  P_SAVE_X(AmbSfxPtrIndex);
-
-  if (AmbSfxPtrIndex != -1)
-  {
-    size_t offset;
-
-    offset = AmbSfxPtr - LevelAmbientSfx[AmbSfxPtrIndex];
-
-    P_SAVE_X(offset);
-  }
 }
 
 void P_UnArchiveAmbientSound(void)
 {
-  if (!heretic) return;
-
-  P_LOAD_X(AmbSfxTics);
-  P_LOAD_X(AmbSfxVolume);
-  P_LOAD_X(AmbSfxPtrIndex);
-
-  if (AmbSfxPtrIndex == -1)
-  {
-    extern int AmbSndSeqInit[];
-
-    AmbSfxPtr = AmbSndSeqInit;
-  }
-  else
-  {
-    size_t offset;
-
-    P_LOAD_X(offset);
-
-    AmbSfxPtr = LevelAmbientSfx[AmbSfxPtrIndex] + offset;
-  }
 }
 
 void P_ArchiveMisc(void)

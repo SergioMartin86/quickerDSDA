@@ -136,7 +136,6 @@ int g_menu_font_spacing;
 const char* g_skyflatname;
 
 dboolean hexen = false;
-dboolean heretic = false;
 
 static void dsda_InitDoom(void) {
   int i;
@@ -614,14 +613,6 @@ static dboolean dsda_AutoDetectHexen(void)
 extern void dsda_ResetNullPClass(void);
 
 void dsda_InitGlobal(void) {
-  heretic = dsda_Flag(dsda_arg_heretic) || dsda_AutoDetectHeretic();
-  hexen = dsda_Flag(dsda_arg_hexen) || dsda_AutoDetectHexen();
-
-  if (hexen)
-    dsda_InitHexen();
-  else if (heretic)
-    dsda_InitHeretic();
-  else
     dsda_InitDoom();
 
   dsda_ResetNullPClass();

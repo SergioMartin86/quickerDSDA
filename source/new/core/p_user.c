@@ -312,8 +312,6 @@ void P_CalcHeight (player_t* player)
   if (player->viewz > player->mo->ceilingz - 4 * FRACUNIT)
     player->viewz = player->mo->ceilingz - 4 * FRACUNIT;
 
-  if (heretic && player->viewz < player->mo->floorz + 4 * FRACUNIT)
-    player->viewz = player->mo->floorz + 4 * FRACUNIT;
 }
 
 //
@@ -840,12 +838,12 @@ void P_PlayerThink (player_t* player)
           newweapon == g_wp_fist && player->weaponowned[g_wp_chainsaw]
           && (
             player->readyweapon != g_wp_chainsaw ||
-            (!heretic && !player->powers[pw_strength])
+            (!player->powers[pw_strength])
           )
         )
           newweapon = g_wp_chainsaw;
 
-        if (!heretic &&
+        if (
             gamemode == commercial &&
             newweapon == wp_shotgun &&
             player->weaponowned[wp_supershotgun] &&
@@ -1147,8 +1145,6 @@ void P_ArtiTele(player_t * player)
     {                           // Teleporting away will undo any morph effects (pig)
       P_UndoPlayerMorph(player);
     }
-    if (heretic)
-      S_StartVoidSound(heretic_sfx_wpnup);      // Full volume laugh
 }
 
 void P_PlayerNextArtifact(player_t * player)

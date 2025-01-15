@@ -87,9 +87,6 @@ void F_StartFinale (void)
   int mnum;
   int muslump;
 
-  if (heretic) return Heretic_F_StartFinale();
-  if (hexen) return Hexen_F_StartFinale();
-
   gameaction = ga_nothing;
   gamestate = GS_FINALE;
 
@@ -121,9 +118,6 @@ void F_StartFinale (void)
 
 dboolean F_Responder (event_t *event)
 {
-  if (heretic) return Heretic_F_Responder(event);
-  if (hexen) return Hexen_F_Responder(event);
-
   if (finalestage == 2)
     return F_CastResponder (event);
 
@@ -163,9 +157,6 @@ static dboolean F_ShowCast(void)
 void F_Ticker(void)
 {
   int i;
-
-  if (heretic) return Heretic_F_Ticker();
-  if (hexen) return Hexen_F_Ticker();
 
   if (dsda_FTicker())
   {
@@ -529,9 +520,6 @@ void F_StartPostFinale (void)
 //
 void F_Drawer (void)
 {
-  if (heretic) return Heretic_F_Drawer();
-  if (hexen) return Hexen_F_Drawer();
-
   if (dsda_FDrawer())
   {
     return;

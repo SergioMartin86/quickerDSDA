@@ -82,11 +82,6 @@ static void dsda_CalculateFontBounds(const char *playpal) {
   byte entry;
   double lightness;
 
-  if (heretic)
-    lump = W_LumpByName(ref_lump_heretic);
-  else if (hexen)
-    lump = W_LumpByName(ref_lump_hexen);
-  else
     lump = W_LumpByName(ref_lump_doom);
 
   width = *((const int16_t *) lump);

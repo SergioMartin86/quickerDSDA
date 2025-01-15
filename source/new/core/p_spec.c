@@ -5189,24 +5189,6 @@ void P_PlayerInHereticSector(player_t * player, sector_t * sector)
 
 void P_SpawnLineSpecials(void)
 {
-    int i;
-
-    if (!heretic) return;
-
-    //
-    //      Init line EFFECTs
-    //
-
-    numlinespecials = 0;
-    for (i = 0; i < numlines; i++)
-        switch (lines[i].special)
-        {
-            case 48:           // Effect_Scroll_Left
-            case 99:           // Effect_Scroll_Right
-                linespeciallist[numlinespecials] = &lines[i];
-                numlinespecials++;
-                break;
-        }
 }
 
 // hexen

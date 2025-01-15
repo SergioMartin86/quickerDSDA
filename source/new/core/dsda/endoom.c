@@ -352,13 +352,9 @@ void dsda_CacheEndoom(void) {
   if (hexen)
     return;
 
-  if (heretic)
-    lump = W_CheckNumForName("ENDTEXT");
-  else {
     lump = W_CheckNumForName("ENDBOOM");
     if (lump == LUMP_NOT_FOUND)
       lump = W_CheckNumForName("ENDOOM");
-  }
 
   if (lump == LUMP_NOT_FOUND || W_LumpLength(lump) != 4000)
     return;

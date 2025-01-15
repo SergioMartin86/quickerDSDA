@@ -78,9 +78,6 @@ int dsda_DoorType(int index) {
     return door_type_none;
   }
 
-  if (heretic && special > 34)
-    return door_type_none;
-
   if (GenLockedBase <= special && special < GenDoorBase) {
     special -= GenLockedBase;
     special = (special & LockedKey) >> LockedKeyShift;
@@ -128,13 +125,6 @@ dboolean dsda_IsExitLine(int index) {
 
 dboolean dsda_IsTeleportLine(int index) {
   int special = lines[index].special;
-
-  if (map_format.hexen)
-    return special == 70 ||
-           special == 71;
-
-  if (heretic)
-    return special == 39;
 
   return special == 39  ||
          special == 97  ||
@@ -519,11 +509,6 @@ void dsda_ApplyZDoomMapFormat(void) {
 }
 
 void dsda_ApplyDefaultMapFormat(void) {
-  if (hexen)
-    map_format = hexen_map_format;
-  else if (heretic)
-    map_format = heretic_map_format;
-  else
     map_format = doom_map_format;
 
   dsda_ApplyMapPrecision();

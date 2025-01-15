@@ -35,22 +35,7 @@ static void dsda_DetermineEpisodeMap(dsda_episode_t* episode) {
 }
 
 void dsda_AddOriginalEpisodes(void) {
-  if (heretic) {
-    dsda_AddEpisode("e1m1", "CITY OF THE DAMNED", NULL, 'c', true);
-    dsda_AddEpisode("e2m1", "HELL'S MAW", NULL, 'h', true);
-    dsda_AddEpisode("e3m1", "THE DOME OF D'SPARIL", NULL, 't', true);
-
-    if (gamemode == retail) {
-      dsda_AddEpisode("e4m1", "THE OSSUARY", NULL, 't', true);
-      dsda_AddEpisode("e5m1", "THE STAGNANT DEMESNE", NULL, 't', true);
-    }
-  }
-  else if (hexen) {
-    dsda_AddEpisode("map01", "FIGHTER", NULL, 'f', true);
-    dsda_AddEpisode("map01", "CLERIC", NULL, 'c', true);
-    dsda_AddEpisode("map01", "MAGE", NULL, 'm', true);
-  }
-  else if (gamemode != commercial && gamemission != chex) {
+if (gamemode != commercial && gamemission != chex) {
     dsda_AddEpisode("e1m1", NULL, "M_EPI1", 'k', true);
     dsda_AddEpisode("e2m1", NULL, "M_EPI2", 't', true);
     dsda_AddEpisode("e3m1", NULL, "M_EPI3", 'i', true);

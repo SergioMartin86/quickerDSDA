@@ -307,10 +307,6 @@ void SB_Ticker(void)
     int delta;
     int curHealth;
 
-    if (heretic && leveltime & 1 && !dsda_PausedOutsideDemo())
-    {
-        ChainWiggle = P_Random(pr_heretic) & 1;
-    }
     curHealth = players[consoleplayer].mo->health;
     if (curHealth < 0)
     {
@@ -607,8 +603,8 @@ void DrawInventoryBar(void)
 void DrawArtifact(int x, int y, int vpt)
 {
   inventory_t *inv;
-  const int delta_x = heretic ? 22 : 19;
-  const int delta_y = heretic ? 22 : 21;
+  const int delta_x = 19;
+  const int delta_y = 21;
 
   inv = &players[displayplayer].inventory[inv_ptr];
 

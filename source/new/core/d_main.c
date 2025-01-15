@@ -1085,9 +1085,7 @@ static void LoadWADsAtPath(const char *path, wad_source_t source)
 
 static const char *D_AutoLoadGameBase()
 {
-  return hexen ? "hexen-all" :
-         heretic ? "heretic-all" :
-         "doom-all";
+  return "doom-all";
 }
 
 #define ALL_AUTOLOAD "all-all"
@@ -1157,21 +1155,6 @@ const char* doomverstr = "Unknown";
 
 static void EvaluateDoomVerStr(void)
 {
-  if (heretic)
-  {
-    if (gamemode == retail)
-      doomverstr= "Heretic: Shadow of the Serpent Riders";
-    else if (gamemode == shareware)
-      doomverstr = "Heretic Shareware";
-    else
-      doomverstr = "Heretic";
-  }
-  else if (hexen)
-  {
-    doomverstr = "Hexen";
-  }
-  else
-  {
     switch ( gamemode )
     {
       case retail:
@@ -1212,7 +1195,6 @@ static void EvaluateDoomVerStr(void)
         doomverstr = "Public DOOM";
         break;
     }
-  }
 
   if (bfgedition)
   {

@@ -190,18 +190,6 @@ static dboolean P_GiveAmmo(player_t *player, ammotype_t ammo, int num)
   // We were down to zero, so select a new weapon.
   // Preferences are not user selectable.
 
-  if (heretic) {
-    if (player->readyweapon == wp_staff || player->readyweapon == wp_gauntlets)
-    {
-        if (player->weaponowned[GetAmmoChange[ammo]])
-        {
-              P_AutoSwitchWeapon(player, GetAmmoChange[ammo]);
-        }
-    }
-
-    return true;
-  }
-
   switch (ammo)
     {
     case am_clip:
@@ -244,8 +232,6 @@ dboolean P_GiveWeapon(player_t *player, weapontype_t weapon, dboolean dropped)
 {
   dboolean gaveammo;
   dboolean gaveweapon;
-
-  if (heretic) return Heretic_P_GiveWeapon(player, weapon);
 
   if (netgame && deathmatch!=2 && !dropped)
     {
@@ -461,9 +447,6 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
   int      i;
   int      sound;
   fixed_t  delta = special->z - toucher->z;
-
-  if (heretic) return Heretic_P_TouchSpecialThing(special, toucher);
-  if (hexen) return Hexen_P_TouchSpecialThing(special, toucher);
 
   if (delta > toucher->height || delta < -8*FRACUNIT)
     return;        // out of reach

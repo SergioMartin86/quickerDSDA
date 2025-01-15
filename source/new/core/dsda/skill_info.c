@@ -182,9 +182,7 @@ void dsda_InitSkills(void) {
   if (!clear_skills) {
     const skill_info_t* original_skill_infos;
 
-    original_skill_infos = hexen   ? hexen_skill_infos   :
-                           heretic ? heretic_skill_infos :
-                                     doom_skill_infos;
+    original_skill_infos =     doom_skill_infos;
 
     for (i = 0; i < 5; ++i)
       skill_infos[i] = original_skill_infos[i];

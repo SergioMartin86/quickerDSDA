@@ -447,8 +447,6 @@ typedef enum {
 
 // TODO_HEXEN: BLINKTHRESHOLD is (4*35)
 
-extern dboolean heretic;
-
 //hexen
 
 // The top 3 bits of the artifact field in the ticcmd_t struct are used

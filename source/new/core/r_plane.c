@@ -394,17 +394,6 @@ static void R_MakeSpans(int x, unsigned int t1, unsigned int b1,
 // when drawing skies, it used this to "overrun" into the lower patch pixels
 const rpatch_t *R_HackedSkyPatch(texture_t *texture)
 {
-  if (heretic && texture->patchcount == 1)
-  {
-    const rpatch_t *patch;
-
-    patch = (const rpatch_t*) R_PatchByNum(texture->patches[0].patch);
-
-    if (patch->height == 200)
-    {
-      return patch;
-    }
-  }
 
   return NULL;
 }
@@ -719,24 +708,6 @@ static void R_DoDrawPlane(visplane_t *pl)
                 (((63 - scrollOffset) << (pl->special - 222) & 63) << 6);
             break;
           default:
-            break;
-        }
-      }
-      else if (heretic)
-      {
-        switch (pl->special)
-        {
-          case 20:
-          case 21:
-          case 22:
-          case 23:
-          case 24:           // Scroll_East
-            dsvars.source = dsvars.source +
-              ((63 - ((leveltime >> 1) & 63)) << (pl->special - 20) & 63);
-            break;
-          case 4:            // Scroll_EastLavaDamage
-            dsvars.source = dsvars.source +
-              (((63 - ((leveltime >> 1) & 63)) << 3) & 63);
             break;
         }
       }

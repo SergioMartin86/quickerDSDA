@@ -152,20 +152,7 @@ int dsda_LegacyNextMap(int* episode, int* map) {
   *episode = gameepisode - 1;
   *map = gamemap - 1;
 
-  if (heretic) {
-    int next;
-
-    if (gamemode == shareware)
-      heretic_next[0][7] = 11;
-
-    if (gamemode == registered)
-      heretic_next[2][7] = 11;
-
-    next = heretic_next[BETWEEN(0, 5, *episode)][BETWEEN(0, 8, *map)];
-    *episode = next / 10;
-    *map = next % 10;
-  }
-  else if (gamemode == commercial) {
+  if (gamemode == commercial) {
     // secret level
     doom2_next[14] = (haswolflevels ? 31 : 16);
 
@@ -225,14 +212,7 @@ int dsda_LegacyPrevMap(int* episode, int* map) {
   *episode = gameepisode - 1;
   *map = gamemap - 1;
 
-  if (heretic) {
-    int prev;
-
-    prev = heretic_prev[BETWEEN(0, 5, *episode)][BETWEEN(0, 8, *map)];
-    *episode = prev / 10;
-    *map = prev % 10;
-  }
-  else if (gamemode == commercial) {
+if (gamemode == commercial) {
     // secret level
     doom2_prev[15] = (haswolflevels ? 32 : 15);
 
@@ -378,11 +358,7 @@ int dsda_LegacyMapMusic(int* music_index, int* music_lump, int episode, int map)
         mus_e1m9
       };
 
-      if (heretic)
-        *music_index = heretic_mus_e1m1 +
-                       WRAP((episode - 1) * 9 + map - 1,
-                            HERETIC_NUMMUSIC - heretic_mus_e1m1);
-      else if (episode < 4)
+     if (episode < 4)
         *music_index = mus_e1m1 +
                        WRAP((episode - 1) * 9 + map - 1, mus_runnin - mus_e1m1);
       else
@@ -457,16 +433,6 @@ int dsda_LegacyHUTitle(dsda_string_t* str) {
 int dsda_LegacySkyTexture(int* sky) {
   if (map_format.doublesky)
     *sky = Sky1Texture;
-  else if (heretic) {
-    static const char *sky_lump_names[5] = {
-        "SKY1", "SKY2", "SKY3", "SKY1", "SKY3"
-    };
-
-    if (gameepisode < 6)
-      *sky = R_TextureNumForName(sky_lump_names[gameepisode - 1]);
-    else
-      *sky = R_TextureNumForName("SKY1");
-  }
   else if (gamemode == commercial) {
     *sky = R_TextureNumForName ("SKY3");
     if (gamemap < 12)
@@ -559,13 +525,6 @@ int dsda_LegacyPrepareIntermission(int* result) {
     if (secretexit)
       wminfo.next = 8; // go to secret level
     else if (gamemap == 9) {
-      // returning from secret level
-      if (heretic)
-      {
-        static int after_secret[5] = { 6, 4, 4, 4, 3 };
-        wminfo.next = after_secret[gameepisode - 1];
-      }
-      else
         switch (gameepisode) {
           case 1:
             wminfo.next = 3;
@@ -644,8 +603,7 @@ int dsda_LegacyEnterPic(const char** enter_pic) {
 }
 
 int dsda_LegacyBorderTexture(const char** border_texture) {
-  *border_texture = heretic ? "FLOOR30" :
-                    gamemode == commercial ? "GRNROCK" : "FLOOR7_2";
+  *border_texture =   gamemode == commercial ? "GRNROCK" : "FLOOR7_2";
 
   return true;
 }
