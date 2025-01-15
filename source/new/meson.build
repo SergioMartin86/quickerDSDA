@@ -160,16 +160,6 @@ quickerDSDASrc =  [
  'core/memio.c',
  'core/mus2mid.c',
  'core/i_system.c',
- 'core/MUSIC/dumbplayer.c',
- 'core/MUSIC/flplayer.c',
- 'core/MUSIC/madplayer.c',
- 'core/MUSIC/midifile.c',
- 'core/MUSIC/opl.c',
- 'core/MUSIC/opl3.c',
- 'core/MUSIC/oplplayer.c',
- 'core/MUSIC/opl_queue.c',
- 'core/MUSIC/portmidiplayer.c',
- 'core/MUSIC/vorbisplayer.c',
 ]
 
 quickerDSDAIncludeDirs = [
