@@ -211,8 +211,6 @@ quickerDSDASrc =  [
  'core/w_mmap.c',
  'core/memio.c',
  'core/mus2mid.c',
- 'core/SDL/i_main.c',
- 'core/SDL/i_sshot.c',
  'core/SDL/i_system.c',
  'core/MUSIC/dumbplayer.c',
  'core/MUSIC/flplayer.c',

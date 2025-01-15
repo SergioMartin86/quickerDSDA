@@ -79,24 +79,8 @@ static int parsecommand (char *out, const char *in, int len)
   {
     if (*in == '%')
     {
-      I_UpdateRenderSize(); // Handle potential resolution scaling - DTIED
       switch (in[1])
       {
-        case 'w':
-          i = snprintf (out, len, "%u", renderW);
-          break;
-        case 'h':
-          i = snprintf (out, len, "%u", renderH);
-          break;
-        case 'f':
-          i = snprintf (out, len, "%s", vid_fname);
-          break;
-        case 'r':
-          i = snprintf (out, len, "%u", cap_fps);
-          break;
-        case '%':
-          i = snprintf (out, len, "%%");
-          break;
         default:
           return 0;
       }

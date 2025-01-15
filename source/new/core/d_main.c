@@ -1906,3 +1906,26 @@ void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, i
 
   // printf("ForwardSpeed: %d - sideMove:     %d - angleTurn:    %d - buttons: %u\n", forwardSpeed, strafingSpeed, turningSpeed, local_cmds[playerId].buttons);
 }
+
+//int main(int argc, const char * const * argv)
+// Headless main does not initialize SDL
+int headlessMain(int argc, char **argv)
+{
+  dsda_ParseCommandLineArgs(argc, argv);
+
+  // e6y: Check for conflicts.
+  // Conflicting command-line parameters could cause the engine to be confused
+  // in some cases. Added checks to prevent this.
+  // Example: dsda-doom.exe -record mydemo -playdemo demoname
+  ParamsMatchingCheck();
+
+  // e6y: was moved from D_DoomMainSetup
+  // init subsystems
+  //jff 9/3/98 use logical output routine
+  lprintf(LO_DEBUG, "M_LoadDefaults: Load system defaults.\n");
+  M_LoadDefaults();              // load before initing other systems
+  lprintf(LO_DEBUG, "\n");
+
+  D_DoomMainSetup();
+  return 0;
+}

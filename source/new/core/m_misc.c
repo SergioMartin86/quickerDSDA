@@ -839,8 +839,6 @@ void M_LoadDefaults (void)
 
 void M_DoScreenShot (const char* fname)
 {
-  if (I_ScreenShot(fname) != 0)
-    doom_printf("M_ScreenShot: Error writing screenshot\n");
 }
 
 #ifndef SCREENSHOT_DIR
