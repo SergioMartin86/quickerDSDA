@@ -38,7 +38,6 @@
 #include "p_map.h"
 #include "r_main.h"
 #include "p_tick.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "p_user.h"
 #include "smooth.h"
@@ -222,19 +221,16 @@ static int P_TeleportToDestination(mobj_t *destination, line_t *line, mobj_t *th
   if (flags & TELF_SOURCEFOG)
   {
     // spawn teleport fog and emit sound at source
-    S_StartMobjSound(P_SpawnMobj(oldx, oldy, oldz, MT_TFOG), sfx_telept);
+    P_SpawnMobj(oldx, oldy, oldz, MT_TFOG);
   }
 
   if (flags & TELF_DESTFOG)
   {
     // spawn teleport fog and emit sound at destination
-    S_StartMobjSound(
       P_SpawnMobj(
         destination->x + 20 * finecosine[destination->angle >> ANGLETOFINESHIFT],
         destination->y + 20 * finesine[destination->angle >> ANGLETOFINESHIFT],
         thing->z, MT_TFOG
-      ),
-      sfx_telept
     );
   }
 
@@ -619,11 +615,9 @@ dboolean P_Teleport(mobj_t * thing, fixed_t x, fixed_t y, angle_t angle, dboolea
     {
         fogDelta = thing->flags & MF_MISSILE ? 0 : TELEFOGHEIGHT;
         fog = P_SpawnMobj(oldx, oldy, oldz + fogDelta, g_mt_tfog);
-        S_StartMobjSound(fog, g_sfx_telept);
         an = angle >> ANGLETOFINESHIFT;
         fog = P_SpawnMobj(x + 20 * finecosine[an],
                           y + 20 * finesine[an], thing->z + fogDelta, g_mt_tfog);
-        S_StartMobjSound(fog, g_sfx_telept);
         if (thing->player &&
             !thing->player->powers[pw_weaponlevel2] &&
             !thing->player->powers[pw_speed])
