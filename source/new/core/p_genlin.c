@@ -37,7 +37,6 @@
 #include "p_spec.h"
 #include "p_tick.h"
 #include "m_random.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "e6y.h"
 
@@ -542,7 +541,6 @@ int EV_DoGenLift
         break;
     }
 
-    S_StartSectorSound(sec, sfx_pstart);
     P_AddActivePlat(plat); // add this plat to the list of active plats
   }
   return rtn;
@@ -893,7 +891,6 @@ int EV_DoGenLockedDoor
 
     // killough 4/15/98: fix generalized door opening sounds
     // (previously they always had the blazing door close sound)
-    S_StartSectorSound(door->sector, door->speed >= VDOORSPEED * 4 ? sfx_bdopn : sfx_doropn);
   }
   return rtn;
 }
@@ -996,33 +993,23 @@ int EV_DoGenDoor
         door->direction = 1;
         door->topheight = P_FindLowestCeilingSurrounding(sec);
         door->topheight -= 4*FRACUNIT;
-        if (door->topheight != sec->ceilingheight)
-          S_StartSectorSound(door->sector,
-                             Sped >= SpeedFast || comp[comp_sound] ? sfx_bdopn : sfx_doropn);
         door->type = Sped>=SpeedFast? genBlazeRaise : genRaise;
         break;
       case ODoor:
         door->direction = 1;
         door->topheight = P_FindLowestCeilingSurrounding(sec);
         door->topheight -= 4*FRACUNIT;
-        if (door->topheight != sec->ceilingheight)
-          S_StartSectorSound(door->sector,
-                             Sped >= SpeedFast || comp[comp_sound] ? sfx_bdopn : sfx_doropn);
         door->type = Sped>=SpeedFast? genBlazeOpen : genOpen;
         break;
       case CdODoor:
         door->topheight = sec->ceilingheight;
         door->direction = -1;
-        S_StartSectorSound(door->sector,
-                             Sped >= SpeedFast && !comp[comp_sound] ? sfx_bdcls : sfx_dorcls);
         door->type = Sped>=SpeedFast? genBlazeCdO : genCdO;
         break;
       case CDoor:
         door->topheight = P_FindLowestCeilingSurrounding(sec);
         door->topheight -= 4*FRACUNIT;
         door->direction = -1;
-        S_StartSectorSound(door->sector,
-                             Sped >= SpeedFast && !comp[comp_sound] ? sfx_bdcls : sfx_dorcls);
         door->type = Sped>=SpeedFast? genBlazeClose : genClose;
         break;
       default:
