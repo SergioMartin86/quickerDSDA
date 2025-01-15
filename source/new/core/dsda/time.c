@@ -102,23 +102,6 @@ static void dsda_Throttle(int timer, unsigned long long target_time) {
 }
 
 void dsda_LimitFPS(void) {
-  extern int movement_smooth;
-  extern int window_focused;
-
-  int allow_limit;
-  int fps_limit;
-
-  allow_limit = (movement_smooth || !window_focused) && !dsda_Flag(dsda_arg_timedemo) && !dsda_Flag(dsda_arg_fastdemo);
-  fps_limit = window_focused ? dsda_IntConfig(dsda_config_fps_limit)
-                             : dsda_IntConfig(dsda_config_background_fps_limit);
-
-  if (allow_limit && fps_limit) {
-    unsigned long long target_time;
-
-    target_time = 1000000 / fps_limit;
-
-    dsda_Throttle(dsda_timer_fps, target_time);
-  }
 }
 
 #define TICRATE 35

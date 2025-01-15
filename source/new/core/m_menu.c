@@ -1249,15 +1249,6 @@ static void M_QuitResponse(dboolean affirmative)
       S_StartVoidSound(quitsounds2[(gametic>>2)&7]);
     else
       S_StartVoidSound(quitsounds[(gametic>>2)&7]);
-
-    // wait till all sounds stopped or 3 seconds are over
-    i = 30;
-    while (i > 0) {
-      I_uSleep(100000); // CPhipps - don't thrash cpu in this loop
-      if (!I_AnySoundStillPlaying())
-        break;
-      i--;
-    }
   }
 
   //e6y: I_SafeExit instead of exit - prevent recursive exits
@@ -3004,7 +2995,7 @@ static const char *gl_fade_mode_list[] = { "Normal", "Smooth", NULL };
 setup_menu_t audiovideo_settings[] = {
   { "Video", S_SKIP | S_TITLE, m_null, G_X},
   { "Video mode", S_CHOICE | S_STR, m_conf, G_X, dsda_config_videomode, 0, videomodes },
-  { "Screen Resolution", S_CHOICE | S_STR, m_conf, G_X, dsda_config_screen_resolution, 0, screen_resolutions_list },
+  { "Screen Resolution", S_CHOICE | S_STR, m_conf, G_X, dsda_config_screen_resolution, 0, (const char**){} },
   { "Aspect Ratio", S_CHOICE, m_conf, G_X, dsda_config_render_aspect, 0, render_aspects_list },
   { "Fullscreen Video mode", S_YESNO, m_conf, G_X, dsda_config_use_fullscreen },
   { "Exclusive Fullscreen", S_YESNO, m_conf, G_X, dsda_config_exclusive_fullscreen },
@@ -3019,7 +3010,7 @@ setup_menu_t audiovideo_settings[] = {
   { "Number of Sound Channels", S_NUM, m_conf, G_X, dsda_config_snd_channels },
   { "Enable v1.1 Pitch Effects", S_YESNO, m_conf, G_X, dsda_config_pitched_sounds },
   { "Disable Sound Cutoffs", S_YESNO, m_conf, G_X, dsda_config_full_sounds },
-  { "Preferred MIDI player", S_CHOICE | S_STR, m_conf, G_X, dsda_config_snd_midiplayer, 0, midiplayers },
+  { "Preferred MIDI player", S_CHOICE | S_STR, m_conf, G_X, dsda_config_snd_midiplayer, 0, (const char**){}  },
   { "Mute Audio When Out of Focus", S_YESNO, m_conf, G_X, dsda_config_mute_unfocused_window },
 
   NEXT_PAGE(mouse_settings),
@@ -3192,14 +3183,6 @@ setup_menu_t tas_settings[] = {
 // To (un)set fullscreen video after menu changes
 void M_ChangeFullScreen(void)
 {
-  I_UpdateVideoMode();
-
-  #ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode())
-  {
-    gld_PreprocessLevel();
-  }
-  #endif
 }
 
 void M_ChangeVideoMode(void)
@@ -5705,10 +5688,6 @@ dboolean M_Responder(event_t* ev) {
     if (M_MessageResponder(ch, action, ev))
       return true;
 
-  // killough 2/22/98: add support for screenshot key:
-  // Don't eat the keypress in this case. See sf bug #1843280.
-  if (dsda_InputActivated(dsda_input_screenshot))
-    I_QueueScreenshot();
 
   if (heretic && F_BlockingInput())
     return false;
@@ -6331,8 +6310,6 @@ void M_Init(void)
   M_ChangeMapMultisamling();
 
   M_ChangeStretch();
-
-  M_ChangeMIDIPlayer();
 }
 
 //

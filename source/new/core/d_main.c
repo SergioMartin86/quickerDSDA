@@ -360,7 +360,6 @@ void D_Display (fixed_t frac)
   if (dsda_SkipMode())
   {
     if (HU_DrawDemoProgress(false))
-      I_FinishUpdate();
     if (!dsda_InputActive(dsda_input_use))
       return;
 
@@ -520,8 +519,7 @@ void D_Display (fixed_t frac)
   HU_DrawDemoProgress(true); //e6y
 
   // normal update
-  if (!wipe)
-    I_FinishUpdate ();              // page flip or blit buffer
+  if (!wipe) {}
   else {
     // wipe update
     wipe_EndScreen();
@@ -563,13 +561,10 @@ static void D_DoomLoop(void)
       I_SafeExit(0);
 
     WasRenderedInTryRunTics = false;
-    // frame syncronous IO operations
-    I_StartFrame ();
 
     // process one or more tics
     if (singletics)
     {
-      I_StartTic ();
       G_BuildTiccmd (&local_cmds[consoleplayer]);
       if (advancedemo)
         D_DoAdvanceDemo ();
@@ -598,11 +593,6 @@ static void D_DoomLoop(void)
         {
           isExtraDDisplay = !first;
           first = false;
-
-          if (gamestate == wipegamestate || cap_wipescreen)
-          {
-            I_QueueFrameCapture();
-          }
 
           D_Display(cap_frac);
 
@@ -1793,9 +1783,6 @@ void D_DoomMainSetup(void)
   lprintf(LO_DEBUG, "V_Init: allocate screens.\n");
   V_Init();
 
-  //e6y: Calculate the screen resolution and init all buffers
-  I_InitScreenResolution();
-
   //e6y: some stuff from command-line should be initialised before ProcessDehFile()
   e6y_InitCommandLine();
 
@@ -2023,9 +2010,6 @@ void D_DoomMainSetup(void)
   lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");
   dsda_InitFont();
 
-  if (!(dsda_Flag(dsda_arg_nodraw) && dsda_Flag(dsda_arg_nosound)))
-    I_InitGraphics();
-
   // NSM
   arg = dsda_Arg(dsda_arg_viddump);
   if (arg->found)
@@ -2096,34 +2080,6 @@ void headlessUpdateSounds(void)
 
 void headlessUpdateVideo(void)
 {
-  // Update display, next frame, with current state.
-  // NSM
-  if (capturing_video && !dsda_SkipMode())
-  {
-    dboolean first = true;
-    int cap_step = TICRATE * FRACUNIT / cap_fps;
-    cap_frac += cap_step;
-    while(cap_frac <= FRACUNIT)
-    {
-      isExtraDDisplay = !first;
-      first = false;
-
-      if (gamestate == wipegamestate || cap_wipescreen)
-      {
-        I_QueueFrameCapture();
-      }
-
-      D_Display(cap_frac);
-
-      isExtraDDisplay = false;
-      cap_frac += cap_step;
-    }
-    cap_frac -= FRACUNIT + cap_step;
-  }
-  else
-  {
-    D_Display(-1);
-  }
 }
 
 void headlessEnableRendering()

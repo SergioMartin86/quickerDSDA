@@ -93,7 +93,6 @@ void M_ChangeDemoSmoothTurns(void);
 void M_ChangeSkyMode(void);
 void M_ChangeMessages(void);
 void S_ResetSfxVolume(void);
-void I_ResetMusicVolume(void);
 void M_ChangeAllowFog(void);
 #ifdef __ENABLE_OPENGL_
 void gld_ResetShadowParameters(void);
@@ -103,15 +102,12 @@ void gld_ResetShadowParameters(void){};
 void gld_MultisamplingInit(void){};
 #endif
 void M_ChangeFOV(void);
-void I_InitMouse(void);
 void AccelChanging(void);
 void G_UpdateMouseSensitivity(void);
 void dsda_InitGameController(void);
 void M_ChangeSpeed(void);
 void M_ChangeShorttics(void);
-void I_InitSoundParams(void);
 void S_Init(void);
-void M_ChangeMIDIPlayer(void);
 void HU_InitCrosshair(void);
 void HU_InitThresholds(void);
 void dsda_InitKeyFrame(void);
@@ -374,7 +370,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_mute_music] = {
     "dsda_mute_music", dsda_config_mute_music,
-    CONF_BOOL(0), NULL, NOT_STRICT, I_ResetMusicVolume
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_mute_unfocused_window] = {
     "dsda_mute_unfocused_window", dsda_config_mute_unfocused_window,
@@ -619,7 +615,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_use_mouse] = {
     "use_mouse", dsda_config_use_mouse,
-    CONF_BOOL(1), NULL, NOT_STRICT, I_InitMouse
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_mouse_sensitivity_horiz] = {
     "mouse_sensitivity_horiz", dsda_config_mouse_sensitivity_horiz,
@@ -691,7 +687,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_pitched_sounds] = {
     "pitched_sounds", dsda_config_pitched_sounds,
-    CONF_BOOL(0), NULL, NOT_STRICT, I_InitSoundParams
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_full_sounds] = {
     "full_sounds", dsda_config_full_sounds,
@@ -699,11 +695,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_snd_samplerate] = {
     "snd_samplerate", dsda_config_snd_samplerate,
-    dsda_config_int, 11025, 48000, { 44100 }, NULL, NOT_STRICT, I_InitSoundParams
+    dsda_config_int, 11025, 48000, { 44100 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_snd_samplecount] = {
     "snd_samplecount", dsda_config_snd_samplecount,
-    dsda_config_int, 0, 8192, { 0 }, NULL, NOT_STRICT, I_InitSoundParams
+    dsda_config_int, 0, 8192, { 0 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_sfx_volume] = {
     "sfx_volume", dsda_config_sfx_volume,
@@ -711,7 +707,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_music_volume] = {
     "music_volume", dsda_config_music_volume,
-    dsda_config_int, 0, 15, { 8 }, NULL, NOT_STRICT, I_ResetMusicVolume
+    dsda_config_int, 0, 15, { 8 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_mus_pause_opt] = {
     "mus_pause_opt", dsda_config_mus_pause_opt,
@@ -723,7 +719,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_snd_midiplayer] = {
     "snd_midiplayer", dsda_config_snd_midiplayer,
-    CONF_STRING("fluidsynth"), NULL, NOT_STRICT, M_ChangeMIDIPlayer
+    CONF_STRING("fluidsynth"), NULL, NOT_STRICT, NULL
   },
   [dsda_config_snd_mididev] = {
     "snd_mididev", dsda_config_snd_mididev,

@@ -94,7 +94,6 @@ void FakeNetUpdate(void)
     lastmadetic += newtics;
 
     while (newtics--) {
-      I_StartTic();
       if (maketic - gametic > BACKUPTICS/2) break;
 
       // e6y

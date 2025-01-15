@@ -156,13 +156,11 @@ dboolean dsda_StrictMode(void) {
 }
 
 dboolean dsda_MuteSfx(void) {
-  return dsda_IntConfig(dsda_config_mute_sfx) ||
-         (!I_WindowFocused() && dsda_IntConfig(dsda_config_mute_unfocused_window));
+  return 1;
 }
 
 dboolean dsda_MuteMusic(void) {
-  return dsda_IntConfig(dsda_config_mute_music) ||
-         (!I_WindowFocused() && dsda_IntConfig(dsda_config_mute_unfocused_window));
+  return 1;
 }
 
 dboolean dsda_ProcessCheatCodes(void) {

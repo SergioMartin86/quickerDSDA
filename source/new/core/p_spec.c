@@ -1454,13 +1454,6 @@ void P_AddMobjSecret(mobj_t *mobj)
 void P_PlayerCollectSecret(player_t *player)
 {
   player->secretcount++;
-
-  if (dsda_IntConfig(dsda_config_hudadd_secretarea))
-  {
-    int sfx_id = raven ? g_sfx_secret :
-                 I_GetSfxLumpNum(&S_sfx[g_sfx_secret]) < 0 ? sfx_itmbk : g_sfx_secret;
-    SetCustomMessage(player - players, "A secret is revealed!", 2 * TICRATE, sfx_id);
-  }
 }
 
 static void P_CollectSecretCommon(sector_t *sector, player_t *player)

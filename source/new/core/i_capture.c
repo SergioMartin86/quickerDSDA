@@ -88,9 +88,6 @@ static int parsecommand (char *out, const char *in, int len)
         case 'h':
           i = snprintf (out, len, "%u", renderH);
           break;
-        case 's':
-          i = snprintf (out, len, "%u", snd_samplerate);
-          break;
         case 'f':
           i = snprintf (out, len, "%s", vid_fname);
           break;
@@ -533,7 +530,6 @@ void I_CapturePrep (const char *fn)
     capturing_video = 0;
     return;
   }
-  I_SetSoundCap ();
   lprintf (LO_INFO, "I_CapturePrep: video capture started\n");
   capturing_video = 1;
 
@@ -548,36 +544,6 @@ void I_CapturePrep (const char *fn)
 // Modified to work with SDL2 resizeable window and fullscreen desktop - DTIED
 void I_CaptureFrame (void)
 {
-  unsigned char *snd;
-  unsigned char *vid;
-  static int partsof35 = 0; // correct for sync when samplerate % 35 != 0
-  int nsampreq;
-
-  if (!capturing_video)
-    return;
-
-  nsampreq = snd_samplerate / cap_fps;
-  partsof35 += snd_samplerate % cap_fps;
-  if (partsof35 >= cap_fps)
-  {
-    partsof35 -= cap_fps;
-    nsampreq++;
-  }
-
-  snd = I_GrabSound (nsampreq);
-  if (snd)
-  {
-    if (fwrite (snd, nsampreq * 4, 1, soundpipe.f_stdin) != 1)
-      lprintf(LO_WARN, "I_CaptureFrame: error writing soundpipe.\n");
-    //Z_Free (snd); // static buffer
-  }
-  vid = I_GrabScreen ();
-  if (vid)
-  {
-    if (fwrite (vid, renderW * renderH * 3, 1, videopipe.f_stdin) != 1)
-      lprintf(LO_WARN, "I_CaptureFrame: error writing videopipe.\n");
-    //Z_Free (vid); // static buffer
-  }
 
 }
 

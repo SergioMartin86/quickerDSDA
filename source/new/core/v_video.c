@@ -675,27 +675,10 @@ void V_TouchPalette(void)
 
 void V_SetPalette(int pal)
 {
-  currentPaletteIndex = pal;
-
-#ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode()) {gld_SetPalette(pal);
-  else 
-#endif
-    I_SetPalette(pal);
 }
 
 void V_SetPlayPal(int playpal_index)
 {
-  dsda_SetPlayPal(playpal_index);
-  R_UpdatePlayPal();
-  V_SetPalette(currentPaletteIndex);
-
-#ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode())
-  {
-    gld_FlushTextures();
-  }
-  #endif
 }
 
 //
@@ -704,11 +687,6 @@ void V_SetPlayPal(int playpal_index)
 // CPhipps - New function to fill a rectangle with a given colour
 static void V_FillRect8(int scrn, int x, int y, int width, int height, byte colour)
 {
-  byte* dest = screens[scrn].data + x + y*screens[scrn].pitch;
-  while (height--) {
-    memset(dest, colour, width);
-    dest += screens[scrn].pitch;
-  }
 }
 
 static void WRAP_V_DrawLine(fline_t* fl, int color);
@@ -1381,16 +1359,6 @@ void SetRatio(int width, int height)
 
 void V_GetWideRect(int *x, int *y, int *w, int *h, enum patch_translation_e flags)
 {
-  stretch_param_t *params = dsda_StretchParams(flags);
-  int sx = *x;
-  int sy = *y;
-
-  *x = params->video->x1lookup[*x];
-  *y = params->video->y1lookup[*y];
-  *w = params->video->x2lookup[sx + *w - 1] - *x + 1;
-  *h = params->video->y2lookup[sy + *h - 1] - *y + 1;
-  *x += params->deltax1;
-  *y += params->deltay1;
 }
 
 //
@@ -1438,38 +1406,19 @@ int V_BestColor(const unsigned char *palette, int r, int g, int b)
 // Alt-Enter: fullscreen <-> windowed
 void V_ToggleFullscreen(void)
 {
-  dsda_UpdateIntConfig(dsda_config_use_fullscreen, !desired_fullscreen, true);
 }
 
 void V_ChangeScreenResolution(void)
 {
-  I_UpdateVideoMode();
-
-  #ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode())
-  {
-    gld_PreprocessLevel();
-  }
-  #endif
 }
 
 void V_FillRectVPT(int scrn, int x, int y, int width, int height, byte color, enum patch_translation_e flags)
 {
-  V_GetWideRect(&x, &y, &width, &height, flags);
-  V_FillRect(scrn, x, y, width, height, color);
 }
 
 int V_FillHeightVPT(int scrn, int y, int height, byte color, enum patch_translation_e flags)
 {
-  stretch_param_t *params = dsda_StretchParams(flags);
-  int sy = y;
-
-  y = params->video->y1lookup[y];
-  height = params->video->y2lookup[sy + height - 1] - y + 1;
-  y += params->deltay1;
-  V_FillRect(scrn, 0, y, SCREENWIDTH, height, color);
-
-  return height;
+  return 0;
 }
 
 // heretic
@@ -1479,191 +1428,37 @@ int V_FillHeightVPT(int scrn, int y, int height, byte color, enum patch_translat
 // heretic_note: is something already implemented to handle this?
 void V_DrawRawScreen(const char *lump_name)
 {
-  V_DrawRawScreenSection(lump_name, 0, 0, 200);
 }
 
 void V_DrawRawScreenSection(const char *lump_name, int source_offset, int dest_y_offset, int dest_y_limit)
 {
-  int i, j;
-  float x_factor, y_factor;
-  int x_offset, y_offset;
-  const byte* raw;
-
-  // e6y: wide-res
-  // NOTE: the size isn't quite right on all resolutions,
-  // which causes the black bars on the edge of heretic E3's
-  // bottom endscreen to overlap the top screen during scrolling.
-  // this happens in both software and GL at the time of writing.
-  V_ClearBorder();
-
-  // custom widescreen assets are a different format
-  {
-    int lump;
-
-    lump = W_CheckNumForName(lump_name);
-    if (W_LumpLength(lump) != HERETIC_RAW_SCREEN_SIZE)
-    {
-      V_DrawNamePatch(0, 0, 0, lump_name, CR_DEFAULT, VPT_STRETCH);
-      return;
-    }
-  }
-
-  x_factor = (float)SCREENWIDTH / 320;
-  y_factor = (float)SCREENHEIGHT / 200;
-
-  if (y_factor < x_factor)
-    x_factor = y_factor;
-
-  x_offset = (int)((SCREENWIDTH - (x_factor * 320)) / 2);
-  y_offset = (int)((dest_y_offset * y_factor) - (source_offset * y_factor / 320));
-
-  // TODO: create a V_FillRaw alias and call that instead of the gld_ func directly,
-  // though that means there needs to be a software version too (that's ideally a
-  // bit more efficient than the current code's thousands-of-little-boxes approach)
-  #ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode()) {
-    gld_FillRawName(lump_name, x_offset, y_offset, 320, 200, 320 * x_factor, 200 * y_factor, VPT_STRETCH_REAL);
-    return;
-  }
-  #endif
-
-  raw = (const byte *)W_LumpByName(lump_name) + source_offset;
-
-  for (j = dest_y_offset; j < dest_y_offset + dest_y_limit; ++j)
-    for (i = 0; i < 320; ++i, ++raw)
-    {
-      int x, y, width, height;
-
-      x = (int)(i * x_factor);
-      y = (int)(j * y_factor);
-      width = (int)((i + 1) * x_factor) - x;
-      height = (int)((j + 1) * y_factor) - y;
-
-      V_FillRect(0, x_offset + x, y, width, height, *raw);
-    }
 }
 
 void V_DrawShadowedNumPatch(int x, int y, int lump)
 {
-  V_DrawNumPatch(x, y, 0, lump, CR_DEFAULT, VPT_STRETCH);
 }
 
 void V_DrawShadowedNamePatch(int x, int y, const char* name)
 {
-  V_DrawNamePatch(x, y, 0, name, CR_DEFAULT, VPT_STRETCH);
 }
 
 void V_DrawTLNumPatch(int x, int y, int lump)
 {
-  V_DrawNumPatch(x, y, 0, lump, CR_DEFAULT, VPT_STRETCH);
 }
 
 void V_DrawTLNamePatch(int x, int y, const char* name)
 {
-  V_DrawNamePatch(x, y, 0, name, CR_DEFAULT, VPT_STRETCH);
 }
 
 void V_DrawAltTLNumPatch(int x, int y, int lump)
 {
-  V_DrawNumPatch(x, y, 0, lump, CR_DEFAULT, VPT_STRETCH);
 }
 
-// void V_DrawShadowedPatch(int x, int y, patch_t *patch)
-// {
-//     int count, col;
-//     column_t *column;
-//     pixel_t *desttop, *dest;
-//     byte *source;
-//     pixel_t *desttop2, *dest2;
-//     int w;
-//
-//     y -= SHORT(patch->topoffset);
-//     x -= SHORT(patch->leftoffset);
-//
-//     if (x < 0
-//      || x + SHORT(patch->width) > ORIGWIDTH
-//      || y < 0
-//      || y + SHORT(patch->height) > ORIGHEIGHT)
-//     {
-//         I_Error("Bad V_DrawShadowedPatch");
-//     }
-//
-//     col = 0;
-//     desttop = dest_screen + ((y * dy) >> FRACBITS) * SCREENWIDTH + ((x * dx) >> FRACBITS);
-//     desttop2 = dest_screen + (((y + 2) * dy) >> FRACBITS) * SCREENWIDTH + (((x + 2) * dx) >> FRACBITS);
-//
-//     w = SHORT(patch->width);
-//     for (; col < w << FRACBITS; x++, col+=dxi, desttop++, desttop2++)
-//     {
-//         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col >> FRACBITS]));
-//
-//         // step through the posts in a column
-//
-//         while (column->topdelta != 0xff)
-//         {
-//             int srccol = 0;
-//             source = (byte *) column + 3;
-//             dest = desttop + ((column->topdelta * dy) >> FRACBITS) * SCREENWIDTH;
-//             dest2 = desttop2 + ((column->topdelta * dy) >> FRACBITS) * SCREENWIDTH;
-//             count = (column->length * dy) >> FRACBITS;
-//
-//             while (count--)
-//             {
-//                 *dest2 = tinttable[((*dest2) << 8)];
-//                 dest2 += SCREENWIDTH;
-//                 *dest = source[srccol >> FRACBITS];
-//                 srccol += dyi;
-//                 dest += SCREENWIDTH;
-//
-//             }
-//             column = (column_t *) ((byte *) column + column->length + 4);
-//         }
-//     }
-// }
 
-// void V_DrawTLPatch(int x, int y, patch_t * patch)
-// {
-//     int count, col;
-//     column_t *column;
-//     pixel_t *desttop, *dest;
-//     byte *source;
-//     int w;
-//
-//     y -= SHORT(patch->topoffset);
-//     x -= SHORT(patch->leftoffset);
-//
-//     if (x < 0
-//      || x + SHORT(patch->width) > ORIGWIDTH
-//      || y < 0
-//      || y + SHORT(patch->height) > ORIGHEIGHT)
-//     {
-//         I_Error("Bad V_DrawTLPatch");
-//     }
-//
-//     col = 0;
-//     desttop = dest_screen + ((y * dy) >> FRACBITS) * SCREENWIDTH + ((x * dx) >> FRACBITS);
-//
-//     w = SHORT(patch->width);
-//     for (; col < w << FRACBITS; x++, col+=dxi, desttop++)
-//     {
-//         column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col >> FRACBITS]));
-//
-//         // step through the posts in a column
-//
-//         while (column->topdelta != 0xff)
-//         {
-//             int srccol = 0;
-//             source = (byte *) column + 3;
-//             dest = desttop + ((column->topdelta * dy) >> FRACBITS) * SCREENWIDTH;
-//             count = (column->length * dy) >> FRACBITS;
-//
-//             while (count--)
-//             {
-//                 *dest = tinttable[((*dest) << 8) + source[srccol >> FRACBITS]];
-//                 srccol += dyi;
-//                 dest += SCREENWIDTH;
-//             }
-//             column = (column_t *) ((byte *) column + column->length + 4);
-//         }
-//     }
-// }
+
+/////////// Headless function
+
+void* headlessGetVideoBuffer() { return 0; }
+int headlessGetVideoPitch() { return 0; }
+int headlessGetVideoWidth() { return 0; }
+int headlessGetVideoHeight() { return 0; }

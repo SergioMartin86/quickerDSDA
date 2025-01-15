@@ -401,10 +401,6 @@ static int num_vissprite, num_vissprite_alloc, num_vissprite_ptrs;
 
 void R_InitSprites(const char * const *namelist)
 {
-  int i;
-  for (i=0; i<SCREENWIDTH; i++)    // killough 2/8/98
-    negonearray[i] = -1;
-  R_InitSpriteDefs(namelist);
 }
 
 //

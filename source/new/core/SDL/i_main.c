@@ -93,7 +93,6 @@
 void I_Init(void)
 {
   dsda_ResetTimeFunctions(fastdemo);
-  I_InitSound();
 }
 
 //e6y
@@ -332,9 +331,6 @@ int _main(int argc, char **argv) // Renamed to allow linking this file to an app
 
   // Priority class for the prboom-plus process
   I_SetProcessPriority();
-
-  /* cphipps - call to video specific startup code */
-  I_PreInitGraphics();
 
   D_DoomMain ();
   return 0;
