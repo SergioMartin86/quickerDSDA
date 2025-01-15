@@ -83,7 +83,6 @@
 #include "dsda.h"
 #include "dsda/aim.h"
 #include "dsda/args.h"
-#include "dsda/build.h"
 #include "dsda/configuration.h"
 #include "dsda/demo.h"
 #include "dsda/excmd.h"
@@ -1240,9 +1239,6 @@ static void G_DoLoadLevel (void)
   dsda_ResetPauseMode();
   dsda_ResetExCmdQueue();
 
-  if (dsda_BuildMode() || dsda_StartInBuildMode())
-    dsda_EnterBuildMode();
-
   // killough 5/13/98: in case netdemo has consoleplayer other than green
   ST_Start();
   HU_Start();
@@ -1332,9 +1328,6 @@ dboolean G_Responder (event_t* ev)
 
   if (gamestate == GS_FINALE && F_Responder(ev))
     return true;  // finale ate the event
-
-  if (dsda_BuildResponder(ev))
-    return true;
 
   // If the next/previous weapon keys are pressed, set the next_weapon
   // variable to change weapons when the next ticcmd is generated.
@@ -1426,6 +1419,12 @@ dboolean G_Responder (event_t* ev)
 // Make ticcmd_ts for the players.
 //
 
+dboolean dsda_AdvanceFrame(void) {
+ return true;
+
+}
+
+
 void G_Ticker (void)
 {
   int i;
@@ -1514,9 +1513,6 @@ void G_Ticker (void)
     END_ONCE
   }
 
-  if (dsda_BuildMode())
-    dsda_RefreshBuildMode();
-
   if (dsda_AdvanceFrame())
   {
     advance_frame = true;
@@ -1541,9 +1537,6 @@ void G_Ticker (void)
         ticcmd_t *cmd = &players[i].cmd;
 
         memcpy(cmd, &local_cmds[i], sizeof *cmd);
-
-        if (dsda_BuildMode())
-          dsda_ReadBuildCmd(cmd);
 
         if (dsda_PendingJoin())
           dsda_JoinDemoCmd(cmd);

@@ -25,7 +25,6 @@
 #include "i_video.h"
 
 #include "dsda/args.h"
-#include "dsda/build.h"
 #include "dsda/configuration.h"
 #include "dsda/exhud.h"
 #include "dsda/features.h"
@@ -198,7 +197,7 @@ dboolean dsda_ShowSplitData(void) {
 }
 
 dboolean dsda_CommandDisplay(void) {
-  return dsda_IntConfig(dsda_config_command_display) || dsda_BuildMode();
+  return dsda_IntConfig(dsda_config_command_display);
 }
 
 dboolean dsda_CoordinateDisplay(void) {

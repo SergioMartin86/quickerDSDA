@@ -17,8 +17,6 @@
 
 #include "d_ticcmd.h"
 
-#include "dsda/build.h"
-
 #include "base.h"
 
 #include "command_display.h"
@@ -245,18 +243,6 @@ void dsda_DrawCommandDisplayHC(void* data) {
 
   dsda_UpdateLocal(data);
 
-  if (dsda_BuildMode()) {
-    ticcmd_t next_cmd;
-    dsda_command_t next_command;
-
-    dsda_CopyBuildCmd(&next_cmd);
-    dsda_TicCmdToCommand(&next_command, &next_cmd);
-    dsda_UpdateCommandText(&next_command, &next_command_display,
-                           next_command_display.component, dsda_BuildPlayback());
-    dsda_DrawCommandDisplayLine(next_command_display.component, offset);
-
-    ++offset;
-  }
 
   for (i = 0; i < dsda_command_history_size; ++i) {
     dsda_DrawCommandDisplayLine(command->component, i + offset);

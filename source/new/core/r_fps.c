@@ -44,7 +44,6 @@
 #include "e6y.h"
 
 #include "dsda/aim.h"
-#include "dsda/build.h"
 #include "dsda/configuration.h"
 #include "dsda/pause.h"
 #include "dsda/scroll.h"

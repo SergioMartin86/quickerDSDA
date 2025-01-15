@@ -25,7 +25,6 @@
 #include "v_video.h"
 
 #include "dsda/args.h"
-#include "dsda/build.h"
 #include "dsda/features.h"
 #include "dsda/pause.h"
 #include "dsda/playback.h"
@@ -77,9 +76,6 @@ void dsda_EnterSkipMode(void) {
   dsda_ApplySkipSettings();
   dsda_ResetPauseMode();
   S_StopMusic();
-
-  if (dsda_BuildMode())
-    dsda_ApplyPauseMode(PAUSE_BUILDMODE);
 }
 
 void dsda_ExitSkipMode(void) {

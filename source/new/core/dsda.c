@@ -28,7 +28,6 @@
 
 #include "dsda/analysis.h"
 #include "dsda/args.h"
-#include "dsda/build.h"
 #include "dsda/demo.h"
 #include "dsda/exhud.h"
 #include "dsda/features.h"
@@ -117,8 +116,6 @@ static void dsda_HandleTurbo(void) {
   if (arg->found)
     turbo_scale = arg->value.v_int;
 
-  if (turbo_scale > 100)
-    dsda_ToggleBuildTurbo();
 }
 
 int dsda_TurboScale(void) {
@@ -139,7 +136,7 @@ void dsda_ToggleFrozenMode(void) {
 }
 
 static void dsda_HandleBuild(void) {
-  start_in_build_mode = dsda_Flag(dsda_arg_build);
+  start_in_build_mode = 0;
 }
 
 int dsda_StartInBuildMode(void) {

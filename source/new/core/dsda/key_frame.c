@@ -36,7 +36,6 @@
 
 #include "dsda.h"
 #include "dsda/args.h"
-#include "dsda/build.h"
 #include "dsda/configuration.h"
 #include "dsda/demo.h"
 #include "dsda/features.h"
@@ -264,7 +263,7 @@ void dsda_RestoreKeyFrame(dsda_key_frame_t* key_frame, dboolean skip_wipe) {
 
   dsda_TrackFeature(uf_keyframe);
 
-  if (skip_wipe || dsda_BuildMode())
+  if (skip_wipe)
     dsda_SkipNextWipe();
 
   save_p = key_frame->buffer;
