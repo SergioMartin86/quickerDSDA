@@ -13,7 +13,6 @@ quickerDSDASrc =  [
  'core/dsda/build.c',
  'core/dsda/compatibility.c',
  'core/dsda/configuration.c',
- 'core/dsda/console.c',
  'core/dsda/cr_table.c',
  'core/dsda/data_organizer.c',
  'core/dsda/death.c',

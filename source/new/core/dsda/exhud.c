@@ -27,7 +27,6 @@
 #include "w_wad.h"
 
 #include "dsda/args.h"
-#include "dsda/console.h"
 #include "dsda/global.h"
 #include "dsda/hud_components.h"
 #include "dsda/render_stats.h"

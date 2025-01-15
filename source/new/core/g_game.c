@@ -90,7 +90,6 @@
 #include "dsda/brute_force.h"
 #include "dsda/build.h"
 #include "dsda/configuration.h"
-#include "dsda/console.h"
 #include "dsda/demo.h"
 #include "dsda/excmd.h"
 #include "dsda/exdemo.h"
@@ -1523,8 +1522,6 @@ void G_Ticker (void)
       dsda_arg_t *arg;
 
       arg = dsda_Arg(dsda_arg_command);
-      if (arg->found)
-        dsda_InterpretConsoleCommands(arg->value.v_string, false, true);
     END_ONCE
   }
 
