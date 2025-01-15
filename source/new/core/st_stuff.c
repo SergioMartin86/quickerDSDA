@@ -44,7 +44,6 @@
 #include "r_main.h"
 #include "am_map.h"
 #include "m_cheat.h"
-#include "m_menu.h"
 #include "s_sound.h"
 #include "sounds.h"
 #include "dstrings.h"
@@ -774,10 +773,6 @@ static void ST_doPaletteStuff(void)
         if (palette >= NUMREDPALS)
           palette = NUMREDPALS-1;
 
-        /* cph 2006/08/06 - if in the menu, reduce the red tint - navigating to
-         * load a game can be tricky if the screen is all red */
-        if (menuactive) palette >>=1;
-
         palette += STARTREDPALS;
       }
     }
@@ -893,44 +888,6 @@ void ST_Refresh(void)
 
 void ST_Drawer(dboolean refresh)
 {
-  dboolean statusbaron = R_StatusBarVisible();
-  dboolean fullmenu = (menuactive == mnact_full) && !M_MenuIsShaded();
-
-  V_BeginUIDraw();
-
-  if (raven)
-  {
-    SB_Drawer(statusbaron, refresh, fullmenu);
-    V_EndUIDraw();
-    return;
-  }
-
-  /* cph - let status bar on be controlled
-   * completely by the call from D_Display
-   * proff - really do it
-   */
-  st_firsttime = st_firsttime || refresh || fullmenu;
-
-  ST_doPaletteStuff();  // Do red-/gold-shifts from damage/items
-
-  if (statusbaron) {
-    if (st_firsttime || (V_IsOpenGLMode() || fadeBG()))
-    {
-      /* If just after ST_Start(), refresh all */
-      st_firsttime = false;
-      ST_refreshBackground(); // draw status bar background to off-screen buff
-      if (!fullmenu)
-        ST_drawWidgets(true); // and refresh all widgets
-    }
-    else
-    {
-      /* Otherwise, update as little as possible */
-      if (!fullmenu)
-        ST_drawWidgets(false); // update all widgets
-    }
-  }
-
-  V_EndUIDraw();
 }
 
 

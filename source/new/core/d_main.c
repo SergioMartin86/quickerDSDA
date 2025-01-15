@@ -61,7 +61,6 @@
 #include "f_wipe.h"
 #include "m_file.h"
 #include "m_misc.h"
-#include "m_menu.h"
 #include "i_main.h"
 #include "i_system.h"
 #include "i_sound.h"
@@ -108,7 +107,6 @@
 #include "dsda/zipfile.h"
 #include "dsda/gl/render_scale.h"
 
-#include "heretic/mn_menu.h"
 #include "heretic/sb_bar.h"
 
 #include "hexen/sn_sonix.h"
@@ -196,9 +194,6 @@ void D_PostEvent(event_t *ev)
 {
   dsda_InputTrackEvent(ev);
 
-  if (M_Responder(ev))
-    dsda_InputFlushTick(); // If the menu used the event, make it invisible
-  else
     G_Responder(ev);
 }
 
@@ -312,8 +307,6 @@ static void D_DrawPause(void)
       V_DrawNamePatch(160, 70, 0, "PAUSED", CR_DEFAULT, VPT_STRETCH);
     }
   }
-  else if (heretic)
-    MN_DrawPause();
   else
     V_DrawNamePatch((320 - V_NamePatchWidth("M_PAUSE")) / 2, 4, 0, "M_PAUSE", CR_DEFAULT, VPT_STRETCH);
 
@@ -358,7 +351,6 @@ static void D_DoomLoop(void)
       G_BuildTiccmd (&local_cmds[consoleplayer]);
       if (advancedemo)
         D_DoAdvanceDemo ();
-      M_Ticker ();
       G_Ticker ();
       gametic++;
       maketic++;
@@ -446,8 +438,6 @@ static void D_PageDrawer(void)
     V_ClearBorder();
     V_DrawNamePatch(0, 0, 0, pagename, CR_DEFAULT, VPT_STRETCH);
   }
-  else
-    M_DrawCredits();
 }
 
 //
@@ -1760,7 +1750,6 @@ void D_DoomMainSetup(void)
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "M_Init: Init miscellaneous info.\n");
-  M_Init();
 
   dsda_LoadSndInfo();
 

@@ -311,7 +311,5 @@ void dsda_UpdateAutoSaves(void) {
     automap = gamemap;
     autoepisode = gameepisode;
 
-    if (!leveltime)
-      M_AutoSave();
   }
 }

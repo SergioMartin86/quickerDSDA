@@ -30,7 +30,6 @@
 #include "dsda/exhud.h"
 #include "dsda/mapinfo.h"
 
-#include "heretic/mn_menu.h"
 #include "heretic/sb_bar.h"
 
 #include "hexen/sn_sonix.h"
@@ -73,8 +72,6 @@ static signed int totalFrags[MAX_MAXPLAYERS];
 static int HubCount;
 static char *HubText;
 
-extern dboolean BorderNeedRefresh;
-
 void Hexen_IN_Start(wbstartstruct_t* wbstartstruct)
 {
     V_SetPalette(0);
@@ -101,7 +98,6 @@ static void Stop(void)
 {
     intermission = false;
     SB_Start();
-    BorderNeedRefresh = true;
 }
 
 static const char *ClusMsgLumpNames[] = {
@@ -370,18 +366,6 @@ static void DrDeathTally(void)
                     DrNumber(players[i].frags[j], x, y, 100);
                 }
             }
-            else
-            {
-                temp = MN_TextAWidth("--") / 2;
-                if (bold)
-                {
-                    MN_DrTextAYellow("--", x - temp, y);
-                }
-                else
-                {
-                    MN_DrTextA("--", x - temp, y);
-                }
-            }
         }
         if (showTotals && playeringame[i]
             && !((slaughterboy & (1 << i)) && !(intertime & 16)))
@@ -395,24 +379,10 @@ static void DrDeathTally(void)
 
 static void DrNumber(int val, int x, int y, int wrapThresh)
 {
-    char buff[8] = "XX";
-
-    if (!(val < -9 && wrapThresh < 1000))
-    {
-        snprintf(buff, sizeof(buff), "%d", val >= wrapThresh ? val % wrapThresh : val);
-    }
-    MN_DrTextA(buff, x - MN_TextAWidth(buff) / 2, y);
 }
 
 static void DrNumberBold(int val, int x, int y, int wrapThresh)
 {
-    char buff[8] = "XX";
-
-    if (!(val < -9 && wrapThresh < 1000))
-    {
-        snprintf(buff, sizeof(buff), "%d", val >= wrapThresh ? val % wrapThresh : val);
-    }
-    MN_DrTextAYellow(buff, x - MN_TextAWidth(buff) / 2, y);
 }
 
 static void DrawHubText(void)

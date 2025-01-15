@@ -27,7 +27,7 @@ dboolean dsda_Paused(void) {
 }
 
 dboolean dsda_PausedViaMenu(void) {
-  return menuactive && !netgame;
+  return  0;
 }
 
 dboolean dsda_PausedOutsideDemo(void) {

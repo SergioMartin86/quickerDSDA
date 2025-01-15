@@ -51,7 +51,6 @@
 
 #include "d_main.h"
 #include "g_game.h"
-#include "m_menu.h"
 
 #include "i_system.h"
 #include "i_main.h"
@@ -123,9 +122,6 @@ void TryRunTics (void)
       if (!movement_smooth) {
           I_uSleep(ms_to_next_tick*1000);
       }
-      if (dsda_GetTick() - entertime > 10) {
-        M_Ticker(); return;
-      }
 
       if (gametic > 0)
       {
@@ -143,7 +139,6 @@ void TryRunTics (void)
   while (runtics--) {
     if (advancedemo)
       D_DoAdvanceDemo ();
-    M_Ticker ();
     G_Ticker ();
     gametic++;
     FakeNetUpdate();

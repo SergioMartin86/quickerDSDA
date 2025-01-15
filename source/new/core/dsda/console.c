@@ -25,7 +25,6 @@
 #include "lprintf.h"
 #include "m_cheat.h"
 #include "m_file.h"
-#include "m_menu.h"
 #include "m_misc.h"
 #include "p_inter.h"
 #include "p_map.h"
@@ -97,14 +96,6 @@ static void dsda_DrawConsole(void) {
   HUlib_drawTextLine(&hu_console_message, false);
 }
 
-menu_t dsda_ConsoleDef = {
-  0,
-  NULL,
-  NULL,
-  dsda_DrawConsole,
-  0, 0,
-  0, MENUF_TEXTINPUT
-};
 
 static dboolean dsda_ExecuteConsole(const char* command_line, dboolean noise);
 
@@ -164,8 +155,6 @@ dboolean dsda_OpenConsole(void) {
 
   dsda_TrackFeature(uf_console);
 
-  M_StartControlPanel();
-  M_SetupNextMenu(&dsda_ConsoleDef);
   dsda_ResetConsoleEntry();
 
   return true;
@@ -1057,8 +1046,6 @@ static dboolean console_BuildTurbo(const char* command, const char* args) {
 
 static dboolean console_Exit(const char* command, const char* args) {
   extern void M_ClearMenus(void);
-
-  M_ClearMenus();
 
   return true;
 }
@@ -2650,42 +2637,6 @@ void dsda_InterpretConsoleCommands(const char* str, dboolean noise, dboolean rai
 }
 
 void dsda_UpdateConsole(int action) {
-  if (action == MENU_BACKSPACE && console_entry_index > 0) {
-    int shift_i;
-
-    for (shift_i = console_entry_index; console_entry->text[shift_i]; ++shift_i)
-      console_entry->text[shift_i - 1] = console_entry->text[shift_i];
-    console_entry->text[shift_i - 1] = '\0';
-
-    --console_entry_index;
-    dsda_UpdateConsoleDisplay();
-  }
-  else if (action == MENU_ENTER) {
-    dsda_InterpretConsoleCommands(console_entry->text, true, false);
-
-    dsda_UpdateConsoleHistory();
-    dsda_ResetConsoleEntry();
-  }
-  else if (action == MENU_UP) {
-    if (console_entry->prev)
-      console_entry = console_entry->prev;
-    console_entry_index = strlen(console_entry->text);
-    dsda_UpdateConsoleDisplay();
-  }
-  else if (action == MENU_DOWN) {
-    if (console_entry->next)
-      console_entry = console_entry->next;
-    console_entry_index = strlen(console_entry->text);
-    dsda_UpdateConsoleDisplay();
-  }
-  else if (action == MENU_RIGHT && console_entry->text[console_entry_index]) {
-    ++console_entry_index;
-    dsda_UpdateConsoleDisplay();
-  }
-  else if (action == MENU_LEFT && console_entry_index > 0) {
-    --console_entry_index;
-    dsda_UpdateConsoleDisplay();
-  }
 }
 
 void dsda_ExecuteConsoleScript(int i) {

@@ -862,10 +862,7 @@ static dboolean M_ClassicDemo(void)
 
 static dboolean M_CheatAllowed(int when)
 {
-  return !dsda_StrictMode() &&
-         !(when & not_demo         && (demorecording || demoplayback)) &&
-         !(when & not_classic_demo && M_ClassicDemo()) &&
-         !(when & not_menu         && menuactive);
+  return 0;
 }
 
 static void cht_InitCheats(void)

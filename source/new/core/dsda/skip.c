@@ -75,7 +75,6 @@ void dsda_EnterSkipMode(void) {
 
   skip_mode = true;
 
-  M_ClearMenus();
   dsda_ApplySkipSettings();
   dsda_ResetPauseMode();
   S_StopMusic();

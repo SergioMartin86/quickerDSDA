@@ -57,7 +57,6 @@
 #include "m_misc.h"
 #include "m_bbox.h"
 #include "d_main.h"
-#include "m_menu.h"
 
 #include "dsda/id_list.h"
 #include "dsda/input.h"
@@ -2816,8 +2815,6 @@ void AM_Drawer (dboolean minimap)
 
   if (!automap_overlay) // cph - If not overlay mode, clear background for the automap
     V_FillRect(FB, f_x, f_y, f_w, f_h, (byte)mapcolor_p->back); //jff 1/5/98 background default color
-  if (automap_overlay == 2 && !M_MenuIsShaded())
-    V_DrawShaded(FB, f_x, f_y, f_w, f_h, FULLSHADE);
 
   if (map_textured)
   {

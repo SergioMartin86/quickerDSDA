@@ -50,7 +50,6 @@
 #include "i_system.h"
 #include "i_main.h"
 #include "i_sound.h"
-#include "m_menu.h"
 #include "lprintf.h"
 #include "m_file.h"
 #include "i_system.h"
@@ -200,8 +199,7 @@ int G_ReloadLevel(void)
   int result = false;
 
   if ((gamestate == GS_LEVEL || gamestate == GS_INTERMISSION) &&
-      allow_incompatibility &&
-      !menuactive)
+      allow_incompatibility)
   {
     G_DeferedInitNew(gameskill, gameepisode, gamemap);
     result = true;
@@ -226,8 +224,7 @@ int G_GotoNextLevel(void)
   dsda_NextMap(&epsd, &map);
 
   if ((gamestate == GS_LEVEL) &&
-    allow_incompatibility &&
-    !menuactive)
+    allow_incompatibility )
   {
     G_DeferedInitNew(gameskill, epsd, map);
     changed = true;
@@ -244,8 +241,7 @@ int G_GotoPrevLevel(void)
   dsda_PrevMap(&epsd, &map);
 
   if ((gamestate == GS_LEVEL) &&
-    allow_incompatibility &&
-    !menuactive)
+    allow_incompatibility )
   {
     G_DeferedInitNew(gameskill, epsd, map);
     changed = true;

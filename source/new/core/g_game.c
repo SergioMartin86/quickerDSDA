@@ -53,7 +53,6 @@
 #include "f_finale.h"
 #include "m_file.h"
 #include "m_misc.h"
-#include "m_menu.h"
 #include "m_cheat.h"
 #include "m_random.h"
 #include "p_setup.h"
@@ -652,17 +651,9 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
     if (hexen)
     {
-      extern int mn_SuicideConsole;
-
       if (dsda_InputActive(dsda_input_jump))
       {
         cmd->arti |= AFLAG_JUMP;
-      }
-
-      if (mn_SuicideConsole)
-      {
-          cmd->arti |= AFLAG_SUICIDE;
-          mn_SuicideConsole = false;
       }
 
       if (!cmd->arti)
@@ -1039,7 +1030,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
   G_ConvertAnalogMotion(speed, &forward, &side);
 
-  if (!walkcamera.type || menuactive) //e6y
+  if (!walkcamera.type) //e6y
     G_ResetMotion();
 
   if (forward > MAXPLMOVE)
@@ -2371,7 +2362,6 @@ void G_LoadGame(int slot)
 static void G_LoadGameErr(const char *msg)
 {
   P_FreeSaveBuffer();
-  M_ForcedLoadGame(msg);             // Print message asking for 'Y' to force
 }
 
 const char * comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
@@ -2413,8 +2403,6 @@ void RecalculateDrawnSubsectors(void)
 
 void G_AfterLoad(void)
 {
-  extern int BorderNeedRefresh;
-
   dsda_ResetTrackers();
 
   R_ActivateSectorInterpolations(); //e6y
@@ -2437,79 +2425,11 @@ void G_AfterLoad(void)
 
   R_FillBackScreen ();
 
-  BorderNeedRefresh = true;
   ST_Start();
 }
 
 void G_DoLoadGame(void)
 {
-  int  length;
-  // CPhipps - do savegame filename stuff here
-  char *name;                // killough 3/22/98
-  int saveversion;
-
-  dsda_SetLastLoadSlot(savegameslot);
-
-  name = dsda_SaveGameName(savegameslot, load_via_cmd);
-
-  // [crispy] loaded game must always be single player.
-  // Needed for ability to use a further game loading, as well as
-  // cheat codes and other single player only specifics.
-  if (!load_via_cmd)
-  {
-    netgame = false;
-    deathmatch = false;
-  }
-
-  gameaction = ga_nothing;
-
-  length = M_ReadFile(name, &savebuffer);
-  if (length<=0)
-    I_Error("Couldn't read file %s: %s", name, "(Unknown Error)");
-  Z_Free(name);
-  save_p = savebuffer + SAVESTRINGSIZE;
-
-  P_LOAD_X(saveversion);
-  if (saveversion != SAVEVERSION && !forced_loadgame) {
-    G_LoadGameErr("Unrecognised savegame version!\nAre you sure? (y/n) ");
-    return;
-  }
-
-  // CPhipps - always check savegames even when forced,
-  //  only print a warning if forced
-  {  // killough 3/16/98: check lump name checksum (independent of order)
-    uint64_t checksum;
-
-    P_LOAD_X(checksum);
-
-    if (checksum != G_Signature() && !forced_loadgame)
-    {
-      char *msg = Z_Malloc(strlen((char *) save_p) + 128);
-
-      strcpy(msg, "Incompatible Savegame!!!\n");
-      if (*save_p)
-        strcat(strcat(msg, "Wads expected:\n\n"), (char *) save_p);
-      strcat(msg, "\nAre you sure?");
-
-      G_LoadGameErr(msg);
-
-      Z_Free(msg);
-
-      return;
-    }
-  }
-
-  save_p += strlen((char*) save_p) + 1;
-
-  // dearchive all the modifications
-  dsda_UnArchiveAll();
-
-  if (*save_p != 0xe6)
-    I_Error ("G_DoLoadGame: Bad savegame");
-
-  G_AfterLoad();
-
-  P_FreeSaveBuffer();
 }
 
 //
@@ -2535,68 +2455,7 @@ void G_SaveGame(int slot, const char *description)
 
 static void G_DoSaveGame(dboolean via_cmd)
 {
-  char *name;
-  char *description;
-  int saveversion;
-  uint64_t checksum;
-  const char *maplump;
-  int time, ttime;
 
-  gameaction = ga_nothing; // cph - cancel savegame at top of this function,
-    // in case later problems cause a premature exit
-
-  dsda_SetLastSaveSlot(savegameslot);
-
-  name = dsda_SaveGameName(savegameslot, via_cmd);
-
-  description = savedescription;
-  saveversion = SAVEVERSION;
-
-  P_InitSaveBuffer();
-
-  P_SAVE_SIZE(description, SAVESTRINGSIZE);
-  P_SAVE_X(saveversion);
-
-  /* killough 3/16/98, 12/98: store lump name checksum */
-  checksum = G_Signature();
-  P_SAVE_X(checksum);
-
-  // killough 3/16/98: store pwad filenames in savegame
-  {
-    // CPhipps - changed for new wadfiles handling
-    size_t i;
-    for (i = 0; i<numwadfiles; i++)
-    {
-      const char *const w = wadfiles[i].name;
-      size_t size = strlen(w);
-
-      P_SAVE_SIZE(w, size);
-      P_SAVE_BYTE('\n');
-    }
-    P_SAVE_BYTE(0);
-  }
-
-  dsda_ArchiveAll();
-
-  P_SAVE_BYTE(0xe6);   // consistency marker
-
-  doom_printf( "%s", M_WriteFile(name, savebuffer, save_p - savebuffer)
-         ? s_GGSAVED /* Ty - externalised */
-         : "Game save failed!"); // CPhipps - not externalised
-
-  /* Print some information about the save game */
-  maplump = dsda_MapLumpName(gameepisode, gamemap);
-  time = leveltime / TICRATE;
-  ttime = (totalleveltimes + leveltime) / TICRATE;
-
-  lprintf(LO_INFO, "G_DoSaveGame: [%d] %s (%s), Skill %d, Level Time %02d:%02d:%02d, Total Time %02d:%02d:%02d\n",
-    savegameslot + 1, maplump, W_GetLumpInfoByNum(W_GetNumForName(maplump))->wadfile->name, gameskill + 1,
-    time/3600, (time%3600)/60, time%60, ttime/3600, (ttime%3600)/60, ttime%60);
-
-  P_FreeSaveBuffer();
-
-  savedescription[0] = 0;
-  Z_Free(name);
 }
 
 static int     d_skill;
@@ -4073,7 +3932,7 @@ void P_WalkTicker()
   int side;
   int angturn;
 
-  if (!walkcamera.type || menuactive)
+  if (!walkcamera.type)
     return;
 
   G_SetSpeed(false);

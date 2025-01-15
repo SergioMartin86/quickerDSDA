@@ -37,12 +37,10 @@
 
 #include "heretic/def.h"
 #include "heretic/dstrings.h"
-#include "heretic/mn_menu.h"
 #include "heretic/sb_bar.h"
 
 #include "in_lude.h"
 
-extern dboolean BorderNeedRefresh;
 
 typedef enum
 {
@@ -261,7 +259,6 @@ void IN_Stop(void)
 {
     intermission = false;
     SB_Start();
-    BorderNeedRefresh = true;
 }
 
 //========================================================================
@@ -588,41 +585,6 @@ void IN_DrawStatBack(void)
 
 void IN_DrawOldLevel(void)
 {
-    const char *level_name = NameForMap(prevmap);
-    int i;
-    int x;
-
-    x = 160 - MN_TextBWidth(level_name) / 2;
-    IN_DrTextB(level_name, x, 3);
-    x = 160 - MN_TextAWidth("FINISHED") / 2;
-    MN_DrTextA("FINISHED", x, 25);
-
-    if (prevmap == 9)
-    {
-        for (i = 0; i < nextmap - 1; i++)
-        {
-            IN_DrawBeenThere(i);
-        }
-        if (!(intertime & 16))
-        {
-            IN_DrawBeenThere(8);
-        }
-    }
-    else
-    {
-        for (i = 0; i < prevmap - 1; i++)
-        {
-            IN_DrawBeenThere(i);
-        }
-        if (players[consoleplayer].didsecret)
-        {
-            IN_DrawBeenThere(8);
-        }
-        if (!(intertime & 16))
-        {
-            IN_DrawBeenThere(prevmap - 1);
-        }
-    }
 }
 
 //========================================================================
@@ -633,31 +595,6 @@ void IN_DrawOldLevel(void)
 
 void IN_DrawYAH(void)
 {
-    const char *level_name = NameForMap(nextmap);
-    int i;
-    int x;
-
-    x = 160 - MN_TextAWidth("NOW ENTERING:") / 2;
-    MN_DrTextA("NOW ENTERING:", x, 10);
-    x = 160 - MN_TextBWidth(level_name) / 2;
-    IN_DrTextB(level_name, x, 20);
-
-    if (prevmap == 9)
-    {
-        prevmap = nextmap - 1;
-    }
-    for (i = 0; i < prevmap; i++)
-    {
-        IN_DrawBeenThere(i);
-    }
-    if (players[consoleplayer].didsecret)
-    {
-        IN_DrawBeenThere(8);
-    }
-    if (!(intertime & 16) || interstate == 3)
-    {                           // draw the destination 'X'
-        IN_DrawGoingThere(nextmap - 1);
-    }
 }
 
 //========================================================================
@@ -668,102 +605,6 @@ void IN_DrawYAH(void)
 
 void IN_DrawSingleStats(void)
 {
-    const char *prev_level_name = NameForMap(prevmap);
-    const char *next_level_name = NameForMap(nextmap);
-    int x;
-    static int sounds;
-
-    // [crispy] offset the stats for Ep.4 and up, to make room for level time
-    int yoffset = 0;
-    if (gamemode == retail && gameepisode > 3)
-    {
-        yoffset = 20;
-    }
-
-    IN_DrTextB("KILLS", 50, 65 - yoffset);
-    IN_DrTextB("ITEMS", 50, 90 - yoffset);
-    IN_DrTextB("SECRETS", 50, 115 - yoffset);
-
-    x = 160 - MN_TextBWidth(prev_level_name) / 2;
-    IN_DrTextB(prev_level_name, x, 3);
-    x = 160 - MN_TextAWidth("FINISHED") / 2;
-    MN_DrTextA("FINISHED", x, 25);
-
-    dsda_DrawExIntermission();
-
-    if (intertime < 30)
-    {
-        sounds = 0;
-        return;
-    }
-    if (sounds < 1 && intertime >= 30)
-    {
-        S_StartVoidSound(heretic_sfx_dorcls);
-        sounds++;
-    }
-    IN_DrawNumber(players[consoleplayer].killcount, 200, 65 - yoffset, 3);
-    V_DrawShadowedNamePatch(237, 65 - yoffset, "FONTB15");
-    IN_DrawNumber(totalkills, 248, 65 - yoffset, 3);
-    if (intertime < 60)
-    {
-        return;
-    }
-    if (sounds < 2 && intertime >= 60)
-    {
-        S_StartVoidSound(heretic_sfx_dorcls);
-        sounds++;
-    }
-    IN_DrawNumber(players[consoleplayer].itemcount, 200, 90 - yoffset, 3);
-    V_DrawShadowedNamePatch(237, 90 - yoffset, "FONTB15");
-    IN_DrawNumber(totalitems, 248, 90 - yoffset, 3);
-    if (intertime < 90)
-    {
-        return;
-    }
-    if (sounds < 3 && intertime >= 90)
-    {
-        S_StartVoidSound(heretic_sfx_dorcls);
-        sounds++;
-    }
-    IN_DrawNumber(players[consoleplayer].secretcount, 200, 115 - yoffset, 3);
-    V_DrawShadowedNamePatch(237, 115 - yoffset, "FONTB15");
-    IN_DrawNumber(totalsecret, 248, 115 - yoffset, 3);
-    if (intertime < 150)
-    {
-        return;
-    }
-    if (sounds < 4 && intertime >= 150)
-    {
-        S_StartVoidSound(heretic_sfx_dorcls);
-        sounds++;
-    }
-
-    // [crispy] ignore "now entering" if it's the final intermission
-    if (gamemode != retail || gameepisode <= 3 || finalintermission)
-    {
-        IN_DrTextB("TIME", 85, 150);
-        IN_DrawTime(155, 150, hours, minutes, seconds);
-
-        // [crispy] Show total time on intermission
-        IN_DrTextB("TOTAL", 85, 170);
-        IN_DrawTime(155, 170, totalHours, totalMinutes, totalSeconds);
-    }
-    else
-    {
-        // [crispy] show the level time for Ep.4 and up
-        IN_DrTextB("TIME", 85, 120);
-        IN_DrawTime(155, 120, hours, minutes, seconds);
-
-        // [crispy] Show total time on intermission
-        IN_DrTextB("TOTAL", 85, 140);
-        IN_DrawTime(155, 140, totalHours, totalMinutes, totalSeconds);
-
-        x = 160 - MN_TextAWidth("NOW ENTERING:") / 2;
-        MN_DrTextA("NOW ENTERING:", x, 160);
-        x = 160 - MN_TextBWidth(next_level_name) / 2;
-        IN_DrTextB(next_level_name, x, 170);
-        skipintermission = false;
-    }
 }
 
 //========================================================================
@@ -774,47 +615,6 @@ void IN_DrawSingleStats(void)
 
 void IN_DrawCoopStats(void)
 {
-    const char *level_name = NameForMap(prevmap);
-    int i;
-    int x;
-    int ypos;
-
-    static int sounds;
-
-    IN_DrTextB("KILLS", 95, 35);
-    IN_DrTextB("BONUS", 155, 35);
-    IN_DrTextB("SECRET", 232, 35);
-    x = 160 - MN_TextBWidth(level_name) / 2;
-    IN_DrTextB(level_name, x, 3);
-    x = 160 - MN_TextAWidth("FINISHED") / 2;
-    MN_DrTextA("FINISHED", x, 25);
-
-    ypos = 50;
-    for (i = 0; i < g_maxplayers; i++)
-    {
-        if (playeringame[i])
-        {
-            V_DrawShadowedNumPatch(25, ypos, patchFaceOkayBase + i);
-            if (intertime < 40)
-            {
-                sounds = 0;
-                ypos += 37;
-                continue;
-            }
-            else if (intertime >= 40 && sounds < 1)
-            {
-                S_StartVoidSound(heretic_sfx_dorcls);
-                sounds++;
-            }
-            IN_DrawNumber(killPercent[i], 85, ypos + 10, 3);
-            V_DrawShadowedNamePatch(121, ypos + 10, "FONTB05");
-            IN_DrawNumber(bonusPercent[i], 160, ypos + 10, 3);
-            V_DrawShadowedNamePatch(196, ypos + 10, "FONTB05");
-            IN_DrawNumber(secretPercent[i], 237, ypos + 10, 3);
-            V_DrawShadowedNamePatch(273, ypos + 10, "FONTB05");
-            ypos += 37;
-        }
-    }
 }
 
 //========================================================================
@@ -825,92 +625,6 @@ void IN_DrawCoopStats(void)
 
 void IN_DrawDMStats(void)
 {
-    int i;
-    int j;
-    int ypos;
-    int xpos;
-    int kpos;
-
-    static int sounds;
-
-    xpos = 90;
-    ypos = 55;
-
-    IN_DrTextB("TOTAL", 265, 30);
-    MN_DrTextA("VICTIMS", 140, 8);
-    for (i = 0; i < 7; i++)
-    {
-        MN_DrTextA(KillersText[i], 10, 80 + 9 * i);
-    }
-    if (intertime < 20)
-    {
-        for (i = 0; i < g_maxplayers; i++)
-        {
-            if (playeringame[i])
-            {
-                V_DrawShadowedNumPatch(
-                  40,
-                  ((ypos << FRACBITS) + dSlideY[i] * intertime) >> FRACBITS,
-                  patchFaceOkayBase + i
-                );
-                V_DrawShadowedNumPatch(
-                  ((xpos << FRACBITS) + dSlideX[i] * intertime) >> FRACBITS,
-                  18,
-                  patchFaceDeadBase + i
-                );
-            }
-        }
-        sounds = 0;
-        return;
-    }
-    if (intertime >= 20 && sounds < 1)
-    {
-        S_StartVoidSound(heretic_sfx_dorcls);
-        sounds++;
-    }
-    if (intertime >= 100 && slaughterboy && sounds < 2)
-    {
-        S_StartVoidSound(heretic_sfx_wpnup);
-        sounds++;
-    }
-    for (i = 0; i < g_maxplayers; i++)
-    {
-        if (playeringame[i])
-        {
-            if (intertime < 100 || i == consoleplayer)
-            {
-                V_DrawShadowedNumPatch(40, ypos, patchFaceOkayBase + i);
-                V_DrawShadowedNumPatch(xpos, 18, patchFaceDeadBase + i);
-            }
-            else
-            {
-                V_DrawTLNumPatch(40, ypos, patchFaceOkayBase + i);
-                V_DrawTLNumPatch(xpos, 18, patchFaceDeadBase + i);
-            }
-            kpos = 86;
-            for (j = 0; j < g_maxplayers; j++)
-            {
-                if (playeringame[j])
-                {
-                    IN_DrawNumber(players[i].frags[j], kpos, ypos + 10, 3);
-                    kpos += 43;
-                }
-            }
-            if (slaughterboy & (1 << i))
-            {
-                if (!(intertime & 16))
-                {
-                    IN_DrawNumber(totalFrags[i], 263, ypos + 10, 3);
-                }
-            }
-            else
-            {
-                IN_DrawNumber(totalFrags[i], 263, ypos + 10, 3);
-            }
-            ypos += 36;
-            xpos += 43;
-        }
-    }
 }
 
 //========================================================================
@@ -922,25 +636,6 @@ void IN_DrawDMStats(void)
 // [crispy] always draw seconds; don't 0-pad minutes with no hour
 void IN_DrawTime(int x, int y, int h, int m, int s)
 {
-    if (h)
-    {
-        IN_DrawNumber(h, x, y, 2);
-        IN_DrTextB(":", x + 26, y);
-    }
-    x += 34;
-    if (h || m > 9)
-    {
-        IN_DrawNumber(m, x, y, 2);
-    }
-    else if (m)
-    {
-        IN_DrawNumber(m, x + 12, y, 1);
-    }
-    x += 34;
-    {
-        IN_DrTextB(":", x - 8, y);
-        IN_DrawNumber(s, x, y, 2);
-    }
 }
 
 //========================================================================
@@ -951,92 +646,6 @@ void IN_DrawTime(int x, int y, int h, int m, int s)
 
 void IN_DrawNumber(int val, int x, int y, int digits)
 {
-    int lump;
-    int xpos;
-    int oldval;
-    int realdigits;
-    dboolean neg;
-
-    oldval = val;
-    xpos = x;
-    neg = false;
-    realdigits = 1;
-
-    if (val < 0)
-    {                           //...this should reflect negative frags
-        val = -val;
-        neg = true;
-        if (val > 99)
-        {
-            val = 99;
-        }
-    }
-    if (val > 9)
-    {
-        realdigits++;
-        if (digits < realdigits)
-        {
-            realdigits = digits;
-            val = 9;
-        }
-    }
-    if (val > 99)
-    {
-        realdigits++;
-        if (digits < realdigits)
-        {
-            realdigits = digits;
-            val = 99;
-        }
-    }
-    if (val > 999)
-    {
-        realdigits++;
-        if (digits < realdigits)
-        {
-            realdigits = digits;
-            val = 999;
-        }
-    }
-    if (digits == 4)
-    {
-        lump = FontBNumbers[val / 1000];
-        V_DrawShadowedNumPatch(xpos + 6 - R_NumPatchWidth(lump) / 2 - 12, y, lump);
-    }
-    if (digits > 2)
-    {
-        if (realdigits > 2)
-        {
-            lump = FontBNumbers[val / 100];
-            V_DrawShadowedNumPatch(xpos + 6 - R_NumPatchWidth(lump) / 2, y, lump);
-        }
-        xpos += 12;
-    }
-    val = val % 100;
-    if (digits > 1)
-    {
-        if (val > 9)
-        {
-            lump = FontBNumbers[val / 10];
-            V_DrawShadowedNumPatch(xpos + 6 - R_NumPatchWidth(lump) / 2, y, lump);
-        }
-        else if (digits == 2 || oldval > 99)
-        {
-            V_DrawShadowedNumPatch(xpos, y, FontBNumbers[0]);
-        }
-        xpos += 12;
-    }
-    val = val % 10;
-    lump = FontBNumbers[val];
-    V_DrawShadowedNumPatch(xpos + 6 - R_NumPatchWidth(lump) / 2, y, lump);
-    if (neg)
-    {
-        V_DrawShadowedNamePatch(
-          xpos + 6 - R_NamePatchWidth("FONTB13") / 2 - 12 * (realdigits),
-          y,
-          "FONTB13"
-        );
-    }
 }
 
 //========================================================================
@@ -1047,19 +656,4 @@ void IN_DrawNumber(int val, int x, int y, int digits)
 
 void IN_DrTextB(const char *text, int x, int y)
 {
-    char c;
-
-    while ((c = *text++) != 0)
-    {
-        if (c < 33)
-        {
-            x += 8;
-        }
-        else
-        {
-            int lump = FontBLump + c - 33;
-            V_DrawShadowedNumPatch(x, y, lump);
-            x += R_NumPatchWidth(lump) - 1;
-        }
-    }
 }

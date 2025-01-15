@@ -19,11 +19,8 @@
 #define __DSDA_CONSOLE__
 
 #include "doomtype.h"
-#include "m_menu.h"
 
 #define CONSOLE_SCRIPT_COUNT 10
-
-extern menu_t dsda_ConsoleDef;
 
 int dsda_ConsoleHeight(void);
 dboolean dsda_OpenConsole(void);

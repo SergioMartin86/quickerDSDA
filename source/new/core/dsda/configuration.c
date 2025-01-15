@@ -88,9 +88,7 @@ extern int sts_pct_always_gray;
 extern int sts_traditional_keys;
 extern int full_sounds;
 
-void M_ChangeDemoSmoothTurns(void);
 void M_ChangeSkyMode(void);
-void M_ChangeMessages(void);
 void S_ResetSfxVolume(void);
 void M_ChangeAllowFog(void);
 #ifdef __ENABLE_OPENGL_
@@ -123,9 +121,7 @@ void gld_ResetAutomapTransparency(void);
 #else
 void gld_ResetAutomapTransparency(void){}
 #endif
-void M_ChangeVideoMode(void);
 void M_ChangeUncappedFrameRate(void);
-void M_ChangeFullScreen(void);
 void R_SetViewSize(void);
 void M_ChangeApplyPalette(void);
 void M_ChangeStretch(void);
@@ -291,12 +287,12 @@ dsda_config_t dsda_config[dsda_config_count] = {
   [dsda_config_demo_smoothturns] = {
     "demo_smoothturns", dsda_config_demo_smoothturns,
     CONF_BOOL(0), &demo_smoothturns,
-    NOT_STRICT, M_ChangeDemoSmoothTurns
+    NOT_STRICT, NULL
   },
   [dsda_config_demo_smoothturnsfactor] = {
     "demo_smoothturnsfactor", dsda_config_demo_smoothturnsfactor,
     dsda_config_int, 1, SMOOTH_PLAYING_MAXFACTOR, { 6 }, &demo_smoothturnsfactor,
-    NOT_STRICT, M_ChangeDemoSmoothTurns
+    NOT_STRICT, NULL
   },
   [dsda_config_weapon_attack_alignment] = {
     "weapon_attack_alignment", dsda_config_weapon_attack_alignment,
@@ -332,7 +328,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_show_messages] = {
     "show_messages", dsda_config_show_messages,
-    CONF_BOOL(1), NULL, NOT_STRICT, M_ChangeMessages
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_command_display] = {
     "dsda_command_display", dsda_config_command_display,
@@ -1106,11 +1102,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_videomode] = {
     "videomode", dsda_config_videomode,
-    CONF_STRING("Software"), NULL, NOT_STRICT, M_ChangeVideoMode
+    CONF_STRING("Software"), NULL, NOT_STRICT, NULL
   },
   [dsda_config_screen_resolution] = {
     "screen_resolution", dsda_config_screen_resolution,
-    CONF_STRING("640x480"), NULL, NOT_STRICT, M_ChangeVideoMode
+    CONF_STRING("640x480"), NULL, NOT_STRICT, NULL
   },
   [dsda_config_custom_resolution] = {
     "custom_resolution", dsda_config_custom_resolution,
@@ -1118,15 +1114,15 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_use_fullscreen] = {
     "use_fullscreen", dsda_config_use_fullscreen,
-    CONF_BOOL(0), NULL, NOT_STRICT, M_ChangeFullScreen
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_exclusive_fullscreen] = {
     "exclusive_fullscreen", dsda_config_exclusive_fullscreen,
-    CONF_BOOL(0), NULL, NOT_STRICT, M_ChangeVideoMode
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_render_vsync] = {
     "render_vsync", dsda_config_render_vsync,
-    CONF_BOOL(0), NULL, NOT_STRICT, M_ChangeVideoMode
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_uncapped_framerate] = {
     "uncapped_framerate", dsda_config_uncapped_framerate,
@@ -1170,11 +1166,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_render_screen_multiply] = {
     "render_screen_multiply", dsda_config_render_screen_multiply,
-    dsda_config_int, 1, 5, { 1 }, NULL, NOT_STRICT, M_ChangeVideoMode
+    dsda_config_int, 1, 5, { 1 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_integer_scaling] = {
     "integer_scaling", dsda_config_integer_scaling,
-    CONF_BOOL(0), NULL, NOT_STRICT, M_ChangeVideoMode
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_render_aspect] = {
     "render_aspect", dsda_config_render_aspect,

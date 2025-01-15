@@ -18,7 +18,6 @@
 
 #include "doomstat.h"
 #include "m_cheat.h"
-#include "m_menu.h"
 #include "m_random.h"
 #include "v_video.h"
 #include "r_main.h"
@@ -538,148 +537,12 @@ static int oldpieces = -1;
 
 void SB_Drawer(dboolean statusbaron, dboolean refresh, dboolean fullmenu)
 {
-    if (refresh || fullmenu || fadeBG() || V_IsOpenGLMode()) SB_state = -1;
-
-    if (!statusbaron)
-    {
-        SB_PaletteFlash(false);
-        if (R_FullView())
-        {
-            DrawAnimatedIcons();
-        }
-        return;
-    }
-
-    CPlayer = &players[consoleplayer];
-    if (SB_state == -1)
-    {
-        if (heretic)
-        {
-            V_DrawNumPatch(0, 158, 0, LumpBARBACK, CR_DEFAULT, VPT_STRETCH);
-            if (players[consoleplayer].cheats & CF_GODMODE)
-            {
-                V_DrawNamePatch(16, 167, 0, "GOD1", CR_DEFAULT, VPT_STRETCH);
-                V_DrawNamePatch(287, 167, 0, "GOD2", CR_DEFAULT, VPT_STRETCH);
-            }
-        }
-        else
-        {
-            V_DrawNumPatch(0, 134, 0, LumpH2BAR, CR_DEFAULT, VPT_STRETCH);
-        }
-
-        oldhealth = -1;
-    }
-    DrawCommonBar();
-    if (!inventory)
-    {
-        if (SB_state != 0)
-        {
-            // Main interface
-            if (heretic)
-            {
-                V_DrawNumPatch(34, 160, 0, LumpSTATBAR, CR_DEFAULT, VPT_STRETCH);
-            }
-            else
-            {
-              if (!automap_active)
-              {
-                  V_DrawNumPatch(38, 162, 0, LumpSTATBAR, CR_DEFAULT, VPT_STRETCH);
-              }
-              else
-              {
-                  V_DrawNumPatch(38, 162, 0, LumpKEYBAR, CR_DEFAULT, VPT_STRETCH);
-              }
-            }
-            oldarti = 0;
-            oldammo = -1;
-            oldmana1 = -1;
-            oldmana2 = -1;
-            oldarmor = -1;
-            oldpieces = -1;
-            oldweapon = -1;
-            oldfrags = -9999;       //can't use -1, 'cuz of negative frags
-            oldlife = -1;
-            oldkeys = -1;
-        }
-        if (heretic || !automap_active)
-        {
-            DrawMainBar();
-        }
-        else if (hexen)
-        {
-            DrawKeyBar();
-        }
-        SB_state = 0;
-    }
-    else
-    {
-        if (heretic && SB_state != 1)
-        {
-            V_DrawNumPatch(34, 160, 0, LumpINVBAR, CR_DEFAULT, VPT_STRETCH);
-        }
-        DrawInventoryBar();
-        SB_state = 1;
-    }
-    SB_PaletteFlash(false);
-    DrawAnimatedIcons();
 }
 
 // sets the new palette based upon current values of player->damagecount
 // and player->bonuscount
 void SB_PaletteFlash(dboolean forceChange)
 {
-    static int sb_palette = 0;
-    int palette;
-
-    if (forceChange)
-    {
-        sb_palette = -1;
-    }
-
-    CPlayer = &players[consoleplayer];
-
-    if (CPlayer->poisoncount)
-    {
-        palette = 0;
-        palette = (CPlayer->poisoncount + 7) >> 3;
-        if (palette >= NUMPOISONPALS)
-        {
-            palette = NUMPOISONPALS - 1;
-        }
-        palette += STARTPOISONPALS;
-    }
-    else if (CPlayer->damagecount)
-    {
-        palette = (CPlayer->damagecount + 7) >> 3;
-        if (palette >= NUMREDPALS)
-        {
-            palette = NUMREDPALS - 1;
-        }
-        palette += STARTREDPALS;
-    }
-    else if (CPlayer->bonuscount)
-    {
-        palette = (CPlayer->bonuscount + 7) >> 3;
-        if (palette >= NUMBONUSPALS)
-        {
-            palette = NUMBONUSPALS - 1;
-        }
-        palette += STARTBONUSPALS;
-    }
-    else if (CPlayer->mo->flags2 & MF2_ICEDAMAGE)
-    {                       // Frozen player
-        palette = STARTICEPAL;
-    }
-    else
-    {
-        palette = 0;
-    }
-    if (palette != sb_palette)
-    {
-        SB_state = -1;
-        sb_palette = palette;
-        V_SetPalette(sb_palette);
-    }
 }
 
 //---------------------------------------------------------------------------
@@ -690,56 +553,6 @@ void SB_PaletteFlash(dboolean forceChange)
 
 void DrawCommonBar(void)
 {
-    int healthPos;
-
-    if (!dsda_HideHorns())
-    {
-      if (heretic)
-      {
-          V_DrawNumPatch(0,  148, 0, LumpLTFCTOP, CR_DEFAULT, VPT_STRETCH);
-          V_DrawNumPatch(290,  148, 0, LumpRTFCTOP, CR_DEFAULT, VPT_STRETCH);
-      }
-      else
-      {
-          V_DrawNumPatch(0, 134, 0, LumpH2TOP, CR_DEFAULT, VPT_STRETCH);
-      }
-    }
-
-    if (oldhealth != HealthMarker)
-    {
-        oldhealth = HealthMarker;
-        healthPos = HealthMarker;
-        if (healthPos < 0)
-        {
-            healthPos = 0;
-        }
-        if (healthPos > 100)
-        {
-            healthPos = 100;
-        }
-
-        if (heretic)
-        {
-            int chainY;
-
-            healthPos = (healthPos * 256) / 100;
-            chainY =
-                (HealthMarker == CPlayer->mo->health) ? 191 : 191 + ChainWiggle;
-            V_DrawNumPatch(0,  190, 0, LumpCHAINBACK, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(2 + (healthPos % 17),  chainY, 0, LumpCHAIN, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(17 + healthPos,  chainY, 0, LumpLIFEGEM, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(0,  190, 0, LumpLTFACE, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(276,  190, 0, LumpRTFACE, CR_DEFAULT, VPT_STRETCH);
-            ShadeChain();
-        }
-        else
-        {
-            V_DrawNumPatch(28 + (((healthPos * 196) / 100) % 9), 193, 0, LumpCHAIN, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(7 + ((healthPos * 11) / 5), 193, 0, LumpLIFEGEM, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(0, 193, 0, LumpLFEDGE, CR_DEFAULT, VPT_STRETCH);
-            V_DrawNumPatch(277, 193, 0, LumpRTEDGE, CR_DEFAULT, VPT_STRETCH);
-        }
-    }
 }
 
 //---------------------------------------------------------------------------
@@ -750,112 +563,6 @@ void DrawCommonBar(void)
 
 void DrawMainBar(void)
 {
-    int i;
-    int temp;
-
-    if (hexen) return Hexen_DrawMainBar();
-
-    // Ready artifact
-    if (ArtifactFlash)
-    {
-        V_DrawNumPatch(180,  161, 0, LumpBLACKSQ, CR_DEFAULT, VPT_STRETCH);
-
-        temp = W_GetNumForName("useartia") + ArtifactFlash - 1;
-
-        V_DrawNumPatch(182, 161, 0, temp, CR_DEFAULT, VPT_STRETCH);
-        ArtifactFlash--;
-        oldarti = -1;           // so that the correct artifact fills in after the flash
-    }
-    else if (oldarti != CPlayer->readyArtifact
-             || oldartiCount != CPlayer->inventory[inv_ptr].count)
-    {
-        V_DrawNumPatch(180,  161, 0, LumpBLACKSQ, CR_DEFAULT, VPT_STRETCH);
-        if (CPlayer->readyArtifact > 0)
-        {
-            V_DrawNumPatch(
-              179, 160, 0, lumparti[CPlayer->readyArtifact], CR_DEFAULT, VPT_STRETCH
-            );
-
-            DrSmallNumber(CPlayer->inventory[inv_ptr].count, 201, 182);
-        }
-        oldarti = CPlayer->readyArtifact;
-        oldartiCount = CPlayer->inventory[inv_ptr].count;
-    }
-
-    // Frags
-    if (deathmatch)
-    {
-        temp = 0;
-        for (i = 0; i < g_maxplayers; i++)
-        {
-            temp += CPlayer->frags[i];
-        }
-        if (temp != oldfrags)
-        {
-            V_DrawNumPatch(57,  171, 0, LumpARMCLEAR, CR_DEFAULT, VPT_STRETCH);
-            DrINumber(temp, 61, 170);
-            oldfrags = temp;
-        }
-    }
-    else
-    {
-        temp = HealthMarker;
-        if (temp < 0)
-        {
-            temp = 0;
-        }
-        else if (temp > 100)
-        {
-            temp = 100;
-        }
-        if (oldlife != temp)
-        {
-            oldlife = temp;
-            V_DrawNumPatch(57,  171, 0, LumpARMCLEAR, CR_DEFAULT, VPT_STRETCH);
-            DrINumber(temp, 61, 170);
-        }
-    }
-
-    // Keys
-    if (oldkeys != playerkeys)
-    {
-        if (CPlayer->cards[key_yellow])
-        {
-            V_DrawNamePatch(153, 164, 0, "ykeyicon", CR_DEFAULT, VPT_STRETCH);
-        }
-        if (CPlayer->cards[key_green])
-        {
-            V_DrawNamePatch(153, 172, 0, "gkeyicon", CR_DEFAULT, VPT_STRETCH);
-        }
-        if (CPlayer->cards[key_blue])
-        {
-            V_DrawNamePatch(153, 180, 0, "bkeyicon", CR_DEFAULT, VPT_STRETCH);
-        }
-        oldkeys = playerkeys;
-    }
-    // Ammo
-    temp = CPlayer->ammo[wpnlev1info[CPlayer->readyweapon].ammo];
-    if (oldammo != temp || oldweapon != CPlayer->readyweapon)
-    {
-        V_DrawNumPatch(108,  161, 0, LumpBLACKSQ, CR_DEFAULT, VPT_STRETCH);
-        if (temp && CPlayer->readyweapon > 0 && CPlayer->readyweapon < 7)
-        {
-            DrINumber(temp, 109, 162);
-            V_DrawNamePatch(
-              111, 172, 0, ammopic[CPlayer->readyweapon - 1], CR_DEFAULT, VPT_STRETCH
-            );
-        }
-        oldammo = temp;
-        oldweapon = CPlayer->readyweapon;
-    }
-
-    // Armor
-    if (oldarmor != CPlayer->armorpoints[ARMOR_ARMOR])
-    {
-        V_DrawNumPatch(224,  171, 0, LumpARMCLEAR, CR_DEFAULT, VPT_STRETCH);
-        DrINumber(CPlayer->armorpoints[ARMOR_ARMOR], 228, 170);
-        oldarmor = CPlayer->armorpoints[ARMOR_ARMOR];
-    }
 }
 
 //---------------------------------------------------------------------------

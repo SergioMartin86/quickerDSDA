@@ -493,7 +493,7 @@ dboolean dsda_BuildResponder(event_t* ev) {
     return true;
   }
 
-  if (!build_mode || menuactive)
+  if (!build_mode )
     return false;
 
   if (dsda_InputActivated(dsda_input_build_source)) {
