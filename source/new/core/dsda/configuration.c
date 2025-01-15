@@ -24,7 +24,6 @@
 #include "lprintf.h"
 #include "r_main.h"
 #include "r_segs.h"
-#include "s_sound.h"
 #include "smooth.h"
 #include "v_video.h"
 #include "z_zone.h"
@@ -83,10 +82,8 @@ extern int demo_smoothturnsfactor;
 extern int sts_always_red;
 extern int sts_pct_always_gray;
 extern int sts_traditional_keys;
-extern int full_sounds;
 
 void M_ChangeSkyMode(void);
-void S_ResetSfxVolume(void);
 void M_ChangeAllowFog(void);
 #ifdef __ENABLE_OPENGL_
 void gld_ResetShadowParameters(void);
@@ -346,7 +343,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_mute_sfx] = {
     "dsda_mute_sfx", dsda_config_mute_sfx,
-    CONF_BOOL(0), NULL, NOT_STRICT, S_ResetSfxVolume
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_mute_music] = {
     "dsda_mute_music", dsda_config_mute_music,
@@ -354,7 +351,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_mute_unfocused_window] = {
     "dsda_mute_unfocused_window", dsda_config_mute_unfocused_window,
-    CONF_BOOL(0), NULL, NOT_STRICT, S_ResetVolume
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_cheat_codes] = {
     "dsda_cheat_codes", dsda_config_cheat_codes,
@@ -671,7 +668,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_full_sounds] = {
     "full_sounds", dsda_config_full_sounds,
-    CONF_BOOL(0), &full_sounds
+    CONF_BOOL(0), NULL
   },
   [dsda_config_snd_samplerate] = {
     "snd_samplerate", dsda_config_snd_samplerate,
@@ -683,7 +680,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_sfx_volume] = {
     "sfx_volume", dsda_config_sfx_volume,
-    dsda_config_int, 0, 15, { 8 }, NULL, NOT_STRICT, S_ResetSfxVolume
+    dsda_config_int, 0, 15, { 8 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_music_volume] = {
     "music_volume", dsda_config_music_volume,
@@ -695,7 +692,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_snd_channels] = {
     "snd_channels", dsda_config_snd_channels,
-    dsda_config_int, 1, MAX_CHANNELS, { 32 }, NULL, NOT_STRICT, S_Init
+    dsda_config_int, 1, 0, { 32 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_snd_midiplayer] = {
     "snd_midiplayer", dsda_config_snd_midiplayer,

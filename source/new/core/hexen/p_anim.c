@@ -17,7 +17,6 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "m_random.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "r_defs.h"
 #include "r_state.h"
@@ -277,7 +276,6 @@ static void P_LightningFlash(void)
     if (foundSec)
     {
         Sky1Texture = dsda_Sky2Texture();     // set alternate sky
-        S_StartVoidSound(hexen_sfx_thunder_crash);
     }
     // Calculate the next lighting flash
     if (!NextLightningFlash)

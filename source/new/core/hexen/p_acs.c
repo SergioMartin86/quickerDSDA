@@ -18,7 +18,6 @@
 #include "doomstat.h"
 #include "m_misc.h"
 #include "m_random.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "w_wad.h"
 #include "lprintf.h"
@@ -584,7 +583,6 @@ dboolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
             snprintf(LockedBuffer, sizeof(LockedBuffer),
                      "YOU NEED THE %s\n", TextKeyMessages[lock - 1]);
             P_SetMessage(mo->player, LockedBuffer, true);
-            S_StartMobjSound(mo, hexen_sfx_door_locked);
             return false;
         }
     }
@@ -1669,26 +1667,11 @@ static int CmdSectorSound(void)
         mobj = (mobj_t *) & ACScript->line->frontsector->soundorg;
     }
     volume = Pop();
-    S_StartSoundAtVolume(mobj, S_GetSoundID(StringLookup(Pop())), volume, 0);
     return SCRIPT_CONTINUE;
 }
 
 static int CmdThingSound(void)
 {
-    int tid;
-    int sound;
-    int volume;
-    mobj_t *mobj;
-    int searcher;
-
-    volume = Pop();
-    sound = S_GetSoundID(StringLookup(Pop()));
-    tid = Pop();
-    searcher = -1;
-    while ((mobj = P_FindMobjFromTID(tid, &searcher)) != NULL)
-    {
-        S_StartSoundAtVolume(mobj, sound, volume, 0);
-    }
     return SCRIPT_CONTINUE;
 }
 
@@ -1697,7 +1680,6 @@ static int CmdAmbientSound(void)
     int volume;
 
     volume = Pop();
-    S_StartSoundAtVolume(NULL, S_GetSoundID(StringLookup(Pop())), volume, 0);
     return SCRIPT_CONTINUE;
 }
 

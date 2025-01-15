@@ -21,7 +21,6 @@
 #include "lprintf.h"
 #include "p_enemy.h"
 #include "r_data.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "v_video.h"
 #include "w_wad.h"

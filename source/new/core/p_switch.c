@@ -37,7 +37,6 @@
 #include "p_maputl.h"
 #include "p_spec.h"
 #include "g_game.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "lprintf.h"
 #include "e6y.h"//e6y
@@ -240,8 +239,6 @@ void P_ChangeSwitchTexture
        * in which case it's the sound origin of that button press... */
       soundorg = buttonlist->soundorg;
   }
-
-  S_StartLineSound(line, soundorg, sound);
 
   if (useAgain)
     P_StartButton(line, position, switchlist[i], BUTTONTIME);
@@ -601,7 +598,6 @@ P_UseSpecialLine
        */
       if (!bossaction && thing->player && thing->player->health <= 0 && !comp[comp_zombie])
       {
-        S_StartMobjSound(thing, sfx_noway);
         return false;
       }
 
@@ -681,7 +677,6 @@ P_UseSpecialLine
        */
       if (!bossaction && thing->player && thing->player->health <= 0 && !comp[comp_zombie])
       {
-        S_StartMobjSound(thing, sfx_noway);
         return false;
       }
 

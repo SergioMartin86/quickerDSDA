@@ -20,7 +20,6 @@
 #include "m_misc.h"
 #include "p_setup.h"
 #include "r_data.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "w_wad.h"
 
@@ -338,33 +337,6 @@ static inline int WRAP(int i, int w)
 }
 
 int dsda_LegacyMapMusic(int* music_index, int* music_lump, int episode, int map) {
-  *music_lump = -1;
-
-  if (idmusnum != -1)
-    *music_index = idmusnum; //jff 3/17/98 reload IDMUS music if not -1
-  else {
-    if (gamemode == commercial)
-      *music_index = mus_runnin + WRAP(map - 1, DOOM_MUSINFO - mus_runnin);
-    else {
-      static const int spmus[] = {
-        mus_e3m4,
-        mus_e3m2,
-        mus_e3m3,
-        mus_e1m5,
-        mus_e2m7,
-        mus_e2m4,
-        mus_e2m6,
-        mus_e2m5,
-        mus_e1m9
-      };
-
-     if (episode < 4)
-        *music_index = mus_e1m1 +
-                       WRAP((episode - 1) * 9 + map - 1, mus_runnin - mus_e1m1);
-      else
-        *music_index = spmus[WRAP(map - 1, 9)];
-    }
-  }
 
   return true;
 }

@@ -42,7 +42,6 @@
 #include "hu_stuff.h"
 #include "st_lib.h"
 #include "r_main.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "p_pspr.h"
 #include "r_draw.h"

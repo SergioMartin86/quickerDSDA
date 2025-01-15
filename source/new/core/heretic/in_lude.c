@@ -23,7 +23,6 @@
 
 #include "doomstat.h"
 #include "d_event.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "i_system.h"
 #include "i_video.h"
@@ -227,7 +226,6 @@ void IN_Start(wbstartstruct_t* wbstartstruct)
     skipintermission = false;
     intertime = 0;
     oldintertime = 0;
-    S_ChangeMusic(heretic_mus_intr, true);
 }
 
 //========================================================================
@@ -438,13 +436,11 @@ void IN_Ticker(void)
         {
             interstate = 2;
             skipintermission = false;
-            S_StartVoidSound(heretic_sfx_dorcls);
             return;
         }
         interstate = 3;
         cnt = 10;
         skipintermission = false;
-        S_StartVoidSound(heretic_sfx_dorcls);
     }
 }
 
@@ -511,10 +507,6 @@ void IN_Drawer(void)
         return;
     }
 
-    if (oldinterstate != 2 && interstate == 2)
-    {
-        S_StartVoidSound(heretic_sfx_pstop);
-    }
     oldinterstate = interstate;
     switch (interstate)
     {

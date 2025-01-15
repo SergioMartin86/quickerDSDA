@@ -59,7 +59,6 @@
 
 // heretic needs
 #include "heretic/def.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "p_inter.h"
 #include "m_random.h"
@@ -953,7 +952,6 @@ dboolean P_UndoPlayerChicken(player_t * player)
     angle >>= ANGLETOFINESHIFT;
     fog = P_SpawnMobj(x + 20 * finecosine[angle],
                       y + 20 * finesine[angle], z + TELEFOGHEIGHT, HERETIC_MT_TFOG);
-    S_StartMobjSound(fog, heretic_sfx_telept);
     P_PostChickenWeapon(player, weapon);
     return (true);
 }
@@ -1066,7 +1064,6 @@ void P_PlayerUseArtifact(player_t * player, artitype_t arti)
                 P_PlayerRemoveArtifact(player, i);
                 if (player == &players[consoleplayer])
                 {
-                        S_StartVoidSound(heretic_sfx_artiuse);
                     ArtifactFlash = 4;
                 }
             }
@@ -1120,7 +1117,6 @@ dboolean P_UseArtifact(player_t * player, artitype_t arti)
                 else
                 {               // Succeeded
                     player->chickenTics = 0;
-                    S_StartMobjSound(player->mo, heretic_sfx_wpnup);
                 }
             }
             else
@@ -1337,10 +1333,6 @@ void P_ChickenPlayerThink(player_t * player)
         P_SetMobjState(pmo, HERETIC_S_CHICPLAY_PAIN);
         return;
     }
-    if (P_Random(pr_heretic) < 48)
-    {                           // Just noise
-        S_StartMobjSound(pmo, heretic_sfx_chicact);
-    }
 }
 
 // hexen
@@ -1452,7 +1444,6 @@ void P_BlastRadius(player_t * player)
     thinker_t *think;
     fixed_t dist;
 
-    S_StartMobjSound(pmo, hexen_sfx_artifact_blast);
     P_NoiseAlert(player->mo, player->mo);
 
     for (think = thinkercap.next; think != &thinkercap; think = think->next)
@@ -1518,19 +1509,7 @@ void P_MorphPlayerThink(player_t * player)
     if (!(pmo->momx + pmo->momy) && P_Random(pr_hexen) < 64)
     {                           // Snout sniff
         P_SetPspriteNF(player, ps_weapon, HEXEN_S_SNOUTATK2);
-        S_StartMobjSound(pmo, hexen_sfx_pig_active1);     // snort
         return;
-    }
-    if (P_Random(pr_hexen) < 48)
-    {
-        if (P_Random(pr_hexen) < 128)
-        {
-            S_StartMobjSound(pmo, hexen_sfx_pig_active1);
-        }
-        else
-        {
-            S_StartMobjSound(pmo, hexen_sfx_pig_active2);
-        }
     }
 }
 
@@ -1622,7 +1601,6 @@ dboolean P_UndoPlayerMorph(player_t * player)
     angle >>= ANGLETOFINESHIFT;
     fog = P_SpawnMobj(x + 20 * finecosine[angle],
                       y + 20 * finesine[angle], z + TELEFOGHEIGHT, HEXEN_MT_TFOG);
-    S_StartMobjSound(fog, hexen_sfx_teleport);
     P_PostMorphWeapon(player, weapon);
     return (true);
 }
@@ -1742,7 +1720,6 @@ dboolean P_HealRadius(player_t * player)
                     (Hexen_P_GiveArmor(mo->player, ARMOR_AMULET, 1)))
                 {
                     effective = true;
-                    S_StartMobjSound(mo, hexen_sfx_mysticincant);
                 }
                 break;
             case PCLASS_CLERIC:        // Radius heal
@@ -1750,7 +1727,6 @@ dboolean P_HealRadius(player_t * player)
                 if (P_GiveBody(mo->player, amount))
                 {
                     effective = true;
-                    S_StartMobjSound(mo, hexen_sfx_mysticincant);
                 }
                 break;
             case PCLASS_MAGE:  // Radius mana boost
@@ -1759,7 +1735,6 @@ dboolean P_HealRadius(player_t * player)
                     (P_GiveMana(mo->player, MANA_2, amount)))
                 {
                     effective = true;
-                    S_StartMobjSound(mo, hexen_sfx_mysticincant);
                 }
                 break;
             case PCLASS_PIG:
@@ -1821,10 +1796,6 @@ static dboolean Hexen_P_UseArtifact(player_t * player, artitype_t arti)
             if (!P_GivePower(player, pw_flight))
             {
                 return (false);
-            }
-            if (player->mo->momz <= -35 * FRACUNIT)
-            {                   // stop falling scream
-                S_StopSound(player->mo);
             }
             break;
         case hexen_arti_summon:

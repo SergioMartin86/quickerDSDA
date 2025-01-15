@@ -38,7 +38,6 @@
 #include "lprintf.h"
 #include "v_video.h"
 #include "w_wad.h"
-#include "s_sound.h"
 #include "sounds.h"
 
 #include "heretic/f_finale.h"
@@ -98,15 +97,6 @@ void F_StartFinale (void)
   finalepatch = NULL;
 
   dsda_InterMusic(&mnum, &muslump);
-
-  if (muslump >= 0)
-  {
-    S_ChangeMusInfoMusic(muslump, true);
-  }
-  else
-  {
-    S_ChangeMusic(mnum, true);
-  }
 
   dsda_StartFinale();
 
@@ -293,20 +283,6 @@ static const char *castbackground;
 
 static void F_StartCastMusic(const char* music, dboolean loop_music)
 {
-  if (music)
-  {
-    if (!S_ChangeMusicByName(music, loop_music))
-      lprintf(LO_WARN, "Finale cast music not found: %s\n", music);
-  }
-  else if (gamemode == commercial)
-  {
-    S_ChangeMusic(mus_evil, loop_music);
-  }
-  else
-  {
-    lprintf(LO_WARN, "Finale cast music unspecified\n");
-    S_StopMusic();
-  }
 }
 
 void F_StartCast (const char* background, const char* music, dboolean loop_music)
@@ -407,16 +383,6 @@ static const char* scrollpic2;
 
 static void F_StartScrollMusic(const char* music, dboolean loop_music)
 {
-  if (music) {
-    if (!S_ChangeMusicByName(music, loop_music))
-      lprintf(LO_WARN, "Finale scroll music not found: %s\n", music);
-  }
-  else if (W_LumpNameExists("D_BUNNY"))
-    S_ChangeMusic(mus_bunny, loop_music);
-  else {
-    lprintf(LO_WARN, "Finale scroll music unspecified\n");
-    S_StopMusic();
-  }
 }
 
 static dboolean end_patches_exist;
@@ -500,7 +466,6 @@ void F_BunnyScroll (void)
     stage = 6;
   if (stage > laststage)
   {
-    S_StartVoidSound(sfx_pistol);
     laststage = stage;
   }
 

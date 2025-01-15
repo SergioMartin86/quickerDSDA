@@ -37,7 +37,6 @@
 #include "p_map.h"
 #include "p_spec.h"
 #include "p_tick.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "lprintf.h"
 #include "g_overflow.h"
@@ -234,9 +233,6 @@ void T_MoveCompatibleFloor(floormove_t * floor)
     }
   }
 
-  if (!(leveltime&7))     // make the floormove sound
-    S_LoopSectorSound(floor->sector, g_sfx_stnmov, 8);
-
   if (res == pastdest)    // if destination height is reached
   {
     if (floor->type == floorBuildStair)
@@ -308,10 +304,6 @@ void T_MoveCompatibleFloor(floormove_t * floor)
         }
       }
 
-      // Moving floors (but not plats) in versions <= v1.2 did not
-      // make floor stop sound
-      if (compatibility_level > doom_12_compatibility)
-          S_StartSectorSound(floor->sector, sfx_pstop);
     }
   }
 }
@@ -444,18 +436,12 @@ void T_MoveElevator(elevator_t* elevator)
       );
   }
 
-  // make floor move sound
-  if (!(leveltime&7))
-    S_LoopSectorSound(elevator->sector, sfx_stnmov, 8);
-
   if (res == pastdest)            // if destination height acheived
   {
     elevator->sector->floordata = NULL;     //jff 2/22/98
     elevator->sector->ceilingdata = NULL;   //jff 2/22/98
     P_RemoveThinker(&elevator->thinker);    // remove elevator from actives
 
-    // make floor stop sound
-    S_StartSectorSound(elevator->sector, sfx_pstop);
   }
 }
 
@@ -1997,17 +1983,11 @@ void T_BuildZDoomPillar(pillar_t * pillar)
          T_MoveCeilingPlane(pillar->sector, pillar->ceilingSpeed, pillar->ceilingdest,
                             pillar->crush, -pillar->direction, pillar->hexencrush);
 
-  if (!(leveltime & 7))
-    S_LoopSectorSound(pillar->sector, g_sfx_stnmov, 8);
-
   if (res1 == pastdest && res2 == pastdest)
   {
     pillar->sector->floordata = NULL;
     pillar->sector->ceilingdata = NULL;
     P_RemoveThinker(&pillar->thinker);
-
-    // make floor stop sound
-    S_StartSectorSound(pillar->sector, sfx_pstop);
   }
   else
   {

@@ -40,7 +40,6 @@
 #include "p_mobj.h"
 #include "m_misc.h"
 #include "sounds.h"
-#include "s_sound.h"
 #include "i_sound.h"
 #include "r_defs.h"
 #include "sc_man.h"
@@ -64,12 +63,6 @@ void S_ParseMusInfo(const char *mapid)
     int num, lumpnum;
     int inMap = false;
     int load_muslump = -1;
-
-    /* don't restart music that is already playing */
-    if (mus_playing &&
-        mus_playing->lumpnum == S_music[mus_musinfo].lumpnum) {
-        load_muslump = S_music[mus_musinfo].lumpnum;
-    }
 
     memset(&musinfo, 0, sizeof(musinfo));
     musinfo.items[0] = -1;
@@ -160,7 +153,6 @@ void T_MAPMusic(void)
 
         if (lumpnum >= 0 && lumpnum < numlumps)
         {
-          S_ChangeMusInfoMusic(lumpnum, true);
         }
       }
 

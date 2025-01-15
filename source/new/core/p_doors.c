@@ -34,7 +34,6 @@
 #include "doomstat.h"
 #include "p_spec.h"
 #include "p_tick.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "r_main.h"
 #include "lprintf.h"
@@ -79,26 +78,22 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
           case blazeRaise:
           case genBlazeRaise:
             door->direction = -1; // time to go back down
-            S_StartSectorSound(door->sector, sfx_bdcls);
             break;
 
           case normal:
           case genRaise:
           case vld_normal:
             door->direction = -1; // time to go back down
-            S_StartSectorSound(door->sector, g_sfx_dorcls);
             break;
 
           case close30ThenOpen:
           case genCdO:
           case vld_close30ThenOpen:
             door->direction = 1;  // time to go back up
-            S_StartSectorSound(door->sector, g_sfx_doropn);
             break;
 
           case genBlazeCdO:
             door->direction = 1;  // time to go back up
-            S_StartSectorSound(door->sector, sfx_bdopn);
             break;
 
           default:
@@ -117,13 +112,11 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
           case vld_raiseIn5Mins:
             door->direction = 1;  // time to raise then
             door->type = g_door_normal; // door acts just like normal 1 DR door now
-            S_StartSectorSound(door->sector, g_sfx_doropn);
             break;
 
           case waitCloseDoor:
             door->direction = -1;
             door->type = closeDoor;
-            S_StartSectorSound(door->sector, g_sfx_dorcls);
 
           default:
             break;
@@ -171,8 +164,6 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
             door->sector->ceilingdata = NULL;  //jff 2/22/98
             P_RemoveThinker (&door->thinker);  // unlink and free
             // killough 4/15/98: remove double-closing sound of blazing doors
-            if (comp[comp_blazing])
-              S_StartSectorSound(door->sector, sfx_bdcls);
             break;
 
           case normal:
@@ -187,7 +178,6 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
           case vld_close:
             door->sector->ceilingdata = NULL;
             P_RemoveThinker(&door->thinker);        // unlink and free
-            S_StartSectorSound(door->sector, g_sfx_dorlnd);
             break;
 
           // close then open doors start waiting
@@ -233,14 +223,12 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
           case genBlazeRaise:
             door->direction = 1;
             if (!comp[comp_blazing]) {
-              S_StartSectorSound(door->sector, sfx_bdopn);
               break;
             }
             // fallthrough
 
           default:             // other types bounce off the obstruction
             door->direction = 1;
-            S_StartSectorSound(door->sector, g_sfx_doropn);
             break;
         }
       }
@@ -302,7 +290,6 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
           case vld_open:
             door->sector->ceilingdata = NULL;
             P_RemoveThinker(&door->thinker);        // unlink and free
-            S_StopSound(&door->sector->soundorg);
             break;
 
           default:
@@ -462,7 +449,6 @@ int EV_DoLockedDoor
     case 133:
       if (!p->cards[it_bluecard] && !p->cards[it_blueskull])
       {
-        S_StartMobjSound(p->mo,sfx_oof);         // killough 3/20/98
         return 0;
       }
       break;
@@ -471,7 +457,6 @@ int EV_DoLockedDoor
     case 135:
       if (!p->cards[it_redcard] && !p->cards[it_redskull])
       {
-        S_StartMobjSound(p->mo,sfx_oof);         // killough 3/20/98
         return 0;
       }
       break;
@@ -480,7 +465,6 @@ int EV_DoLockedDoor
     case 137:
       if (!p->cards[it_yellowcard] && !p->cards[it_yellowskull])
       {
-        S_StartMobjSound(p->mo,sfx_oof);         // killough 3/20/98
         return 0;
       }
       break;
@@ -541,7 +525,6 @@ int EV_DoDoor
         door->topheight -= 4*FRACUNIT;
         door->direction = -1;
         door->speed = VDOORSPEED * 4;
-        S_StartSectorSound(door->sector, sfx_bdcls);
         break;
 
       case closeDoor:
@@ -549,14 +532,12 @@ int EV_DoDoor
         door->topheight = P_FindLowestCeilingSurrounding(sec);
         door->topheight -= 4*FRACUNIT;
         door->direction = -1;
-        S_StartSectorSound(door->sector, g_sfx_dorcls);
         break;
 
       case close30ThenOpen:
       case vld_close30ThenOpen:
         door->topheight = sec->ceilingheight;
         door->direction = -1;
-        S_StartSectorSound(door->sector, g_sfx_dorcls);
         break;
 
       case blazeRaise:
@@ -565,8 +546,6 @@ int EV_DoDoor
         door->topheight = P_FindLowestCeilingSurrounding(sec);
         door->topheight -= 4*FRACUNIT;
         door->speed = VDOORSPEED * 4;
-        if (door->topheight != sec->ceilingheight)
-          S_StartSectorSound(door->sector, sfx_bdopn);
         break;
 
       case vld_normal_turbo:
@@ -581,8 +560,6 @@ int EV_DoDoor
         door->direction = 1;
         door->topheight = P_FindLowestCeilingSurrounding(sec);
         door->topheight -= 4*FRACUNIT;
-        if (door->topheight != sec->ceilingheight)
-          S_StartSectorSound(door->sector, g_sfx_doropn);
         break;
 
       default:
@@ -622,7 +599,6 @@ int EV_VerticalDoor
         return 0;
       if (!player->cards[it_bluecard] && !player->cards[it_blueskull])
       {
-          S_StartMobjSound(player->mo,sfx_oof);     // killough 3/20/98
           return 0;
       }
       break;
@@ -633,7 +609,6 @@ int EV_VerticalDoor
           return 0;
       if (!player->cards[it_yellowcard] && !player->cards[it_yellowskull])
       {
-          S_StartMobjSound(player->mo,sfx_oof);     // killough 3/20/98
           return 0;
       }
       break;
@@ -644,7 +619,6 @@ int EV_VerticalDoor
           return 0;
       if (!player->cards[it_redcard] && !player->cards[it_redskull])
       {
-          S_StartMobjSound(player->mo,sfx_oof);     // killough 3/20/98
           return 0;
       }
       break;
@@ -656,7 +630,6 @@ int EV_VerticalDoor
   // if the wrong side of door is pushed, give oof sound
   if (line->sidenum[1]==NO_INDEX)                     // killough
   {
-    S_StartMobjSound(player->mo,sfx_oof);           // killough 3/20/98
     return 0;
   }
 
@@ -730,11 +703,9 @@ int EV_VerticalDoor
   {
     case 117: // blazing door raise
     case 118: // blazing door open
-      S_StartSectorSound(sec, sfx_bdopn);
       break;
 
     default:  // normal or locked door sound
-      S_StartSectorSound(sec, sfx_doropn);
       break;
   }
 
@@ -892,7 +863,6 @@ void Heretic_EV_VerticalDoor(line_t * line, mobj_t * thing)
             if (!player->cards[key_blue])
             {
                 P_SetMessage(player, HERETIC_TXT_NEEDBLUEKEY, false);
-                S_StartVoidSound(heretic_sfx_plroof);
                 return;
             }
             break;
@@ -905,7 +875,6 @@ void Heretic_EV_VerticalDoor(line_t * line, mobj_t * thing)
             if (!player->cards[key_yellow])
             {
                 P_SetMessage(player, HERETIC_TXT_NEEDYELLOWKEY, false);
-                S_StartVoidSound(heretic_sfx_plroof);
                 return;
             }
             break;
@@ -918,7 +887,6 @@ void Heretic_EV_VerticalDoor(line_t * line, mobj_t * thing)
             if (!player->cards[key_green])
             {
                 P_SetMessage(player, HERETIC_TXT_NEEDGREENKEY, false);
-                S_StartVoidSound(heretic_sfx_plroof);
                 return;
             }
             break;
@@ -950,8 +918,6 @@ void Heretic_EV_VerticalDoor(line_t * line, mobj_t * thing)
                 return;
         }
     }
-
-    S_StartSectorSound(sec, heretic_sfx_doropn);
 
     //
     // new door thinker
@@ -1018,20 +984,17 @@ static void P_SpawnZDoomDoor(sector_t *sec, vldoor_e type, line_t *line, fixed_t
       door->topheight = P_FindLowestCeilingSurrounding(sec);
       door->topheight -= 4 * FRACUNIT;
       door->direction = -1;
-      S_StartSectorSound(door->sector, g_sfx_dorcls);
       break;
     case genCdO:
       door->topheight = sec->ceilingheight;
       door->direction = -1;
       door->topwait = topwait;
-      S_StartSectorSound(door->sector, g_sfx_dorcls);
       break;
     case normal:
     case openDoor:
       door->direction = 1;
       door->topheight = P_FindLowestCeilingSurrounding(sec);
       door->topheight -= 4 * FRACUNIT;
-      S_StartSectorSound(door->sector, g_sfx_doropn);
       break;
     case waitRaiseDoor:
       door->direction = 2;
@@ -1067,8 +1030,6 @@ int EV_DoZDoomDoor(vldoor_e type, line_t *line, mobj_t *mo, int tag, fixed_t spe
     // if the wrong side of door is pushed, give oof sound
     if (line->sidenum[1] == NO_INDEX)
     {
-      if (mo->player) // is this check necessary?
-        S_StartMobjSound(mo, sfx_oof);
       return 0;
     }
 
@@ -1092,7 +1053,6 @@ int EV_DoZDoomDoor(vldoor_e type, line_t *line, mobj_t *mo, int tag, fixed_t spe
           {
             door->direction = 1;
 
-            S_StartSectorSound(door->sector, g_sfx_doropn);
             return 1;
           }
           else if (!(line->activation & (SPAC_PUSH | SPAC_MPUSH)))
@@ -1105,7 +1065,6 @@ int EV_DoZDoomDoor(vldoor_e type, line_t *line, mobj_t *mo, int tag, fixed_t spe
 
             door->direction = -1; // start going down immediately
 
-            S_StartSectorSound(door->sector, g_sfx_dorcls);
             return 1;
           }
           else

@@ -23,7 +23,6 @@
 #include "p_spec.h"
 #include "p_tick.h"
 #include "r_state.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "umapinfo.h"
 #include "v_video.h"

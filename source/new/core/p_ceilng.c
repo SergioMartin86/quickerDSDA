@@ -36,7 +36,6 @@
 #include "p_map.h"
 #include "p_spec.h"
 #include "p_tick.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "e6y.h"//e6y
 
@@ -188,10 +187,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
               false
             );
 
-      // if not silent, make moving sound
-      if (!(leveltime & 7) && !ceiling->silent)
-        S_LoopSectorSound(ceiling->sector, g_sfx_stnmov, 8);
-
       // handle reaching destination height
       if (res == pastdest)
       {
@@ -215,7 +210,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
 
           // crushers reverse direction at the top
           case silentCrushAndRaise:
-            S_StartSectorSound(ceiling->sector, sfx_pstop);
             // fallthrough
           case genSilentCrusher:
           case genCrusher:
@@ -227,8 +221,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
           case ceilCrushAndRaise:
             ceiling->direction = -1;
             ceiling->speed = ceiling->oldspeed;
-            if (ceiling->silent == 1)
-              S_StartSectorSound(ceiling->sector, sfx_pstop);
             break;
 
           default:
@@ -251,10 +243,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
               ceiling->crushmode == crushHexen
             );
 
-      // if not silent, make moving sound
-      if (!(leveltime & 7) && !ceiling->silent)
-        S_LoopSectorSound(ceiling->sector, g_sfx_stnmov, 8);
-
       // handle reaching destination height
       if (res == pastdest)
       {
@@ -272,7 +260,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
           // make platform stop at bottom of all crusher strokes
           // except generalized ones, reset speed, start back up
           case silentCrushAndRaise:
-            S_StartSectorSound(ceiling->sector, sfx_pstop);
             // fallthrough
           case crushAndRaise:
             ceiling->speed = CEILSPEED;
@@ -305,8 +292,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
           case ceilCrushRaiseAndStay:
             ceiling->speed = ceiling->speed2;
             ceiling->direction = 1;
-            if (ceiling->silent == 1)
-              S_StartSectorSound(ceiling->sector, sfx_pstop);
             break;
 
           default:

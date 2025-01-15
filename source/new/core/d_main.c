@@ -54,7 +54,6 @@
 #include "sounds.h"
 #include "z_zone.h"
 #include "w_wad.h"
-#include "s_sound.h"
 #include "v_video.h"
 #include "f_finale.h"
 #include "f_wipe.h"
@@ -340,10 +339,6 @@ static void D_DoomLoop(void)
     else
       TryRunTics (); // will run at least one tic
 
-    // killough 3/16/98: change consoleplayer to displayplayer
-    if (players[displayplayer].mo) // cph 2002/08/10
-      S_UpdateSounds();// move positional sounds
-
     // Update display, next frame, with current state.
     if (!movement_smooth || !WasRenderedInTryRunTics || gamestate != wipegamestate)
     {
@@ -435,9 +430,6 @@ static void D_SetPageName(const char *name)
 
 void D_SetPage(const char* name, int tics, int music)
 {
-  if (music)
-    S_StartMusic(music);
-
   if (tics)
     pagetic = tics;
 
@@ -1409,10 +1401,6 @@ void D_DoomMainSetup(void)
   dsda_HandleSkip();
 
   //jff 9/3/98 use logical output routine
-  lprintf(LO_DEBUG, "S_Init: Setting up sound.\n");
-  S_Init();
-
-  //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");
   dsda_InitFont();
 
@@ -1479,9 +1467,6 @@ void headlessRunSingleTick(void)
 
 void headlessUpdateSounds(void)
 {
-  // killough 3/16/98: change consoleplayer to displayplayer
-  if (players[displayplayer].mo) // cph 2002/08/10
-    S_UpdateSounds();// move positional sounds
 }
 
 void headlessUpdateVideo(void)

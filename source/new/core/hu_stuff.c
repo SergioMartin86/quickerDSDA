@@ -37,7 +37,6 @@
 #include "hu_stuff.h"
 #include "hu_lib.h"
 #include "st_stuff.h" /* jff 2/16/98 need loc of status bar */
-#include "s_sound.h"
 #include "sounds.h"
 #include "g_game.h"
 #include "r_main.h"
@@ -397,10 +396,6 @@ void HU_Ticker(void)
 
     custom_message_p->msg = NULL;
 
-    if (custom_message_p->sfx > 0 && custom_message_p->sfx < num_sfx)
-    {
-      S_StartVoidSound(custom_message_p->sfx);
-    }
   }
 
 }

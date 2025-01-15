@@ -18,7 +18,6 @@
 #include "doomstat.h"
 #include "w_wad.h"
 #include "v_video.h"
-#include "s_sound.h"
 #include "sounds.h"
 
 #include "dsda/palette.h"
@@ -79,7 +78,6 @@ void Heretic_F_StartFinale(void)
   finalestage = 0;
   finalecount = 0;
   FontABaseLump = W_GetNumForName("FONTA_S") + 1;
-  S_ChangeMusic(heretic_mus_cptd, true);
 }
 
 dboolean F_BlockingInput(void)

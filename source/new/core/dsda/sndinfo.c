@@ -18,7 +18,6 @@
 #include <stddef.h>
 
 #include "m_misc.h"
-#include "s_sound.h"
 #include "sc_man.h"
 #include "sounds.h"
 

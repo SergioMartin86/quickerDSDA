@@ -23,7 +23,6 @@
 #include "z_zone.h"
 #include "p_saveg.h"
 #include "p_map.h"
-#include "s_sound.h"
 
 #include "dsda/args.h"
 #include "dsda/configuration.h"
@@ -80,8 +79,6 @@ static void dsda_ArchiveContext(void) {
   for (; i < FUTURE_MAXPLAYERS; ++i)
     P_SAVE_BYTE(0);
 
-  P_SAVE_BYTE(idmusnum);
-
   dsda_ArchiveMusic();
 
   CheckSaveGame(dsda_GameOptionSize());
@@ -118,10 +115,6 @@ static void dsda_UnArchiveContext(void) {
   for (i = 0; i < g_maxplayers; ++i)
     P_LOAD_BYTE(playeringame[i]);
   save_p += FUTURE_MAXPLAYERS - g_maxplayers;
-
-  P_LOAD_BYTE(idmusnum);
-  if (idmusnum == 255)
-    idmusnum = -1;
 
   dsda_UnArchiveMusic();
 

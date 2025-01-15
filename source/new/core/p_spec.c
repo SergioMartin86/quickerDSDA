@@ -53,7 +53,6 @@
 #include "g_game.h"
 #include "p_inter.h"
 #include "p_enemy.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "i_sound.h"
 #include "m_bbox.h"                                         // phares 3/20/98
@@ -942,7 +941,6 @@ dboolean P_CanUnlockGenDoor
         !player->cards[it_yellowskull]
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -953,7 +951,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_redskull])
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -964,7 +961,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_blueskull])
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -975,7 +971,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_yellowskull])
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -986,7 +981,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_redcard])
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -997,7 +991,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_bluecard])
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -1008,7 +1001,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_yellowcard])
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -1026,7 +1018,6 @@ dboolean P_CanUnlockGenDoor
         )
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       if
@@ -1049,7 +1040,6 @@ dboolean P_CanUnlockGenDoor
         )
       )
       {
-        S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
       break;
@@ -1178,11 +1168,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
       }
     default:
       break;
-  }
-
-  if (sfx != sfx_None)
-  {
-    S_StartMobjSound(mo, sfx);
   }
 
   return successful;
@@ -3069,7 +3054,6 @@ void P_UpdateSpecials (void)
             /* since the buttonlist array is usually zeroed out,
              * button popouts generally appear to come from (0,0) */
             so = (degenmobj_t *) &buttonlist[i].soundorg;
-          S_StartLineSound(buttonlist[i].line, so, g_sfx_swtchn);
         memset(&buttonlist[i],0,sizeof(button_t));
       }
     }
@@ -4785,12 +4769,10 @@ void P_AmbientSound(void)
         {
             case afxcmd_play:
                 AmbSfxVolume = P_Random(pr_heretic) >> 2;
-                S_StartAmbientSound(NULL, *AmbSfxPtr++, AmbSfxVolume);
                 break;
             case afxcmd_playabsvol:
                 sound = *AmbSfxPtr++;
                 AmbSfxVolume = *AmbSfxPtr++;
-                S_StartAmbientSound(NULL, sound, AmbSfxVolume);
                 break;
             case afxcmd_playrelvol:
                 sound = *AmbSfxPtr++;
@@ -4803,7 +4785,6 @@ void P_AmbientSound(void)
                 {
                     AmbSfxVolume = 127;
                 }
-                S_StartAmbientSound(NULL, sound, AmbSfxVolume);
                 break;
             case afxcmd_delay:
                 AmbSfxTics = *AmbSfxPtr++;
@@ -5206,7 +5187,6 @@ void P_PlayerOnSpecialFlat(player_t * player, int floorType)
             if (!(leveltime & 31))
             {
                 P_DamageMobj(player->mo, &LavaInflictor, NULL, 10);
-                S_StartMobjSound(player->mo, hexen_sfx_lava_sizzle);
             }
             break;
         default:
@@ -5267,7 +5247,6 @@ static dboolean CheckedLockedDoor(mobj_t * mo, byte lock)
         snprintf(LockedBuffer, sizeof(LockedBuffer),
                  "YOU NEED THE %s\n", TextKeyMessages[lock - 1]);
         P_SetMessage(mo->player, LockedBuffer, true);
-        S_StartMobjSound(mo, hexen_sfx_door_locked);
         return false;
     }
     return true;
@@ -5302,14 +5281,6 @@ dboolean EV_LineSearchForPuzzleItem(line_t * line, byte * args, mobj_t * mo)
                 P_PlayerRemoveArtifact(player, i);
                 if (player == &players[consoleplayer])
                 {
-                    if (arti < hexen_arti_firstpuzzitem)
-                    {
-                        S_StartVoidSound(hexen_sfx_artifact_use);
-                    }
-                    else
-                    {
-                        S_StartVoidSound(hexen_sfx_puzzle_success);
-                    }
                     ArtifactFlash = 4;
                 }
                 return true;
@@ -7596,7 +7567,6 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         if (!args[1] || (mo->player && mo->player->mo == mo))
         {
-          S_ChangeMusInfoMusic(args[0], args[2]);
           buttonSuccess = 1;
         }
       }
@@ -7604,7 +7574,6 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
     case zl_music_stop:
       if (!args[0] || (mo->player && mo->player->mo == mo))
       {
-        S_StopMusic();
         buttonSuccess = 1;
       }
       break;

@@ -44,7 +44,6 @@
 #include "i_system.h"
 #include "i_sound.h"
 #include "i_video.h"
-#include "s_sound.h"
 #include "lprintf.h"
 #include "m_file.h"
 #include "d_main.h"
@@ -921,7 +920,6 @@ void M_ScreenShot(void)
 
     if (!M_FileExists(lbmname))
     {
-      S_StartVoidSound(gamemode==commercial ? sfx_radio : sfx_tink);
       M_DoScreenShot(lbmname); // cph
       success = 1;
     }

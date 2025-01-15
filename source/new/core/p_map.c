@@ -39,7 +39,6 @@
 #include "p_map.h"
 #include "p_setup.h"
 #include "p_spec.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "p_inter.h"
 #include "m_random.h"
@@ -343,12 +342,10 @@ dboolean P_MoveThing(mobj_t *thing, fixed_t x, fixed_t y, fixed_t z, dboolean fo
                             oldy,
                             oldfloorz + g_telefog_height,
                             g_mt_tfog);
-      S_StartMobjSound(telefog, g_sfx_telept);
       telefog = P_SpawnMobj(thing->x,
                             thing->y,
                             thing->floorz + g_telefog_height,
                             g_mt_tfog);
-      S_StartMobjSound(telefog, g_sfx_telept);
     }
 
     thing->PrevX = x;
@@ -860,8 +857,6 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
         damage = ((P_Random(pr_mbf21) & 3) + 2) * tmthing->info->damage;
         if (!(thing->flags & MF_NOBLOOD))
           P_SpawnBlood(tmthing->x, tmthing->y, tmthing->z, damage, thing);
-        if (tmthing->info->ripsound)
-          S_StartMobjSound(tmthing, tmthing->info->ripsound);
       }
 
       P_DamageMobj(thing, tmthing, tmthing->target, damage);
@@ -1662,7 +1657,6 @@ void P_HitSlideLine (line_t* ld)
     {
       tmxmove /= 2; // absorb half the momentum
       tmymove = -tmymove/2;
-      S_StartMobjSound(slidemo,sfx_oof); // oooff!
     }
     else
       tmymove = 0; // no more movement in the Y direction
@@ -1675,7 +1669,6 @@ void P_HitSlideLine (line_t* ld)
     {
       tmxmove = -tmxmove/2; // absorb half the momentum
       tmymove /= 2;
-      S_StartMobjSound(slidemo,sfx_oof); // oooff!                      //   ^
     }                                                               //   |
     else                                                            // phares
       tmxmove = 0; // no more movement in the X direction
@@ -1705,7 +1698,6 @@ void P_HitSlideLine (line_t* ld)
   {
     moveangle = lineangle - deltaangle;
     movelen /= 2; // absorb
-    S_StartMobjSound(slidemo,sfx_oof); // oooff!
     moveangle >>= ANGLETOFINESHIFT;
     tmxmove = FixedMul (movelen, finecosine[moveangle]);
     tmymove = FixedMul (movelen, finesine[moveangle]);
@@ -2288,7 +2280,6 @@ dboolean PTR_UseTraverse (intercept_t* in)
 
     if (line_opening.range <= 0)
     {
-        S_StartSound (usething, sfx_noway);
 
       // can't use through a wall
       return false;
@@ -2367,7 +2358,7 @@ void P_UseLines (player_t*  player)
 
   if (P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_UseTraverse ))
     if (!comp[comp_sound] && !P_PathTraverse ( x1, y1, x2, y2, PT_ADDLINES, PTR_NoWayTraverse ))
-      S_StartSound (usething, sfx_noway);
+      {}
 }
 
 
@@ -3609,7 +3600,6 @@ dboolean PTR_PuzzleItemTraverse(intercept_t * in)
                             break;
                     }
                 }
-                S_StartMobjSound(PuzzleItemUser, sound);
                 return false;   // can't use through a wall
             }
             return true;        // Continue searching

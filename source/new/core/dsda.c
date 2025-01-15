@@ -24,7 +24,6 @@
 #include "p_tick.h"
 #include "g_game.h"
 #include "sounds.h"
-#include "s_sound.h"
 
 #include "dsda/analysis.h"
 #include "dsda/args.h"
@@ -232,7 +231,6 @@ void dsda_DecomposeMovieTime(dsda_movie_time_t* total_time) {
 }
 
 void dsda_DisplayNotification(const char* msg) {
-  S_StartVoidSound(gamemode == commercial ? sfx_radio : sfx_itmbk);
   doom_printf("%s", msg);
 }
 

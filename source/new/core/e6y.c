@@ -46,7 +46,6 @@
 #include "doomtype.h"
 #include "doomstat.h"
 #include "d_main.h"
-#include "s_sound.h"
 #include "i_system.h"
 #include "i_main.h"
 #include "i_sound.h"

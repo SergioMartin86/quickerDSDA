@@ -16,7 +16,6 @@
 
 #include "doomstat.h"
 #include "d_event.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "i_system.h"
 #include "i_video.h"
@@ -137,7 +136,6 @@ static void InitStats(void)
                 ClusterMessage[msgSize] = '\0';    // Append terminator
                 HubText = ClusterMessage;
                 HubCount = strlen(HubText) * TEXTSPEED + TEXTWAIT;
-                S_StartSongName("hub", true);
             }
         }
     }
@@ -178,7 +176,6 @@ static void InitStats(void)
         {                       // don't do the slaughter stuff if everyone is equal
             slaughterboy = 0;
         }
-        S_StartSongName("hub", true);
     }
 }
 
@@ -341,7 +338,6 @@ static void DrDeathTally(void)
     if (intertime >= TALLY_EFFECT_TICKS && showTotals == false)
     {
         showTotals = true;
-        S_StartVoidSound(hexen_sfx_platform_stop);
     }
     y = yPos >> FRACBITS;
     for (i = 0; i < g_maxplayers; i++)

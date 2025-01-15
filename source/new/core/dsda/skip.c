@@ -20,7 +20,6 @@
 #include "e6y.h"
 #include "i_main.h"
 #include "i_sound.h"
-#include "s_sound.h"
 #include "smooth.h"
 #include "v_video.h"
 
@@ -75,7 +74,6 @@ void dsda_EnterSkipMode(void) {
 
   dsda_ApplySkipSettings();
   dsda_ResetPauseMode();
-  S_StopMusic();
 }
 
 void dsda_ExitSkipMode(void) {
@@ -91,8 +89,6 @@ void dsda_ExitSkipMode(void) {
   demo_warp_reached = false;
   demo_skiptics = 0;
 
-  S_Init();
-  S_RestartMusic();
 
   #ifdef __ENABLE_OPENGL_
   if (V_IsOpenGLMode())

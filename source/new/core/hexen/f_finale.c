@@ -17,7 +17,6 @@
 #include "doomstat.h"
 #include "w_wad.h"
 #include "v_video.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "lprintf.h"
 
@@ -58,8 +57,6 @@ void Hexen_F_StartFinale(void)
     FinaleLumpName = "FINALE1";
     FontABaseLump = W_GetNumForName("FONTA_S") + 1;
     InitializeFade(1);
-
-    S_StartSongName("hall", false);     // don't loop the song
 }
 
 dboolean Hexen_F_Responder(event_t * event)
@@ -83,7 +80,6 @@ void Hexen_F_Ticker(void)
                 FinaleText = GetFinaleText(1);
                 FinaleEndCount = strlen(FinaleText) * TEXTSPEED + TEXTWAIT;
                 FinaleLumpName = "FINALE2";
-                S_StartSongName("orb", false);
                 break;
             case 3:            // Pic 2 -- Fade out
                 FinaleEndCount = 70;
@@ -95,7 +91,6 @@ void Hexen_F_Ticker(void)
                 FinaleEndCount = 71;
                 DeInitializeFade();
                 InitializeFade(1);
-                S_StartSongName("chess", true);
                 break;
             case 5:            // Pic 3 , Text 3
                 FinaleText = GetFinaleText(2);

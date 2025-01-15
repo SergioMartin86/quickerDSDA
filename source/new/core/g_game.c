@@ -66,7 +66,6 @@
 #include "r_main.h"
 #include "r_draw.h"
 #include "p_map.h"
-#include "s_sound.h"
 #include "s_advsound.h"
 #include "sounds.h"
 #include "r_data.h"
@@ -1065,7 +1064,6 @@ dboolean G_Responder (event_t* ev)
 
     ST_Start();    // killough 3/7/98: switch status bar views too
     HU_Start();
-    S_UpdateSounds();
     R_ActivateSectorInterpolations();
     R_SmoothPlaying_Reset(NULL);
     return true;
@@ -1084,10 +1082,6 @@ dboolean G_Responder (event_t* ev)
     if (dsda_InputActivated(dsda_input_pause))
     {
       dsda_TogglePauseMode(PAUSE_PLAYBACK);
-      if (dsda_Paused())
-        S_PauseSound();
-      else
-        S_ResumeSound();
       return true;
     }
   }
@@ -1328,10 +1322,6 @@ void G_Ticker (void)
           {
             case BT_PAUSE:
               dsda_TogglePauseMode(PAUSE_COMMAND);
-              if (dsda_Paused())
-                S_PauseSound();
-              else
-                S_ResumeSound();
               break;
           }
           players[i].cmd.buttons = 0;
@@ -1417,9 +1407,6 @@ void G_Ticker (void)
       D_PageTicker();
       break;
   }
-
-  if (leveltime == entry_leveltime)
-    S_StopSoundLoops();
 
   if (advance_frame)
     dsda_UnmaskPause(pause_mask);
@@ -1682,8 +1669,6 @@ static dboolean G_CheckSpot(int playernum, mapthing_t *mthing)
 
     mo = P_SpawnMobj(x+20*xa, y+20*ya, sec->floorheight, MT_TFOG);
 
-    if (players[consoleplayer].viewz != 1)
-      S_StartMobjSound(mo, sfx_telept);  // don't start sound on first frame
   }
 
   return true;
@@ -1927,7 +1912,6 @@ void G_WorldDone (void)
 
 void G_DoWorldDone (void)
 {
-  idmusnum = -1;             //jff 3/17/98 allow new level's music to be loaded
   gamestate = GS_LEVEL;
   dsda_UpdateGameMap(wminfo.nextep + 1, wminfo.next + 1);
   G_DoLoadLevel();
@@ -2370,9 +2354,6 @@ void G_DoNewGame (void)
   int realMap = d_map;
   int realEpisode = d_episode;
 
-  // e6y: allow new level's music to be loaded
-  idmusnum = -1;
-
   G_ReloadDefaults();            // killough 3/1/98
   netgame = solo_net;
   deathmatch = false;
@@ -2482,7 +2463,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   if (dsda_Paused())
   {
     dsda_ResetPauseMode();
-    S_ResumeSound();
   }
 
   if (episode < 1)

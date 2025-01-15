@@ -18,7 +18,6 @@
 
 #include "doomdef.h"
 #include "m_random.h"
-#include "s_sound.h"
 #include "sounds.h"
 #include "p_mobj.h"
 #include "lprintf.h"
@@ -323,10 +322,8 @@ void SN_StopSequence(mobj_t * mobj)
         next_node = node->next;
         if (node->mobj == mobj)
         {
-            S_StopSound(mobj);
             if (node->stopSound)
             {
-                S_StartSoundAtVolume(mobj, node->stopSound, node->volume, 0);
             }
             if (SequenceListHead == node)
             {
@@ -364,15 +361,12 @@ void SN_UpdateActiveSequences(void)
             node->delayTics--;
             continue;
         }
-        sndPlaying = S_GetSoundPlayingInfo(node->mobj, node->currentSoundID);
         switch (*node->sequencePtr)
         {
             case SS_CMD_PLAY:
                 if (!sndPlaying)
                 {
                     node->currentSoundID = *(node->sequencePtr + 1);
-                    S_StartSoundAtVolume(node->mobj, node->currentSoundID,
-                                         node->volume, 0);
                 }
                 node->sequencePtr += 2;
                 break;
@@ -387,8 +381,6 @@ void SN_UpdateActiveSequences(void)
                 if (!sndPlaying)
                 {
                     node->currentSoundID = *(node->sequencePtr + 1);
-                    S_StartSoundAtVolume(node->mobj, node->currentSoundID,
-                                         node->volume, 0);
                 }
                 break;
             case SS_CMD_DELAY:
@@ -411,7 +403,6 @@ void SN_UpdateActiveSequences(void)
                 // Wait until something else stops the sequence
                 break;
             case SS_CMD_END:
-                SN_StopSequence(node->mobj);
                 break;
             default:
                 break;
