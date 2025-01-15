@@ -28,65 +28,6 @@ static local_component_t* local;
 static char* free_text;
 
 void dsda_UpdateFreeText(void) {
-  int i, j;
-  const char* text;
-
-  text = dsda_StringConfig(dsda_config_free_text);
-
-  if (free_text)
-    Z_Free(free_text);
-
-  free_text = Z_Malloc(strlen(text) + 1);
-
-  for (i = 0, j = 0; text[i]; ++i, ++j) {
-    if (text[i] == '\\') {
-      if (text[i + 1] == 'n') {
-        free_text[j] = '\n';
-        ++i;
-        continue;
-      }
-
-      if (text[i + 1] == 'c') {
-        int color;
-        int c10, c1;
-
-        c10 = text[i + 2];
-        if (c10 >= '0' && c10 <= '9') {
-          c10 -= '0';
-
-          c1 = text[i + 3];
-          if (c1 >= '0' && c1 <= '9') {
-            c1 -= '0';
-            c10 *= 10;
-            i += 3;
-          }
-          else {
-            c1 = 0;
-            i += 2;
-          }
-
-          color = c10 + c1;
-        }
-        else {
-          color = 0;
-          ++i;
-        }
-
-        if (color < 0 || color >= CR_HUD_LIMIT)
-          color = 0;
-
-        free_text[j] = '\x1b';
-        free_text[j + 1] = HUlib_Color(color);
-        ++j;
-
-        continue;
-      }
-    }
-
-    free_text[j] = text[i];
-  }
-
-  free_text[j] = '\0';
 }
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {

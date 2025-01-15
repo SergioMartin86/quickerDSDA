@@ -55,7 +55,6 @@
 #include "r_fps.h"
 #include "r_plane.h"
 #include "g_overflow.h"
-#include "am_map.h"
 #include "e6y.h"//e6y
 
 #include "dsda.h"
@@ -3131,10 +3130,10 @@ static int P_GroupLines (void)
                                   // I can sue the old code unchanged
     int block;
 
-    sector->bbox[0] = sector->blockbox[0] >> FRACTOMAPBITS;
-    sector->bbox[1] = sector->blockbox[1] >> FRACTOMAPBITS;
-    sector->bbox[2] = sector->blockbox[2] >> FRACTOMAPBITS;
-    sector->bbox[3] = sector->blockbox[3] >> FRACTOMAPBITS;
+    sector->bbox[0] = sector->blockbox[0];
+    sector->bbox[1] = sector->blockbox[1];
+    sector->bbox[2] = sector->blockbox[2];
+    sector->bbox[3] = sector->blockbox[3];
 
     // set the degenmobj_t to the middle of the bounding box
     if (comp[comp_sound])
@@ -3947,10 +3946,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
     SN_StopAllSequences();
   }
 
-  if (dsda_ShowMinimap())
-  {
-    AM_Start(false);
-  }
 }
 
 //

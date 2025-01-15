@@ -17,12 +17,10 @@
 
 #include <string.h>
 
-#include "am_map.h"
 #include "doomdef.h"
 #include "doomstat.h"
 #include "hu_stuff.h"
 #include "g_overflow.h"
-#include "gl_struct.h"
 #include "lprintf.h"
 #include "r_main.h"
 #include "r_segs.h"
@@ -113,9 +111,6 @@ void dsda_InitCommandHistory(void);
 void dsda_InitQuickstartCache(void);
 void dsda_InitParallelSFXFilter(void);
 void M_ChangeMapMultisamling(void);
-void M_ChangeMapTextured(void);
-void AM_InitParams(void);
-void AM_initPlayerTrail(void);
 #ifdef __ENABLE_OPENGL_
 void gld_ResetAutomapTransparency(void);
 #else
@@ -204,7 +199,6 @@ void dsda_UpdateStrictMode(void) {
   M_ChangeSkyMode(); // affected by mouselook setting
   HU_InitCrosshair();
   M_ChangeApplyPalette();
-  M_ChangeMapTextured();
   dsda_RefreshExHudCoordinateDisplay();
   dsda_RefreshExHudCommandDisplay();
   dsda_RefreshExHudMinimap();
@@ -480,115 +474,115 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_mapcolor_back] = {
     "mapcolor_back", dsda_config_mapcolor_back,
-    CONF_COLOR(247), &mapcolor.back
+    CONF_COLOR(247), 0
   },
   [dsda_config_mapcolor_grid] = {
     "mapcolor_grid", dsda_config_mapcolor_grid,
-    CONF_COLOR(104), &mapcolor.grid
+    CONF_COLOR(104), 0
   },
   [dsda_config_mapcolor_wall] = {
     "mapcolor_wall", dsda_config_mapcolor_wall,
-    CONF_COLOR(23), &mapcolor.wall
+    CONF_COLOR(23), 0
   },
   [dsda_config_mapcolor_fchg] = {
     "mapcolor_fchg", dsda_config_mapcolor_fchg,
-    CONF_COLOR(55), &mapcolor.fchg
+    CONF_COLOR(55), 0
   },
   [dsda_config_mapcolor_cchg] = {
     "mapcolor_cchg", dsda_config_mapcolor_cchg,
-    CONF_COLOR(215), &mapcolor.cchg
+    CONF_COLOR(215), 0
   },
   [dsda_config_mapcolor_clsd] = {
     "mapcolor_clsd", dsda_config_mapcolor_clsd,
-    CONF_COLOR(208), &mapcolor.clsd
+    CONF_COLOR(208), 0
   },
   [dsda_config_mapcolor_rkey] = {
     "mapcolor_rkey", dsda_config_mapcolor_rkey,
-    CONF_COLOR(175), &mapcolor.rkey
+    CONF_COLOR(175), 0
   },
   [dsda_config_mapcolor_bkey] = {
     "mapcolor_bkey", dsda_config_mapcolor_bkey,
-    CONF_COLOR(204), &mapcolor.bkey
+    CONF_COLOR(204), 0
   },
   [dsda_config_mapcolor_ykey] = {
     "mapcolor_ykey", dsda_config_mapcolor_ykey,
-    CONF_COLOR(231), &mapcolor.ykey
+    CONF_COLOR(231), 0
   },
   [dsda_config_mapcolor_rdor] = {
     "mapcolor_rdor", dsda_config_mapcolor_rdor,
-    CONF_COLOR(175), &mapcolor.rdor
+    CONF_COLOR(175), 0
   },
   [dsda_config_mapcolor_bdor] = {
     "mapcolor_bdor", dsda_config_mapcolor_bdor,
-    CONF_COLOR(204), &mapcolor.bdor
+    CONF_COLOR(204), 0
   },
   [dsda_config_mapcolor_ydor] = {
     "mapcolor_ydor", dsda_config_mapcolor_ydor,
-    CONF_COLOR(231), &mapcolor.ydor
+    CONF_COLOR(231), 0
   },
   [dsda_config_mapcolor_tele] = {
     "mapcolor_tele", dsda_config_mapcolor_tele,
-    CONF_COLOR(119), &mapcolor.tele
+    CONF_COLOR(119), 0
   },
   [dsda_config_mapcolor_secr] = {
     "mapcolor_secr", dsda_config_mapcolor_secr,
-    CONF_COLOR(252), &mapcolor.secr
+    CONF_COLOR(252), 0
   },
   [dsda_config_mapcolor_revsecr] = {
     "mapcolor_revsecr", dsda_config_mapcolor_revsecr,
-    CONF_COLOR(112), &mapcolor.revsecr
+    CONF_COLOR(112), 0
   },
   [dsda_config_mapcolor_exit] = {
     "mapcolor_exit", dsda_config_mapcolor_exit,
-    CONF_COLOR(0), &mapcolor.exit
+    CONF_COLOR(0), 0
   },
   [dsda_config_mapcolor_unsn] = {
     "mapcolor_unsn", dsda_config_mapcolor_unsn,
-    CONF_COLOR(104), &mapcolor.unsn
+    CONF_COLOR(104), 0
   },
   [dsda_config_mapcolor_flat] = {
     "mapcolor_flat", dsda_config_mapcolor_flat,
-    CONF_COLOR(88), &mapcolor.flat
+    CONF_COLOR(88), 0
   },
   [dsda_config_mapcolor_sprt] = {
     "mapcolor_sprt", dsda_config_mapcolor_sprt,
-    CONF_COLOR(112), &mapcolor.sprt
+    CONF_COLOR(112), 0
   },
   [dsda_config_mapcolor_item] = {
     "mapcolor_item", dsda_config_mapcolor_item,
-    CONF_COLOR(231), &mapcolor.item
+    CONF_COLOR(231), 0
   },
   [dsda_config_mapcolor_hair] = {
     "mapcolor_hair", dsda_config_mapcolor_hair,
-    CONF_COLOR(208), &mapcolor.hair
+    CONF_COLOR(208), 0
   },
   [dsda_config_mapcolor_sngl] = {
     "mapcolor_sngl", dsda_config_mapcolor_sngl,
-    CONF_COLOR(208), &mapcolor.sngl
+    CONF_COLOR(208), 0
   },
   [dsda_config_mapcolor_me] = {
     "mapcolor_me", dsda_config_mapcolor_me,
-    CONF_COLOR(112), &mapcolor.me
+    CONF_COLOR(112), 0
   },
   [dsda_config_mapcolor_enemy] = {
     "mapcolor_enemy", dsda_config_mapcolor_enemy,
-    CONF_COLOR(177), &mapcolor.enemy
+    CONF_COLOR(177), 0
   },
   [dsda_config_mapcolor_frnd] = {
     "mapcolor_frnd", dsda_config_mapcolor_frnd,
-    CONF_COLOR(112), &mapcolor.frnd
+    CONF_COLOR(112), 0
   },
   [dsda_config_mapcolor_trail_1] = {
     "mapcolor_trail_1", dsda_config_mapcolor_trail_1,
-    CONF_COLOR(80), &mapcolor.trail_1
+    CONF_COLOR(80), 0
   },
   [dsda_config_mapcolor_trail_2] = {
     "mapcolor_trail_2", dsda_config_mapcolor_trail_2,
-    CONF_COLOR(100), &mapcolor.trail_2
+    CONF_COLOR(100), 0
   },
   [dsda_config_gl_skymode] = {
     "gl_skymode", dsda_config_gl_skymode,
-    dsda_config_int, skytype_auto, skytype_count - 1, { skytype_auto }, NULL,
+    dsda_config_int, 0, 0, {  }, NULL,
     NOT_STRICT, M_ChangeSkyMode
   },
   [dsda_config_gl_render_multisampling] = {
@@ -597,7 +591,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_gl_render_fov] = {
     "gl_render_fov", dsda_config_gl_render_fov,
-    dsda_config_int, 20, 160, { 90 }, &gl_render_fov, NOT_STRICT, M_ChangeFOV
+    dsda_config_int, 20, 160, { 90 }, NULL, NOT_STRICT, M_ChangeFOV
   },
   [dsda_config_gl_health_bar] = {
     "gl_health_bar", dsda_config_gl_health_bar,
@@ -1013,11 +1007,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_map_blinking_locks] = {
     "map_blinking_locks", dsda_config_map_blinking_locks,
-    CONF_BOOL(0), NULL, NOT_STRICT, AM_InitParams
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_secret_after] = {
     "map_secret_after", dsda_config_map_secret_after,
-    CONF_BOOL(0), NULL, NOT_STRICT, AM_InitParams
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_coordinates] = {
     "map_coordinates", dsda_config_map_coordinates,
@@ -1037,51 +1031,51 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_map_trail_mode] = {
     "map_trail_mode", dsda_config_map_trail_mode,
-    dsda_config_int, 0, map_trail_mode_max - 1, { 0 }, NULL, NOT_STRICT, AM_initPlayerTrail
+    dsda_config_int, 0, 0, { 0 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_trail_size] = {
     "map_trail_size", dsda_config_map_trail_size,
-    dsda_config_int, 0, 350, { 105 }, NULL, NOT_STRICT, AM_initPlayerTrail
+    dsda_config_int, 0, 350, { 105 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_automap_overlay] = {
     "automap_overlay", dsda_config_automap_overlay,
-    dsda_config_int, 0, 2, { 0 }, &automap_overlay
+    dsda_config_int, 0, 2, { 0 }, NULL
   },
   [dsda_config_automap_rotate] = {
     "automap_rotate", dsda_config_automap_rotate,
-    CONF_BOOL(0), &automap_rotate
+    CONF_BOOL(0), NULL
   },
   [dsda_config_automap_follow] = {
     "automap_follow", dsda_config_automap_follow,
-    CONF_BOOL(1), &automap_follow
+    CONF_BOOL(1), NULL
   },
   [dsda_config_automap_grid] = {
     "automap_grid", dsda_config_automap_grid,
-    CONF_BOOL(0), &automap_grid
+    CONF_BOOL(0), NULL
   },
   [dsda_config_map_grid_size] = {
     "map_grid_size", dsda_config_map_grid_size,
-    dsda_config_int, 8, 256, { 128 }, NULL, NOT_STRICT, AM_InitParams
+    dsda_config_int, 8, 256, { 128 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_pan_speed] = {
     "map_pan_speed", dsda_config_map_pan_speed,
-    dsda_config_int, 1, 32, { 16 }, NULL, NOT_STRICT, AM_InitParams
+    dsda_config_int, 1, 32, { 16 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_scroll_speed] = {
     "map_scroll_speed", dsda_config_map_scroll_speed,
-    dsda_config_int, 1, 32, { 32 }, NULL, NOT_STRICT, AM_InitParams
+    dsda_config_int, 1, 32, { 32 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_wheel_zoom] = {
     "map_wheel_zoom", dsda_config_map_wheel_zoom,
-    CONF_BOOL(1), NULL, NOT_STRICT, AM_InitParams
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_use_multisamling] = {
     "map_use_multisampling", dsda_config_map_use_multisamling,
-    CONF_BOOL(0), NULL, NOT_STRICT, M_ChangeMapMultisamling
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_textured] = {
     "map_textured", dsda_config_map_textured,
-    CONF_BOOL(1), NULL, STRICT_INT(0), M_ChangeMapTextured
+    CONF_BOOL(1), NULL, STRICT_INT(0), NULL
   },
   [dsda_config_map_textured_trans] = {
     "map_textured_trans", dsda_config_map_textured_trans,
@@ -1097,8 +1091,8 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_map_things_appearance] = {
     "map_things_appearance", dsda_config_map_things_appearance,
-    dsda_config_int, 0, map_things_appearance_max - 1, { map_things_appearance_max - 1 },
-    NULL, NOT_STRICT, AM_InitParams
+    dsda_config_int, 0, 0, {  },
+    NULL, NOT_STRICT, NULL
   },
   [dsda_config_videomode] = {
     "videomode", dsda_config_videomode,

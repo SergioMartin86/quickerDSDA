@@ -23,7 +23,6 @@
 #include "s_sound.h"
 #include "smooth.h"
 #include "v_video.h"
-#include "gl_struct.h"
 
 #include "dsda/args.h"
 #include "dsda/build.h"

@@ -42,7 +42,6 @@
 #include "v_video.h"
 #include "st_stuff.h"
 #include "g_game.h"
-#include "am_map.h"
 #include "lprintf.h"
 
 #include "dsda/stretch.h"
@@ -149,9 +148,8 @@ dboolean R_PartialView(void)
 
 dboolean R_StatusBarVisible(void)
 {
-  return R_PartialView() || automap_on;
+  return 0;
 }
-
 //
 // Error functions that will abort if R_FlushColumns tries to flush
 // columns without a column type.
@@ -502,49 +500,6 @@ void R_InitBuffer(int width, int height)
 
 void R_FillBackScreen (void)
 {
-  int automap = automap_on;
-
-  if (grnrock.lumpnum == 0)
-    return;
-
-  V_BeginUIDraw();
-
-  // e6y: wide-res
-  if (ratio_multiplier != ratio_scale || wide_offsety)
-  {
-    int only_stbar;
-
-    only_stbar = V_IsSoftwareMode() || automap || R_PartialView();
-
-    if (only_stbar && ST_SCALED_OFFSETX > 0)
-    {
-      int stbar_top = SCREENHEIGHT - ST_SCALED_HEIGHT;
-
-      if (V_IsOpenGLMode())
-        V_FillFlat(grnrock.lumpnum, 1, 0, stbar_top, SCREENWIDTH, ST_SCALED_HEIGHT, VPT_STRETCH);
-      else
-      {
-        V_FillFlat(grnrock.lumpnum, 1,
-          0, stbar_top, ST_SCALED_OFFSETX, ST_SCALED_HEIGHT, VPT_STRETCH);
-        V_FillFlat(grnrock.lumpnum, 1,
-          SCREENWIDTH - ST_SCALED_OFFSETX, stbar_top, ST_SCALED_OFFSETX, ST_SCALED_HEIGHT, VPT_STRETCH);
-
-        // For custom huds, need to put the backfill inside the bar area (in the copy buffer)
-        V_FillFlat(grnrock.lumpnum, 0,
-          ST_SCALED_OFFSETX, stbar_top, SCREENWIDTH - 2 * ST_SCALED_OFFSETX, ST_SCALED_HEIGHT, VPT_STRETCH);
-      }
-
-      // heretic_note: I think this looks bad, so I'm skipping it...
-      if (!heretic)
-      {
-        // line between view and status bar
-        V_FillPatch(brdr_b.lumpnum, 1, 0, stbar_top, ST_SCALED_OFFSETX, brdr_b.height, VPT_NONE);
-        V_FillPatch(brdr_b.lumpnum, 1, SCREENWIDTH - ST_SCALED_OFFSETX, stbar_top, ST_SCALED_OFFSETX, brdr_b.height, VPT_NONE);
-      }
-    }
-  }
-
-  V_EndUIDraw();
 }
 
 //

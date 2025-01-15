@@ -40,7 +40,6 @@
 #include "p_tick.h"
 #include "p_saveg.h"
 #include "m_random.h"
-#include "am_map.h"
 #include "p_enemy.h"
 #include "lprintf.h"
 #include "s_advsound.h"
@@ -453,42 +452,10 @@ void P_UnArchiveRNG(void)
 // killough 2/22/98: Save/restore automap state
 void P_ArchiveMap(void)
 {
-  int i;
-
-  P_SAVE_X(automap_active);
-  P_SAVE_X(markpointnum);
-
-  for (i = 0; i < markpointnum; i++)
-  {
-    P_SAVE_X(markpoints[i].x);
-    P_SAVE_X(markpoints[i].y);
-  }
 }
 
 void P_UnArchiveMap(void)
 {
-  P_LOAD_X(automap_active);
-
-  if (automap_active)
-    AM_Start(true);
-
-  P_LOAD_X(markpointnum);
-
-  if (markpointnum)
-    {
-      int i;
-      while (markpointnum >= markpointnum_max)
-        markpoints = Z_Realloc(markpoints, sizeof *markpoints *
-         (markpointnum_max = markpointnum_max ? markpointnum_max*2 : 16));
-
-      for (i = 0; i < markpointnum; i++)
-      {
-        P_LOAD_X(markpoints[i].x);
-        P_LOAD_X(markpoints[i].y);
-
-        AM_setMarkParams(i);
-      }
-    }
 }
 
 void P_ArchiveThinkerSubclass(th_class class)

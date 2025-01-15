@@ -61,11 +61,8 @@
 #include "r_main.h"
 #include "r_things.h"
 #include "r_sky.h"
-#include "am_map.h"
 #include "dsda.h"
 #include "dsda/settings.h"
-#include "gl_struct.h"
-#include "gl_intern.h"
 #include "g_game.h"
 #include "d_deh.h"
 #include "e6y.h"
@@ -179,7 +176,7 @@ prboom_comp_t prboom_comp[PC_MAX] = {
 
 void M_ChangeShorttics(void)
 {
-  shorttics = dsda_IntConfig(dsda_config_movement_shorttics) || dsda_Flag(dsda_arg_shorttics);
+  shorttics = dsda_Flag(dsda_arg_shorttics);
 }
 
 void e6y_InitCommandLine(void)
@@ -312,8 +309,6 @@ void M_ChangeAspectRatio(void)
 
 void M_ChangeStretch(void)
 {
-  render_stretch_hud = dsda_IntConfig(dsda_config_render_stretch_hud);
-
   R_SetViewSize();
 }
 
@@ -595,36 +590,16 @@ static double analog_accelfactor;
 
 void AccelChanging(void)
 {
-  int mouse_acceleration;
-  int analog_acceleration;
-
-  mouse_acceleration = dsda_IntConfig(dsda_config_mouse_acceleration);
-  mouse_accelfactor = (double) mouse_acceleration / 100.0 + 1.0;
-
-  analog_acceleration = dsda_IntConfig(dsda_config_analog_look_acceleration);
-  analog_accelfactor = (double) analog_acceleration / 100.0 + 1.0;
 }
 
 int AccelerateMouse(int val)
 {
-  if (!mouse_accelfactor)
-    return val;
-
-  if (val < 0)
-    return -AccelerateMouse(-val);
-
-  return M_DoubleToInt(pow((double) val, mouse_accelfactor));
+  return 0;
 }
 
 int AccelerateAnalog(float val)
 {
-  if (!analog_accelfactor)
-    return val;
-
-  if (val < 0)
-    return -AccelerateAnalog(-val);
-
-  return M_DoubleToInt(pow((double) val, analog_accelfactor));
+  return 0;
 }
 
 int mlooky = 0;
@@ -719,8 +694,7 @@ int HU_DrawDemoProgress(int force)
   unsigned int tick, max_period;
 
   if (gamestate == GS_DEMOSCREEN ||
-      !demoplayback ||
-      !dsda_IntConfig(dsda_config_hudadd_demoprogressbar))
+      !demoplayback )
     return false;
 
   tics_count = demo_tics_count * demo_playerscount;

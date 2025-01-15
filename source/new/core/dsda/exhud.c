@@ -17,7 +17,6 @@
 
 #include <stdio.h>
 
-#include "am_map.h"
 #include "doomstat.h"
 #include "hu_stuff.h"
 #include "lprintf.h"
@@ -575,7 +574,7 @@ static void dsda_LoadHUDConfig(void) {
 
 static dboolean dsda_HideHUD(void) {
   return dsda_Flag(dsda_arg_nodraw) ||
-         (R_FullView() && !dsda_IntConfig(dsda_config_hud_displayed));
+         (R_FullView() );
 }
 
 static dboolean dsda_HUDActive(void) {
@@ -588,14 +587,7 @@ static void dsda_ResetActiveHUD(void) {
 }
 
 static void dsda_UpdateActiveHUD(void) {
-  container = R_FullView() ? &containers[hud_full] :
-              dsda_IntConfig(dsda_config_exhud) ? &containers[hud_ex] :
-              &containers[hud_off];
 
-  if (container->loaded)
-    components = container->components;
-  else
-    dsda_ResetActiveHUD();
 }
 
 static void dsda_ResetOffsets(void) {
@@ -658,17 +650,6 @@ static void dsda_UpdateComponents(exhud_component_t* update_components) {
 }
 
 void dsda_UpdateExHud(void) {
-  if (automap_stbar) {
-    if (containers[hud_map].loaded)
-      dsda_UpdateComponents(containers[hud_map].components);
-
-    return;
-  }
-
-  if (!dsda_HUDActive())
-    return;
-
-  dsda_UpdateComponents(components);
 }
 
 static void dsda_DrawComponents(exhud_component_t* draw_components) {
@@ -758,9 +739,6 @@ void dsda_RefreshExHudMinimap(void) {
     // Need to update the component before calling AM_Start
     if (components[exhud_minimap].initialized)
       components[exhud_minimap].update(components[exhud_minimap].data);
-
-    if (in_game && gamestate == GS_LEVEL)
-      AM_Start(false);
   }
   else
     dsda_TurnComponentOff(exhud_minimap);

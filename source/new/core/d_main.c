@@ -69,7 +69,6 @@
 #include "hu_stuff.h"
 #include "wi_stuff.h"
 #include "st_stuff.h"
-#include "am_map.h"
 #include "p_setup.h"
 #include "r_draw.h"
 #include "r_main.h"
@@ -77,7 +76,6 @@
 #include "d_main.h"
 #include "d_deh.h"  // Ty 04/08/98 - Externalizations
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
-#include "am_map.h"
 #include "e6y.h"
 
 #include "dsda/args.h"

@@ -1,7 +1,6 @@
 # quickerDSDA Core sources
 
 quickerDSDASrc =  [
- 'core/am_map.c',
  'core/doomdef.c',
  'core/doomstat.c',
  'core/dsda.c',

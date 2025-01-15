@@ -66,7 +66,6 @@ void dsda_UpdateMinimapHC(void* data) {
 void dsda_DrawMinimapHC(void* data) {
   local = data;
 
-  AM_Drawer(true);
 }
 
 void dsda_CopyMinimapCoordinates(int* f_x, int* f_y, int* f_w, int* f_h) {

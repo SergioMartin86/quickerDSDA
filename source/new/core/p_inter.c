@@ -34,7 +34,6 @@
 #include "doomstat.h"
 #include "dstrings.h"
 #include "m_random.h"
-#include "am_map.h"
 #include "r_main.h"
 #include "s_sound.h"
 #include "smooth.h"
@@ -116,11 +115,6 @@ static weapontype_t GetAmmoChange[] = {
 
 static void P_AutoSwitchWeapon(player_t *player, weapontype_t weapon)
 {
-  int autoswitch_config = dsda_IntConfig(dsda_config_switch_weapon_on_pickup);
-  int autoswitch = ((allow_incompatibility && !deathmatch && !netgame) ? autoswitch_config : true);
-
-  if (!autoswitch) return;
-
   player->pendingweapon = weapon;
 }
 
@@ -1032,8 +1026,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
       }
     }
 
-    if (target->player == &players[consoleplayer] && automap_active)
-      AM_Stop(true);    // don't die in auto map; switch view prior to dying
   }
 
   if (hexen)

@@ -239,7 +239,6 @@ void HU_DrawCrosshair(void)
   if (
     !crosshair_nam[hudadd_crosshair] ||
     crosshair.lump == -1 ||
-    automap_active ||
     dsda_Paused()
   )
   {

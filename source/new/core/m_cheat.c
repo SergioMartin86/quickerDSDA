@@ -32,7 +32,6 @@
  *-----------------------------------------------------------------------------*/
 
 #include "doomstat.h"
-#include "am_map.h"
 #include "g_game.h"
 #include "r_data.h"
 #include "p_inter.h"
@@ -588,47 +587,10 @@ void M_CheatIDDT(void)
 // killough 3/26/98: emulate Doom better
 static void cheat_ddt()
 {
-  if (automap_input)
-    M_CheatIDDT();
 }
 
 static void cheat_reveal_secret()
 {
-  static int last_secret = -1;
-
-  if (automap_input)
-  {
-    int i, start_i;
-
-    dsda_TrackFeature(uf_iddt);
-
-    i = last_secret + 1;
-    if (i >= numsectors)
-      i = 0;
-    start_i = i;
-
-    do
-    {
-      sector_t *sec = &sectors[i];
-
-      if (P_IsSecret(sec))
-      {
-        dsda_UpdateIntConfig(dsda_config_automap_follow, false, true);
-
-        // This is probably not necessary
-        if (sec->lines && sec->lines[0] && sec->lines[0]->v1)
-        {
-          AM_SetMapCenter(sec->lines[0]->v1->x, sec->lines[0]->v1->y);
-          last_secret = i;
-          break;
-        }
-      }
-
-      i++;
-      if (i >= numsectors)
-        i = 0;
-    } while (i != start_i);
-  }
 }
 
 static void cheat_cycle_mobj(mobj_t **last_mobj, int *last_count, int flags, int alive)
@@ -662,7 +624,6 @@ static void cheat_cycle_mobj(mobj_t **last_mobj, int *last_count, int flags, int
       if ((!alive || mobj->health > 0) && mobj->flags & flags)
       {
         dsda_UpdateIntConfig(dsda_config_automap_follow, false, true);
-        AM_SetMapCenter(mobj->x, mobj->y);
         P_SetTarget(last_mobj, mobj);
         break;
       }
@@ -672,28 +633,10 @@ static void cheat_cycle_mobj(mobj_t **last_mobj, int *last_count, int flags, int
 
 static void cheat_reveal_kill()
 {
-  if (automap_input)
-  {
-    static int last_count;
-    static mobj_t *last_mobj;
-
-    dsda_TrackFeature(uf_iddt);
-
-    cheat_cycle_mobj(&last_mobj, &last_count, MF_COUNTKILL, true);
-  }
 }
 
 static void cheat_reveal_item()
 {
-  if (automap_input)
-  {
-    static int last_count;
-    static mobj_t *last_mobj;
-
-    dsda_TrackFeature(uf_iddt);
-
-    cheat_cycle_mobj(&last_mobj, &last_count, MF_COUNTITEM, false);
-  }
 }
 
 // killough 2/7/98: HOM autodetection

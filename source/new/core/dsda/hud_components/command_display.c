@@ -112,9 +112,6 @@ void dsda_ResetCommandHistory(void) {
 void dsda_InitCommandHistory(void) {
   int i;
 
-  dsda_command_history_size = dsda_IntConfig(dsda_config_command_history_size);
-  dsda_hide_empty_commands = dsda_IntConfig(dsda_config_hide_empty_commands);
-
   for (i = 1; i < MAX_HISTORY; ++i) {
     command_history[i].prev = &command_history[i - 1];
     command_history[i - 1].next = &command_history[i];

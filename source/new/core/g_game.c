@@ -63,7 +63,6 @@
 #include "wi_stuff.h"
 #include "hu_stuff.h"
 #include "st_stuff.h"
-#include "am_map.h"
 #include "w_wad.h"
 #include "r_main.h"
 #include "r_draw.h"
@@ -1289,8 +1288,7 @@ dboolean G_Responder (event_t* ev)
   if (
     gamestate == GS_LEVEL && (
       HU_Responder(ev) ||
-      ST_Responder(ev) ||
-      AM_Responder(ev)
+      ST_Responder(ev) 
     )
   ) return true;
 
@@ -1442,11 +1440,6 @@ void G_Ticker (void)
 
   entry_leveltime = leveltime;
 
-  // CPhipps - player colour changing
-  if (!demoplayback && mapcolor.plyr[consoleplayer] != mapcolor.me) {
-    // Changed my multiplayer colour - Inform the whole game
-    G_ChangedPlayerColour(consoleplayer, mapcolor.me);
-  }
   P_MapStart();
   // do player reborns if needed
   for (i = 0; i < g_maxplayers; i++)
@@ -1673,7 +1666,6 @@ void G_Ticker (void)
       P_Ticker();
       P_WalkTicker();
       mlooky = 0;
-      AM_Ticker();
       ST_Ticker();
       HU_Ticker();
       break;
@@ -1825,8 +1817,6 @@ void G_ChangedPlayerColour(int pn, int cl)
   int i;
 
   if (!netgame) return;
-
-  mapcolor.plyr[pn] = cl;
 
   // Rebuild colour translation tables accordingly
   R_InitTranslationTables();
@@ -2150,8 +2140,6 @@ void G_DoCompleted (void)
     if (playeringame[i])
       G_PlayerFinishLevel(i);        // take away cards and stuff
 
-  AM_Stop(false);
-
   e6y_G_DoCompleted();
   dsda_WatchLevelCompletion();
 
@@ -2189,7 +2177,6 @@ void G_DoCompleted (void)
   wminfo.totaltimes = totalleveltimes;
 
   gamestate = GS_INTERMISSION;
-  automap_active = false;
 
   // lmpwatch.pl engine-side demo testing support
   // print "FINISHED: <mapname>" when the player exits the current map
@@ -2264,7 +2251,6 @@ void G_DoWorldDone (void)
   dsda_UpdateGameMap(wminfo.nextep + 1, wminfo.next + 1);
   G_DoLoadLevel();
   gameaction = ga_nothing;
-  AM_clearMarks();           //jff 4/12/98 clear any marks on the automap
   dsda_EvaluateSkipModeDoWorldDone();
 }
 
@@ -2924,7 +2910,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
 
   dsda_ResetPauseMode();
   dsda_ResetCommandHistory();
-  automap_active = false;
   dsda_UpdateGameSkill(skill);
   dsda_UpdateGameMap(episode, map);
 
@@ -2932,9 +2917,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   levels_completed = 0;
 
   dsda_EvaluateSkipModeInitNew();
-
-  //jff 4/16/98 force marks on automap cleared every new level start
-  AM_clearMarks();
 
   dsda_InitSky();
 

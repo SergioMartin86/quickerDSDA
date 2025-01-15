@@ -14,7 +14,6 @@
 // GNU General Public License for more details.
 //
 
-#include "am_map.h"
 #include "doomstat.h"
 #include "d_event.h"
 #include "s_sound.h"
@@ -81,7 +80,6 @@ void Hexen_IN_Start(wbstartstruct_t* wbstartstruct)
     interstate = 0;
     skipintermission = false;
     intertime = 0;
-    AM_Stop(false);
     SN_StopAllSequences();
 }
 

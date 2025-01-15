@@ -48,7 +48,6 @@
 #include "g_game.h"
 #include "p_tick.h"
 #include "g_overflow.h"
-#include "am_map.h"
 
 #include "e6y.h"//e6y
 
@@ -1501,11 +1500,6 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
   fixed_t oldx;
   fixed_t oldy;
 
-  if (map_trail_mode == map_trail_mode_include_collisions &&
-      thing->player && thing->player->mo == thing)
-  {
-    AM_updatePlayerTrail(x, y);
-  }
 
   if (hexen) return Hexen_P_TryMove(thing, x, y);
 
@@ -1680,11 +1674,6 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
     thing->flags2 &= ~MF2_FEETARECLIPPED;
   }
 
-  if (map_trail_mode == map_trail_mode_ignore_collisions &&
-      thing->player && thing->player->mo == thing)
-  {
-    AM_updatePlayerTrail(x, y);
-  }
 
   // if any special lines were hit, do the effect
 

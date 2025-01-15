@@ -42,7 +42,6 @@
 #include "hu_stuff.h"
 #include "st_lib.h"
 #include "r_main.h"
-#include "am_map.h"
 #include "m_cheat.h"
 #include "s_sound.h"
 #include "sounds.h"

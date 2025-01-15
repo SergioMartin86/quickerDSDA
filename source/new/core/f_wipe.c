@@ -43,7 +43,6 @@
 #include "v_video.h"
 #include "m_random.h"
 #include "f_wipe.h"
-#include "gl_struct.h"
 #include "e6y.h"//e6y
 
 #include "dsda/settings.h"
