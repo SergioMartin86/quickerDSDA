@@ -30,7 +30,7 @@ angle_t dsda_PlayerPitch(player_t* player)
 fixed_t dsda_PlayerSlope(player_t* player)
 {
   return dsda_FreeAim() ? finetangent[(ANG90 - player->mo->pitch) >> ANGLETOFINESHIFT] :
-         raven ? ((player->lookdir) << FRACBITS) / 173 :
+         
          0;
 }
 
@@ -78,12 +78,12 @@ void dsda_PlayerAim(mobj_t* source, angle_t angle, aim_t* aim, uint64_t target_m
 
       if (!linetarget) {
         aim->angle = angle;
-        aim->slope = raven ? ((source->player->lookdir) << FRACBITS) / 173 : 0;
+        aim->slope = 0;
       }
     }
     while (target_mask && (target_mask = 0, !linetarget));  // killough 8/2/98
 
-    aim->z_offset = raven ? ((source->player->lookdir) << FRACBITS) / 173 : 0;
+    aim->z_offset = 0;
   }
 }
 

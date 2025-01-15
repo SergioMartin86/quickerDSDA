@@ -157,7 +157,7 @@ static dboolean P_CheckRange(mobj_t *actor, fixed_t range)
     P_AproxDistance(pl->x-actor->x, pl->y-actor->y) < range &&
     P_CheckSight(actor, actor->target) &&
     ( // finite height!
-      !(raven || map_info.flags & MI_PASSOVER) ||
+      !(map_info.flags & MI_PASSOVER) ||
       (
         pl->z <= actor->z + actor->height &&
         actor->z <= pl->z + pl->height
@@ -462,8 +462,6 @@ static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
       if (P_UseSpecialLine(actor, spechit[numspechit], 0, false))
         good |= spechit[numspechit] == blockline ? 1 : 2;
 
-    if (raven) return good > 0;
-
     /* cph - compatibility maze here
      * Boom v2.01 and orig. Doom return "good"
      * Boom v2.02 and LxDoom return good && (P_Random(pr_trywalk)&3)
@@ -480,10 +478,6 @@ static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
 
   /* killough 11/98: fall more slowly, under gravity, if felldown==true */
   if (!map_format.zdoom && !(actor->flags & MF_FLOAT) && (!felldown || !mbf_features)) {
-    if (raven && actor->z > actor->floorz)
-    {
-      P_HitFloor(actor);
-    }
     actor->z = actor->floorz;
   }
 
@@ -857,8 +851,6 @@ static dboolean P_LookForPlayers(mobj_t *actor, dboolean allaround)
   player_t *player;
   int stop, stopc, c;
 
-  if (raven) return Raven_P_LookForPlayers(actor, allaround);
-
   if (actor->flags & MF_FRIEND)
   {  // killough 9/9/98: friendly monsters go about players differently
     int anyone;
@@ -1168,7 +1160,6 @@ void A_Look(mobj_t *actor)
     int sound;
     sound = actor->info->seesound;
 
-    if (!raven)
       switch (sound)
       {
         case sfx_posit1:
@@ -1243,15 +1234,6 @@ void A_Chase(mobj_t *actor)
     }
   }
 
-  if (raven && skill_info.flags & SI_FAST_MONSTERS)
-  {                           // Monsters move faster in nightmare mode
-    actor->tics -= actor->tics / 2;
-    if (actor->tics < 3)
-    {
-      actor->tics = 3;
-    }
-  }
-
   /* turn towards movement direction if not there yet
    * killough 9/7/98: keep facing towards target if strafing or backing out
    */
@@ -1292,7 +1274,7 @@ void A_Chase(mobj_t *actor)
     P_SetMobjState(actor, actor->info->meleestate);
     /* killough 8/98: remember an attack
     * cph - DEMOSYNC? */
-    if (!actor->info->missilestate && !raven)
+    if (!actor->info->missilestate)
       actor->flags |= MF_JUSTHIT;
     return;
   }
@@ -2482,85 +2464,6 @@ void A_Explode(mobj_t *thingy)
   damage = 128;
   distance = 128;
   flags = BF_DAMAGESOURCE;
-
-  if (raven)
-  {
-    switch (thingy->type)
-    {
-      case HERETIC_MT_FIREBOMB:      // Time Bombs
-      case HEXEN_MT_FIREBOMB:        // Time Bombs
-        thingy->z += 32 * FRACUNIT;
-        thingy->flags &= ~MF_SHADOW;
-        break;
-      case HERETIC_MT_MNTRFX2:       // Minotaur floor fire
-        damage = 24;
-        distance = damage;
-        break;
-      case HERETIC_MT_SOR2FX1:       // D'Sparil missile
-        damage = 80 + (P_Random(pr_heretic) & 31);
-        distance = damage;
-        break;
-      case HEXEN_MT_MNTRFX2:       // Minotaur floor fire
-        damage = 24;
-        break;
-      case HEXEN_MT_BISHOP:        // Bishop radius death
-        damage = 25 + (P_Random(pr_hexen) & 15);
-        break;
-      case HEXEN_MT_HAMMER_MISSILE:        // Fighter Hammer
-        damage = 128;
-        flags &= ~BF_DAMAGESOURCE;
-        break;
-      case HEXEN_MT_FSWORD_MISSILE:        // Fighter Runesword
-        damage = 64;
-        flags &= ~BF_DAMAGESOURCE;
-        break;
-      case HEXEN_MT_CIRCLEFLAME:   // Cleric Flame secondary flames
-        damage = 20;
-        flags &= ~BF_DAMAGESOURCE;
-        break;
-      case HEXEN_MT_SORCBALL1:     // Sorcerer balls
-      case HEXEN_MT_SORCBALL2:
-      case HEXEN_MT_SORCBALL3:
-        distance = 255;
-        damage = 255;
-        thingy->special_args[0] = 1; // don't play bounce
-        break;
-      case HEXEN_MT_SORCFX1:       // Sorcerer spell 1
-        damage = 30;
-        break;
-      case HEXEN_MT_SORCFX4:       // Sorcerer spell 4
-        damage = 20;
-        break;
-      case HEXEN_MT_TREEDESTRUCTIBLE:
-        damage = 10;
-        break;
-      case HEXEN_MT_DRAGON_FX2:
-        damage = 80;
-        flags &= ~BF_DAMAGESOURCE;
-        break;
-      case HEXEN_MT_MSTAFF_FX:
-        damage = 64;
-        distance = 192;
-        flags &= ~BF_DAMAGESOURCE;
-        break;
-      case HEXEN_MT_MSTAFF_FX2:
-        damage = 80;
-        distance = 192;
-        flags &= ~BF_DAMAGESOURCE;
-        break;
-      case HEXEN_MT_POISONCLOUD:
-        damage = 4;
-        distance = 40;
-        break;
-      case HEXEN_MT_ZXMAS_TREE:
-      case HEXEN_MT_ZSHRUB2:
-        damage = 30;
-        distance = 64;
-        break;
-      default:
-        break;
-    }
-  }
 
   P_RadiusAttack(thingy, thingy->target, damage, distance, flags);
   if (

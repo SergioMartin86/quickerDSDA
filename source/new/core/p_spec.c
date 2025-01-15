@@ -4851,32 +4851,14 @@ void P_AmbientSound(void)
 
 void P_InitLava(void)
 {
-    if (!raven) return;
+    return;
 
-    memset(&LavaInflictor, 0, sizeof(mobj_t));
-    LavaInflictor.type = g_lava_type;
-    LavaInflictor.flags2 = MF2_FIREDAMAGE | MF2_NODMGTHRUST;
 }
 
 void P_InitTerrainTypes(void)
 {
-    int i;
-    int lump;
-    int size;
 
-    if (!raven) return;
-
-    size = (numflats + 1) * sizeof(int);
-    TerrainTypes = Z_Malloc(size);
-    memset(TerrainTypes, 0, size);
-    for (i = 0; TerrainTypeDefs[hexen][i].type != -1; i++)
-    {
-        lump = W_CheckNumForName2(TerrainTypeDefs[hexen][i].name, ns_flats);
-        if (lump != LUMP_NOT_FOUND)
-        {
-            TerrainTypes[lump - firstflat] = TerrainTypeDefs[hexen][i].type;
-        }
-    }
+   return;
 }
 
 void P_CrossHereticSpecialLine(line_t * line, int side, mobj_t * thing, dboolean bossaction)

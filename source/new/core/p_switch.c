@@ -178,7 +178,6 @@ static void P_StartButton
 {
   int           i;
 
-  if (!raven)
     // See if button is already pressed
     for (i = 0;i < MAXBUTTONS;i++)
       if (buttonlist[i].btimer && buttonlist[i].line == line)

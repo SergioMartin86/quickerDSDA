@@ -309,8 +309,6 @@ void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume, int loop_timeo
   mobj_t *origin;
   mobj_t *listener;
 
-  if (raven) return Raven_S_StartSoundAtVolume(origin_p, sfx_id, volume, loop_timeout);
-
   origin = (mobj_t *) origin_p;
   listener = GetSoundListener();
 
@@ -442,19 +440,17 @@ void S_StartLineSound(line_t *line, degenmobj_t *soundorg, int sfx_id)
 
 void S_StartSound(void *origin, int sfx_id)
 {
-  S_StartSoundAtVolume(origin, sfx_id, raven ? 127 : sfx_volume, 0);
+  S_StartSoundAtVolume(origin, sfx_id, sfx_volume, 0);
 }
 
 void S_LoopSound(void *origin, int sfx_id, int timeout)
 {
-  S_StartSoundAtVolume(origin, sfx_id, raven ? 127 : sfx_volume, timeout);
+  S_StartSoundAtVolume(origin, sfx_id,  sfx_volume, timeout);
 }
 
 void S_StopSound(void *origin)
 {
   int cnum;
-
-  if (raven) return Heretic_S_StopSound(origin);
 
   //jff 1/22/98 return if sound is not enabled
   if (nosfxparm)

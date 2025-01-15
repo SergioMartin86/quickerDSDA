@@ -54,30 +54,6 @@ void dsda_DeathUse(player_t* player) {
   {
     case death_use_default:
     default:
-      if (raven)
-      {
-        if (player == &players[consoleplayer])
-        {
-          V_SetPalette(0);
-          inv_ptr = 0;
-          curpos = 0;
-          newtorch = 0;
-          newtorchdelta = 0;
-        }
-
-        if (hexen)
-        {
-          player->mo->special1.i = player->pclass;
-          if (player->mo->special1.i > 2)
-          {
-            player->mo->special1.i = 0;
-          }
-        }
-
-        // Let the mobj know the player has entered the reborn state.  Some
-        // mobjs need to know when it's ok to remove themselves.
-        player->mo->special2.i = 666;
-      }
 
       player->playerstate = PST_REBORN;
       break;

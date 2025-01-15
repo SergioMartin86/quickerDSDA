@@ -271,9 +271,6 @@ void dsda_EvaluatePatchScale(void) {
       SCREENHEIGHT < 200 || WIDE_SCREENHEIGHT < 200)
     render_stretch_hud = patch_stretch_fit_to_width;
 
-  if (raven && render_stretch_hud == 0)
-    render_stretch_hud++;
-
   switch (render_stretch_hud) {
     case patch_stretch_not_adjusted:
       wide_offset2x = SCREENWIDTH - patches_scalex * 320;

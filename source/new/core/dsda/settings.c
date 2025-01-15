@@ -100,8 +100,6 @@ int dsda_CompatibilityLevel(void) {
   int level;
   dsda_arg_t* complevel_arg;
 
-  if (raven) return doom_12_compatibility;
-
   if (map_format.zdoom) return mbf21_compatibility;
 
   complevel_arg = dsda_Arg(dsda_arg_complevel);
@@ -285,8 +283,7 @@ void dsda_SkipNextWipe(void) {
 
 // In raven, strict mode does not affect this setting
 dboolean dsda_RenderWipeScreen(void) {
-  return raven ? dsda_TransientIntConfig(dsda_config_render_wipescreen) :
-                 dsda_IntConfig(dsda_config_render_wipescreen);
+  return   dsda_IntConfig(dsda_config_render_wipescreen);
 }
 
 dboolean dsda_PendingSkipWipe(void) {

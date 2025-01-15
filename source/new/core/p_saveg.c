@@ -1069,12 +1069,6 @@ void P_ArchiveThinkers(void) {
 
       // killough 2/14/98: end changes
 
-      if (raven)
-      {
-        P_ReplaceMobjWithIndex(&mobj->special1.m);
-        P_ReplaceMobjWithIndex(&mobj->special2.m);
-      }
-
       if (mobj->player)
         mobj->player = (player_t *)((mobj->player-players) + 1);
     }
@@ -1646,12 +1640,6 @@ void P_UnArchiveThinkers(void) {
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->target, mobj_p, mobj_count);
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->tracer, mobj_p, mobj_count);
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->lastenemy, mobj_p, mobj_count);
-
-      if (raven)
-      {
-        P_ReplaceIndexWithMobj(&((mobj_t *) th)->special1.m, mobj_p, mobj_count);
-        P_ReplaceIndexWithMobj(&((mobj_t *) th)->special2.m, mobj_p, mobj_count);
-      }
 
       // restore references now that targets are set
       if (((mobj_t *) th)->index == MARKED_FOR_DELETION)

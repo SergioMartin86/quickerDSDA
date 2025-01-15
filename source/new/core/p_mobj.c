@@ -93,8 +93,6 @@ dboolean P_SetMobjState(mobj_t* mobj,statenum_t state)
   dboolean ret;                               // return value
   statenum_t* tempstate = NULL;               // for use with recursion
 
-  if (raven) return Raven_P_SetMobjState(mobj, state);
-
   seenstate = seenstate_tab;
   i = state;
   ret = true;
@@ -161,13 +159,10 @@ void P_ExplodeMissile (mobj_t* mo)
 
   P_SetMobjState (mo, mobjinfo[mo->type].deathstate);
 
-  if (!raven)
-  {
-    mo->tics -= P_Random(pr_explode) & 3;
+  mo->tics -= P_Random(pr_explode) & 3;
 
-    if (mo->tics < 1)
-      mo->tics = 1;
-  }
+  if (mo->tics < 1)
+    mo->tics = 1;
 
   mo->flags &= ~MF_MISSILE;
 
@@ -262,9 +257,6 @@ static void P_XYMovement (mobj_t* mo)
       mo->flags &= ~MF_SKULLFLY;
       mo->momz = 0;
 
-      if (raven)
-        new_state = mo->info->seestate;
-      else
         new_state = mo->info->spawnstate;
 
       P_SetMobjState (mo, new_state);
@@ -493,13 +485,7 @@ static void P_XYMovement (mobj_t* mo)
             ceilingline->backsector &&
             ceilingline->backsector->ceilingpic == skyflatnum)
         {
-          if (raven && mo->type == g_skullpop_mt)
-          {
-            mo->momx = mo->momy = 0;
-            mo->momz = -FRACUNIT;
-            return;
-          }
-          else if (hexen && mo->type == HEXEN_MT_HOLY_FX)
+           if (hexen && mo->type == HEXEN_MT_HOLY_FX)
           {
             P_ExplodeMissile(mo);
             return;
@@ -605,7 +591,7 @@ static void P_XYMovement (mobj_t* mo)
       {
         if ((unsigned)(player->mo->state - states - pclass.run_state) < 4)
         {
-          if (raven || player->mo == mo || compatibility_level >= lxdoom_1_compatibility)
+          if (player->mo == mo || compatibility_level >= lxdoom_1_compatibility)
           {
             P_SetMobjState(player->mo, pclass.normal_state);
           }
@@ -618,7 +604,7 @@ static void P_XYMovement (mobj_t* mo)
     /* killough 10/98: kill any bobbing momentum too (except in voodoo dolls)
      * cph - DEMOSYNC - needs compatibility check?
      */
-    if (!raven && player && player->mo == mo)
+    if (player && player->mo == mo)
       player->momx = player->momy = 0;
   }
   else
@@ -862,56 +848,6 @@ floater:
   if (mo->z <= mo->floorz)
   {
     // hit the floor
-
-    if (raven)
-    {
-      if (mo->flags & MF_MISSILE)
-      {
-        mo->z = mo->floorz;
-        if (mo->flags2 & MF2_FLOORBOUNCE)
-        {
-          P_FloorBounceMissile(mo);
-          return;
-        }
-        else if (
-          raven && (
-            mo->type == HERETIC_MT_MNTRFX2 ||
-            mo->type == HEXEN_MT_MNTRFX2 ||
-            mo->type == HEXEN_MT_LIGHTNING_FLOOR
-          )
-        )
-        {                   // Minotaur floor fire can go up steps
-          return;
-        }
-        else if (hexen && mo->type == HEXEN_MT_HOLY_FX)
-        {                   // The spirit struck the ground
-          mo->momz = 0;
-          P_HitFloor(mo);
-          return;
-        }
-        else
-        {
-          if (hexen)
-            P_HitFloor(mo);
-          P_ExplodeMissile(mo);
-          return;
-        }
-      }
-
-      if (hexen && mo->flags & MF_COUNTKILL)   // Blasted mobj falling
-      {
-        if (mo->momz < -(23 * FRACUNIT))
-        {
-          P_DamageMobj(mo, NULL, NULL, 10000);
-        }
-      }
-
-      if (mo->z - mo->momz > mo->floorz)
-      {                       // Spawn splashes, etc.
-          P_HitFloor(mo);
-      }
-    }
-
     /* Note (id):
      *  somebody left this after the setting momz to 0,
      *  kinda useless there.
@@ -1051,7 +987,7 @@ floater:
       return;
     }
 
-    if (!raven && (mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP))
+    if ( (mo->flags & MF_MISSILE) && !(mo->flags & MF_NOCLIP))
     {
       P_ExplodeMissile (mo);
       return;
@@ -1108,23 +1044,6 @@ floater:
     {
       if (hexen && mo->type == HEXEN_MT_LIGHTNING_CEILING)
       {
-        return;
-      }
-      if (raven && mo->subsector->sector->ceilingpic == skyflatnum)
-      {
-        if (mo->type == g_skullpop_mt)
-        {
-          mo->momx = mo->momy = 0;
-          mo->momz = -FRACUNIT;
-        }
-        else if (mo->type == HEXEN_MT_HOLY_FX)
-        {
-          P_ExplodeMissile(mo);
-        }
-        else
-        {
-          P_RemoveMobj(mo);
-        }
         return;
       }
       P_ExplodeMissile (mo);
@@ -1378,7 +1297,7 @@ void P_MobjThinker (mobj_t* mobj)
       return;       // killough - mobj was removed
   }
   // raven_note: are the intflags irrelevant when compatibility is enabled?
-  else if (!raven && !(mobj->momx | mobj->momy) && !sentient(mobj))
+  else if (!(mobj->momx | mobj->momy) && !sentient(mobj))
   {                                  // non-sentient objects at rest
     mobj->intflags |= MIF_ARMED;     // arm a mine which has come to rest
 
@@ -1406,18 +1325,9 @@ void P_MobjThinker (mobj_t* mobj)
 
     // raven's cycle code is only here (i.e., not in every call to P_SetMobjState)
     // not sure about ramifications of moving loop inside all state calls
-    if (raven)
-    {
-      while (!mobj->tics)
-        if (!P_SetMobjState(mobj, mobj->state->nextstate))
-          return;     // freed itself
-    }
-    else
-    {
       if (!mobj->tics)
         if (!P_SetMobjState(mobj, mobj->state->nextstate))
           return;     // freed itself
-    }
   }
   else
   {
@@ -1708,7 +1618,6 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   mobj->height = info->height;                                      // phares
   mobj->flags  = info->flags;
   mobj->flags2 = info->flags2;
-  if (raven) mobj->damage = info->damage;
 
   /* killough 8/23/98: no friends, bouncers, or touchy things in old demos */
   if (!mbf_features)
@@ -1754,22 +1663,6 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   else if (z == ONCEILINGZ)
   {
       mobj->z = mobj->ceilingz - mobj->height;
-  }
-  else if (raven && z == FLOATRANDZ)
-  {
-    fixed_t space;
-
-    space = ((mobj->ceilingz) - (mobj->height)) - mobj->floorz;
-    if (space > 48 * FRACUNIT)
-    {
-      space -= 40 * FRACUNIT;
-      mobj->z =
-        ((space * P_Random(pr_heretic)) >> 8) + mobj->floorz + 40 * FRACUNIT;
-    }
-    else
-    {
-      mobj->z = mobj->floorz;
-    }
   }
   else if (hexen && mobj->flags2 & MF2_FLOATBOB)
   {
@@ -1842,32 +1735,6 @@ int        iquetail;
 
 void P_RemoveMobj (mobj_t* mobj)
 {
-  if (raven) // so short, just putting it here
-  {
-    if (hexen)
-    {
-      // Remove from creature queue
-      if (mobj->flags & MF_COUNTKILL && mobj->flags & MF_CORPSE)
-      {
-        A_DeQueueCorpse(mobj);
-      }
-    }
-
-    if (map_format.thing_id && mobj->tid)
-    {
-      map_format.remove_mobj_thing_id(mobj);
-    }
-
-    P_UnsetThingPosition(mobj);
-    if (sector_list)
-    {
-      P_DelSeclist(sector_list);
-      sector_list = NULL;
-    }
-    S_StopSound(mobj);
-    P_RemoveThinker((thinker_t *) mobj);
-    return;
-  }
 
   if ((mobj->flags & MF_SPECIAL)
       && !(mobj->flags & MF_DROPPED)
@@ -2174,7 +2041,7 @@ void P_SpawnPlayer (int n, const mapthing_t* mthing)
 dboolean P_IsDoomnumAllowed(int doomnum)
 {
   // Do not spawn cool, new monsters if !commercial
-  if (!raven && gamemode != commercial)
+  if ( gamemode != commercial)
     switch(doomnum)
       {
       case 64:  // Archvile
@@ -2478,25 +2345,25 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
   if (!P_ShouldSpawnMapThing(options))
     return NULL;
 
-  if (!raven && thingtype >= 14001 && thingtype <= 14064)
+  if (thingtype >= 14001 && thingtype <= 14064)
   {
     iden_num = thingtype - 14000; // Ambient sound id
     thingtype = 14064; // ZMT_AMBIENTSOUND
   }
 
-  if (!raven && thingtype == 14065)
+  if (thingtype == 14065)
   {
     iden_num = mthing->special_args[0]; // Ambient sound id
     thingtype = 14064; // ZMT_AMBIENTSOUND
   }
 
-  if (!raven && thingtype >= 14100 && thingtype <= 14164)
+  if (thingtype >= 14100 && thingtype <= 14164)
   {
     iden_num = thingtype - 14100; // Mus change
     thingtype = 14164;            // MT_MUSICSOURCE
   }
 
-  if (!raven && thingtype == 14165 && map_format.hexen)
+  if (thingtype == 14165 && map_format.hexen)
   {
     iden_num = BETWEEN(0, 64, mthing->special_args[0]); // Mus change
     thingtype = 14164;            // MT_MUSICSOURCE
@@ -2674,7 +2541,7 @@ spawnit:
       mobj->tics = -1;
   }
 
-  if (!raven && thingtype == 14064)
+  if (thingtype == 14064)
   {
     dsda_SpawnAmbientSource(mobj);
   }
@@ -2696,8 +2563,6 @@ void P_SpawnPuff(fixed_t x,fixed_t y,fixed_t z)
 {
   mobj_t* th;
   int t;
-
-  if (raven) return Raven_P_SpawnPuff(x, y, z);
 
   // killough 5/5/98: remove dependence on order of evaluation:
   t = P_Random(pr_spawnpuff);
@@ -2749,11 +2614,9 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage, mobj_t *bleeder)
 
 dboolean P_CheckMissileSpawn (mobj_t* th)
 {
-  if (!raven) {
     th->tics -= P_Random(pr_missile)&3;
     if (th->tics < 1)
       th->tics = 1;
-  }
 
   // move a little forward so an angle can
   // be computed if it immediately explodes
@@ -2796,46 +2659,7 @@ mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
   angle_t an;
   int     dist;
 
-  if (!raven)
-  {
     z = source->z + 32 * FRACUNIT;
-  }
-  else
-  {
-    switch (type)
-    {
-      case HERETIC_MT_MNTRFX1:       // Minotaur swing attack missile
-      case HEXEN_MT_MNTRFX1:         // Minotaur swing attack missile
-      case HEXEN_MT_ICEGUY_FX:
-      case HEXEN_MT_HOLY_MISSILE:
-        z = source->z + 40 * FRACUNIT;
-        break;
-      case HERETIC_MT_MNTRFX2:       // Minotaur floor fire missile
-        z = ONFLOORZ;
-        break;
-      case HEXEN_MT_MNTRFX2:         // Minotaur floor fire missile
-        z = ONFLOORZ + source->floorclip;
-        break;
-      case HERETIC_MT_SRCRFX1:       // Sorcerer Demon fireball
-        z = source->z + 48 * FRACUNIT;
-        break;
-      case HERETIC_MT_KNIGHTAXE:     // Knight normal axe
-      case HERETIC_MT_REDAXE:        // Knight red power axe
-        z = source->z + 36 * FRACUNIT;
-        break;
-      case HEXEN_MT_CENTAUR_FX:
-        z = source->z + 45 * FRACUNIT;
-        break;
-      default:
-        z = source->z + 32 * FRACUNIT;
-        break;
-    }
-
-    if (hexen)
-      z -= source->floorclip;
-    else if (source->flags2 & MF2_FEETARECLIPPED)
-      z -= FOOTCLIPSIZE;
-  }
 
   th = P_SpawnMobj(source->x, source->y, z, type);
 
@@ -2865,13 +2689,8 @@ mobj_t* P_SpawnMissile(mobj_t* source,mobj_t* dest,mobjtype_t type)
 
   th->momz = (dest->z - source->z) / dist;
 
-  if (!raven)
-  {
     P_CheckMissileSpawn(th);
     return th;
-  }
-
-  return (P_CheckMissileSpawn(th) ? th : NULL);
 }
 
 
@@ -2892,36 +2711,7 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
   x = source->x;
   y = source->y;
 
-  if (!raven)
-  {
     z = source->z + 4 * 8 * FRACUNIT + aim.z_offset;
-  }
-  else
-  {
-    if (type == HEXEN_MT_LIGHTNING_FLOOR)
-    {
-      z = ONFLOORZ;
-      aim.slope = 0;
-    }
-    else if (type == HEXEN_MT_LIGHTNING_CEILING)
-    {
-      z = ONCEILINGZ;
-      aim.slope = 0;
-    }
-    else
-    {
-      z = source->z + 4 * 8 * FRACUNIT + aim.z_offset;
-
-      if (hexen)
-      {
-        z -= source->floorclip;
-      }
-      else if (source->flags2 & MF2_FEETARECLIPPED)
-      {
-        z -= FOOTCLIPSIZE;
-      }
-    }
-  }
 
   // heretic global MissileMobj
   MissileMobj = th = P_SpawnMobj(x, y, z, type);

@@ -62,10 +62,10 @@ void R_InitSkyMap(void)
 
   r_stretchsky = dsda_IntConfig(dsda_config_render_stretchsky);
 
-  if (raven || !dsda_MouseLook())
+  if ( !dsda_MouseLook())
   {
     skystretch = false;
-    skytexturemid = (raven ? 200 : 100) * FRACUNIT;
+    skytexturemid = (100) * FRACUNIT;
     skyiscale = (200 << FRACBITS) / SCREENHEIGHT;
   }
   else

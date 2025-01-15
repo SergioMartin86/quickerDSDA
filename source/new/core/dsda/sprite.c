@@ -91,14 +91,11 @@ int dsda_GetOriginalSpriteIndex(const char* key) {
 
 void dsda_InitializeSprites(const char** source, int count) {
   int i;
-  extern int raven;
 
   num_sprites = count;
   deh_spritenames_size = num_sprites + 1;
 
   sprnames = source;
-
-  if (raven) return;
 
   deh_spritenames = malloc(deh_spritenames_size * sizeof(*deh_spritenames));
   for (i = 0; i < num_sprites; i++)

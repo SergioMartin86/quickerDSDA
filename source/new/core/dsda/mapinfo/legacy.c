@@ -340,7 +340,7 @@ int dsda_LegacyMusicIndexToLumpNum(int* lump, int music_index) {
   char name[9];
   const char* format;
 
-  format = raven ? "%s" : "d_%s";
+  format =  "d_%s";
 
   sprintf(name, format, S_music[music_index].name);
 

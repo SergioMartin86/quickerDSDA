@@ -572,211 +572,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   if (dsda_InputActive(dsda_input_strafeleft))
     side -= sidemove[speed];
 
-  if (raven)
-  {
-    int lspeed;
-    int look, arti;
-    int flyheight;
-
-    look = arti = flyheight = 0;
-
-    if (dsda_InputActive(dsda_input_lookdown) || dsda_InputActive(dsda_input_lookup))
-    {
-      ++lookheld;
-    }
-    else
-    {
-      lookheld = 0;
-    }
-    if (lookheld < SLOWTURNTICS)
-    {
-      lspeed = 1;
-    }
-    else
-    {
-      lspeed = 2;
-    }
-
-    // Look up/down/center keys
-    if (dsda_InputActive(dsda_input_lookup))
-    {
-      look = lspeed;
-    }
-    if (dsda_InputActive(dsda_input_lookdown))
-    {
-      look = -lspeed;
-    }
-
-    if (dsda_InputActive(dsda_input_lookcenter))
-    {
-      look = TOCENTER;
-    }
-
-    // Fly up/down/drop keys
-    if (dsda_InputActive(dsda_input_flyup))
-    {
-      flyheight = 5;          // note that the actual flyheight will be twice this
-    }
-    if (dsda_InputActive(dsda_input_flydown))
-    {
-      flyheight = -5;
-    }
-    if (dsda_InputActive(dsda_input_flycenter))
-    {
-      flyheight = TOCENTER;
-      look = TOCENTER;
-    }
-
-    // Use artifact key
-    if (dsda_InputTickActivated(dsda_input_use_artifact))
-    {
-      if (inventory)
-      {
-        players[consoleplayer].readyArtifact = players[consoleplayer].inventory[inv_ptr].type;
-        inventory = false;
-        cmd->arti = 0;
-      }
-      else
-      {
-        cmd->arti |= players[consoleplayer].inventory[inv_ptr].type & AFLAG_MASK;
-      }
-    }
-
-    if (hexen)
-    {
-      if (dsda_InputActive(dsda_input_jump))
-      {
-        cmd->arti |= AFLAG_JUMP;
-      }
-
-      if (!cmd->arti)
-      {
-        if (dsda_InputTickActivated(dsda_input_arti_ring))
-        {
-          cmd->arti = hexen_arti_invulnerability;
-        }
-        else if (dsda_InputTickActivated(dsda_input_arti_quartz) &&
-                 players[consoleplayer].mo &&
-                 players[consoleplayer].mo->health < MAXHEALTH)
-        {
-          cmd->arti = hexen_arti_health;
-        }
-        else if (dsda_InputTickActivated(dsda_input_arti_urn))
-        {
-          cmd->arti = hexen_arti_superhealth;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_incant))
-        {
-          cmd->arti = hexen_arti_healingradius;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_summon))
-        {
-          cmd->arti = hexen_arti_summon;
-        }
-        else if (dsda_InputTickActivated(dsda_input_arti_torch))
-        {
-          cmd->arti = hexen_arti_torch;
-        }
-        else if (dsda_InputTickActivated(dsda_input_arti_morph))
-        {
-          cmd->arti = hexen_arti_egg;
-        }
-        else if (dsda_InputTickActivated(dsda_input_arti_wings))
-        {
-          cmd->arti = hexen_arti_fly;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_disk))
-        {
-          cmd->arti = hexen_arti_blastradius;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_flechette))
-        {
-          cmd->arti = hexen_arti_poisonbag;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_banishment))
-        {
-          cmd->arti = hexen_arti_teleportother;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_boots))
-        {
-          cmd->arti = hexen_arti_speed;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_krater))
-        {
-          cmd->arti = hexen_arti_boostmana;
-        }
-        else if (dsda_InputTickActivated(dsda_input_hexen_arti_bracers))
-        {
-          cmd->arti = hexen_arti_boostarmor;
-        }
-        else if (dsda_InputTickActivated(dsda_input_arti_chaosdevice))
-        {
-          cmd->arti = hexen_arti_teleport;
-        }
-      }
-    }
-    else
-    {
-      if (dsda_InputTickActivated(dsda_input_arti_tome) && !cmd->arti
-          && !players[consoleplayer].powers[pw_weaponlevel2])
-      {
-        cmd->arti = arti_tomeofpower;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_quartz) && !cmd->arti &&
-               players[consoleplayer].mo &&
-               players[consoleplayer].mo->health < MAXHEALTH)
-      {
-        cmd->arti = arti_health;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_urn) && !cmd->arti)
-      {
-        cmd->arti = arti_superhealth;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_bomb) && !cmd->arti)
-      {
-        cmd->arti = arti_firebomb;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_ring) && !cmd->arti)
-      {
-        cmd->arti = arti_invulnerability;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_chaosdevice) && !cmd->arti)
-      {
-        cmd->arti = arti_teleport;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_shadowsphere) && !cmd->arti)
-      {
-        cmd->arti = arti_invisibility;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_wings) && !cmd->arti)
-      {
-        cmd->arti = arti_fly;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_torch) && !cmd->arti)
-      {
-        cmd->arti = arti_torch;
-      }
-      else if (dsda_InputTickActivated(dsda_input_arti_morph) && !cmd->arti)
-      {
-        cmd->arti = arti_egg;
-      }
-    }
-
-    if (players[consoleplayer].playerstate == PST_LIVE && !dsda_FreeAim())
-    {
-        if (look < 0)
-        {
-            look += 16;
-        }
-        cmd->lookfly = look;
-    }
-    if (flyheight < 0)
-    {
-        flyheight += 16;
-    }
-    cmd->lookfly |= flyheight << 4;
-  }
-
   if (dsda_AllowJumping())
   {
     if (!hexen && dsda_InputActive(dsda_input_jump))
@@ -1569,7 +1364,7 @@ void G_Ticker (void)
                 S_ResumeSound();
               break;
           }
-          if (!raven) players[i].cmd.buttons = 0;
+          players[i].cmd.buttons = 0;
         }
 
         if (dsda_AllowExCmd())
@@ -1881,32 +1676,6 @@ static dboolean G_CheckSpot(int playernum, mapthing_t *mthing)
 
   x = mthing->x;
   y = mthing->y;
-
-  if (raven)
-  {
-    unsigned an;
-    mobj_t *mo;
-
-    players[playernum].mo->flags2 &= ~MF2_PASSMOBJ;
-    if (!P_CheckPosition(players[playernum].mo, x, y))
-    {
-      players[playernum].mo->flags2 |= MF2_PASSMOBJ;
-      return false;
-    }
-    players[playernum].mo->flags2 |= MF2_PASSMOBJ;
-
-    // spawn a teleport fog
-    sec = R_PointInSector(x, y);
-    an = ((unsigned) ANG45 * (mthing->angle / 45)) >> ANGLETOFINESHIFT;
-
-    mo = P_SpawnMobj(x + 20 * finecosine[an], y + 20 * finesine[an],
-                     sec->floorheight + TELEFOGHEIGHT, g_mt_tfog);
-
-    if (players[consoleplayer].viewz != 1)
-      S_StartMobjSound(mo, g_sfx_telept);   // don't start sound on first frame
-
-    return true;
-  }
 
   // killough 4/2/98: fix bug where P_CheckPosition() uses a non-solid
   // corpse to detect collisions with other players in DM starts
@@ -2368,11 +2137,6 @@ void G_AfterLoad(void)
     SB_SetClassData();
   }
 
-  if (raven)
-  {
-    players[consoleplayer].readyArtifact = players[consoleplayer].inventory[inv_ptr].type;
-  }
-
   if (setsizeneeded)
     R_ExecuteSetViewSize ();
 
@@ -2574,7 +2338,7 @@ void G_ReloadDefaults(void)
   // Allows PWAD HELP2 screen for DOOM 1 wads.
   // there's no easy way to set it only to complevel 0-2, so
   // I just allowed it for complevel 3 if HELP2 is present
-  if ((compatibility_level <= 3) && (gamemode != commercial) && (gamemode != shareware) && !raven)
+  if ((compatibility_level <= 3) && (gamemode != commercial) && (gamemode != shareware))
     pwad_help2_check = W_PWADLumpNameExists("HELP2");
 
   options = dsda_Options();
@@ -2917,12 +2681,6 @@ void G_ReadOneTick(ticcmd_t* cmd, const byte **data_p)
   }
   cmd->buttons = (unsigned char)(*(*data_p)++);
 
-  if (raven)
-  {
-    cmd->lookfly = (unsigned char)(*(*data_p)++);
-    cmd->arti = (unsigned char)(*(*data_p)++);
-  }
-
   // e6y: ability to play tasdoom demos directly
   if (compatibility_level == tasdoom_compatibility)
   {
@@ -2964,11 +2722,6 @@ void G_WriteDemoTiccmd (ticcmd_t* cmd)
     }
     *p++ = cmd->buttons;
 
-    if (raven)
-    {
-      *p++ = cmd->lookfly;
-      *p++ = cmd->arti;
-    }
   }
 
   dsda_WriteExCmd(&p, cmd);
@@ -3264,7 +3017,7 @@ void G_BeginRecording (void)
 
     for (; i < FUTURE_MAXPLAYERS; i++)
       *demo_p++ = 0;
-  } else if (!raven) { // cph - write old v1.9 demos (might even sync)
+  } else{ // cph - write old v1.9 demos (might even sync)
     unsigned char v = 109;
     longtics = dsda_Flag(dsda_arg_longtics);
     if (longtics)
@@ -3294,40 +3047,7 @@ void G_BeginRecording (void)
     *demo_p++ = consoleplayer;
     for (i=0; i<4; i++)  // intentionally hard-coded 4 -- killough
       *demo_p++ = playeringame[i];
-  } else { // versionless raven
-    *demo_p++ = gameskill;
-    *demo_p++ = gameepisode;
-    *demo_p++ = gamemap;
-
-    // Write special parameter bits onto player one byte.
-    // This aligns with vvHeretic demo usage:
-    //   0x20 = -respawn
-    //   0x10 = -longtics
-    //   0x02 = -nomonsters
-    *demo_p = 1; // assume player one exists
-    if (respawnparm)
-      *demo_p |= DEMOHEADER_RESPAWN;
-    if (longtics)
-      *demo_p |= DEMOHEADER_LONGTICS;
-    if (nomonsters)
-      *demo_p |= DEMOHEADER_NOMONSTERS;
-    demo_p++;
-
-    if (heretic)
-    {
-      for (i = 1; i < g_maxplayers; i++)
-        *demo_p++ = playeringame[i];
-    }
-    else
-    {
-      *demo_p++ = PlayerClass[0] - 1;
-      for (i = 1; i < g_maxplayers; i++)
-      {
-        *demo_p++ = playeringame[i];
-        *demo_p++ = PlayerClass[i] - 1;
-      }
-    }
-  }
+  } 
 
   dsda_EvaluateBytesPerTic();
 
@@ -3519,15 +3239,6 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
       //   0x20 = -respawn
       //   0x10 = -longtics
       //   0x02 = -nomonsters
-      if (raven)
-      {
-        if (*demo_p & DEMOHEADER_RESPAWN)
-          respawnparm = true;
-        if (*demo_p & DEMOHEADER_LONGTICS || dsda_Flag(dsda_arg_longtics))
-          longtics = true;
-        if (*demo_p & DEMOHEADER_NOMONSTERS)
-          nomonsters = true;
-      }
 
       // e6y: detection of more unsupported demo formats
       if (*(header_p + size - 1) == DEMOMARKER)
@@ -3535,7 +3246,7 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
         // file size test;
         // DOOM_old and HERETIC don't use maps>9;
         // 2 at 4,6 means playerclass=mage -> not DOOM_old or HERETIC;
-        if ((size >= 8 && (size - 8) % 4 != 0 && !raven) ||
+        if ((size >= 8 && (size - 8) % 4 != 0) ||
             (map > 9 && !hexen) ||
             (size >= 6 && (*(header_p + 4) == 2 || *(header_p + 6) == 2) && !hexen))
         {

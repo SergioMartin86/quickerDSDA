@@ -405,12 +405,6 @@ dboolean P_GivePower(player_t *player, int power)
     SPEEDTICS, MAULATORTICS
    };
 
-  if (
-    raven &&
-    tics[power] > 1 &&
-    power != pw_ironfeet && power != pw_minotaur &&
-    player->powers[power] > BLINKTHRESHOLD
-  ) return false;
 
   switch (power)
   {
@@ -1114,8 +1108,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 
   target->tics -= P_Random(pr_killtics)&3;
 
-  if (raven) return;
-
   if (target->tics < 1)
     target->tics = 1;
 
@@ -1240,176 +1232,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
   if (player && skill_info.damage_factor)
     damage = FixedMul(damage, skill_info.damage_factor);
 
-  // Special damage types
-  if (raven && inflictor)
-    switch (inflictor->type)
-    {
-      case HERETIC_MT_EGGFX:
-        if (player)
-        {
-          P_ChickenMorphPlayer(player);
-        }
-        else
-        {
-          P_ChickenMorph(target);
-        }
-        return;         // Always return
-      case HERETIC_MT_WHIRLWIND:
-        P_TouchWhirlwind(target);
-        return;
-      case HERETIC_MT_MINOTAUR:
-        if (inflictor->flags & MF_SKULLFLY)
-        {               // Slam only when in charge mode
-          P_MinotaurSlam(inflictor, target);
-          return;
-        }
-        break;
-      case HERETIC_MT_MACEFX4:   // Death ball
-        if ((target->flags2 & MF2_BOSS) || target->type == HERETIC_MT_HEAD)
-        {               // Don't allow cheap boss kills
-          break;
-        }
-        else if (target->player)
-        {               // Player specific checks
-          if (target->player->powers[pw_invulnerability])
-          {           // Can't hurt invulnerable players
-            break;
-          }
-          if (P_AutoUseChaosDevice(target->player))
-          {           // Player was saved using chaos device
-            return;
-          }
-        }
-        damage = 10000; // Something's gonna die
-        break;
-      case HERETIC_MT_PHOENIXFX2:        // Flame thrower
-        if (target->player && P_Random(pr_heretic) < 128)
-        {               // Freeze player for a bit
-          target->reactiontime += 4;
-        }
-        break;
-      case HERETIC_MT_RAINPLR1:  // Rain missiles
-      case HERETIC_MT_RAINPLR2:
-      case HERETIC_MT_RAINPLR3:
-      case HERETIC_MT_RAINPLR4:
-        if (target->flags2 & MF2_BOSS)
-        {               // Decrease damage for bosses
-          damage = (P_Random(pr_heretic) & 7) + 1;
-        }
-        break;
-      case HERETIC_MT_HORNRODFX2:
-      case HERETIC_MT_PHOENIXFX1:
-        if (target->type == HERETIC_MT_SORCERER2 && P_Random(pr_heretic) < 96)
-        {               // D'Sparil teleports away
-          P_DSparilTeleport(target);
-          return;
-        }
-        break;
-      case HERETIC_MT_BLASTERFX1:
-      case HERETIC_MT_RIPPER:
-        if (target->type == HERETIC_MT_HEAD)
-        {               // Less damage to Ironlich bosses
-          damage = P_Random(pr_heretic) & 1;
-          if (!damage)
-          {
-            return;
-          }
-        }
-        break;
-      case HEXEN_MT_EGGFX:
-        if (player)
-        {
-          P_MorphPlayer(player);
-        }
-        else
-        {
-          P_MorphMonster(target);
-        }
-        return;         // Always return
-      case HEXEN_MT_TELOTHER_FX1:
-      case HEXEN_MT_TELOTHER_FX2:
-      case HEXEN_MT_TELOTHER_FX3:
-      case HEXEN_MT_TELOTHER_FX4:
-      case HEXEN_MT_TELOTHER_FX5:
-        if ((target->flags & MF_COUNTKILL) &&
-            (target->type != HEXEN_MT_SERPENT) &&
-            (target->type != HEXEN_MT_SERPENTLEADER) &&
-            (!(target->flags2 & MF2_BOSS)))
-        {
-          P_TeleportOther(target);
-        }
-        return;
-      case HEXEN_MT_MINOTAUR:
-        if (inflictor->flags & MF_SKULLFLY)
-        {               // Slam only when in charge mode
-          P_MinotaurSlam(inflictor, target);
-          return;
-        }
-        break;
-      case HEXEN_MT_BISH_FX:
-        // Bishops are just too nasty
-        damage >>= 1;
-        break;
-      case HEXEN_MT_SHARDFX1:
-        switch (inflictor->special2.i)
-        {
-          case 3:
-            damage <<= 3;
-            break;
-          case 2:
-            damage <<= 2;
-            break;
-          case 1:
-            damage <<= 1;
-            break;
-          default:
-            break;
-        }
-        break;
-      case HEXEN_MT_CSTAFF_MISSILE:
-        // Cleric Serpent Staff does poison damage
-        if (target->player)
-        {
-          P_PoisonPlayer(target->player, source, 20);
-          damage >>= 1;
-        }
-        break;
-      case HEXEN_MT_ICEGUY_FX2:
-        damage >>= 1;
-        break;
-      case HEXEN_MT_POISONDART:
-        if (target->player)
-        {
-          P_PoisonPlayer(target->player, source, 20);
-          damage >>= 1;
-        }
-        break;
-      case HEXEN_MT_POISONCLOUD:
-        if (target->player)
-        {
-          if (target->player->poisoncount < 4)
-          {
-            P_PoisonDamage(target->player, source, 15 + (P_Random(pr_hexen) & 15), false);  // Don't play painsound
-            P_PoisonPlayer(target->player, source, 50);
-            S_StartMobjSound(target, hexen_sfx_player_poisoncough);
-          }
-          return;
-        }
-        else if (!(target->flags & MF_COUNTKILL))
-        {               // only damage monsters/players with the poison cloud
-          return;
-        }
-        break;
-      case HEXEN_MT_FSWORD_MISSILE:
-        if (target->player)
-        {
-          damage -= damage >> 2;
-        }
-        break;
-      default:
-        break;
-    }
-
   // Some close combat weapons should not
   // inflict thrust and push the victim out of reach,
   // thus kick away unless using the chainsaw.
@@ -1468,7 +1290,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
   if (player)
   {
     // end of game hell hack
-    if (!raven && target->subsector->sector->special == 11 && damage >= target->health)
+    if (target->subsector->sector->special == 11 && damage >= target->health)
       damage = target->health - 1;
 
     // Below certain threshold,
@@ -1503,16 +1325,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
       }
     }
 
-    if (
-      raven &&
-      damage >= player->health &&
-      (skill_info.flags & SI_AUTO_USE_HEALTH || deathmatch) &&
-      !player->chickenTics && !player->morphTics
-    )
-    {                       // Try to use some inventory health
-      P_AutoUseHealth(player, damage - player->health + 1);
-    }
-
     player->health -= damage;       // mirror mobj health here for Dave
     if (player->health < 0)
       player->health = 0;
@@ -1522,11 +1334,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 
     if (player->damagecount > 100)
       player->damagecount = 100;  // teleport stomp does 10k points...
-
-    if (raven && player == &players[consoleplayer])
-    {
-      SB_PaletteFlash(false);
-    }
   }
 
   dsda_WatchDamage(target, inflictor, source, damage);
@@ -1681,16 +1488,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     !(source->flags2 & MF2_DMGIGNORED) &&
     (!target->threshold || target->flags2 & MF2_NOTHRESHOLD) &&
     ((source->flags ^ target->flags) & MF_FRIEND || monster_infighting || !mbf_features) &&
-    !(
-      raven && (
-        source->flags2 & MF2_BOSS ||
-        (target->type == HERETIC_MT_SORCERER2 && source->type == HERETIC_MT_WIZARD) ||
-        target->type == HEXEN_MT_BISHOP ||
-        target->type == HEXEN_MT_MINOTAUR ||
-        (target->type == HEXEN_MT_CENTAUR && source->type == HEXEN_MT_CENTAURLEADER) ||
-        (target->type == HEXEN_MT_CENTAURLEADER && source->type == HEXEN_MT_CENTAUR)
-      )
-    ) &&
     !P_InfightingImmune(target, source)
   )
   {

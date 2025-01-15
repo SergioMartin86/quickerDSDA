@@ -855,7 +855,7 @@ void R_SetupFreelook(void)
     int i;
 
     centery = viewheight / 2;
-    if (raven || dsda_MouseLook())
+    if (dsda_MouseLook())
     {
       dy = FixedMul(focallengthy, finetangent[(ANG90-viewpitch)>>ANGLETOFINESHIFT]);
       centery += dy >> FRACBITS;

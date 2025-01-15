@@ -399,8 +399,7 @@ dboolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y, dboolean boss)
   sector_t*  newsec;
 
   /* killough 8/9/98: make telefragging more consistent, preserve compatibility */
-  telefrag = !raven &&
-    (thing->player || (!comp[comp_telefrag] ? boss : (gamemap==30)));
+  telefrag =  (thing->player || (!comp[comp_telefrag] ? boss : (gamemap==30)));
 
   // kill anything occupying the position
 
@@ -756,20 +755,6 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
 
   if (tmthing->flags2 & MF2_PASSMOBJ)
   {                           // check if a mobj passed over/under another object
-    if (raven)
-    {
-      if ((tmthing->type == HERETIC_MT_IMP || tmthing->type == HERETIC_MT_WIZARD)
-          && (thing->type == HERETIC_MT_IMP || thing->type == HERETIC_MT_WIZARD))
-      {                       // don't let imps/wizards fly over other imps/wizards
-        return false;
-      }
-
-      if (tmthing->type == HEXEN_MT_BISHOP && thing->type == HEXEN_MT_BISHOP)
-      {                       // don't let bishops fly over other bishops
-        return false;
-      }
-    }
-
     if (
       (map_format.hexen ? tmthing->z >= thing->z + thing->height
                         : tmthing->z >  thing->z + thing->height)
@@ -870,9 +855,6 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
     tmthing->flags &= ~MF_SKULLFLY;
     tmthing->momx = tmthing->momy = tmthing->momz = 0;
 
-    if (raven)
-      new_state = tmthing->info->seestate;
-    else
       new_state = tmthing->info->spawnstate;
 
     P_SetMobjState (tmthing, new_state);
@@ -1079,18 +1061,6 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
 
     if (tmthing->flags2 & MF2_RIP)
     {
-      if (raven)
-      {
-        if (!(thing->flags & MF_NOBLOOD) &&
-            !(thing->flags2 & MF2_REFLECTIVE) &&
-            !(thing->flags2 & MF2_INVULNERABLE))
-        {                   // Ok to spawn some blood
-          P_RipperBlood(tmthing, thing);
-        }
-        if (heretic) S_StartMobjSound(tmthing, heretic_sfx_ripslop);
-        damage = ((P_Random(pr_heretic) & 3) + 2) * tmthing->damage;
-      }
-      else
       {
         damage = ((P_Random(pr_mbf21) & 3) + 2) * tmthing->info->damage;
         if (!(thing->flags & MF_NOBLOOD))
@@ -1111,26 +1081,9 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
 
     // damage / explode
 
-    damage = raven ? tmthing->damage : tmthing->info->damage;
+    damage =  tmthing->info->damage;
     damage = ((P_Random(pr_damage) % 8) + 1) * damage;
-    if (
-      raven &&
-      damage &&
-      !(thing->flags & MF_NOBLOOD) &&
-      !(thing->flags2 & MF2_REFLECTIVE) &&
-      !(thing->flags2 & MF2_INVULNERABLE) &&
-      !(tmthing->type == HEXEN_MT_TELOTHER_FX1) &&
-      !(tmthing->type == HEXEN_MT_TELOTHER_FX2) &&
-      !(tmthing->type == HEXEN_MT_TELOTHER_FX3) &&
-      !(tmthing->type == HEXEN_MT_TELOTHER_FX4) &&
-      !(tmthing->type == HEXEN_MT_TELOTHER_FX5) &&
-      P_Random(pr_heretic) < 192
-    )
-    {
-      P_BloodSplatter(tmthing->x, tmthing->y, tmthing->z, thing);
-    }
-    if (!raven || damage)
-      P_DamageMobj(thing, tmthing, tmthing->target, damage);
+    P_DamageMobj(thing, tmthing, tmthing->target, damage);
 
     // don't traverse any more
     return false;
@@ -2152,7 +2105,7 @@ void P_SlideMove(mobj_t *mo)
 
     /* killough 10/98: affect the bobbing the same way (but not voodoo dolls)
      * cph - DEMOSYNC? */
-    if (!raven && mo->player && mo->player->mo == mo)
+    if ( mo->player && mo->player->mo == mo)
     {
       if (D_abs(mo->player->momx) > D_abs(tmxmove))
         mo->player->momx = tmxmove;
@@ -2471,7 +2424,7 @@ dboolean PTR_ShootTraverse (intercept_t* in)
   }
   else
   {
-    if (raven || in->d.thing->flags & MF_NOBLOOD)
+    if (in->d.thing->flags & MF_NOBLOOD)
       P_SpawnPuff (x,y,z);
     else
       P_SpawnBlood (x,y,z, la_damage, th);
@@ -2479,22 +2432,6 @@ dboolean PTR_ShootTraverse (intercept_t* in)
 
   if (la_damage)
   {
-    if (
-      raven &&
-      !(in->d.thing->flags & MF_NOBLOOD) &&
-      !(in->d.thing->flags2 & MF2_INVULNERABLE)
-    )
-    {
-      if (PuffType == HEXEN_MT_AXEPUFF || PuffType == HEXEN_MT_AXEPUFF_GLOW)
-      {
-        P_BloodSplatter2(x, y, z, in->d.thing);
-      }
-      if (P_Random(pr_heretic) < 192)
-      {
-        P_BloodSplatter(x, y, z, in->d.thing);
-      }
-    }
-
     if (hexen && PuffType == HEXEN_MT_FLAMEPUFF2)
     {                       // Cleric FlameStrike does fire damage
       extern mobj_t LavaInflictor;

@@ -88,8 +88,6 @@ int dsda_GetOriginalMusicIndex(const char* key) {
 
 void dsda_InitializeMusic(musicinfo_t* source, int count) {
   int i;
-  extern int raven;
-
   num_music = count;
   deh_musicnames_size = num_music + 1;
   mus_musinfo = num_music - 1;
@@ -98,8 +96,6 @@ void dsda_InitializeMusic(musicinfo_t* source, int count) {
 
   // S_music = malloc(num_music * sizeof(*S_music));
   // memcpy(S_music, source, num_music * sizeof(*S_music));
-
-  if (raven) return;
 
   deh_musicnames = malloc(deh_musicnames_size * sizeof(*deh_musicnames));
   for (i = 1; i < num_music; i++)

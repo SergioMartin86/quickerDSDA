@@ -208,7 +208,6 @@ static void D_Wipe(void)
   //e6y
   if (!dsda_RenderWipeScreen() || dsda_SkipWipe())
   {
-    if (!raven)
       dsda_TrackFeature(uf_wipescreen);
 
     // If there's no screen wipe, we still need to refresh the status bar
@@ -410,16 +409,6 @@ void D_PageTicker(void)
 //
 static void D_PageDrawer(void)
 {
-  if (raven)
-  {
-    V_DrawRawScreen(pagename);
-    if (demosequence == 1)
-    {
-      V_DrawNamePatch(4, 160, 0, "ADVISOR", CR_DEFAULT, VPT_STRETCH);
-    }
-    return;
-  }
-
   // Allows use of PWAD HELP2 screen in demosequence
   if (demosequence == 4 && pwad_help2_check)
     pagename = "HELP2";

@@ -137,7 +137,6 @@ const char* g_skyflatname;
 
 dboolean hexen = false;
 dboolean heretic = false;
-dboolean raven = false;
 
 static void dsda_InitDoom(void) {
   int i;
@@ -617,7 +616,6 @@ extern void dsda_ResetNullPClass(void);
 void dsda_InitGlobal(void) {
   heretic = dsda_Flag(dsda_arg_heretic) || dsda_AutoDetectHeretic();
   hexen = dsda_Flag(dsda_arg_hexen) || dsda_AutoDetectHexen();
-  raven = heretic || hexen;
 
   if (hexen)
     dsda_InitHexen();

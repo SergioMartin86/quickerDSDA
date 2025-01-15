@@ -620,7 +620,7 @@ int dsda_DoomPrepareFinale(int* result) {
 void dsda_DoomLoadMapInfo(void) {
   int p;
 
-  if (dsda_Flag(dsda_arg_nomapinfo) || !dsda_UseMapinfo() || raven)
+  if (dsda_Flag(dsda_arg_nomapinfo) || !dsda_UseMapinfo())
     return;
 
   p = -1;

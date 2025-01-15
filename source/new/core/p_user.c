@@ -252,7 +252,7 @@ void P_CalcHeight (player_t* player)
     player->bob = FRACUNIT / 2;
   }
 
-  if (!onground && !raven)
+  if (!onground)
   {
     player->viewz = player->mo->z + g_viewheight;
 
@@ -348,8 +348,6 @@ void P_MovePlayer (player_t* player)
   mobj_t *mo;
 
   P_HandleExCmdLook(player);
-
-  if (raven) return Raven_P_MovePlayer(player);
 
   cmd = &player->cmd;
   mo = player->mo;
@@ -452,25 +450,7 @@ void P_DeathThink (player_t* player)
     player->deltaviewheight = 0;
     if (onground)
     {
-      if (raven && !dsda_FreeAim())
-      {
-        if (player->lookdir < 60)
-        {
-          int lookDelta;
-
-          lookDelta = (60 - player->lookdir) / 8;
-          if (lookDelta < 1 && (leveltime & 1))
-          {
-              lookDelta = 1;
-          }
-          else if (lookDelta > 6)
-          {
-              lookDelta = 6;
-          }
-          player->lookdir += lookDelta;
-        }
-      }
-      else if ((int)player->mo->pitch > -(int)ANG1*19)
+if ((int)player->mo->pitch > -(int)ANG1*19)
       {
         player->mo->pitch -= ((int)ANG1*19 - player->mo->pitch) / 8;
       }
@@ -835,11 +815,6 @@ void P_PlayerThink (player_t* player)
     }
   }
 
-  if (raven && cmd->buttons & BT_SPECIAL)
-  {
-    cmd->buttons = 0;
-  }
-
   // Check for weapon change.
   if (cmd->buttons & BT_CHANGE && !player->morphTics)
   {
@@ -1056,66 +1031,10 @@ void P_PlayerThink (player_t* player)
 
   // Handling colormaps.
   // killough 3/20/98: reformat to terse C syntax
-  if (!raven)
     player->fixedcolormap = dsda_PowerPalette() &&
       (player->powers[pw_invulnerability] > 4*32 ||
       player->powers[pw_invulnerability] & 8) ? INVERSECOLORMAP :
       player->powers[pw_infrared] > 4*32 || player->powers[pw_infrared] & 8;
-  else
-  {
-    if (!hexen && player->powers[pw_invulnerability])
-    {
-      if (player->powers[pw_invulnerability] > BLINKTHRESHOLD
-          || (player->powers[pw_invulnerability] & 8))
-      {
-        player->fixedcolormap = INVERSECOLORMAP;
-      }
-      else
-      {
-        player->fixedcolormap = 0;
-      }
-    }
-    else if (player->powers[pw_infrared])
-    {
-      if (player->powers[pw_infrared] <= BLINKTHRESHOLD)
-      {
-        if (player->powers[pw_infrared] & 8)
-        {
-          player->fixedcolormap = 0;
-        }
-        else
-        {
-          player->fixedcolormap = 1;
-        }
-      }
-      else if (!(leveltime & 16) && player == &players[consoleplayer])
-      {
-        if (newtorch)
-        {
-          if (player->fixedcolormap + newtorchdelta > 7
-              || player->fixedcolormap + newtorchdelta < 1
-              || newtorch == player->fixedcolormap)
-          {
-            newtorch = 0;
-          }
-          else
-          {
-            player->fixedcolormap += newtorchdelta;
-          }
-        }
-        else
-        {
-          newtorch = (M_Random() & 7) + 1;
-          newtorchdelta = (newtorch == player->fixedcolormap) ?
-              0 : ((newtorch > player->fixedcolormap) ? 1 : -1);
-        }
-      }
-    }
-    else
-    {
-      player->fixedcolormap = 0;
-    }
-  }
 }
 
 // heretic

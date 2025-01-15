@@ -161,10 +161,8 @@ static void dsda_MigrateMobjInfo(void) {
         mobjinfo[i].flags2 |= MF2_PCROSS | MF2_IMPACT;
     }
 
-    if (!raven) {
       mobjinfo[MT_SKULL].flags2 |= MF2_MCROSS | MF2_PUSHWALL | MF2_CANUSEWALLS;
       mobjinfo[MT_PLAYER].flags2 |= MF2_WINDTHRUST | MF2_PUSHWALL | MF2_CANUSEWALLS;
-    }
   }
   else if (!map_format.zdoom && migrated)
   {
@@ -178,10 +176,8 @@ static void dsda_MigrateMobjInfo(void) {
         mobjinfo[i].flags2 &= ~(MF2_PCROSS | MF2_IMPACT);
     }
 
-    if (!raven) {
       mobjinfo[MT_SKULL].flags2 &= ~(MF2_MCROSS | MF2_PUSHWALL | MF2_CANUSEWALLS);
       mobjinfo[MT_PLAYER].flags2 &= ~(MF2_WINDTHRUST | MF2_PUSHWALL | MF2_CANUSEWALLS);
-    }
   }
 }
 

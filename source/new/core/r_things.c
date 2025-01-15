@@ -1132,10 +1132,6 @@ static void R_DrawPSprite (pspdef_t *psp)
   vis->texturemid = (BASEYCENTER<<FRACBITS) /* +  FRACUNIT/2 */ -
                     (psp_sy-topoffset);
 
-  if (R_FullView() && raven)
-  {
-    vis->texturemid -= PSpriteSY[viewplayer->pclass][players[consoleplayer].readyweapon];
-  }
 
   // Move the weapon down for 1280x1024.
   vis->texturemid -= psprite_offset;

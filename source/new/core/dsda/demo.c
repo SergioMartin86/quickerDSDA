@@ -186,7 +186,6 @@ int dsda_BytesPerTic(void) {
 
 void dsda_EvaluateBytesPerTic(void) {
   bytes_per_tic = (longtics ? 5 : 4);
-  if (raven) bytes_per_tic += 2;
   if (dsda_ExCmdDemo()) bytes_per_tic++;
 }
 
