@@ -603,11 +603,11 @@ static void P_XYMovement (mobj_t* mo)
       }
       else
       {
-        if ((unsigned)(player->mo->state - states - pclass[player->pclass].run_state) < 4)
+        if ((unsigned)(player->mo->state - states - pclass.run_state) < 4)
         {
           if (raven || player->mo == mo || compatibility_level >= lxdoom_1_compatibility)
           {
-            P_SetMobjState(player->mo, pclass[player->pclass].normal_state);
+            P_SetMobjState(player->mo, pclass.normal_state);
           }
         }
       }

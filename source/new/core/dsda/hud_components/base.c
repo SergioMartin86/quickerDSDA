@@ -89,11 +89,7 @@ void dsda_InitPatchHC(dsda_patch_component_t* component, int x_offset, int y_off
 }
 
 int dsda_HexenArmor(player_t* player) {
-  return (pclass[player->pclass].auto_armor_save
-          + player->armorpoints[ARMOR_ARMOR]
-          + player->armorpoints[ARMOR_SHIELD]
-          + player->armorpoints[ARMOR_HELMET]
-          + player->armorpoints[ARMOR_AMULET]) >> FRACBITS;
+  return 0;
 }
 
 static void dsda_DrawBigDigit(int x, int y, int cm, int vpt, int digit) {

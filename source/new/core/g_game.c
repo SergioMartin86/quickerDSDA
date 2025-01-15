@@ -343,7 +343,7 @@ void G_SetSpeed(dboolean reset)
   dsda_pclass_t *player_class;
   static dsda_pclass_t *last_player_class = NULL;
 
-  player_class = &pclass[players[consoleplayer].pclass];
+  player_class = &pclass;
 
   if (last_player_class == player_class && !reset)
     return;
@@ -511,7 +511,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   int newweapon;                                          // phares
   dboolean strict_input;
 
-  dsda_pclass_t *player_class = &pclass[players[consoleplayer].pclass];
+  dsda_pclass_t *player_class = &pclass;
 
   strict_input = dsda_StrictMode();
 

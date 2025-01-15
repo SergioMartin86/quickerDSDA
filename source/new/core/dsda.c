@@ -409,7 +409,7 @@ void dsda_WatchCommand(void) {
     if (!playeringame[i]) continue;
 
     cmd = &players[i].cmd;
-    player_class = &pclass[players[i].pclass];
+    player_class = &pclass;
 
     if (cmd->buttons & BT_USE && dsda_time_use)
       dsda_AddSplit(DSDA_SPLIT_USE, dsda_time_use);

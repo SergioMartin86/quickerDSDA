@@ -1502,9 +1502,9 @@ void Raven_P_MovePlayer(player_t * player)
         }
         else
         {
-            if (player->mo->state == &states[pclass[player->pclass].normal_state])
+            if (player->mo->state == &states[pclass.normal_state])
             {
-                P_SetMobjState(player->mo, pclass[player->pclass].run_state);
+                P_SetMobjState(player->mo, pclass.run_state);
             }
         }
     }

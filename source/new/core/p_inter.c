@@ -1532,47 +1532,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     )
       return;
 
-    if (hexen)
-    {
-      int i;
-      int saved;
-      fixed_t savedPercent = pclass[player->pclass].auto_armor_save
-                             + player->armorpoints[ARMOR_ARMOR]
-                             + player->armorpoints[ARMOR_SHIELD]
-                             + player->armorpoints[ARMOR_HELMET]
-                             + player->armorpoints[ARMOR_AMULET];
-      if (savedPercent)
-      {                       // armor absorbed some damage
-        if (savedPercent > 100 * FRACUNIT)
-        {
-          savedPercent = 100 * FRACUNIT;
-        }
-        for (i = 0; i < NUMARMOR; i++)
-        {
-          if (player->armorpoints[i])
-          {
-            player->armorpoints[i] -= FixedDiv(
-              FixedMul(damage << FRACBITS, pclass[player->pclass].armor_increment[i]),
-              300 * FRACUNIT
-            );
-            if (player->armorpoints[i] < 2 * FRACUNIT)
-            {
-              player->armorpoints[i] = 0;
-            }
-          }
-        }
-        saved = FixedDiv(
-          FixedMul(damage << FRACBITS, savedPercent),
-          100 * FRACUNIT
-        );
-        if (saved > savedPercent * 2)
-        {
-          saved = savedPercent * 2;
-        }
-        damage -= saved >> FRACBITS;
-      }
-    }
-    else
     {
       if (player->armortype)
       {
@@ -2772,38 +2731,6 @@ dboolean P_GiveMana(player_t * player, manatype_t mana, int count)
 
 dboolean Hexen_P_GiveArmor(player_t * player, armortype_t armortype, int amount)
 {
-    int hits;
-    int totalArmor;
-
-    if (amount == -1)
-    {
-        hits = pclass[player->pclass].armor_increment[armortype];
-        if (player->armorpoints[armortype] >= hits)
-        {
-            return false;
-        }
-        else
-        {
-            player->armorpoints[armortype] = hits;
-        }
-    }
-    else
-    {
-        hits = amount * 5 * FRACUNIT;
-        totalArmor = player->armorpoints[ARMOR_ARMOR]
-            + player->armorpoints[ARMOR_SHIELD]
-            + player->armorpoints[ARMOR_HELMET]
-            + player->armorpoints[ARMOR_AMULET]
-            + pclass[player->pclass].auto_armor_save;
-        if (totalArmor < pclass[player->pclass].armor_max)
-        {
-            player->armorpoints[armortype] += hits;
-        }
-        else
-        {
-            return false;
-        }
-    }
     return true;
 }
 

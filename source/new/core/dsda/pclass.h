@@ -22,7 +22,7 @@
 #include "doomdef.h"
 
 typedef struct dsda_pclass_s {
-  int armor_increment[NUMARMOR];
+  int armor_increment;
   int auto_armor_save;
   int armor_max;
 
@@ -38,6 +38,6 @@ typedef struct dsda_pclass_s {
   int attack_end_state;
 } dsda_pclass_t;
 
-extern dsda_pclass_t pclass[NUMCLASSES];
+extern dsda_pclass_t pclass;
 
 #endif

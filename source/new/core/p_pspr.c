@@ -177,10 +177,6 @@ static void P_BringUpWeapon(player_t *player)
     {
       newstate = HEXEN_S_FAXEUP_G;
     }
-    else
-    {
-      newstate = hexen_weaponinfo[player->pendingweapon][player->pclass].upstate;
-    }
   }
   else if (player->powers[pw_weaponlevel2])
   {
@@ -478,7 +474,7 @@ static void P_FireWeapon(player_t *player)
 
   dsda_WatchWeaponFire(player->readyweapon);
 
-  P_SetMobjState(player->mo, pclass[player->pclass].fire_weapon_state);
+  P_SetMobjState(player->mo, pclass.fire_weapon_state);
 
   if (heretic)
   {
@@ -488,20 +484,6 @@ static void P_FireWeapon(player_t *player)
                                              : &weaponinfo[0];
     newstate = player->refire ? wpinfo[player->readyweapon].holdatkstate
                               : wpinfo[player->readyweapon].atkstate;
-  }
-  else if (hexen)
-  {
-    if (player->pclass == PCLASS_FIGHTER && player->readyweapon == wp_second
-        && player->ammo[MANA_1] > 0)
-    {                           // Glowing axe
-      newstate = HEXEN_S_FAXEATK_G1;
-    }
-    else
-    {
-      newstate = player->refire ?
-        hexen_weaponinfo[player->readyweapon][player->pclass].holdatkstate
-        : hexen_weaponinfo[player->readyweapon][player->pclass].atkstate;
-    }
   }
   else
   {
@@ -534,10 +516,6 @@ void P_DropWeapon(player_t *player)
   {
     newstate = wpnlev2info[player->readyweapon].downstate;
   }
-  else if (player->pclass)
-  {
-    newstate = hexen_weaponinfo[player->readyweapon][player->pclass].downstate;
-  }
   else
   {
     newstate = weaponinfo[player->readyweapon].downstate;
@@ -564,9 +542,9 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
   }
 
   // get out of attack state
-  if (player->mo->state >= &states[pclass[player->pclass].attack_state]
-      && player->mo->state <= &states[pclass[player->pclass].attack_end_state])
-    P_SetMobjState(player->mo, pclass[player->pclass].normal_state);
+  if (player->mo->state >= &states[pclass.attack_state]
+      && player->mo->state <= &states[pclass.attack_end_state])
+    P_SetMobjState(player->mo, pclass.normal_state);
 
   if (heretic)
   {
@@ -594,8 +572,6 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
     statenum_t newstate;
     if (player->powers[pw_weaponlevel2])
       newstate = wpnlev2info[player->readyweapon].downstate;
-    else if (player->pclass)
-      newstate = hexen_weaponinfo[player->readyweapon][player->pclass].downstate;
     else
       newstate = weaponinfo[player->readyweapon].downstate;
     P_SetPsprite(player, ps_weapon, newstate);
@@ -749,10 +725,6 @@ void A_Raise(player_t *player, pspdef_t *psp)
         && player->ammo[MANA_1])
     {
       newstate = HEXEN_S_FAXEREADY_G;
-    }
-    else
-    {
-      newstate = hexen_weaponinfo[player->readyweapon][player->pclass].readystate;
     }
   }
   else
@@ -2605,56 +2577,10 @@ void P_PostMorphWeapon(player_t * player, weapontype_t weapon)
     player->pendingweapon = wp_nochange;
     player->readyweapon = weapon;
     player->psprites[ps_weapon].sy = WEAPONBOTTOM;
-    P_SetPsprite(player, ps_weapon,
-                 hexen_weaponinfo[weapon][player->pclass].upstate);
 }
 
 static dboolean P_CheckMana(player_t * player)
 {
-    manatype_t mana;
-    int count;
-
-    mana = hexen_weaponinfo[player->readyweapon][player->pclass].ammo;
-    count = WeaponManaUse[player->pclass][player->readyweapon];
-    if (mana == MANA_BOTH)
-    {
-        if (player->ammo[MANA_1] >= count && player->ammo[MANA_2] >= count)
-        {
-            return true;
-        }
-    }
-    else if (mana == MANA_NONE || player->ammo[mana] >= count)
-    {
-        return (true);
-    }
-
-    // out of mana, pick a weapon to change to
-    if (player->weaponowned[wp_third]
-        && player->ammo[MANA_2] >= WeaponManaUse[player->pclass][wp_third])
-    {
-        player->pendingweapon = wp_third;
-    }
-    else if (player->weaponowned[wp_second]
-             && player->ammo[MANA_1] >=
-             WeaponManaUse[player->pclass][wp_second])
-    {
-        player->pendingweapon = wp_second;
-    }
-    else if (player->weaponowned[wp_fourth]
-             && player->ammo[MANA_1] >=
-             WeaponManaUse[player->pclass][wp_fourth]
-             && player->ammo[MANA_2] >=
-             WeaponManaUse[player->pclass][wp_fourth])
-    {
-        player->pendingweapon = wp_fourth;
-    }
-    else
-    {
-        player->pendingweapon = wp_first;
-    }
-
-    P_SetPsprite(player, ps_weapon,
-                 hexen_weaponinfo[player->readyweapon][player->pclass].downstate);
     return (false);
 }
 
@@ -2703,103 +2629,17 @@ void A_SnoutAttack(player_t * player, pspdef_t * psp)
     }
 }
 
-#define HAMMER_RANGE (MELEERANGE+MELEERANGE/2)
 
 void A_FHammerAttack(player_t * player, pspdef_t * psp)
 {
-    angle_t angle;
-    mobj_t *pmo = player->mo;
-    int damage;
-    fixed_t power;
-    int slope;
-    int i;
-
-    damage = 60 + (P_Random(pr_hexen) & 63);
-    power = 10 * FRACUNIT;
-    PuffType = HEXEN_MT_HAMMERPUFF;
-    for (i = 0; i < 16; i++)
-    {
-        angle = pmo->angle + i * (ANG45 / 32);
-        slope = P_AimLineAttack(pmo, angle, HAMMER_RANGE, 0);
-        if (linetarget)
-        {
-            P_LineAttack(pmo, angle, HAMMER_RANGE, slope, damage);
-            AdjustPlayerAngle(pmo);
-            if (linetarget->flags & MF_COUNTKILL || linetarget->player)
-            {
-                P_ThrustMobj(linetarget, angle, power);
-            }
-            pmo->special1.i = false;      // Don't throw a hammer
-            goto hammerdone;
-        }
-        angle = pmo->angle - i * (ANG45 / 32);
-        slope = P_AimLineAttack(pmo, angle, HAMMER_RANGE, 0);
-        if (linetarget)
-        {
-            P_LineAttack(pmo, angle, HAMMER_RANGE, slope, damage);
-            AdjustPlayerAngle(pmo);
-            if (linetarget->flags & MF_COUNTKILL || linetarget->player)
-            {
-                P_ThrustMobj(linetarget, angle, power);
-            }
-            pmo->special1.i = false;      // Don't throw a hammer
-            goto hammerdone;
-        }
-    }
-    // didn't find any targets in meleerange, so set to throw out a hammer
-    PuffSpawned = NULL;
-    angle = pmo->angle;
-    slope = P_AimLineAttack(pmo, angle, HAMMER_RANGE, 0);
-    P_LineAttack(pmo, angle, HAMMER_RANGE, slope, damage);
-    if (PuffSpawned)
-    {
-        pmo->special1.i = false;
-    }
-    else
-    {
-        pmo->special1.i = true;
-    }
-  hammerdone:
-    if (player->ammo[MANA_2] < WeaponManaUse[player->pclass][player->readyweapon])
-    {                           // Don't spawn a hammer if the player doesn't have enough mana
-        pmo->special1.i = false;
-    }
-    return;
 }
 
 void A_FHammerThrow(player_t * player, pspdef_t * psp)
 {
-    mobj_t *mo;
-
-    if (!player->mo->special1.i)
-    {
-        return;
-    }
-    player->ammo[MANA_2] -= WeaponManaUse[player->pclass][player->readyweapon];
-    mo = P_SpawnPlayerMissile(player->mo, HEXEN_MT_HAMMER_MISSILE);
-    if (mo)
-    {
-        mo->special1.i = 0;
-    }
 }
 
 void A_FSwordAttack(player_t * player, pspdef_t * psp)
 {
-    mobj_t *pmo;
-
-    player->ammo[MANA_1] -= WeaponManaUse[player->pclass][player->readyweapon];
-    player->ammo[MANA_2] -= WeaponManaUse[player->pclass][player->readyweapon];
-    pmo = player->mo;
-    P_SPMAngleXYZ(pmo, pmo->x, pmo->y, pmo->z - 10 * FRACUNIT,
-                  HEXEN_MT_FSWORD_MISSILE, pmo->angle + ANG45 / 4);
-    P_SPMAngleXYZ(pmo, pmo->x, pmo->y, pmo->z - 5 * FRACUNIT,
-                  HEXEN_MT_FSWORD_MISSILE, pmo->angle + ANG45 / 8);
-    P_SPMAngleXYZ(pmo, pmo->x, pmo->y, pmo->z, HEXEN_MT_FSWORD_MISSILE, pmo->angle);
-    P_SPMAngleXYZ(pmo, pmo->x, pmo->y, pmo->z + 5 * FRACUNIT,
-                  HEXEN_MT_FSWORD_MISSILE, pmo->angle - ANG45 / 8);
-    P_SPMAngleXYZ(pmo, pmo->x, pmo->y, pmo->z + 10 * FRACUNIT,
-                  HEXEN_MT_FSWORD_MISSILE, pmo->angle - ANG45 / 4);
-    S_StartMobjSound(pmo, hexen_sfx_fighter_sword_fire);
 }
 
 void A_FSwordAttack2(mobj_t * actor)
@@ -2981,8 +2821,6 @@ void A_MLightningAttack2(mobj_t * actor)
 
 void A_MLightningAttack(player_t * player, pspdef_t * psp)
 {
-    A_MLightningAttack2(player->mo);
-    player->ammo[MANA_2] -= WeaponManaUse[player->pclass][player->readyweapon];
 }
 
 void A_ZapMimic(mobj_t * actor)
@@ -3043,25 +2881,6 @@ void MStaffSpawn(mobj_t * pmo, angle_t angle)
 
 void A_MStaffAttack(player_t * player, pspdef_t * psp)
 {
-    angle_t angle;
-    mobj_t *pmo;
-
-    player->ammo[MANA_1] -= WeaponManaUse[player->pclass][player->readyweapon];
-    player->ammo[MANA_2] -= WeaponManaUse[player->pclass][player->readyweapon];
-    pmo = player->mo;
-    angle = pmo->angle;
-
-    MStaffSpawn(pmo, angle);
-    MStaffSpawn(pmo, angle - ANG1 * 5);
-    MStaffSpawn(pmo, angle + ANG1 * 5);
-    S_StartMobjSound(player->mo, hexen_sfx_mage_staff_fire);
-    if (player == &players[consoleplayer])
-    {
-        player->damagecount = 0;
-        player->bonuscount = 0;
-        V_SetPalette(STARTSCOURGEPAL);
-        SB_Start();
-    }
 }
 
 void A_MStaffPalette(player_t * player, pspdef_t * psp)
@@ -3212,76 +3031,6 @@ void A_FPunchAttack(player_t * player, pspdef_t * psp)
 
 void A_FAxeAttack(player_t * player, pspdef_t * psp)
 {
-    angle_t angle;
-    mobj_t *pmo = player->mo;
-    fixed_t power;
-    int damage;
-    int slope;
-    int i;
-    int useMana;
-    int r;
-
-    r = P_Random(pr_hexen);
-    damage = 40 + (r & 15) + (P_Random(pr_hexen) & 7);
-    power = 0;
-    if (player->ammo[MANA_1] > 0)
-    {
-        damage <<= 1;
-        power = 6 * FRACUNIT;
-        PuffType = HEXEN_MT_AXEPUFF_GLOW;
-        useMana = 1;
-    }
-    else
-    {
-        PuffType = HEXEN_MT_AXEPUFF;
-        useMana = 0;
-    }
-    for (i = 0; i < 16; i++)
-    {
-        angle = pmo->angle + i * (ANG45 / 16);
-        slope = P_AimLineAttack(pmo, angle, AXERANGE, 0);
-        if (linetarget)
-        {
-            P_LineAttack(pmo, angle, AXERANGE, slope, damage);
-            if (linetarget->flags & MF_COUNTKILL || linetarget->player)
-            {
-                P_ThrustMobj(linetarget, angle, power);
-            }
-            AdjustPlayerAngle(pmo);
-            useMana++;
-            goto axedone;
-        }
-        angle = pmo->angle - i * (ANG45 / 16);
-        slope = P_AimLineAttack(pmo, angle, AXERANGE, 0);
-        if (linetarget)
-        {
-            P_LineAttack(pmo, angle, AXERANGE, slope, damage);
-            if (linetarget->flags & MF_COUNTKILL)
-            {
-                P_ThrustMobj(linetarget, angle, power);
-            }
-            AdjustPlayerAngle(pmo);
-            useMana++;
-            goto axedone;
-        }
-    }
-    // didn't find any creatures, so try to strike any walls
-    pmo->special1.i = 0;
-
-    angle = pmo->angle;
-    slope = P_AimLineAttack(pmo, angle, MELEERANGE, 0);
-    P_LineAttack(pmo, angle, MELEERANGE, slope, damage);
-
-  axedone:
-    if (useMana == 2)
-    {
-        player->ammo[MANA_1] -=
-            WeaponManaUse[player->pclass][player->readyweapon];
-        if (player->ammo[MANA_1] <= 0)
-        {
-            P_SetPsprite(player, ps_weapon, HEXEN_S_FAXEATK_5);
-        }
-    }
     return;
 }
 
@@ -3327,77 +3076,10 @@ void A_CMaceAttack(player_t * player, pspdef_t * psp)
 
 void A_CStaffCheck(player_t * player, pspdef_t * psp)
 {
-    mobj_t *pmo;
-    int damage;
-    int newLife;
-    angle_t angle;
-    int slope;
-    int i;
-
-    pmo = player->mo;
-    damage = 20 + (P_Random(pr_hexen) & 15);
-    PuffType = HEXEN_MT_CSTAFFPUFF;
-    for (i = 0; i < 3; i++)
-    {
-        angle = pmo->angle + i * (ANG45 / 16);
-        slope = P_AimLineAttack(pmo, angle, 1.5 * MELEERANGE, 0);
-        if (linetarget)
-        {
-            P_LineAttack(pmo, angle, 1.5 * MELEERANGE, slope, damage);
-            pmo->angle = R_PointToAngle2(pmo->x, pmo->y,
-                                         linetarget->x, linetarget->y);
-            if ((linetarget->player || linetarget->flags & MF_COUNTKILL)
-                && (!(linetarget->flags2 & (MF2_DORMANT + MF2_INVULNERABLE))))
-            {
-                newLife = player->health + (damage >> 3);
-                newLife = newLife > 100 ? 100 : newLife;
-                pmo->health = player->health = newLife;
-                P_SetPsprite(player, ps_weapon, HEXEN_S_CSTAFFATK2_1);
-            }
-            player->ammo[MANA_1] -=
-                WeaponManaUse[player->pclass][player->readyweapon];
-            break;
-        }
-        angle = pmo->angle - i * (ANG45 / 16);
-        slope = P_AimLineAttack(player->mo, angle, 1.5 * MELEERANGE, 0);
-        if (linetarget)
-        {
-            P_LineAttack(pmo, angle, 1.5 * MELEERANGE, slope, damage);
-            pmo->angle = R_PointToAngle2(pmo->x, pmo->y,
-                                         linetarget->x, linetarget->y);
-            if (linetarget->player || linetarget->flags & MF_COUNTKILL)
-            {
-                newLife = player->health + (damage >> 4);
-                newLife = newLife > 100 ? 100 : newLife;
-                pmo->health = player->health = newLife;
-                P_SetPsprite(player, ps_weapon, HEXEN_S_CSTAFFATK2_1);
-            }
-            player->ammo[MANA_1] -=
-                WeaponManaUse[player->pclass][player->readyweapon];
-            break;
-        }
-    }
-    R_SmoothPlaying_Reset(player); // e6y
 }
 
 void A_CStaffAttack(player_t * player, pspdef_t * psp)
 {
-    mobj_t *mo;
-    mobj_t *pmo;
-
-    player->ammo[MANA_1] -= WeaponManaUse[player->pclass][player->readyweapon];
-    pmo = player->mo;
-    mo = P_SPMAngle(pmo, HEXEN_MT_CSTAFF_MISSILE, pmo->angle - (ANG45 / 15));
-    if (mo)
-    {
-        mo->special2.i = 32;
-    }
-    mo = P_SPMAngle(pmo, HEXEN_MT_CSTAFF_MISSILE, pmo->angle + (ANG45 / 15));
-    if (mo)
-    {
-        mo->special2.i = 0;
-    }
-    S_StartMobjSound(player->mo, hexen_sfx_cleric_cstaff_fire);
 }
 
 void A_CStaffMissileSlither(mobj_t * actor)
@@ -3436,17 +3118,6 @@ void A_CStaffCheckBlink(player_t * player, pspdef_t * psp)
 
 void A_CFlameAttack(player_t * player, pspdef_t * psp)
 {
-    mobj_t *mo;
-
-    mo = P_SpawnPlayerMissile(player->mo, HEXEN_MT_CFLAME_MISSILE);
-    if (mo)
-    {
-        mo->thinker.function = P_BlasterMobjThinker;
-        mo->special1.i = 2;
-    }
-
-    player->ammo[MANA_2] -= WeaponManaUse[player->pclass][player->readyweapon];
-    S_StartMobjSound(player->mo, hexen_sfx_cleric_flame_fire);
 }
 
 void A_CFlamePuff(mobj_t * actor)
@@ -3583,17 +3254,6 @@ void A_CHolyAttack2(mobj_t * actor)
 
 void A_CHolyAttack(player_t * player, pspdef_t * psp)
 {
-    player->ammo[MANA_1] -= WeaponManaUse[player->pclass][player->readyweapon];
-    player->ammo[MANA_2] -= WeaponManaUse[player->pclass][player->readyweapon];
-    P_SpawnPlayerMissile(player->mo, HEXEN_MT_HOLY_MISSILE);
-    if (player == &players[consoleplayer])
-    {
-        player->damagecount = 0;
-        player->bonuscount = 0;
-        V_SetPalette(STARTHOLYPAL);
-        SB_Start();
-    }
-    S_StartMobjSound(player->mo, hexen_sfx_choly_fire);
 }
 
 void A_CHolyPalette(player_t * player, pspdef_t * psp)
@@ -3856,44 +3516,6 @@ void A_CHolySpawnPuff(mobj_t * actor)
 
 void A_FireConePL1(player_t * player, pspdef_t * psp)
 {
-    angle_t angle;
-    int damage;
-    int i;
-    mobj_t *pmo, *mo;
-    int conedone = false;
-
-    pmo = player->mo;
-    player->ammo[MANA_1] -= WeaponManaUse[player->pclass][player->readyweapon];
-    S_StartMobjSound(pmo, hexen_sfx_mage_shards_fire);
-
-    damage = 90 + (P_Random(pr_hexen) & 15);
-    for (i = 0; i < 16; i++)
-    {
-        angle = pmo->angle + i * (ANG45 / 16);
-        P_AimLineAttack(pmo, angle, MELEERANGE, 0);
-        if (linetarget)
-        {
-            pmo->flags2 |= MF2_ICEDAMAGE;
-            P_DamageMobj(linetarget, pmo, pmo, damage);
-            pmo->flags2 &= ~MF2_ICEDAMAGE;
-            conedone = true;
-            break;
-        }
-    }
-
-    // didn't find any creatures, so fire projectiles
-    if (!conedone)
-    {
-        mo = P_SpawnPlayerMissile(pmo, HEXEN_MT_SHARDFX1);
-        if (mo)
-        {
-            mo->special1.i = SHARDSPAWN_LEFT | SHARDSPAWN_DOWN | SHARDSPAWN_UP
-                | SHARDSPAWN_RIGHT;
-            mo->special2.i = 3;   // Set sperm count (levels of reproductivity)
-            P_SetTarget(&mo->target, pmo);
-            mo->special_args[0] = 3;    // Mark Initial shard as super damage
-        }
-    }
 }
 
 void A_ShedShard(mobj_t * actor)

@@ -377,22 +377,6 @@ static void cheat_fa()
 {
   int i;
 
-  if (hexen)
-  {
-    for (i = 0; i < NUMARMOR; i++)
-    {
-        plyr->armorpoints[i] = pclass[plyr->pclass].armor_increment[i];
-    }
-    for (i = 0; i < HEXEN_NUMWEAPONS; i++)
-    {
-        plyr->weaponowned[i] = true;
-    }
-    for (i = 0; i < NUMMANA; i++)
-    {
-        plyr->ammo[i] = MAX_MANA;
-    }
-  }
-  else
   {
     if (!plyr->backpack)
     {

@@ -50,12 +50,12 @@ static build_cmd_queue_t cmd_queue;
 
 static signed char forward50(void) {
   return dsda_Flag(dsda_arg_stroller) ?
-         pclass[players[consoleplayer].pclass].forwardmove[0] :
-         pclass[players[consoleplayer].pclass].forwardmove[1];
+         pclass.forwardmove[0] :
+         pclass.forwardmove[1];
 }
 
 static signed char strafe40(void) {
-  return pclass[players[consoleplayer].pclass].sidemove[1];
+  return pclass.sidemove[1];
 }
 
 static signed char strafe50(void) {

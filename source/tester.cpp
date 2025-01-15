@@ -151,6 +151,8 @@ int main(int argc, char *argv[])
   printf("[] Emulation Core:                         '%s'\n", emulationCoreName.c_str());
   printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
   printf("[] Sequence Length:                        %lu\n", sequenceLength);
+
+  if (cycleType == "Rerecord")
   printf("[] State Size:                             %lu bytes\n", stateSize);
   
   // If warmup is enabled, run it now. This helps in reducing variation in performance results due to CPU throttling
@@ -223,6 +225,8 @@ int main(int argc, char *argv[])
   printf("[] Elapsed time:                           %3.3fs\n", (double)dt * 1.0e-9);
   printf("[] Performance:                            %.3f inputs / s\n", (double)sequenceLength / elapsedTimeSeconds);
   printf("[] Final State Hash:                       %s\n", hashStringBuffer);
+
+  if (cycleType == "Rerecord")
   printf("[] Effective Save State Size:              %lu bytes\n", e.getEffectiveSaveStateSize());
 
   // Checking expected consitions

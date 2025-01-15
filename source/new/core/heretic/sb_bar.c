@@ -1211,53 +1211,6 @@ static void DrawAnimatedIcons(void)
 
 void DrawKeyBar(void)
 {
-    int i;
-    int xPosition;
-    int temp;
-
-    if (oldkeys != playerkeys)
-    {
-        xPosition = 46;
-        for (i = 0; i < NUMCARDS && xPosition <= 126; i++)
-        {
-            if (playerkeys & (1 << i))
-            {
-                V_DrawNumPatch(xPosition, 164, 0,
-                               W_GetNumForName("keyslot1") + i, CR_DEFAULT, VPT_STRETCH);
-                xPosition += 20;
-            }
-        }
-        oldkeys = playerkeys;
-    }
-    temp = pclass[CPlayer->pclass].auto_armor_save +
-        CPlayer->armorpoints[ARMOR_ARMOR] +
-        CPlayer->armorpoints[ARMOR_SHIELD] +
-        CPlayer->armorpoints[ARMOR_HELMET] +
-        CPlayer->armorpoints[ARMOR_AMULET];
-    if (oldarmor != temp)
-    {
-        for (i = 0; i < NUMARMOR; i++)
-        {
-            if (!CPlayer->armorpoints[i])
-            {
-                continue;
-            }
-            if (CPlayer->armorpoints[i] <= (pclass[CPlayer->pclass].armor_increment[i] >> 2))
-            {
-                V_DrawTLNumPatch(150 + 31 * i, 164, W_GetNumForName("armslot1") + i);
-            }
-            else if (CPlayer->armorpoints[i] <= (pclass[CPlayer->pclass].armor_increment[i] >> 1))
-            {
-                V_DrawAltTLNumPatch(150 + 31 * i, 164, W_GetNumForName("armslot1") + i);
-            }
-            else
-            {
-                V_DrawNumPatch(150 + 31 * i, 164, 0,
-                               W_GetNumForName("armslot1") + i, CR_DEFAULT, VPT_STRETCH);
-            }
-        }
-        oldarmor = temp;
-    }
 }
 
 static int PieceX[NUMCLASSES][3] = {
@@ -1453,23 +1406,5 @@ static void Hexen_DrawMainBar(void)
         V_FillRectVPT(0, 103, 165, 3, 22 - (22 * CPlayer->ammo[1]) / MAX_MANA, 0, VPT_STRETCH);
 
         oldweapon = CPlayer->readyweapon;
-    }
-    // Armor
-    temp = pclass[CPlayer->pclass].auto_armor_save +
-        CPlayer->armorpoints[ARMOR_ARMOR] +
-        CPlayer->armorpoints[ARMOR_SHIELD] +
-        CPlayer->armorpoints[ARMOR_HELMET] +
-        CPlayer->armorpoints[ARMOR_AMULET];
-    if (oldarmor != temp)
-    {
-        oldarmor = temp;
-        V_DrawNumPatch(255, 178, 0, LumpARMCLEAR, CR_DEFAULT, VPT_STRETCH);
-        DrINumber(FixedDiv(temp, 5 * FRACUNIT) >> FRACBITS, 250, 176);
-    }
-    // Weapon Pieces
-    if (oldpieces != CPlayer->pieces)
-    {
-        DrawWeaponPieces();
-        oldpieces = CPlayer->pieces;
     }
 }
