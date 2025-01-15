@@ -137,8 +137,6 @@ static void dsda_MigrateMobjInfo(void) {
   int i;
   static dboolean migrated = false;
 
-  if (hexen) return;
-
   if (map_format.zdoom && !migrated)
   {
     migrated = true;

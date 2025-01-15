@@ -211,8 +211,6 @@ void SB_Init(void)
     int i;
     int startLump;
 
-    if (hexen) return Hexen_SB_Init();
-
     lumparti = heretic_lumparti;
     sb_ticker_delta_cap = 8;
     sb_icon_y = 17;
@@ -353,8 +351,6 @@ static void DrINumber(signed int val, int x, int y)
     int lump;
     int oldval;
 
-    if (hexen) return Hexen_DrINumber(val, x, y);
-
     oldval = val;
     if (val < 0)
     {
@@ -435,8 +431,6 @@ static void DrBNumber(signed int val, int x, int y)
 static void DrSmallNumberVPT(int val, int x, int y, int vpt)
 {
     int lump;
-
-    if (hexen) return Hexen_DrSmallNumberVPT(val, x, y, vpt);
 
     if (val == 1)
     {
@@ -885,17 +879,6 @@ static void DrawAnimatedIcons(void)
         {
             frame = (leveltime / 3) & 15;
             V_DrawNumPatch(60, sb_icon_y, 0, SpinSpeedLump + frame, CR_DEFAULT, VPT_STRETCH);
-        }
-    }
-
-    // Defensive power
-    if (hexen && CPlayer->powers[pw_invulnerability])
-    {
-        if (CPlayer->powers[pw_invulnerability] > BLINKTHRESHOLD
-            || !(CPlayer->powers[pw_invulnerability] & 16))
-        {
-            frame = (leveltime / 3) & 15;
-            V_DrawNumPatch(260, sb_icon_y, 0, SpinDefenseLump + frame, CR_DEFAULT, VPT_STRETCH);
         }
     }
 

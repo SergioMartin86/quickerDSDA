@@ -418,6 +418,8 @@ typedef enum {
 
 #define FOOTCLIPSIZE 10*FRACUNIT
 
+// extern dboolean hexen;
+
 // Any floor type >= FLOOR_LIQUID will floorclip sprites (hexen)
 typedef enum {
   FLOOR_SOLID,
@@ -543,6 +545,5 @@ typedef enum
 #define TXT_ARTIPUZZGEAR       "CLOCK GEAR"
 #define TXT_USEPUZZLEFAILED    "YOU CANNOT USE THIS HERE"
 
-extern dboolean hexen;
 
 #endif          // __DOOMDEF__

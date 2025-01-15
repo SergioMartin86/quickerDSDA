@@ -2338,11 +2338,6 @@ void A_SkullPop(mobj_t *actor)
   mobj_t *mo;
   player_t *player;
 
-  if (hexen && !actor->player)
-  {
-    return;
-  }
-
   actor->flags &= ~MF_SOLID;
   mo = P_SpawnMobj(actor->x, actor->y, actor->z + 48 * FRACUNIT, g_skullpop_mt);
   //mo->target = actor;
@@ -2352,8 +2347,6 @@ void A_SkullPop(mobj_t *actor)
   // Attach player mobj to bloody skull
   player = actor->player;
   actor->player = NULL;
-  if (hexen)
-    actor->special1.i = player->pclass;
   mo->player = player;
   mo->health = actor->health;
   mo->angle = actor->angle;
@@ -4036,11 +4029,6 @@ void P_Massacre(void)
         mo = (mobj_t *) think;
         if ((mo->flags & MF_COUNTKILL) && (mo->health > 0))
         {
-            if (hexen)
-            {
-              mo->flags2 &= ~(MF2_NONSHOOTABLE + MF2_INVULNERABLE);
-              mo->flags |= MF_SHOOTABLE;
-            }
             P_DamageMobj(mo, NULL, NULL, 10000);
         }
     }
@@ -4134,23 +4122,8 @@ void A_MinotaurCharge(mobj_t * actor)
 {
     mobj_t *puff;
 
-    if (hexen && !actor->target)
-      return;
-
-    if (hexen ? actor->special_args[4] > 0 : actor->special1.i)
-    {
-        puff = P_SpawnMobj(actor->x, actor->y, actor->z, g_mntr_charge_puff);
-        puff->momz = 2 * FRACUNIT;
-        if (hexen)
-          actor->special_args[4]--;
-        else
-          actor->special1.i--;
-    }
-    else
-    {
-        actor->flags &= ~MF_SKULLFLY;
-        P_SetMobjState(actor, actor->info->seestate);
-    }
+    actor->flags &= ~MF_SKULLFLY;
+    P_SetMobjState(actor, actor->info->seestate);
 }
 
 void A_MinotaurAtk2(mobj_t * actor)
@@ -4404,9 +4377,6 @@ void A_NoBlocking(mobj_t * actor)
 {
     actor->flags &= ~MF_SOLID;
 
-    if (hexen)
-      return;
-
     // Check for monsters dropping things
     switch (actor->type)
     {
@@ -4652,8 +4622,6 @@ void A_CheckSkullFloor(mobj_t * actor)
     if (actor->z <= actor->floorz)
     {
         P_SetMobjState(actor, g_s_bloodyskullx1);
-        if (hexen)
-          S_StartMobjSound(actor, hexen_sfx_drip);
     }
 }
 

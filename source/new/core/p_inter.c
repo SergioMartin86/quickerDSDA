@@ -395,14 +395,6 @@ dboolean P_GivePower(player_t *player, int power)
   switch (power)
   {
     case pw_invulnerability:
-      if (hexen)
-      {
-        player->mo->flags2 |= MF2_INVULNERABLE;
-        if (player->pclass == PCLASS_MAGE)
-        {
-            player->mo->flags2 |= MF2_REFLECTIVE;
-        }
-      }
       break;
     case pw_invisibility:
       player->mo->flags |= MF_SHADOW;
@@ -423,9 +415,6 @@ dboolean P_GivePower(player_t *player, int power)
       }
       break;
   }
-
-  if (hexen && player->powers[power])
-    return false;
 
   // Unless player has infinite duration cheat, set duration (killough)
 
@@ -793,21 +782,10 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 
   if (map_format.hexen && target->special)
   {
-    if (!hexen || (target->flags & MF_COUNTKILL || target->type == HEXEN_MT_ZBELL))
-    {                           // Initiate monster death actions
-        if (hexen && target->type == HEXEN_MT_SORCBOSS)
-        {
-            byte dummyArgs[3] = {0, 0, 0};
-            P_StartACS(target->special, 0, dummyArgs, target, NULL, 0);
-        }
-        else
-        {
-            map_format.execute_line_special(
-              target->special, target->special_args, NULL, 0,
-              map_info.flags & MI_ACTIVATE_OWN_DEATH_SPECIALS ? target : source
-            );
-        }
-    }
+    map_format.execute_line_special(
+      target->special, target->special_args, NULL, 0,
+      map_info.flags & MI_ACTIVATE_OWN_DEATH_SPECIALS ? target : source
+    );
   }
 
   if (source && source->player)
@@ -952,131 +930,11 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 
   }
 
-  if (hexen)
-  {
-    if (target->flags2 & MF2_FIREDAMAGE)
-    {
-      if (target->type == HEXEN_MT_FIGHTER_BOSS
-          || target->type == HEXEN_MT_CLERIC_BOSS
-          || target->type == HEXEN_MT_MAGE_BOSS)
-      {
-        switch (target->type)
-        {
-          case HEXEN_MT_FIGHTER_BOSS:
-            S_StartMobjSound(target, hexen_sfx_player_fighter_burn_death);
-            P_SetMobjState(target, HEXEN_S_PLAY_F_FDTH1);
-            return;
-          case HEXEN_MT_CLERIC_BOSS:
-            S_StartMobjSound(target, hexen_sfx_player_cleric_burn_death);
-            P_SetMobjState(target, HEXEN_S_PLAY_C_FDTH1);
-            return;
-          case HEXEN_MT_MAGE_BOSS:
-            S_StartMobjSound(target, hexen_sfx_player_mage_burn_death);
-            P_SetMobjState(target, HEXEN_S_PLAY_M_FDTH1);
-            return;
-          default:
-            break;
-        }
-      }
-      else if (target->type == HEXEN_MT_TREEDESTRUCTIBLE)
-      {
-        P_SetMobjState(target, HEXEN_S_ZTREEDES_X1);
-        target->height = 24 * FRACUNIT;
-        S_StartMobjSound(target, hexen_sfx_tree_explode);
-        return;
-      }
-    }
-    if (target->flags2 & MF2_ICEDAMAGE)
-    {
-      target->flags |= MF_ICECORPSE;
-      switch (target->type)
-      {
-        case HEXEN_MT_BISHOP:
-          P_SetMobjState(target, HEXEN_S_BISHOP_ICE);
-          return;
-        case HEXEN_MT_CENTAUR:
-        case HEXEN_MT_CENTAURLEADER:
-          P_SetMobjState(target, HEXEN_S_CENTAUR_ICE);
-          return;
-        case HEXEN_MT_DEMON:
-        case HEXEN_MT_DEMON2:
-          P_SetMobjState(target, HEXEN_S_DEMON_ICE);
-          return;
-        case HEXEN_MT_SERPENT:
-        case HEXEN_MT_SERPENTLEADER:
-          P_SetMobjState(target, HEXEN_S_SERPENT_ICE);
-          return;
-        case HEXEN_MT_WRAITH:
-        case HEXEN_MT_WRAITHB:
-          P_SetMobjState(target, HEXEN_S_WRAITH_ICE);
-          return;
-        case HEXEN_MT_ETTIN:
-          P_SetMobjState(target, HEXEN_S_ETTIN_ICE1);
-          return;
-        case HEXEN_MT_FIREDEMON:
-          P_SetMobjState(target, HEXEN_S_FIRED_ICE1);
-          return;
-        case HEXEN_MT_FIGHTER_BOSS:
-          P_SetMobjState(target, HEXEN_S_FIGHTER_ICE);
-          return;
-        case HEXEN_MT_CLERIC_BOSS:
-          P_SetMobjState(target, HEXEN_S_CLERIC_ICE);
-          return;
-        case HEXEN_MT_MAGE_BOSS:
-          P_SetMobjState(target, HEXEN_S_MAGE_ICE);
-          return;
-        case HEXEN_MT_PIG:
-          P_SetMobjState(target, HEXEN_S_PIG_ICE);
-          return;
-        default:
-          target->flags &= ~MF_ICECORPSE;
-          break;
-      }
-    }
-
-    if (target->type == HEXEN_MT_MINOTAUR)
-    {
-      mobj_t *master = target->special1.m;
-      if (master->health > 0)
-      {
-        if (!ActiveMinotaur(master->player))
-        {
-          master->player->powers[pw_minotaur] = 0;
-        }
-      }
-    }
-    else if (target->type == HEXEN_MT_TREEDESTRUCTIBLE)
-    {
-      target->height = 24 * FRACUNIT;
-    }
-    if (target->health < -(P_MobjSpawnHealth(target) >> 1)
-        && target->info->xdeathstate)
-    {                           // Extreme death
-      P_SetMobjState(target, target->info->xdeathstate);
-    }
-    else
-    {                           // Normal death
-      if ((target->type == HEXEN_MT_FIREDEMON) &&
-          (target->z <= target->floorz + 2 * FRACUNIT) &&
-          (target->info->xdeathstate))
-      {
-        // This is to fix the imps' staying in fall state
-        P_SetMobjState(target, target->info->xdeathstate);
-      }
-      else
-      {
-        P_SetMobjState(target, target->info->deathstate);
-      }
-    }
-  }
-  else
-  {
     xdeath_limit = P_MobjSpawnHealth(target);
     if (target->health < -xdeath_limit && target->info->xdeathstate)
       P_SetMobjState (target, target->info->xdeathstate);
     else
       P_SetMobjState (target, target->info->deathstate);
-  }
 
   target->tics -= P_Random(pr_killtics)&3;
 
@@ -1153,41 +1011,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     return;
   }
 
-  // hexen has a different order of checks
-  if (hexen)
-  {
-    if ((target->flags2 & MF2_INVULNERABLE) && damage < 10000)
-    {                           // mobj is invulnerable
-      if (target->player)
-        return;             // for player, no exceptions
-      if (inflictor)
-      {
-        switch (inflictor->type)
-        {
-              // These inflictors aren't foiled by invulnerability
-          case HEXEN_MT_HOLY_FX:
-          case HEXEN_MT_POISONCLOUD:
-          case HEXEN_MT_FIREBOMB:
-            break;
-          default:
-            return;
-        }
-      }
-      else
-      {
-        return;
-      }
-    }
-    if (target->player)
-    {
-      if (damage < 1000 && ((target->player->cheats & CF_GODMODE)
-                            || target->player->powers[pw_invulnerability]))
-      {
-        return;
-      }
-    }
-  }
-
   if (target->flags & MF_SKULLFLY)
   {
     target->momx = target->momy = target->momz = 0;
@@ -1213,7 +1036,7 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     !(
       source &&
       source->player &&
-      (hexen || weaponinfo[source->player->readyweapon].flags & WPF_NOTHRUST)
+      (weaponinfo[source->player->readyweapon].flags & WPF_NOTHRUST)
     ) &&
     !(inflictor->flags2 & MF2_NODMGTHRUST)
   )
@@ -1269,7 +1092,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     // killough 3/26/98: make god mode 100% god mode in non-compat mode
 
     if (
-      !hexen &&
       (damage < 1000 || (!comp[comp_god] && (player->cheats & CF_GODMODE))) &&
       (player->cheats & CF_GODMODE || player->powers[pw_invulnerability])
     )
@@ -1343,52 +1165,12 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
       P_Random(pr_painchance) < target->info->painchance &&
       !(target->flags & MF_SKULLFLY)) //killough 11/98: see below
   {
-    if (hexen && inflictor && inflictor->type >= HEXEN_MT_LIGHTNING_FLOOR &&
-                              inflictor->type <= HEXEN_MT_LIGHTNING_ZAP)
-    {
-      if (P_Random(pr_hexen) < 96)
-      {
-        target->flags |= MF_JUSTHIT;    // fight back!
-        P_SetMobjState(target, target->info->painstate);
-      }
-      else
-      {                   // "electrocute" the target
-        target->frame |= FF_FULLBRIGHT;
-        if (target->flags & MF_COUNTKILL && P_Random(pr_hexen) < 128
-            && !S_GetSoundPlayingInfo(target, hexen_sfx_puppybeat))
-        {
-          if ((target->type == HEXEN_MT_CENTAUR) ||
-              (target->type == HEXEN_MT_CENTAURLEADER) ||
-              (target->type == HEXEN_MT_ETTIN))
-          {
-            S_StartMobjSound(target, hexen_sfx_puppybeat);
-          }
-        }
-      }
-    }
-    else
-    {
       if (mbf_features)
         justhit = true;
       else
         target->flags |= MF_JUSTHIT;    // fight back!
 
       P_SetMobjState(target, target->info->painstate);
-
-      if (hexen && inflictor && inflictor->type == HEXEN_MT_POISONCLOUD)
-      {
-        if (target->flags & MF_COUNTKILL && P_Random(pr_hexen) < 128
-            && !S_GetSoundPlayingInfo(target, hexen_sfx_puppybeat))
-        {
-          if ((target->type == HEXEN_MT_CENTAUR) ||
-              (target->type == HEXEN_MT_CENTAURLEADER) ||
-              (target->type == HEXEN_MT_ETTIN))
-          {
-            S_StartMobjSound(target, hexen_sfx_puppybeat);
-          }
-        }
-      }
-    }
   }
 
   target->reactiontime = 0;           // we're awake now...
@@ -1821,36 +1603,12 @@ dboolean P_GiveArtifact(player_t * player, artitype_t arti, mobj_t * mo)
     }
     if (i == player->inventorySlotNum)
     {
-        if (hexen && arti < hexen_arti_firstpuzzitem)
-        {
-            i = 0;
-            while (player->inventory[i].type < hexen_arti_firstpuzzitem
-                   && i < player->inventorySlotNum)
-            {
-                i++;
-            }
-            if (i != player->inventorySlotNum)
-            {
-                int j;
-                for (j = player->inventorySlotNum; j > i; j--)
-                {
-                    player->inventory[j].count =
-                        player->inventory[j - 1].count;
-                    player->inventory[j].type = player->inventory[j - 1].type;
-                    slidePointer = true;
-                }
-            }
-        }
         player->inventory[i].count = 1;
         player->inventory[i].type = arti;
         player->inventorySlotNum++;
     }
     else
     {
-        if (hexen && arti >= hexen_arti_firstpuzzitem && netgame && !deathmatch)
-        {                       // Can't carry more than 1 puzzle item in coop netplay
-            return false;
-        }
         if (player->inventory[i].count >= g_arti_limit)
         {                       // Player already has 16 of this item
             return (false);
@@ -1973,14 +1731,7 @@ void P_MinotaurSlam(mobj_t * source, mobj_t * target)
     thrust = 16 * FRACUNIT + (P_Random(pr_heretic) << 10);
     target->momx += FixedMul(thrust, finecosine[angle]);
     target->momy += FixedMul(thrust, finesine[angle]);
-    if (hexen)
-    {
-        P_DamageMobj(target, NULL, source, HITDICE(4));
-    }
-    else
-    {
-        P_DamageMobj(target, NULL, NULL, HITDICE(6));
-    }
+      P_DamageMobj(target, NULL, NULL, HITDICE(6));
     if (target->player)
     {
         target->reactiontime = 14 + (P_Random(pr_heretic) & 7);

@@ -1672,13 +1672,8 @@ void P_UnArchiveThinkers(void) {
     map_format.build_mobj_thing_id_list();
   }
 
-  if (hexen)
-  {
-    P_InitCreatureCorpseQueue(true);    // true = scan for corpses
-  }
-
   // killough 3/26/98: Spawn icon landings:
-  if (gamemode == commercial && !hexen)
+  if (gamemode == commercial)
   {
     // P_SpawnBrainTargets overwrites brain.targeton and brain.easy with zero.
     struct brain_s brain_tmp = brain; // saving
@@ -1952,19 +1947,7 @@ void P_ArchiveMisc(void)
     P_SAVE_ARRAY(AnimDefs);
   }
 
-  if (map_format.hexen)
-  {
-    size = sizeof(*localQuakeHappening) * MAX_MAXPLAYERS;
-    P_SAVE_SIZE(localQuakeHappening, size);
-  }
 
-  if (!hexen) return;
-
-  P_SAVE_ARRAY(PlayerClass);
-  P_SAVE_X(NextLightningFlash);
-  P_SAVE_X(LightningFlash);
-
-  SV_StoreMapArchive();
 }
 
 void P_UnArchiveMisc(void)
@@ -1976,19 +1959,6 @@ void P_UnArchiveMisc(void)
     P_LOAD_ARRAY(AnimDefs);
   }
 
-  if (map_format.hexen)
-  {
-    size = sizeof(*localQuakeHappening) * MAX_MAXPLAYERS;
-    P_LOAD_SIZE(localQuakeHappening, size);
-  }
-
-  if (!hexen) return;
-
-  P_LOAD_ARRAY(PlayerClass);
-  P_LOAD_X(NextLightningFlash);
-  P_LOAD_X(LightningFlash);
-
-  SV_RestoreMapArchive();
 }
 
 

@@ -158,29 +158,8 @@ void P_ExplodeMissile (mobj_t* mo)
 
   mo->flags &= ~MF_MISSILE;
 
-  if (!hexen)
-  {
     if (mo->info->deathsound)
       S_StartMobjSound(mo, mo->info->deathsound);
-  }
-  else
-  {
-    switch (mo->type)
-    {
-      case HEXEN_MT_SORCBALL1:
-      case HEXEN_MT_SORCBALL2:
-      case HEXEN_MT_SORCBALL3:
-        S_StartVoidSound(hexen_sfx_sorcerer_bigballexplode);
-        break;
-      case HEXEN_MT_SORCFX1:
-        S_StartVoidSound(hexen_sfx_sorcerer_headscream);
-        break;
-      default:
-        if (mo->info->deathsound)
-          S_StartMobjSound(mo, mo->info->deathsound);
-        break;
-    }
-  }
 }
 
 
@@ -380,55 +359,6 @@ static void P_XYMovement (mobj_t* mo)
       }
       else if (mo->flags & MF_MISSILE)
       {
-        if (hexen && mo->flags2 & MF2_FLOORBOUNCE)
-        {
-          if (BlockingMobj)
-          {
-            if ((BlockingMobj->flags2 & MF2_REFLECTIVE) ||
-                ((!BlockingMobj->player) &&
-                 (!(BlockingMobj->flags & MF_COUNTKILL))))
-            {
-              fixed_t speed;
-
-              angle = R_PointToAngle2(BlockingMobj->x, BlockingMobj->y, mo->x, mo->y) +
-                      ANG1 * ((P_Random(pr_hexen) % 16) - 8);
-              speed = P_AproxDistance(mo->momx, mo->momy);
-              speed = FixedMul(speed, 0.75 * FRACUNIT);
-              mo->angle = angle;
-              angle >>= ANGLETOFINESHIFT;
-              mo->momx = FixedMul(speed, finecosine[angle]);
-              mo->momy = FixedMul(speed, finesine[angle]);
-              if (mo->info->seesound)
-              {
-                S_StartMobjSound(mo, mo->info->seesound);
-              }
-              return;
-            }
-            else
-            { // Struck a player/creature
-              P_ExplodeMissile(mo);
-            }
-          }
-          else
-          { // Struck a wall
-            P_BounceWall(mo);
-            switch (mo->type)
-            {
-              case HEXEN_MT_SORCBALL1:
-              case HEXEN_MT_SORCBALL2:
-              case HEXEN_MT_SORCBALL3:
-              case HEXEN_MT_SORCFX1:
-                break;
-              default:
-                if (mo->info->seesound)
-                {
-                  S_StartMobjSound(mo, mo->info->seesound);
-                }
-                break;
-            }
-            return;
-          }
-        }
 
         if (BlockingMobj && (BlockingMobj->flags2 & MF2_REFLECTIVE))
         {
@@ -477,12 +407,7 @@ static void P_XYMovement (mobj_t* mo)
             ceilingline->backsector &&
             ceilingline->backsector->ceilingpic == skyflatnum)
         {
-           if (hexen && mo->type == HEXEN_MT_HOLY_FX)
-          {
-            P_ExplodeMissile(mo);
-            return;
-          }
-          else if (demo_compatibility ||  // killough
+             if (demo_compatibility ||  // killough
                    mo->z > ceilingline->backsector->ceilingheight)
           {
             // Hack to prevent missiles exploding
@@ -522,8 +447,7 @@ static void P_XYMovement (mobj_t* mo)
   if (mo->z > mo->floorz &&
       !(mo->flags & MF_FLY) &&
       !(mo->flags2 & MF2_FLY) &&
-      !(mo->flags2 & MF2_ONMOBJ) &&
-      (!hexen || mo->type != HEXEN_MT_BLASTEFFECT))
+      !(mo->flags2 & MF2_ONMOBJ)) 
     return;
 
   /* killough 8/11/98: add bouncers
@@ -863,7 +787,6 @@ floater:
     )
       mo->momz = -mo->momz; // the skull slammed into something
 
-    if (hexen) mo->z = mo->floorz;
     if (mo->momz < 0)
     {
       /* killough 11/98: touchy objects explode on impact */
@@ -907,14 +830,11 @@ floater:
         if (comp[comp_sound] || (mo->health > 0)) /* cph - prevent "oof" when dead */
             S_StartSound (mo, sfx_oof);
         }
-        else if (hexen && mo->type >= HEXEN_MT_POTTERY1 && mo->type <= HEXEN_MT_POTTERY3)
-        {
-          P_DamageMobj(mo, NULL, NULL, 25);
-        }
+        
       }
       mo->momz = 0;
     }
-    if (!hexen) mo->z = mo->floorz;
+     mo->z = mo->floorz;
 
     /* cph 2001/04/15 -
      * This is the buggy lost-soul bouncing code referenced above.
@@ -968,14 +888,6 @@ floater:
 
     mo->z = mo->ceilingz - mo->height;
 
-    if (hexen && mo->flags2 & MF2_FLOORBOUNCE)
-    {
-      if (mo->info->seesound)
-      {
-        S_StartMobjSound(mo, mo->info->seesound);
-      }
-      return;
-    }
 
     /* cph 2001/04/15 -
      * We might have hit a ceiling but had downward momentum (e.g. ceiling is
@@ -985,12 +897,8 @@ floater:
     if (comp[comp_soul] && mo->flags & MF_SKULLFLY)
       mo->momz = -mo->momz; // the skull slammed into something
 
-    if ((mo->flags & MF_MISSILE) && (hexen || !(mo->flags & MF_NOCLIP)))
+    if ((mo->flags & MF_MISSILE) && (!(mo->flags & MF_NOCLIP)))
     {
-      if (hexen && mo->type == HEXEN_MT_LIGHTNING_CEILING)
-      {
-        return;
-      }
       P_ExplodeMissile (mo);
       return;
     }
@@ -1141,8 +1049,7 @@ void P_MobjThinker (mobj_t* mobj)
 
   if (mobj->flags2 & MF2_FLOATBOB)
   {                           // Floating item bobbing motion
-      mobj->z = mobj->floorz +
-                (hexen ? mobj->special1.i : 0) + FloatBobOffsets[(mobj->health++) & 63];
+      mobj->z = mobj->floorz + FloatBobOffsets[(mobj->health++) & 63];
   }
   else if (mobj->z != mobj->floorz || mobj->momz || BlockingMobj)
   {
@@ -1153,12 +1060,6 @@ void P_MobjThinker (mobj_t* mobj)
       if (!(onmo = P_CheckOnmobj(mobj)))
       {
         P_ZMovement(mobj);
-
-        // This bug is part of the original source
-        if (hexen && mobj->player && mobj->flags & MF2_ONMOBJ)
-        {
-          mobj->flags2 &= ~MF2_ONMOBJ;
-        }
 
         if (map_format.zdoom)
         {
@@ -1173,10 +1074,6 @@ void P_MobjThinker (mobj_t* mobj)
           {
             fixed_t gravity = P_MobjGravity(mobj);
 
-            if (hexen && mobj->momz < -gravity * 8 && !(mobj->flags2 & MF2_FLY))
-            {
-              PlayerLandedOnThing(mobj, onmo, gravity);
-            }
             if (onmo->z + onmo->height - mobj->z <= 24 * FRACUNIT)
             {
               mobj->player->viewheight -= onmo->z + onmo->height - mobj->z;
@@ -1599,30 +1496,11 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   {
       mobj->z = mobj->ceilingz - mobj->height;
   }
-  else if (hexen && mobj->flags2 & MF2_FLOATBOB)
-  {
-    mobj->z = mobj->floorz + z;     // artifact z passed in as height
-  }
   else
   {
     mobj->z = z;
   }
 
-  if (hexen)
-  {
-    if (mobj->flags2 & MF2_FOOTCLIP
-        && P_GetThingFloorType(mobj) >= FLOOR_LIQUID
-        && mobj->z == mobj->subsector->sector->floorheight)
-    {
-      mobj->floorclip = 10 * FRACUNIT;
-    }
-    else
-    {
-      mobj->floorclip = 0;
-    }
-  }
-  else
-  {
     if (mobj->flags2 & MF2_FOOTCLIP
         && P_GetThingFloorType(mobj) != FLOOR_SOLID
         && mobj->floorz == mobj->subsector->sector->floorheight)
@@ -1633,7 +1511,6 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
     {
         mobj->flags2 &= ~MF2_FEETARECLIPPED;
     }
-  }
 
   mobj->PrevX = mobj->x;
   mobj->PrevY = mobj->y;
@@ -1862,39 +1739,6 @@ void P_SpawnPlayer (int n, const mapthing_t* mthing)
   y    = mthing->y;
   z    = ONFLOORZ;
 
-  if (hexen)
-  {
-    if (randomclass && deathmatch)
-    {
-      p->pclass = 1 + P_Random(pr_hexen) % 3;
-      if (p->pclass == PlayerClass[mthing->type - 1])
-      {
-        p->pclass = 1 + ((p->pclass + 1) % 3);
-      }
-      PlayerClass[mthing->type - 1] = p->pclass;
-      SB_SetClassData();
-    }
-    else
-    {
-      p->pclass = PlayerClass[mthing->type - 1];
-    }
-    switch (p->pclass)
-    {
-      case PCLASS_FIGHTER:
-        mobj = P_SpawnMobj(x, y, z, HEXEN_MT_PLAYER_FIGHTER);
-        break;
-      case PCLASS_CLERIC:
-        mobj = P_SpawnMobj(x, y, z, HEXEN_MT_PLAYER_CLERIC);
-        break;
-      case PCLASS_MAGE:
-        mobj = P_SpawnMobj(x, y, z, HEXEN_MT_PLAYER_MAGE);
-        break;
-      default:
-        I_Error("P_SpawnPlayer: Unknown class type");
-        return;
-    }
-  }
-  else
     mobj = P_SpawnMobj(x,y,z, g_mt_player);
 
   if (map_info.flags & MI_USE_PLAYER_START_Z)
@@ -1903,24 +1747,6 @@ void P_SpawnPlayer (int n, const mapthing_t* mthing)
   if (map_format.zdoom)
     P_AdjustZLimits(mobj);
 
-  // set color translations for player sprites
-  if (hexen)
-  {
-    if (p->pclass == PCLASS_FIGHTER && (mthing->type == 1 || mthing->type == 3))
-    {
-      // The first type should be blue, and the third should be the
-      // Fighter's original gold color
-      if (mthing->type == 1)
-      {
-        mobj->flags |= MF_TRANSLATION2;
-      }
-    }
-    else if (mthing->type > 1)
-    {                           // Set color translation bits for player sprites
-      mobj->flags |= (mthing->type - 1) << MF_TRANSSHIFT;
-    }
-  }
-  else
     mobj->flags |= playernumtotrans[n]<<MF_TRANSSHIFT;
 
   if (leave_data.flags & LF_SET_ANGLE)
@@ -2015,32 +1841,6 @@ static dboolean P_ShouldSpawnMapThing(int options)
 
   spawn_multi = skill_info.flags & SI_SPAWN_MULTI;
 
-  if (map_format.hexen)
-  {
-    // Check current game type with spawn flags
-    if (netgame == false)
-    {
-      spawnMask = MTF_GSINGLE;
-
-      if (spawn_multi)
-        spawnMask |= MTF_GCOOP;
-    }
-    else if (deathmatch)
-    {
-      spawnMask = MTF_GDEATHMATCH;
-    }
-    else
-    {
-      spawnMask = MTF_GCOOP;
-    }
-
-    if (!(options & spawnMask))
-    {
-      return false;
-    }
-  }
-  else
-  {
     /* jff "not single" thing flag */
     if (!spawn_multi && !netgame && options & MTF_NOTSINGLE)
       return false;
@@ -2052,7 +1852,6 @@ static dboolean P_ShouldSpawnMapThing(int options)
     //jff 3/30/98 implement "not cooperative" thing flag
     if ((spawn_multi || netgame) && !deathmatch && options & MTF_NOTCOOP)
       return false;
-  }
 
   // check for appropriate skill level
   if (
@@ -2063,42 +1862,6 @@ static dboolean P_ShouldSpawnMapThing(int options)
                                    !(options & MTF_SKILL5)
   )
     return false;
-
-  if (hexen)
-  {
-    static unsigned int classFlags[] = {
-      0, // null class
-      MTF_FIGHTER,
-      MTF_CLERIC,
-      MTF_MAGE
-    };
-
-    int i;
-
-    // Check current character classes with spawn flags
-    if (netgame == false)
-    {                           // Single player
-      if ((options & classFlags[PlayerClass[0]]) == 0)
-      {                       // Not for current class
-        return false;
-      }
-    }
-    else if (deathmatch == false)
-    {                           // Cooperative
-      spawnMask = 0;
-      for (i = 0; i < g_maxplayers; i++)
-      {
-        if (playeringame[i])
-        {
-          spawnMask |= classFlags[PlayerClass[i]];
-        }
-      }
-      if ((options & spawnMask) == 0)
-      {
-        return false;
-      }
-    }
-  }
 
   return true;
 }
@@ -2147,8 +1910,6 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
   // killough 2/26/98: Ignore type-0 things as NOPs
   // phares 5/14/98: Ignore Player 5-8 starts (for now)
 
-  if (!hexen)
-  {
     switch(thingtype)
     {
       case 0:
@@ -2158,7 +1919,6 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
       case DEN_PLAYER8:
         return NULL;
     }
-  }
 
   // killough 11/98: clear flags unused by Doom
   //
@@ -2247,17 +2007,6 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
     return NULL;
   }
 
-  if (map_format.hexen)
-  {
-    if (mthing->type >= 1400 && mthing->type < 1410)
-    {
-      R_PointInSector(
-        mthing->x, mthing->y
-      )->seqType = mthing->type - 1400;
-      return NULL;
-    }
-  }
-
   if (!P_ShouldSpawnMapThing(options))
     return NULL;
 
@@ -2276,12 +2025,6 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
   if (thingtype >= 14100 && thingtype <= 14164)
   {
     iden_num = thingtype - 14100; // Mus change
-    thingtype = 14164;            // MT_MUSICSOURCE
-  }
-
-  if (thingtype == 14165 && map_format.hexen)
-  {
-    iden_num = BETWEEN(0, 64, mthing->special_args[0]); // Mus change
     thingtype = 14164;            // MT_MUSICSOURCE
   }
 
@@ -2320,13 +2063,8 @@ spawnit:
     z = ONCEILINGZ;
   else if (mobjinfo[i].flags2 & MF2_SPAWNFLOAT)
     z = FLOATRANDZ;
-  else if (hexen && mobjinfo[i].flags2 & MF2_FLOATBOB)
-    z = mthing->height;
   else
     z = ONFLOORZ;
-
-  if (hexen && i == HEXEN_MT_ZLYNCHED_NOHEART)
-    P_SpawnMobj(x, y, ONFLOORZ, HEXEN_MT_BLOODPOOL);
 
   mobj = P_SpawnMobj (x, y, z, i);
 
@@ -2367,33 +2105,9 @@ spawnit:
   mobj->index = index;//e6y
   mobj->iden_nums = iden_num;
 
-  if (map_format.hexen)
-  {
-    if (z == ONFLOORZ)
-    {
-      mobj->z += mthing->height;
-    }
-    else if (z == ONCEILINGZ)
-    {
-      mobj->z -= mthing->height;
-    }
-
-    if (map_format.zdoom)
-      P_AdjustZLimits(mobj);
-
-    mobj->tid = mthing->tid;
-    mobj->special = mthing->special;
-    mobj->special_args[0] = mthing->special_args[0];
-    mobj->special_args[1] = mthing->special_args[1];
-    mobj->special_args[2] = mthing->special_args[2];
-    mobj->special_args[3] = mthing->special_args[3];
-    mobj->special_args[4] = mthing->special_args[4];
-  }
-
   if (mobj->flags2 & MF2_FLOATBOB)
   {                           // Seed random starting index for bobbing motion
     mobj->health = P_Random(pr_heretic);
-    if (hexen) mobj->special1.i = mthing->height;
   }
 
   if (mobj->tics > 0)
@@ -2422,34 +2136,10 @@ spawnit:
   if (mobj->flags & MF_COUNTITEM)
     totalitems++;
 
-  if (map_format.hexen)
-  {
-    if (mobj->flags & MF_COUNTKILL)
-    {
-      // Quantize angle to 45 degree increments
-      mobj->angle = ANG45 * (mthing->angle / 45);
-    }
-    else
-    {
-      // Scale angle correctly (source is 0..359)
-      mobj->angle = ((mthing->angle << 8) / 360) << 24;
-    }
-  }
-  else
     mobj->angle = ANG45 * (mthing->angle / 45);
 
   if (options & MTF_AMBUSH)
     mobj->flags |= MF_AMBUSH;
-
-  if (map_format.hexen && mthing->options & MTF_DORMANT)
-  {
-      mobj->flags2 |= MF2_DORMANT;
-      if (hexen && mobj->type == HEXEN_MT_ICEGUY)
-      {
-        P_SetMobjState(mobj, HEXEN_S_ICEGUY_DORMANT);
-      }
-      mobj->tics = -1;
-  }
 
   if (thingtype == 14064)
   {
@@ -2639,27 +2329,6 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
     th->momz = FixedMul(th->info->speed, aim.slope);
   }
 
-  if (hexen)
-  {
-    if (th->type == HEXEN_MT_MWAND_MISSILE || th->type == HEXEN_MT_CFLAME_MISSILE)
-    {                           // Ultra-fast ripper spawning missile
-      th->x += (th->momx >> 3);
-      th->y += (th->momy >> 3);
-      th->z += (th->momz >> 3);
-    }
-    else
-    {                           // Normal missile
-      th->x += (th->momx >> 1);
-      th->y += (th->momy >> 1);
-      th->z += (th->momz >> 1);
-    }
-    if (!P_TryMove(th, th->x, th->y, false))
-    {                           // Exploded immediately
-      P_ExplodeMissile(th);
-      return (NULL);
-    }
-    return (th);
-  }
 
   return P_CheckMissileSpawn(th) ? th : NULL;
 }
@@ -2716,34 +2385,7 @@ void P_BlasterMobjThinker(mobj_t * mobj)
             }
             if (changexy)
             {
-                if (hexen)
-                {
-                    if (mobj->type == HEXEN_MT_MWAND_MISSILE && (P_Random(pr_hexen) < 128))
-                    {
-                        z = mobj->z - 8 * FRACUNIT;
-                        if (z < mobj->floorz)
-                        {
-                            z = mobj->floorz;
-                        }
-                        P_SpawnMobj(mobj->x, mobj->y, z, HEXEN_MT_MWANDSMOKE);
-                    }
-                    else if (!--mobj->special1.i)
-                    {
-                        mobj_t *mo;
-                        mobj->special1.i = 4;
-                        z = mobj->z - 12 * FRACUNIT;
-                        if (z < mobj->floorz)
-                        {
-                            z = mobj->floorz;
-                        }
-                        mo = P_SpawnMobj(mobj->x, mobj->y, z, HEXEN_MT_CFLAMEFLOOR);
-                        if (mo)
-                        {
-                            mo->angle = mobj->angle;
-                        }
-                    }
-                }
-                else if (P_Random(pr_heretic) < 64)
+              if (P_Random(pr_heretic) < 64)
                 {
                     z = mobj->z - 8 * FRACUNIT;
                     if (z < mobj->floorz)
@@ -2822,11 +2464,7 @@ mobj_t *P_SpawnMissileAngle(mobj_t * source, mobjtype_t type, angle_t angle, fix
             break;
     }
 
-    if (hexen)
-    {
-        z -= source->floorclip;
-    }
-    else if (source->flags2 & MF2_FEETARECLIPPED)
+    if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
     }
@@ -2917,9 +2555,6 @@ dboolean P_SeekerMissile(mobj_t * actor, mobj_t ** seekTarget, angle_t thresh, a
         {
             dist = 1;
         }
-        if (hexen)
-          actor->momz = (target->z + (target->height >> 1) - (actor->z + (actor->height >> 1))) / dist;
-        else
           actor->momz = (target->z + (seekcenter ? target->height/2 : 0) - actor->z) / dist;
     }
     return (true);
@@ -2939,16 +2574,12 @@ mobj_t *P_SPMAngle(mobj_t * source, mobjtype_t type, angle_t angle)
     x = source->x;
     y = source->y;
     z = source->z + 4 * 8 * FRACUNIT + aim.z_offset;
-    if (hexen)
-    {
-        z -= source->floorclip;
-    }
-    else if (source->flags2 & MF2_FEETARECLIPPED)
+     if (source->flags2 & MF2_FEETARECLIPPED)
     {
         z -= FOOTCLIPSIZE;
     }
     th = P_SpawnMobj(x, y, z, type);
-    if (!hexen && th->info->seesound)
+    if (th->info->seesound)
     {
         S_StartMobjSound(th, th->info->seesound);
     }
@@ -2970,8 +2601,6 @@ int P_HitFloor(mobj_t * thing)
     {                           // don't splash if landing on the edge above water/lava/etc....
         return (FLOOR_SOLID);
     }
-
-    if (hexen) return Hexen_P_HitFloor(thing);
 
     switch (P_GetThingFloorType(thing))
     {
@@ -3004,14 +2633,7 @@ int P_HitFloor(mobj_t * thing)
 
 int P_GetThingFloorType(mobj_t * thing)
 {
-    if (hexen && thing->floorpic)
-    {
-        return (TerrainTypes[thing->floorpic]);
-    }
-    else
-    {
         return (TerrainTypes[thing->subsector->sector->floorpic]);
-    }
 }
 
 // Returns 1 if 'source' needs to turn clockwise, or 0 if 'source' needs
@@ -3079,72 +2701,8 @@ dboolean Raven_P_SetMobjState(mobj_t * mobj, statenum_t state)
 
 void P_FloorBounceMissile(mobj_t * mo)
 {
-    if (hexen)
-    {
-        if (P_HitFloor(mo) >= FLOOR_LIQUID)
-        {
-            switch (mo->type)
-            {
-                case HEXEN_MT_SORCFX1:
-                case HEXEN_MT_SORCBALL1:
-                case HEXEN_MT_SORCBALL2:
-                case HEXEN_MT_SORCBALL3:
-                    break;
-                default:
-                    P_RemoveMobj(mo);
-                    return;
-            }
-        }
-        switch (mo->type)
-        {
-            case HEXEN_MT_SORCFX1:
-                mo->momz = -mo->momz;       // no energy absorbed
-                break;
-            case HEXEN_MT_SGSHARD1:
-            case HEXEN_MT_SGSHARD2:
-            case HEXEN_MT_SGSHARD3:
-            case HEXEN_MT_SGSHARD4:
-            case HEXEN_MT_SGSHARD5:
-            case HEXEN_MT_SGSHARD6:
-            case HEXEN_MT_SGSHARD7:
-            case HEXEN_MT_SGSHARD8:
-            case HEXEN_MT_SGSHARD9:
-            case HEXEN_MT_SGSHARD0:
-                mo->momz = FixedMul(mo->momz, -0.3 * FRACUNIT);
-                if (abs(mo->momz) < (FRACUNIT / 2))
-                {
-                    P_SetMobjState(mo, HEXEN_S_NULL);
-                    return;
-                }
-                break;
-            default:
-                mo->momz = FixedMul(mo->momz, -0.7 * FRACUNIT);
-                break;
-        }
-        mo->momx = 2 * mo->momx / 3;
-        mo->momy = 2 * mo->momy / 3;
-        if (mo->info->seesound)
-        {
-            switch (mo->type)
-            {
-                case HEXEN_MT_SORCBALL1:
-                case HEXEN_MT_SORCBALL2:
-                case HEXEN_MT_SORCBALL3:
-                    if (!mo->special_args[0])
-                        S_StartMobjSound(mo, mo->info->seesound);
-                    break;
-                default:
-                    S_StartMobjSound(mo, mo->info->seesound);
-                    break;
-            }
-            S_StartMobjSound(mo, mo->info->seesound);
-        }
-    }
-    else
-    {
       mo->momz = -mo->momz;
       P_SetMobjState(mo, mobjinfo[mo->type].deathstate);
-    }
 }
 
 extern mobj_t *PuffSpawned;
@@ -3155,11 +2713,7 @@ void Raven_P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
 
     z += (P_SubRandom() << 10);
     puff = P_SpawnMobj(x, y, z, PuffType);
-    if (hexen && linetarget && puff->info->seesound)
-    {                           // Hit thing sound
-        S_StartMobjSound(puff, puff->info->seesound);
-    }
-    else if (puff->info->attacksound)
+     if (puff->info->attacksound)
     {
         S_StartMobjSound(puff, puff->info->attacksound);
     }
@@ -3200,7 +2754,7 @@ void P_RipperBlood(mobj_t * mo, mobj_t * bleeder)
     y = mo->y + (P_SubRandom() << 12);
     z = mo->z + (P_SubRandom() << 12);
     th = P_SpawnMobj(x, y, z, g_mt_blood);
-    if (!hexen) th->flags |= MF_NOGRAVITY;
+   th->flags |= MF_NOGRAVITY;
     th->momx = mo->momx >> 1;
     th->momy = mo->momy >> 1;
     th->tics += P_Random(pr_heretic) & 3;

@@ -290,18 +290,6 @@ static void D_DrawPause(void)
 
   V_BeginUIDraw();
 
-  if (hexen)
-  {
-    if (!netgame)
-    {
-      V_DrawNamePatch(160, 5, 0, "PAUSED", CR_DEFAULT, VPT_STRETCH);
-    }
-    else
-    {
-      V_DrawNamePatch(160, 70, 0, "PAUSED", CR_DEFAULT, VPT_STRETCH);
-    }
-  }
-  else
     V_DrawNamePatch((320 - V_NamePatchWidth("M_PAUSE")) / 2, 4, 0, "M_PAUSE", CR_DEFAULT, VPT_STRETCH);
 
   V_EndUIDraw();
@@ -1115,28 +1103,7 @@ static void HandleWarp(void)
 
 static void HandleClass(void)
 {
-  int p;
-  dsda_arg_t* arg;
-  int player_class = PCLASS_FIGHTER;
-
-  if (!hexen) return;
-
-  arg = dsda_Arg(dsda_arg_class);
-  if (arg->found)
-    player_class = arg->value.v_int + PCLASS_FIGHTER;
-
-  if (
-    player_class != PCLASS_FIGHTER &&
-    player_class != PCLASS_CLERIC &&
-    player_class != PCLASS_MAGE
-  )
-    player_class = PCLASS_FIGHTER;
-
-  PlayerClass[0] = player_class;
-  for (p = 1; p < MAX_MAXPLAYERS; p++)
-    PlayerClass[p] = PCLASS_FIGHTER;
-
-  randomclass = dsda_Flag(dsda_arg_randclass);
+  return;
 }
 
 static void HandlePlayback(void)
@@ -1389,20 +1356,6 @@ void D_DoomMainSetup(void)
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "W_Init: Init WADfiles.\n");
   W_Init(); // CPhipps - handling of wadfiles init changed
-
-  if (hexen)
-  {
-    if (!W_LumpNameExists("MAP05"))
-    {
-      I_Error("The Hexen IWAD shareware is not supported.");
-      gamemode = shareware;
-      g_maxplayers = 4;
-    }
-    else if (!W_LumpNameExists("CLUS1MSG"))
-    {
-      I_Error("The Hexen v1.0 IWAD is not supported.");
-    }
-  }
 
   lprintf(LO_DEBUG, "G_ReloadDefaults: Checking OPTIONS.\n");
   dsda_ParseOptionsLump();

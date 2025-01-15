@@ -762,72 +762,6 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
     int new_state;
     int damage;
 
-    if (hexen)
-    {
-      if (tmthing->type == HEXEN_MT_MINOTAUR)
-      {
-        // Slamming minotaurs shouldn't move non-creatures
-        if (!(thing->flags & MF_COUNTKILL))
-        {
-          return (false);
-        }
-      }
-      else if (tmthing->type == HEXEN_MT_HOLY_FX)
-      {
-        if (thing->flags & MF_SHOOTABLE && thing != tmthing->target)
-        {
-          if (netgame && !deathmatch && thing->player)
-          {               // don't attack other co-op players
-            return true;
-          }
-          if (thing->flags2 & MF2_REFLECTIVE
-              && (thing->player || thing->flags2 & MF2_BOSS))
-          {
-            P_SetTarget(&tmthing->special1.m, tmthing->target);
-            P_SetTarget(&tmthing->target, thing);
-            return true;
-          }
-          if (thing->flags & MF_COUNTKILL || thing->player)
-          {
-            P_SetTarget(&tmthing->special1.m, thing);
-          }
-          if (P_Random(pr_hexen) < 96)
-          {
-            damage = 12;
-            if (thing->player || thing->flags2 & MF2_BOSS)
-            {
-              damage = 3;
-              // ghost burns out faster when attacking players/bosses
-              tmthing->health -= 6;
-            }
-            P_DamageMobj(thing, tmthing, tmthing->target, damage);
-            if (P_Random(pr_hexen) < 128)
-            {
-              P_SpawnMobj(tmthing->x, tmthing->y, tmthing->z,
-                          HEXEN_MT_HOLY_PUFF);
-              S_StartMobjSound(tmthing, hexen_sfx_spirit_attack);
-              if (thing->flags & MF_COUNTKILL && P_Random(pr_hexen) < 128
-                  && !S_GetSoundPlayingInfo(thing, hexen_sfx_puppybeat))
-              {
-                if ((thing->type == HEXEN_MT_CENTAUR) ||
-                    (thing->type == HEXEN_MT_CENTAURLEADER) ||
-                    (thing->type == HEXEN_MT_ETTIN))
-                {
-                  S_StartMobjSound(thing, hexen_sfx_puppybeat);
-                }
-              }
-            }
-          }
-          if (thing->health <= 0)
-          {
-            tmthing->special1.i = 0;
-            P_SetTarget(&tmthing->special1.m, NULL);
-          }
-        }
-        return true;
-      }
-    }
-
     damage = ((P_Random(pr_skullfly) % 8) + 1) * tmthing->info->damage;
 
     P_DamageMobj (thing, tmthing, tmthing, damage);
@@ -885,125 +819,6 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
 
     if (tmthing->z + tmthing->height < thing->z)
       return true;    // underneath
-
-    if (hexen)
-    {
-      if (tmthing->flags2 & MF2_FLOORBOUNCE)
-      {
-        if (tmthing->target == thing || !(thing->flags & MF_SOLID))
-        {
-          return true;
-        }
-        else
-        {
-          return false;
-        }
-      }
-
-      if (tmthing->type == HEXEN_MT_LIGHTNING_FLOOR
-          || tmthing->type == HEXEN_MT_LIGHTNING_CEILING)
-      {
-        if (thing->flags & MF_SHOOTABLE && thing != tmthing->target)
-        {
-          if (thing->info->mass != INT_MAX)
-          {
-            thing->momx += tmthing->momx >> 4;
-            thing->momy += tmthing->momy >> 4;
-          }
-          if ((!thing->player && !(thing->flags2 & MF2_BOSS))
-              || !(leveltime & 1))
-          {
-            if (thing->type == HEXEN_MT_CENTAUR
-                || thing->type == HEXEN_MT_CENTAURLEADER)
-            {           // Lightning does more damage to centaurs
-              P_DamageMobj(thing, tmthing, tmthing->target, 9);
-            }
-            else
-            {
-              P_DamageMobj(thing, tmthing, tmthing->target, 3);
-            }
-            if (!(S_GetSoundPlayingInfo(tmthing,
-                                        hexen_sfx_mage_lightning_zap)))
-            {
-              S_StartMobjSound(tmthing, hexen_sfx_mage_lightning_zap);
-            }
-            if (thing->flags & MF_COUNTKILL && P_Random(pr_hexen) < 64
-                && !S_GetSoundPlayingInfo(thing, hexen_sfx_puppybeat))
-            {
-              if ((thing->type == HEXEN_MT_CENTAUR) ||
-                  (thing->type == HEXEN_MT_CENTAURLEADER) ||
-                  (thing->type == HEXEN_MT_ETTIN))
-              {
-                S_StartMobjSound(thing, hexen_sfx_puppybeat);
-              }
-            }
-          }
-          tmthing->health--;
-          if (tmthing->health <= 0 || thing->health <= 0)
-          {
-            return false;
-          }
-          if (tmthing->type == HEXEN_MT_LIGHTNING_FLOOR)
-          {
-            if (tmthing->special2.m
-                && !tmthing->special2.m->special1.m)
-            {
-              P_SetTarget(&tmthing->special2.m->special1.m, thing);
-            }
-          }
-          else if (!tmthing->special1.m)
-          {
-            P_SetTarget(&tmthing->special1.m, thing);
-          }
-        }
-        return true;        // lightning zaps through all sprites
-      }
-      else if (tmthing->type == HEXEN_MT_LIGHTNING_ZAP)
-      {
-        mobj_t *lmo;
-
-        if (thing->flags & MF_SHOOTABLE && thing != tmthing->target)
-        {
-          lmo = tmthing->special2.m;
-          if (lmo)
-          {
-            if (lmo->type == HEXEN_MT_LIGHTNING_FLOOR)
-            {
-              if (lmo->special2.m
-                  && !lmo->special2.m->special1.m)
-              {
-                P_SetTarget(&lmo->special2.m->special1.m, thing);
-              }
-            }
-            else if (!lmo->special1.m)
-            {
-              P_SetTarget(&lmo->special1.m, thing);
-            }
-            if (!(leveltime & 3))
-            {
-              lmo->health--;
-            }
-          }
-        }
-      }
-      else if (tmthing->type == HEXEN_MT_MSTAFF_FX2 && thing != tmthing->target)
-      {
-        if (!thing->player && !(thing->flags2 & MF2_BOSS))
-        {
-          switch (thing->type)
-          {
-            case HEXEN_MT_FIGHTER_BOSS:      // these not flagged boss
-            case HEXEN_MT_CLERIC_BOSS:       // so they can be blasted
-            case HEXEN_MT_MAGE_BOSS:
-              break;
-            default:
-              P_DamageMobj(thing, tmthing, tmthing->target, 10);
-              return true;
-              break;
-          }
-        }
-      }
-    }
 
     if (tmthing->target && P_ProjectileImmune(thing, tmthing->target))
     {
@@ -1232,7 +1047,7 @@ dboolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
   validcount++;
   numspechit = 0;
 
-  if (tmflags & MF_NOCLIP && (!hexen || !(tmflags & MF_SKULLFLY)))
+  if (tmflags & MF_NOCLIP)
     return true;
 
   // Check things first, possibly picking things up.
@@ -1252,11 +1067,6 @@ dboolean P_CheckPosition (mobj_t* thing,fixed_t x,fixed_t y)
     for (by=yl ; by<=yh ; by++)
       if (!P_BlockThingsIterator(bx,by,PIT_CheckThing))
         return false;
-
-  if (hexen && tmflags & MF_NOCLIP)
-  {
-      return true;
-  }
 
   BlockingMobj = NULL;
 
@@ -1433,8 +1243,6 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
   fixed_t oldx;
   fixed_t oldy;
 
-
-  if (hexen) return Hexen_P_TryMove(thing, x, y);
 
   felldown = floatok = false;               // killough 11/98
 
@@ -1772,11 +1580,6 @@ dboolean P_ThingHeightClip (mobj_t* thing)
   if (onfloor)
   {
     // walking monsters rise and fall with the floor
-    if (
-      !hexen ||
-      (thing->z - thing->floorz < 9 * FRACUNIT) ||
-      (thing->flags & MF_NOGRAVITY)
-    )
       thing->z = thing->floorz;
 
     /* killough 11/98: Possibly upset balance of objects hanging off ledges */
@@ -2386,16 +2189,7 @@ dboolean PTR_ShootTraverse (intercept_t* in)
 
   if (la_damage)
   {
-    if (hexen && PuffType == HEXEN_MT_FLAMEPUFF2)
-    {                       // Cleric FlameStrike does fire damage
-      extern mobj_t LavaInflictor;
-
-      P_DamageMobj(th, &LavaInflictor, shootthing, la_damage);
-    }
-    else
-    {
       P_DamageMobj(th, shootthing, shootthing, la_damage);
-    }
   }
 
   // don't go any farther
@@ -2458,39 +2252,14 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope,
   x2 = t1->x + (distance>>FRACBITS)*finecosine[angle];
   y2 = t1->y + (distance>>FRACBITS)*finesine[angle];
   shootz = t1->z + (t1->height>>1) + 8*FRACUNIT;
-  if (hexen)
-  {
-    shootz -= t1->floorclip;
-  }
-  else if (t1->flags2 & MF2_FEETARECLIPPED)
+if (t1->flags2 & MF2_FEETARECLIPPED)
   {
     shootz -= FOOTCLIPSIZE;
   }
   attackrange = distance;
   aimslope = slope;
 
-  if (P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_ShootTraverse))
-  {
-    if (hexen)
-    {
-      switch (PuffType)
-      {
-        case HEXEN_MT_PUNCHPUFF:
-          S_StartMobjSound(t1, hexen_sfx_fighter_punch_miss);
-          break;
-        case HEXEN_MT_HAMMERPUFF:
-        case HEXEN_MT_AXEPUFF:
-        case HEXEN_MT_AXEPUFF_GLOW:
-          S_StartMobjSound(t1, hexen_sfx_fighter_hammer_miss);
-          break;
-        case HEXEN_MT_FLAMEPUFF:
-          P_SpawnPuff(x2, y2, shootz + FixedMul(slope, distance));
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  P_PathTraverse(t1->x,t1->y,x2,y2,PT_ADDLINES|PT_ADDTHINGS,PTR_ShootTraverse);
 }
 
 
@@ -2519,62 +2288,10 @@ dboolean PTR_UseTraverse (intercept_t* in)
 
     if (line_opening.range <= 0)
     {
-      if (hexen && usething->player)
-      {
-        switch (usething->player->pclass)
-        {
-          case PCLASS_FIGHTER:
-            sound = hexen_sfx_player_fighter_failed_use;
-            break;
-          case PCLASS_CLERIC:
-            sound = hexen_sfx_player_cleric_failed_use;
-            break;
-          case PCLASS_MAGE:
-            sound = hexen_sfx_player_mage_failed_use;
-            break;
-          case PCLASS_PIG:
-            sound = hexen_sfx_pig_active1;
-            break;
-          default:
-            sound = hexen_sfx_None;
-            break;
-        }
-        S_StartMobjSound(usething, sound);
-      }
-      else
-      {
         S_StartSound (usething, sfx_noway);
-      }
 
       // can't use through a wall
       return false;
-    }
-
-    if (hexen && usething->player)
-    {
-      fixed_t pheight = usething->z + (usething->height / 2);
-      if ((line_opening.top < pheight) || (line_opening.bottom > pheight))
-      {
-        switch (usething->player->pclass)
-        {
-          case PCLASS_FIGHTER:
-            sound = hexen_sfx_player_fighter_failed_use;
-            break;
-          case PCLASS_CLERIC:
-            sound = hexen_sfx_player_cleric_failed_use;
-            break;
-          case PCLASS_MAGE:
-            sound = hexen_sfx_player_mage_failed_use;
-            break;
-          case PCLASS_PIG:
-            sound = hexen_sfx_pig_active1;
-            break;
-          default:
-            sound = hexen_sfx_None;
-            break;
-        }
-        S_StartMobjSound(usething, sound);
-      }
     }
 
     // not a special line, but keep checking
@@ -2679,7 +2396,7 @@ int P_SplashDamage(fixed_t dist)
 
   // [XA] independent damage/distance calculation.
   //      same formula as eternity; thanks Quas :P
-  if (!hexen && bomb.damage == bomb.distance)
+  if (bomb.damage == bomb.distance)
     damage = bomb.damage - dist;
   else
     damage = (bomb.damage * (bomb.distance - dist) / bomb.distance) + 1;
@@ -2704,19 +2421,6 @@ dboolean PIT_RadiusAttack (mobj_t* thing)
   if (P_SplashImmune(thing, bomb.spot))
     return true;
 
-  if (hexen)
-  {
-    if (!(bomb.flags & BF_DAMAGESOURCE) && thing == bomb.source)
-    {                           // don't damage the source of the explosion
-      return true;
-    }
-    if (D_abs((thing->z - bomb.spot->z) >> FRACBITS) > 2 * bomb.distance)
-    {                           // too high/low
-      return true;
-    }
-  }
-  else
-  {
     // Boss spider and cyborg
     // take no damage from concussion.
 
@@ -2728,7 +2432,6 @@ dboolean PIT_RadiusAttack (mobj_t* thing)
         thing->flags2 & (MF2_NORADIUSDMG | MF2_BOSS) &&
         !(bomb.spot->flags2 & MF2_FORCERADIUSDMG))
       return true;
-  }
 
   dx = D_abs(thing->x - bomb.spot->x);
   dy = D_abs(thing->y - bomb.spot->y);
@@ -2777,11 +2480,6 @@ dboolean PIT_RadiusAttack (mobj_t* thing)
     // must be in direct path
 
     damage = P_SplashDamage(dist);
-
-    if (hexen && thing->player)
-    {
-      damage >>= 2;
-    }
 
     P_DamageMobj (thing, bomb.spot, bomb.source, damage);
 
@@ -2902,14 +2600,6 @@ dboolean PIT_ChangeSector (mobj_t* thing)
     P_DamageMobj(thing, NULL, NULL, crushchange);
     dsda_WatchCrush(thing, crushchange);
 
-    if (
-      !hexen ||
-      (
-        !(thing->flags & MF_NOBLOOD) &&
-        !(thing->flags2 & MF2_INVULNERABLE)
-      )
-    )
-    {
       // spray blood in a random direction
       mo = P_SpawnMobj (thing->x,
                         thing->y,
@@ -2921,7 +2611,6 @@ dboolean PIT_ChangeSector (mobj_t* thing)
       mo->momx = (t - P_Random (pr_crush)) << 12;
       t = P_Random(pr_crush);
       mo->momy = (t - P_Random (pr_crush)) << 12;
-    }
   }
 
   // keep checking (crush other things)

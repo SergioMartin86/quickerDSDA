@@ -633,33 +633,15 @@ dboolean P_Teleport(mobj_t * thing, fixed_t x, fixed_t y, angle_t angle, dboolea
         thing->angle = angle;
     }
 
-    if (hexen)
-    {
-        if (thing->flags2 & MF2_FOOTCLIP)
-        {
-            if (thing->z == thing->subsector->sector->floorheight
-                && P_GetThingFloorType(thing) > FLOOR_SOLID)
-            {
-                thing->floorclip = 10 * FRACUNIT;
-            }
-            else
-            {
-                thing->floorclip = 0;
-            }
-        }
-    }
-    else
-    {
-        if (thing->flags2 & MF2_FOOTCLIP
-            && P_GetThingFloorType(thing) != FLOOR_SOLID)
-        {
-            thing->flags2 |= MF2_FEETARECLIPPED;
-        }
-        else if (thing->flags2 & MF2_FEETARECLIPPED)
-        {
-            thing->flags2 &= ~MF2_FEETARECLIPPED;
-        }
-    }
+      if (thing->flags2 & MF2_FOOTCLIP
+          && P_GetThingFloorType(thing) != FLOOR_SOLID)
+      {
+          thing->flags2 |= MF2_FEETARECLIPPED;
+      }
+      else if (thing->flags2 & MF2_FEETARECLIPPED)
+      {
+          thing->flags2 &= ~MF2_FEETARECLIPPED;
+      }
 
     if (thing->flags & MF_MISSILE)
     {

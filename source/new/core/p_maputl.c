@@ -938,8 +938,6 @@ static mobj_t *RoughBlockCheck(mobj_t *mo, int index, angle_t fov)
 {
   mobj_t *link;
 
-  if (hexen) return Hexen_RoughBlockCheck(mo, index);
-
   link = blocklinks[index];
   while (link)
   {

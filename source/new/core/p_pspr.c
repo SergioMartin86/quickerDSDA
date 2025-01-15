@@ -119,18 +119,7 @@ void P_SetPspritePtr(player_t *player, pspdef_t *psp, statenum_t stnum)
     psp->state = state;
     psp->tics = state->tics;        // could be 0
 
-    if (hexen)
-    {
-      if (state->misc1)
-      {                       // Set coordinates.
-        psp->sx = state->misc1 << FRACBITS;
-      }
-      if (state->misc2)
-      {
-        psp->sy = state->misc2 << FRACBITS;
-      }
-    }
-    else if (state->misc1)
+ if (state->misc1)
     {
       // coordinate set
       psp->sx = state->misc1 << FRACBITS;
@@ -476,7 +465,7 @@ static void P_FireWeapon(player_t *player)
     newstate = weaponinfo[player->readyweapon].atkstate;
 
   P_SetPsprite(player, ps_weapon, newstate);
-  if (hexen || !(weaponinfo[player->readyweapon].flags & WPF_SILENT))
+  if ( !(weaponinfo[player->readyweapon].flags & WPF_SILENT))
     P_NoiseAlert(player->mo, player->mo);
 
 }
@@ -547,7 +536,6 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
   if (player->cmd.buttons & BT_ATTACK)
   {
     if (
-      hexen || // hexen_note: why is this different?
       !player->attackdown ||
       !(weaponinfo[player->readyweapon].flags & WPF_NOAUTOFIRE)
     )

@@ -1560,11 +1560,6 @@ static void P_PostProcessThings(int mobjcount, mobj_t **mobjlist)
     map_format.build_mobj_thing_id_list();
   }
 
-  if (hexen)
-  {
-    P_InitCreatureCorpseQueue(false);   // false = do NOT scan for corpses
-  }
-
   if (V_IsOpenGLMode())
   {
     no_overlapped_sprites = true;
@@ -3415,7 +3410,7 @@ static void P_UpdateMapFormat()
         lprintf(LO_WARN, "Some features of MAPINFO may not work with non-udmf maps!\n");
       END_ONCE
 
-    if (has_behavior && !hexen)
+    if (has_behavior)
     {
       dsda_ApplyZDoomMapFormat();
     }
@@ -3874,7 +3869,7 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   }
 
   // killough 3/26/98: Spawn icon landings:
-  if (gamemode == commercial && !hexen)
+  if (gamemode == commercial)
     P_SpawnBrainTargets();
 
   // clear special respawning que

@@ -171,7 +171,7 @@ void InterceptsOverrun(int num_intercepts, intercept_t *intercept)
 {
   void P_MustRebuildBlockmap(void);
 
-  if (!hexen && num_intercepts > MAXINTERCEPTS_ORIGINAL && demo_compatibility && PROCESS(OVERFLOW_INTERCEPT))
+  if (num_intercepts > MAXINTERCEPTS_ORIGINAL && demo_compatibility && PROCESS(OVERFLOW_INTERCEPT))
   {
     ShowOverflowWarning(OVERFLOW_INTERCEPT, false, "");
 
@@ -232,7 +232,7 @@ void SpechitOverrun(spechit_overrun_param_t *params)
 {
   int numspechit = *(params->numspechit);
 
-  if (!hexen && demo_compatibility && numspechit > 8)
+  if (demo_compatibility && numspechit > 8)
   {
     line_t **spechit = *(params->spechit);
 
@@ -373,7 +373,7 @@ void RejectOverrun(unsigned int length, const byte **rejectmatrix, int totalline
 
     memset(newreject + length, pad, required - length);
 
-    if (!hexen && demo_compatibility && PROCESS(OVERFLOW_REJECT))
+    if ( demo_compatibility && PROCESS(OVERFLOW_REJECT))
     {
       ShowOverflowWarning(OVERFLOW_REJECT, (required - length > 16) || (length%4 != 0), "");
 

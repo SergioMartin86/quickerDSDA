@@ -119,7 +119,7 @@ void P_InitSwitchList(void)
           (max_numswitches = max_numswitches ? max_numswitches*2 : 8));
 
     // hexen overrides the episode field with a sound index
-    if (hexen || LittleShort(alphSwitchList[i].episode) <= episode) //jff 5/11/98 endianess
+    if (LittleShort(alphSwitchList[i].episode) <= episode) //jff 5/11/98 endianess
     {
       int texture1, texture2;
 
@@ -213,7 +213,7 @@ void P_ChangeSwitchTexture
   tbot = &sides[line->sidenum[0]].bottomtexture;
 
   /* don't zero line->special until after exit switch test */
-  if (!hexen && !useAgain)
+  if (!useAgain)
     line->special = 0;
 
   /* search for a texture to change */
@@ -231,14 +231,6 @@ void P_ChangeSwitchTexture
     return; /* no switch texture was found to change */
   *texture = switchlist[i^1];
 
-  if (hexen)
-  {
-    // hexen has sound id in episode field
-    sound = alphSwitchList[i / 2].episode;
-    soundorg = &line->frontsector->soundorg;
-  }
-  else
-  {
     sound = g_sfx_swtchn;
     /* use the sound origin of the linedef (its midpoint)
      * unless in a compatibility mode */
@@ -247,7 +239,6 @@ void P_ChangeSwitchTexture
       /* usually NULL, unless there is another button already pressed in,
        * in which case it's the sound origin of that button press... */
       soundorg = buttonlist->soundorg;
-    }
   }
 
   S_StartLineSound(line, soundorg, sound);
@@ -400,21 +391,6 @@ P_UseSpecialLine
   dboolean      bossaction)
 {
   dsda_WatchLineActivation(line, thing);
-
-  if (map_format.hexen)
-  {
-    if (side)
-    {
-      if (line->activation & SPAC_USEBACK)
-      {
-        return P_ActivateLine(line, thing, side, SPAC_USEBACK);
-      }
-
-      return false;
-    }
-
-    return P_ActivateLine(line, thing, side, SPAC_USE);
-  }
 
   // e6y
   // b.m. side test was broken in boom201

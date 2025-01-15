@@ -565,7 +565,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
   if (dsda_AllowJumping())
   {
-    if (!hexen && dsda_InputActive(dsda_input_jump))
+    if ( dsda_InputActive(dsda_input_jump))
     {
       dsda_QueueExCmdJump();
     }
@@ -645,7 +645,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
             players[consoleplayer].pendingweapon == wp_nochange
           )
         )
-      ) || (!hexen && dsda_InputActive(dsda_input_toggleweapon))
+      ) || (dsda_InputActive(dsda_input_toggleweapon))
     )
     {
       done_autoswitch = true;
@@ -657,15 +657,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
       if (next_weapon && players[consoleplayer].morphTics == 0)
       {
         newweapon = G_NextWeapon(next_weapon);
-      }
-      else if (hexen)
-      {
-        newweapon =
-          dsda_InputActive(dsda_input_weapon1) ? wp_first :    // killough 5/2/98: reformatted
-          dsda_InputActive(dsda_input_weapon2) ? wp_second :
-          dsda_InputActive(dsda_input_weapon3) ? wp_third :
-          dsda_InputActive(dsda_input_weapon4) ? wp_fourth :
-          wp_nochange;
       }
       else
       {
@@ -908,18 +899,10 @@ static void G_SetInitialInventory(player_t *p)
 {
   int i;
 
-  if (hexen)
-  {
-    p->readyweapon = p->pendingweapon = wp_first;
-    p->weaponowned[wp_first] = true;
-  }
-  else
-  {
     p->readyweapon = p->pendingweapon = g_wp_pistol;
     p->weaponowned[g_wp_fist] = true;
     p->weaponowned[g_wp_pistol] = true;
       p->ammo[am_clip] = initial_bullets; // Ty 03/12/98 - use dehacked values
-  }
 
   for (i = 0; i < NUMAMMO; i++)
     p->maxammo[i] = maxammo[i];
@@ -1253,7 +1236,6 @@ void G_Ticker (void)
     {
       case ga_loadlevel:
         // force players to be initialized on level reload
-        if (!hexen)
           for (i = 0; i < g_maxplayers; i++)
             players[i].playerstate = PST_REBORN;
         G_DoLoadLevel();
@@ -1467,9 +1449,6 @@ static void G_FinishLevelBehaviour(finish_level_behaviour_t *flb, player_t *p)
 
   different_cluster = (dsda_MapCluster(gamemap) != dsda_MapCluster(leave_data.map));
 
-  if (hexen && !deathmatch && !different_cluster)
-    flb->flight_carryover = p->powers[pw_flight];
-  else
     flb->flight_carryover = 0;
 
   flb->set_one_artifact = 0;
@@ -1477,7 +1456,7 @@ static void G_FinishLevelBehaviour(finish_level_behaviour_t *flb, player_t *p)
     flb->use_flight_artifact = arti_none;
     flb->use_flight_count = 0;
 
-  flb->remove_cards = (!hexen || different_cluster);
+  flb->remove_cards = 1;
 }
 
 static void G_PlayerFinishLevel(int player)
@@ -1501,9 +1480,6 @@ static void G_PlayerFinishLevel(int player)
   {
     for (i = 0; i < flb.use_flight_count; i++)
     {
-      if (hexen)
-        p->powers[pw_flight] = 0;
-
       P_PlayerUseArtifact(p, flb.use_flight_artifact);
     }
   }
@@ -1528,9 +1504,6 @@ static void G_PlayerFinishLevel(int player)
     memset(p->cards, 0, sizeof p->cards);
 
   // TODO: need to understand the life cycle of p->mo in hexen
-  if (hexen)
-    p->mo->flags &= ~MF_SHADOW;    // Remove invisibility
-  else
     p->mo = NULL;           // cph - this is zone-allocated so it's gone
 
   p->extralight = 0;      // cancel gun flashes
@@ -1752,9 +1725,6 @@ void G_DoReborn (int playernum)
 {
   dsda_WatchReborn(playernum);
 
-  if (hexen)
-    return Hexen_G_DoReborn(playernum);
-
   if (!netgame && !(map_info.flags & MI_ALLOW_RESPAWN) && !(skill_info.flags & SI_PLAYER_RESPAWN))
     gameaction = ga_loadlevel;      // reload the level from scratch
   else
@@ -1842,9 +1812,6 @@ void G_DoCompleted (void)
 
   R_ResetColorMap();
 
-  if (hexen)
-    totalleveltimes = players[consoleplayer].worldTimer;
-  else
     totalleveltimes += leveltime - leveltime % 35;
   ++levels_completed;
 
@@ -2107,10 +2074,6 @@ void G_AfterLoad(void)
 
   RecalculateDrawnSubsectors();
 
-  if (hexen)
-  {
-    SB_SetClassData();
-  }
 
   if (setsizeneeded)
     R_ExecuteSetViewSize ();
@@ -3198,8 +3161,8 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
         // DOOM_old and HERETIC don't use maps>9;
         // 2 at 4,6 means playerclass=mage -> not DOOM_old or HERETIC;
         if ((size >= 8 && (size - 8) % 4 != 0) ||
-            (map > 9 && !hexen) ||
-            (size >= 6 && (*(header_p + 4) == 2 || *(header_p + 6) == 2) && !hexen))
+            (map > 9) ||
+            (size >= 6 && (*(header_p + 4) == 2 || *(header_p + 6) == 2)))
         {
           I_Error("Unrecognised demo format.");
         }
@@ -3301,27 +3264,12 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
 
   if (demo_compatibility || demover < 200) //e6y  // only 4 players can exist in old demos
   {
-    if (hexen)
-    {
-      //e6y: check for overrun
-      if (CheckForOverrun(header_p, demo_p, size, g_maxplayers, failonerror))
-        return NULL;
-
-      for (i = 0; i < g_maxplayers; i++)
-      {
-        playeringame[i] = (*demo_p++) != 0;
-        PlayerClass[i] = *demo_p++ + 1;
-      }
-    }
-    else
-    {
       //e6y: check for overrun
       if (CheckForOverrun(header_p, demo_p, size, g_maxplayers, failonerror))
         return NULL;
 
       for (i = 0; i < g_maxplayers; i++)
         playeringame[i] = *demo_p++;
-    }
   }
   else
   {
@@ -3771,13 +3719,6 @@ static dboolean InventoryMoveRight(void)
 
 void G_Completed(int map, int position, int flags, angle_t angle)
 {
-    if (hexen && gamemode == shareware && map > 4)
-    {
-        P_SetMessage(&players[consoleplayer], "ACCESS DENIED -- DEMO", true);
-        S_StartVoidSound(hexen_sfx_chat);
-        return;
-    }
-
     secretexit = false;
     gameaction = ga_completed;
     dsda_UpdateLeaveData(map, position, flags, angle);

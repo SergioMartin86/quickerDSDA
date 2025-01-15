@@ -2991,37 +2991,34 @@ void P_UpdateSpecials (void)
   int         i;
 
   // hexen_note: possibly not needed?
-  if (!hexen)
+  // Downcount level timer, exit level if elapsed
+  if (levelTimer == true)
   {
-    // Downcount level timer, exit level if elapsed
-    if (levelTimer == true)
-    {
-      levelTimeCount--;
-      if (!levelTimeCount)
-        G_ExitLevel(0);
-    }
+    levelTimeCount--;
+    if (!levelTimeCount)
+      G_ExitLevel(0);
+  }
 
-    // Check frag counters, if frag limit reached, exit level // Ty 03/18/98
-    //  Seems like the total frags should be kept in a simple
-    //  array somewhere, but until they are...
-    if (levelFragLimit == true)  // we used -frags so compare count
+  // Check frag counters, if frag limit reached, exit level // Ty 03/18/98
+  //  Seems like the total frags should be kept in a simple
+  //  array somewhere, but until they are...
+  if (levelFragLimit == true)  // we used -frags so compare count
+  {
+    int k,m,fragcount,exitflag=false;
+    for (k = 0; k < g_maxplayers; k++)
     {
-      int k,m,fragcount,exitflag=false;
-      for (k = 0; k < g_maxplayers; k++)
+      if (!playeringame[k]) continue;
+      fragcount = 0;
+      for (m = 0; m < g_maxplayers; m++)
       {
-        if (!playeringame[k]) continue;
-        fragcount = 0;
-        for (m = 0; m < g_maxplayers; m++)
-        {
-          if (!playeringame[m]) continue;
-            fragcount += (m!=k)?  players[k].frags[m] : -players[k].frags[m];
-        }
-        if (fragcount >= levelFragLimitCount) exitflag = true;
-        if (exitflag == true) break; // skip out of the loop--we're done
+        if (!playeringame[m]) continue;
+          fragcount += (m!=k)?  players[k].frags[m] : -players[k].frags[m];
       }
-      if (exitflag == true)
-        G_ExitLevel(0);
+      if (fragcount >= levelFragLimitCount) exitflag = true;
+      if (exitflag == true) break; // skip out of the loop--we're done
     }
+    if (exitflag == true)
+      G_ExitLevel(0);
   }
 
   // MAP_FORMAT_TODO: needs investigation
@@ -3065,8 +3062,6 @@ void P_UpdateSpecials (void)
               buttonlist[i].btexture;
             break;
         }
-        if (!hexen)
-        {
           /* don't take the address of the switch's sound origin,
            * unless in a compatibility mode. */
           degenmobj_t *so = buttonlist[i].soundorg;
@@ -3075,7 +3070,6 @@ void P_UpdateSpecials (void)
              * button popouts generally appear to come from (0,0) */
             so = (degenmobj_t *) &buttonlist[i].soundorg;
           S_StartLineSound(buttonlist[i].line, so, g_sfx_swtchn);
-        }
         memset(&buttonlist[i],0,sizeof(button_t));
       }
     }
@@ -3592,8 +3586,6 @@ static void Hexen_P_SpawnSpecials(void);
 // Parses command line parameters.
 void P_SpawnSpecials (void)
 {
-  if (hexen) return Hexen_P_SpawnSpecials();
-
   P_EvaluateDeathmatchParams();
 
   P_InitSectorSpecials();
@@ -5634,7 +5626,7 @@ void P_PlayerInHexenSector(player_t * player, sector_t * sector)
 
 static dboolean P_ArgToCrushType(int arg)
 {
-  return arg == 1 ? false : arg == 2 ? true : hexen;
+  return arg == 1 ? false : arg == 2 ? true : 0;
 }
 
 static crushmode_e P_ArgToCrushMode(int arg, dboolean slowdown)
@@ -5643,7 +5635,7 @@ static crushmode_e P_ArgToCrushMode(int arg, dboolean slowdown)
 
   if (arg >= 1 && arg <= 3) return map[arg - 1];
 
-  return hexen ? crushHexen : slowdown ? crushSlowdown : crushDoom;
+  return slowdown ? crushSlowdown : crushDoom;
 }
 
 static int P_ArgToCrush(int arg)
@@ -6169,7 +6161,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
             remove = true;
             break;
           default:
-            remove = hexen;
+            remove = 0;
             break;
         }
 
@@ -6279,7 +6271,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
             remove = true;
             break;
           default:
-            remove = hexen;
+            remove = 0;
             break;
         }
 
