@@ -41,7 +41,6 @@
 #include "sounds.h"
 #include "st_stuff.h"
 #include "hu_stuff.h"
-#include "s_advsound.h"
 #include "info.h"
 #include "g_game.h"
 #include "p_inter.h"
@@ -1014,7 +1013,6 @@ void P_MobjThinker (mobj_t* mobj)
 
   if (mobj->type == MT_MUSICSOURCE)
   {
-    MusInfoThinker(mobj);
     return;
   }
 

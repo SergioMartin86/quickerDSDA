@@ -38,7 +38,6 @@
 #include "p_map.h"
 #include "r_fps.h"
 #include "e6y.h"
-#include "s_advsound.h"
 
 #include "hexen/p_anim.h"
 
@@ -261,8 +260,6 @@ static void P_RunThinkers (void)
   }
   newthinkerpresent = false;
 
-  // Dedicated thinkers
-  T_MAPMusic();
 }
 
 void P_CleanThinkers (void)

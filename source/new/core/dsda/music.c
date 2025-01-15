@@ -21,7 +21,6 @@
 
 #include "doomtype.h"
 #include "p_saveg.h"
-#include "s_advsound.h"
 
 #include "music.h"
 

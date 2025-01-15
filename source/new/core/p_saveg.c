@@ -42,7 +42,6 @@
 #include "m_random.h"
 #include "p_enemy.h"
 #include "lprintf.h"
-#include "s_advsound.h"
 #include "e6y.h"//e6y
 
 #include "hexen/a_action.h"
@@ -242,8 +241,6 @@ void P_ArchiveWorld (void)
         }
       }
   }
-
-  P_SAVE_X(musinfo.current_item);
 }
 
 
@@ -344,8 +341,6 @@ void P_UnArchiveWorld (void)
         }
       }
   }
-
-  P_LOAD_X(musinfo.current_item);
 }
 
 //
@@ -1608,6 +1603,7 @@ void P_UnArchiveThinkers(void) {
     {
       P_ReplaceIndexWithMobj(&((quake_t *) th)->location, mobj_p, mobj_count);
     }
+    
     else if (P_IsMobjThinker(th))
     {
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->target, mobj_p, mobj_count);

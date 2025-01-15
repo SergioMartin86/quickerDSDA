@@ -18,7 +18,6 @@
 #include <time.h>
 
 #include "doomstat.h"
-#include "s_advsound.h"
 #include "st_stuff.h"
 #include "p_saveg.h"
 #include "p_map.h"
