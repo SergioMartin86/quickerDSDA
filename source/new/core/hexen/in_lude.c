@@ -26,7 +26,6 @@
 #include "g_game.h"
 #include "p_setup.h"
 
-#include "dsda/exhud.h"
 #include "dsda/mapinfo.h"
 
 #include "heretic/sb_bar.h"
@@ -286,7 +285,6 @@ void Hexen_IN_Drawer(void)
         {
             DrawHubText();
         }
-        dsda_DrawExIntermission();
     }
     else
     {

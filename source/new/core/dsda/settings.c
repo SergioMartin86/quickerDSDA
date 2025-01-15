@@ -26,7 +26,6 @@
 
 #include "dsda/args.h"
 #include "dsda/configuration.h"
-#include "dsda/exhud.h"
 #include "dsda/features.h"
 #include "dsda/key_frame.h"
 #include "dsda/map_format.h"

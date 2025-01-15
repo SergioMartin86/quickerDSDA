@@ -29,7 +29,6 @@
 #include "dsda/analysis.h"
 #include "dsda/args.h"
 #include "dsda/demo.h"
-#include "dsda/exhud.h"
 #include "dsda/features.h"
 #include "dsda/ghost.h"
 #include "dsda/key_frame.h"
@@ -179,7 +178,6 @@ void dsda_ReadCommandLine(void) {
   if (dsda_Flag(dsda_arg_tas) || dsda_Flag(dsda_arg_build)) dsda_SetTas();
 
   dsda_InitKeyFrame();
-  dsda_InitCommandHistory();
 }
 
 static int dsda_shown_attempt = 0;
@@ -243,23 +241,6 @@ void dsda_WatchReborn(int playernum) {
 }
 
 void dsda_WatchCard(card_t card) {
-  if (dsda_time_keys)
-    switch (card) {
-      case it_bluecard:
-      case it_blueskull:
-        dsda_AddSplit(DSDA_SPLIT_BLUE_KEY, dsda_time_keys);
-        break;
-      case it_yellowcard:
-      case it_yellowskull:
-        dsda_AddSplit(DSDA_SPLIT_YELLOW_KEY, dsda_time_keys);
-        break;
-      case it_redcard:
-      case it_redskull:
-        dsda_AddSplit(DSDA_SPLIT_RED_KEY, dsda_time_keys);
-        break;
-      default:
-        break;
-    }
 }
 
 static int player_damage_leveltime;
@@ -407,9 +388,6 @@ void dsda_WatchCommand(void) {
     cmd = &players[i].cmd;
     player_class = &pclass;
 
-    if (cmd->buttons & BT_USE && dsda_time_use)
-      dsda_AddSplit(DSDA_SPLIT_USE, dsda_time_use);
-
     if (cmd->sidemove != 0 || abs(cmd->forwardmove) > player_class->stroller_threshold)
       dsda_stroller = false;
 
@@ -419,8 +397,6 @@ void dsda_WatchCommand(void) {
     )
       dsda_turbo = true;
   }
-
-  dsda_AddCommandToCommandDisplay(&players[displayplayer].cmd);
 
   dsda_ExportGhostFrame();
 }
@@ -538,8 +514,6 @@ void dsda_WatchWeaponFire(weapontype_t weapon) {
 }
 
 void dsda_WatchSecret(void) {
-  if (dsda_time_secrets)
-    dsda_AddSplit(DSDA_SPLIT_SECRET, dsda_time_secrets);
 }
 
 static void dsda_ResetTracking(void) {

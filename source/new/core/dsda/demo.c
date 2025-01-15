@@ -242,24 +242,6 @@ void dsda_CopyPriorCmd(ticcmd_t* cmd, int delta) {
 }
 
 void dsda_RestoreCommandHistory(void) {
-  extern int dsda_command_history_size;
-
-  ticcmd_t cmd = { 0 };
-
-  // the dsda format has variable bytes_per_tic - ignoring these for now
-  if (demorecording && true_logictic && dsda_command_history_size && !dsda_demo_version) {
-    const byte* p;
-    int count;
-
-    count = MIN(true_logictic, dsda_command_history_size);
-
-    p = dsda_demo_write_buffer_p - bytes_per_tic * count;
-
-    while (p < dsda_demo_write_buffer_p) {
-      G_ReadOneTick(&cmd, &p);
-      dsda_AddCommandToCommandDisplay(&cmd);
-    }
-  }
 }
 
 void dsda_MarkCompatibilityLevelUnspecified(void) {

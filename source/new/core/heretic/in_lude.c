@@ -32,8 +32,6 @@
 #include "w_wad.h"
 #include "g_game.h"
 
-#include "dsda/exhud.h"
-
 #include "heretic/def.h"
 #include "heretic/dstrings.h"
 #include "heretic/sb_bar.h"

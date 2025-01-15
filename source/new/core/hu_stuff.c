@@ -54,7 +54,6 @@
 #include "g_overflow.h"
 
 #include "dsda.h"
-#include "dsda/exhud.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
 #include "dsda/messenger.h"
@@ -344,9 +343,6 @@ void HU_Start(void)
   HU_InitMessages();
   HU_FetchTitle();
   HU_InitCrosshair();
-
-  dsda_InitExHud();
-
   HU_AnnounceMap();
 }
 
@@ -407,7 +403,6 @@ void HU_Ticker(void)
     }
   }
 
-  dsda_UpdateExHud();
 }
 
 //

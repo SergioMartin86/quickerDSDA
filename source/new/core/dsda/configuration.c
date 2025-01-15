@@ -30,7 +30,6 @@
 #include "z_zone.h"
 
 #include "dsda/args.h"
-#include "dsda/exhud.h"
 #include "dsda/features.h"
 #include "dsda/input.h"
 #include "dsda/stretch.h"
@@ -107,7 +106,6 @@ void HU_InitCrosshair(void);
 void HU_InitThresholds(void);
 void dsda_InitKeyFrame(void);
 void dsda_SetupStretchParams(void);
-void dsda_InitCommandHistory(void);
 void dsda_InitQuickstartCache(void);
 void dsda_InitParallelSFXFilter(void);
 void M_ChangeMapMultisamling(void);
@@ -122,8 +120,6 @@ void M_ChangeApplyPalette(void);
 void M_ChangeStretch(void);
 void M_ChangeAspectRatio(void);
 void dsda_InitGameControllerParameters(void);
-void dsda_InitExHud(void);
-void dsda_UpdateFreeText(void);
 void dsda_ResetAirControl(void);
 void dsda_AlterGameFlags(void);
 
@@ -198,9 +194,6 @@ void dsda_UpdateStrictMode(void) {
   M_ChangeSkyMode(); // affected by mouselook setting
   HU_InitCrosshair();
   M_ChangeApplyPalette();
-  dsda_RefreshExHudCoordinateDisplay();
-  dsda_RefreshExHudCommandDisplay();
-  dsda_RefreshExHudMinimap();
   dsda_TrackConfigFeatures();
 }
 
@@ -325,31 +318,31 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_command_display] = {
     "dsda_command_display", dsda_config_command_display,
-    CONF_BOOL(0), NULL, STRICT_INT(0), dsda_RefreshExHudCommandDisplay
+    CONF_BOOL(0), NULL, STRICT_INT(0), NULL
   },
   [dsda_config_coordinate_display] = {
     "dsda_coordinate_display", dsda_config_coordinate_display,
-    CONF_BOOL(0), NULL, STRICT_INT(0), dsda_RefreshExHudCoordinateDisplay
+    CONF_BOOL(0), NULL, STRICT_INT(0), NULL
   },
   [dsda_config_show_fps] = {
     "dsda_show_fps", dsda_config_show_fps,
-    CONF_BOOL(0), NULL, NOT_STRICT, dsda_RefreshExHudFPS
+    CONF_BOOL(0), NULL, NOT_STRICT, NULL
   },
   [dsda_config_show_minimap] = {
     "dsda_show_minimap", dsda_config_show_minimap,
-    CONF_BOOL(0), NULL, STRICT_INT(0), dsda_RefreshExHudMinimap
+    CONF_BOOL(0), NULL, STRICT_INT(0), NULL
   },
   [dsda_config_show_level_splits] = {
     "dsda_show_level_splits", dsda_config_show_level_splits,
-    CONF_BOOL(1), NULL, NOT_STRICT, dsda_RefreshExHudLevelSplits
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_exhud] = {
     "dsda_exhud", dsda_config_exhud,
-    CONF_BOOL(0), NULL, CONF_FEATURE | NOT_STRICT, dsda_InitExHud
+    CONF_BOOL(0), NULL, CONF_FEATURE | NOT_STRICT, NULL
   },
   [dsda_config_free_text] = {
     "dsda_free_text", dsda_config_free_text,
-    CONF_STRING(""), NULL, NOT_STRICT, dsda_UpdateFreeText
+    CONF_STRING(""), NULL, NOT_STRICT, NULL
   },
   [dsda_config_mute_sfx] = {
     "dsda_mute_sfx", dsda_config_mute_sfx,
@@ -922,11 +915,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_command_history_size] = {
     "dsda_command_history_size", dsda_config_command_history_size,
-    dsda_config_int, 1, 20, { 10 }, NULL, NOT_STRICT, dsda_InitCommandHistory
+    dsda_config_int, 1, 20, { 10 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_hide_empty_commands] = {
     "dsda_hide_empty_commands", dsda_config_hide_empty_commands,
-    CONF_BOOL(1), NULL, NOT_STRICT, dsda_InitCommandHistory
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_skip_quit_prompt] = {
     "dsda_skip_quit_prompt", dsda_config_skip_quit_prompt,
@@ -1014,19 +1007,19 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_map_coordinates] = {
     "map_coordinates", dsda_config_map_coordinates,
-    CONF_BOOL(1), NULL, STRICT_INT(0), dsda_RefreshMapCoordinates
+    CONF_BOOL(1), NULL, STRICT_INT(0), NULL
   },
   [dsda_config_map_totals] = {
     "map_totals", dsda_config_map_totals,
-    CONF_BOOL(1), NULL, NOT_STRICT, dsda_RefreshMapTotals
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_time] = {
     "map_time", dsda_config_map_time,
-    CONF_BOOL(1), NULL, NOT_STRICT, dsda_RefreshMapTime
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_title] = {
     "map_title", dsda_config_map_title,
-    CONF_BOOL(1), NULL, NOT_STRICT, dsda_RefreshMapTitle
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_map_trail_mode] = {
     "map_trail_mode", dsda_config_map_trail_mode,

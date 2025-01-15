@@ -2879,7 +2879,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   }
 
   dsda_ResetPauseMode();
-  dsda_ResetCommandHistory();
   dsda_UpdateGameSkill(skill);
   dsda_UpdateGameMap(episode, map);
 

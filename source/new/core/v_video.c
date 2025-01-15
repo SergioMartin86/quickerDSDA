@@ -509,8 +509,6 @@ static void V_DrawMemPatch(int x, int y, int scrn, const rpatch_t *patch,
 
     deltay1 = params->deltay1;
 
-    if (TOP_ALIGNMENT(flags & VPT_STRETCH_MASK))
-      deltay1 += global_patch_top_offset;
 
     left   += params->deltax1;
     right  += params->deltax2;

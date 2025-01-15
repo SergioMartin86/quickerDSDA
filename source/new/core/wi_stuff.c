@@ -45,7 +45,6 @@
 #include "r_draw.h"
 #include "hu_stuff.h"
 
-#include "dsda/exhud.h"
 #include "dsda/font.h"
 #include "dsda/mapinfo.h"
 
@@ -1009,7 +1008,6 @@ static void WI_drawTimeStats(int cnt_time, int cnt_total_time, int cnt_par)
     }
   }
 
-  dsda_DrawExIntermission();
 }
 
 // ====================================================================
