@@ -83,7 +83,6 @@
 #include "dsda.h"
 #include "dsda/aim.h"
 #include "dsda/args.h"
-#include "dsda/brute_force.h"
 #include "dsda/build.h"
 #include "dsda/configuration.h"
 #include "dsda/demo.h"
@@ -1515,9 +1514,6 @@ void G_Ticker (void)
     END_ONCE
   }
 
-  if (dsda_BruteForce())
-    dsda_EvaluateBruteForce();
-
   if (dsda_BuildMode())
     dsda_RefreshBuildMode();
 
@@ -1537,12 +1533,6 @@ void G_Ticker (void)
 
     dsda_UpdateAutoKeyFrames();
     dsda_UpdateAutoSaves();
-
-    if (dsda_BruteForce())
-    {
-      dsda_UpdateBruteForce();
-      dsda_RemovePauseMode(PAUSE_BUILDMODE);
-    }
 
     for (i = 0; i < g_maxplayers; i++)
     {

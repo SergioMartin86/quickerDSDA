@@ -19,7 +19,6 @@
 #include "g_game.h"
 
 #include "dsda/args.h"
-#include "dsda/brute_force.h"
 #include "dsda/demo.h"
 #include "dsda/exhud.h"
 #include "dsda/features.h"
@@ -427,8 +426,6 @@ void dsda_CopyBuildCmd(ticcmd_t* cmd) {
 void dsda_ReadBuildCmd(ticcmd_t* cmd) {
   if (cmd_queue.depth)
     dsda_PopCommandQueue(cmd);
-  else if (dsda_BruteForce())
-    dsda_CopyBruteForceCommand(cmd);
   else if (true_logictic == build_cmd_tic) {
     *cmd = build_cmd;
     build_cmd_tic = -1;

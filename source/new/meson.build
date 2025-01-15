@@ -8,7 +8,6 @@ quickerDSDASrc =  [
  'core/dsda/ambient.cpp',
  'core/dsda/analysis.c',
  'core/dsda/args.c',
- 'core/dsda/brute_force.c',
  'core/dsda/build.c',
  'core/dsda/compatibility.c',
  'core/dsda/configuration.c',
