@@ -42,7 +42,6 @@
 #include "hu_stuff.h"
 #include "st_lib.h"
 #include "r_main.h"
-#include "m_cheat.h"
 #include "s_sound.h"
 #include "sounds.h"
 #include "dstrings.h"
@@ -454,7 +453,7 @@ static void ST_refreshBackground(void)
 //  intercept cheats.
 dboolean ST_Responder(event_t *ev)
 {
-  return M_CheatResponder(ev);
+  return 0;
 }
 
 static int ST_calcPainOffset(void)

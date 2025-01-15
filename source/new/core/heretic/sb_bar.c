@@ -17,7 +17,6 @@
 // SB_bar.c
 
 #include "doomstat.h"
-#include "m_cheat.h"
 #include "m_random.h"
 #include "v_video.h"
 #include "r_main.h"

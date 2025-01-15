@@ -153,7 +153,6 @@ quickerDSDASrc =  [
  'core/md5.c',
  'core/m_argv.c',
  'core/m_bbox.c',
- 'core/m_cheat.c',
  'core/m_file.c',
  'core/m_misc.c',
  'core/m_random.c',

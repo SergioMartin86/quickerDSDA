@@ -53,7 +53,6 @@
 #include "f_finale.h"
 #include "m_file.h"
 #include "m_misc.h"
-#include "m_cheat.h"
 #include "m_random.h"
 #include "p_setup.h"
 #include "p_saveg.h"
@@ -1609,16 +1608,6 @@ void G_Ticker (void)
             forced_loadgame = true;
             load_via_cmd = true;
             R_SmoothPlaying_Reset(NULL);
-          }
-
-          if (ex->actions & XC_GOD)
-          {
-            M_CheatGod();
-          }
-
-          if (ex->actions & XC_NOCLIP)
-          {
-            M_CheatNoClip();
           }
 
           if (ex->actions & XC_LOOK && ex->look != XC_LOOK_RESET && !dsda_MouseLook())
