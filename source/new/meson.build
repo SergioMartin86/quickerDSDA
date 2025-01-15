@@ -155,8 +155,6 @@ quickerDSDASrc =  [
  'core/z_zone.c',
  'core/d_client.c',
  'core/w_mmap.c',
- 'core/memio.c',
- 'core/mus2mid.c',
  'core/i_system.c',
 ]
 
