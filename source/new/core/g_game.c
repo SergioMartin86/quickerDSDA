@@ -68,11 +68,9 @@
 #include "p_map.h"
 #include "s_sound.h"
 #include "s_advsound.h"
-#include "dstrings.h"
 #include "sounds.h"
 #include "r_data.h"
 #include "r_sky.h"
-#include "d_deh.h"              // Ty 3/27/98 deh declarations
 #include "p_inter.h"
 #include "g_game.h"
 #include "lprintf.h"

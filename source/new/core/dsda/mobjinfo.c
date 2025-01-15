@@ -66,16 +66,16 @@ static void dsda_EnsureCapacity(int limit) {
 static deh_index_hash_t deh_mobj_index_hash;
 
 int dsda_FindDehMobjIndex(int index) {
-  return dsda_FindDehIndex(index, &deh_mobj_index_hash);
+  return 0;
 }
 
 int dsda_GetDehMobjIndex(int index) {
-  return dsda_GetDehIndex(index, &deh_mobj_index_hash);
+  return 0;
 }
 
 // Dehacked has the index off by 1
 int dsda_TranslateDehMobjIndex(int index) {
-  return dsda_GetDehMobjIndex(index - 1) + 1;
+  return 0;
 }
 
 dsda_deh_mobjinfo_t dsda_GetDehMobjInfo(int index) {

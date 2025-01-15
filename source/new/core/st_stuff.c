@@ -44,7 +44,6 @@
 #include "r_main.h"
 #include "s_sound.h"
 #include "sounds.h"
-#include "dstrings.h"
 #include "p_pspr.h"
 #include "r_draw.h"
 #include "e6y.h"//e6y

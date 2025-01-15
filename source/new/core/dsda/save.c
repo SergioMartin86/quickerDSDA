@@ -207,30 +207,6 @@ char* dsda_SaveDir(void) {
   return dsda_base_save_dir;
 }
 
-extern const char* savegamename;
-
-char* dsda_SaveGameName(int slot, dboolean via_cmd) {
-  int length;
-  char* name;
-  const char* save_dir;
-  const char* save_type;
-
-  if (slot > 9999 || slot < 0)
-    I_Error("dsda_SaveGameName: bad save slot %d", slot);
-
-  save_dir = dsda_SaveDir();
-
-  save_type = (via_cmd && demoplayback) ? "demosav" : savegamename;
-
-  length = strlen(save_type) + strlen(save_dir) + 10; // "/" + "9999.dsg\0"
-
-  name = Z_Malloc(length);
-
-  snprintf(name, length, "%s/%s%d.dsg", save_dir, save_type, slot);
-
-  return name;
-}
-
 static int* demo_save_slots;
 static int allocated_save_slot_count;
 static int demo_save_slot_count;

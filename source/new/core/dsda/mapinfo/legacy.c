@@ -450,46 +450,6 @@ int dsda_LegacyMapAuthor(const char** author) {
 }
 
 int dsda_LegacyHUTitle(dsda_string_t* str) {
-  extern char** mapnames[];
-  extern char** mapnames2[];
-  extern char** mapnamesp[];
-  extern char** mapnamest[];
-  extern const char* LevelNames[];
-
-  dsda_InitString(str, NULL);
-
-  if (gamestate == GS_LEVEL && gamemap > 0 && gameepisode > 0) {
-    if (heretic) {
-      if (gameepisode < 6 && gamemap < 10)
-        dsda_StringCat(str, LevelNames[(gameepisode - 1) * 9 + gamemap - 1]);
-    }
-    else {
-      switch (gamemode) {
-        case shareware:
-        case registered:
-        case retail:
-          // Chex.exe always uses the episode 1 level title
-          // eg. E2M1 gives the title for E1M1
-          if (gamemission == chex && gamemap < 10)
-            dsda_StringCat(str, *mapnames[gamemap - 1]);
-          else if (gameepisode < 6 && gamemap < 10)
-            dsda_StringCat(str, *mapnames[(gameepisode - 1) * 9 + gamemap - 1]);
-          break;
-
-        default:  // Ty 08/27/98 - modified to check mission for TNT/Plutonia
-          if (gamemission == pack_tnt && gamemap < 33)
-            dsda_StringCat(str, *mapnamest[gamemap - 1]);
-          else if (gamemission == pack_plut && gamemap < 33)
-            dsda_StringCat(str, *mapnamesp[gamemap - 1]);
-          else if (gamemap < 34)
-            dsda_StringCat(str, *mapnames2[gamemap - 1]);
-          break;
-      }
-    }
-  }
-
-  if (!str->string)
-    dsda_StringCat(str, VANILLA_MAP_LUMP_NAME(gameepisode, gamemap));
 
   return true;
 }
@@ -543,20 +503,6 @@ int dsda_LegacyPrepareInitNew(void) {
 }
 
 void dsda_LegacyParTime(int* partime, dboolean* modified) {
-  extern int deh_pars;
-
-  if (gamemode == commercial) {
-    if (gamemap >= 1 && gamemap <= 34) {
-      *partime = TICRATE * cpars[gamemap - 1];
-      *modified = deh_pars;
-    }
-  }
-  else {
-    if (gameepisode >= 1 && gameepisode <= 4 && gamemap >= 1 && gamemap <= 9) {
-      *partime = TICRATE * pars[gameepisode][gamemap];
-      *modified = deh_pars;
-    }
-  }
 }
 
 int dsda_LegacyPrepareIntermission(int* result) {

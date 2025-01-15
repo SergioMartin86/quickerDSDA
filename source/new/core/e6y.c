@@ -64,7 +64,6 @@
 #include "dsda.h"
 #include "dsda/settings.h"
 #include "g_game.h"
-#include "d_deh.h"
 #include "e6y.h"
 #include "m_file.h"
 
@@ -606,8 +605,6 @@ int mlooky = 0;
 
 void e6y_G_Compatibility(void)
 {
-  deh_applyCompatibility();
-
   if (dsda_PlaybackName())
   {
     int i;

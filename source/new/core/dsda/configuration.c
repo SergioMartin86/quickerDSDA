@@ -121,7 +121,6 @@ void R_SetViewSize(void);
 void M_ChangeApplyPalette(void);
 void M_ChangeStretch(void);
 void M_ChangeAspectRatio(void);
-void deh_changeCompTranslucency(void);
 void dsda_InitGameControllerParameters(void);
 void dsda_InitExHud(void);
 void dsda_UpdateFreeText(void);
@@ -1202,7 +1201,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_boom_translucent_sprites] = {
     "boom_translucent_sprites", dsda_config_boom_translucent_sprites,
-    CONF_BOOL(1), NULL, NOT_STRICT, deh_changeCompTranslucency
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_show_alive_monsters] = { // never persisted
     "show_alive_monsters", dsda_config_show_alive_monsters,

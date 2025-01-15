@@ -51,7 +51,6 @@
 #include "doomtype.h"
 #include "doomstat.h"
 #include "d_net.h"
-#include "dstrings.h"
 #include "sounds.h"
 #include "z_zone.h"
 #include "w_wad.h"
@@ -74,7 +73,6 @@
 #include "r_main.h"
 #include "r_fps.h"
 #include "d_main.h"
-#include "d_deh.h"  // Ty 04/08/98 - Externalizations
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 #include "e6y.h"
 
@@ -1074,53 +1072,6 @@ const char *IWADBaseName(void)
   return dsda_BaseName(wadfiles[i].name);
 }
 
-typedef struct {
-  char **list;
-  int count;
-  int allocated_count;
-} deh_queue_t;
-
-static deh_queue_t autoload_deh_all_queue;
-static deh_queue_t autoload_deh_game_queue;
-static deh_queue_t autoload_deh_iwad_queue;
-static deh_queue_t *autoload_deh_pwad_queue;
-static int autoload_deh_pwad_count;
-
-static void D_QueueAutoloadDeh(deh_queue_t *queue, const char *name)
-{
-  int old_count;
-
-  old_count = queue->count;
-  ++queue->count;
-
-  if (queue->count > queue->allocated_count)
-  {
-    if (!queue->allocated_count)
-      queue->allocated_count = 4;
-
-    while (queue->count > queue->allocated_count)
-      queue->allocated_count *= 2;
-
-    queue->list = Z_Realloc(queue->list, queue->allocated_count * sizeof(*queue->list));
-    memset(&queue->list[old_count], 0, (queue->allocated_count - old_count) * sizeof(*queue->list));
-  }
-
-  queue->list[queue->count - 1] = Z_Strdup(name);
-}
-
-static void D_ProcessDehAutoloadQueue(deh_queue_t *queue)
-{
-  int i;
-
-  for (i = 0; i < queue->count; ++i)
-  {
-    ProcessDehFile(queue->list[i], D_dehout(), 0);
-    Z_Free(queue->list[i]);
-  }
-
-  Z_Free(queue->list);
-}
-
 // Load all WAD files from the given directory.
 
 static void LoadWADsAtPath(const char *path, wad_source_t source)
@@ -1143,75 +1094,6 @@ static void LoadWADsAtPath(const char *path, wad_source_t source)
     I_EndGlob(glob);
 }
 
-static void LoadDehackedFilesAtPath(const char *path, dboolean defer_loading, deh_queue_t *deh_queue)
-{
-    const char *filename;
-    glob_t *glob;
-
-    glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED,
-                            "*.deh", "*.bex", NULL);
-    for (;;)
-    {
-        filename = I_NextGlob(glob);
-        if (filename == NULL)
-        {
-            break;
-        }
-
-        if (deh_queue)
-        {
-            D_QueueAutoloadDeh(deh_queue, filename);
-        }
-        else if (defer_loading)
-        {
-            dsda_AppendStringArg(dsda_arg_deh, filename);
-        }
-        else
-        {
-            ProcessDehFile(filename, D_dehout(), 0);
-        }
-    }
-
-    I_EndGlob(glob);
-}
-
-static void D_AddZip(const char* zipped_file_name, wad_source_t source, deh_queue_t *deh_queue)
-{
-  #ifdef __ENABLE_ZIP
-  char* full_zip_path;
-  const char* temporary_directory;
-
-  full_zip_path = I_RequireZip(zipped_file_name);
-  temporary_directory = dsda_UnzipFile(full_zip_path);
-
-  LoadWADsAtPath(temporary_directory, source);
-  LoadDehackedFilesAtPath(temporary_directory, true, deh_queue);
-
-  Z_Free(full_zip_path);
-  #else
-  fprintf(stderr,".ZIP files not supported ('%s')\n", zipped_file_name); abort();
-  #endif
-}
-
-static void LoadZIPsAtPath(const char *path, wad_source_t source, deh_queue_t *deh_queue)
-{
-    glob_t *glob;
-    const char *filename;
-
-    glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED,
-                            "*.zip", NULL);
-    for (;;)
-    {
-        filename = I_NextGlob(glob);
-        if (filename == NULL)
-        {
-            break;
-        }
-        D_AddZip(filename, source, deh_queue);
-    }
-
-    I_EndGlob(glob);
-}
 
 static const char *D_AutoLoadGameBase()
 {
@@ -1221,91 +1103,6 @@ static const char *D_AutoLoadGameBase()
 }
 
 #define ALL_AUTOLOAD "all-all"
-
-// auto-loading of .wad files.
-
-void D_AutoloadIWadDir()
-{
-  char *autoload_dir;
-
-  // common auto-loaded files for all games
-  autoload_dir = GetAutoloadDir(ALL_AUTOLOAD, true);
-  LoadWADsAtPath(autoload_dir, source_auto_load);
-  LoadZIPsAtPath(autoload_dir, source_auto_load, &autoload_deh_all_queue);
-  Z_Free(autoload_dir);
-
-  // common auto-loaded files for the game
-  autoload_dir = GetAutoloadDir(D_AutoLoadGameBase(), true);
-  LoadWADsAtPath(autoload_dir, source_auto_load);
-  LoadZIPsAtPath(autoload_dir, source_auto_load, &autoload_deh_game_queue);
-  Z_Free(autoload_dir);
-
-  // auto-loaded files per IWAD
-  autoload_dir = GetAutoloadDir(IWADBaseName(), true);
-  LoadWADsAtPath(autoload_dir, source_auto_load);
-  LoadZIPsAtPath(autoload_dir, source_auto_load, &autoload_deh_iwad_queue);
-  Z_Free(autoload_dir);
-}
-
-static void D_AutoloadPWadDir()
-{
-  int i;
-
-  autoload_deh_pwad_count = numwadfiles;
-  autoload_deh_pwad_queue = Z_Calloc(autoload_deh_pwad_count, sizeof(*autoload_deh_pwad_queue));
-
-  for (i = 0; i < numwadfiles; ++i)
-    if (wadfiles[i].src == source_pwad)
-    {
-      char *autoload_dir;
-      autoload_dir = GetAutoloadDir(dsda_BaseName(wadfiles[i].name), false);
-      LoadWADsAtPath(autoload_dir, source_auto_load);
-      LoadZIPsAtPath(autoload_dir, source_auto_load, &autoload_deh_pwad_queue[i]);
-      Z_Free(autoload_dir);
-    }
-}
-
-// auto-loading of .deh files.
-
-static void D_AutoloadDehIWadDir()
-{
-  char *autoload_dir;
-
-  // common auto-loaded files for all games
-  autoload_dir = GetAutoloadDir(ALL_AUTOLOAD, true);
-  LoadDehackedFilesAtPath(autoload_dir, false, NULL);
-  D_ProcessDehAutoloadQueue(&autoload_deh_all_queue);
-  Z_Free(autoload_dir);
-
-  // common auto-loaded files for the game
-  autoload_dir = GetAutoloadDir(D_AutoLoadGameBase(), true);
-  LoadDehackedFilesAtPath(autoload_dir, false, NULL);
-  D_ProcessDehAutoloadQueue(&autoload_deh_game_queue);
-  Z_Free(autoload_dir);
-
-  // auto-loaded files per IWAD
-  autoload_dir = GetAutoloadDir(IWADBaseName(), true);
-  LoadDehackedFilesAtPath(autoload_dir, false, NULL);
-  D_ProcessDehAutoloadQueue(&autoload_deh_iwad_queue);
-  Z_Free(autoload_dir);
-}
-
-static void D_AutoloadDehPWadDir()
-{
-  int i;
-  for (i = 0; i < numwadfiles; ++i)
-    if (wadfiles[i].src == source_pwad)
-    {
-      char *autoload_dir;
-      autoload_dir = GetAutoloadDir(dsda_BaseName(wadfiles[i].name), false);
-      LoadDehackedFilesAtPath(autoload_dir, false, NULL);
-      if (i < autoload_deh_pwad_count)
-        D_ProcessDehAutoloadQueue(&autoload_deh_pwad_queue[i]);
-      Z_Free(autoload_dir);
-    }
-
-  Z_Free(autoload_deh_pwad_queue);
-}
 
 int warpepisode = -1;
 int warpmap = -1;
@@ -1572,10 +1369,6 @@ void D_DoomMainSetup(void)
 
   EvaluateDoomVerStr(); // must come after HandlePlayback (may change iwad)
 
-  // add wad files from autoload directory before wads from -file parameter
-  if (autoload)
-    D_AutoloadIWadDir();
-
   // add any files specified on the command line with -file wadfile
   // to the wad list
 
@@ -1605,10 +1398,6 @@ void D_DoomMainSetup(void)
       {
         dsda_AppendStringArg(dsda_arg_deh, file_name);
       }
-      else if (dsda_HasFileExt(file_name, ".zip"))
-      {
-        D_AddZip(file_name, source_pwad, NULL);
-      }
       else if (dsda_HasFileExt(file_name, ".wad") || dsda_HasFileExt(file_name, ".lmp"))
       {
         if (!file)
@@ -1624,10 +1413,6 @@ void D_DoomMainSetup(void)
       Z_Free(file);
     }
   }
-
-  // add wad files from autoload PWAD directories
-  if (autoload)
-    D_AutoloadPWadDir();
 
   D_InitFakeNetGame();
 
@@ -1653,59 +1438,6 @@ void D_DoomMainSetup(void)
   dsda_ParseOptionsLump();
   G_ReloadDefaults();
 
-  // e6y
-  // option to disable automatic loading of dehacked-in-wad lump
-  if (!dsda_Flag(dsda_arg_nodeh))
-  {
-    // MBF-style DeHackEd in wad support: load all lumps, not just the last one
-    for (p = -1; (p = W_ListNumFromName("DEHACKED", p)) >= 0; )
-      // Split loading DEHACKED lumps into IWAD/autoload and PWADs/others
-      if (lumpinfo[p].source == source_iwad
-          || lumpinfo[p].source == source_pre
-          || lumpinfo[p].source == source_auto_load)
-        ProcessDehFile(NULL, D_dehout(), p); // cph - add dehacked-in-a-wad support
-
-    if (bfgedition)
-    {
-      int lump = W_CheckNumForName2("BFGBEX", ns_prboom);
-      if (lump != LUMP_NOT_FOUND)
-      {
-        ProcessDehFile(NULL, D_dehout(), lump);
-      }
-    }
-    if (gamemission == pack_nerve)
-    {
-      int lump = W_CheckNumForName2("NERVEBEX", ns_prboom);
-      if (lump != LUMP_NOT_FOUND)
-      {
-        ProcessDehFile(NULL, D_dehout(), lump);
-      }
-    }
-    if (gamemission == chex)
-    {
-      int lump = W_CheckNumForName2("CHEXDEH", ns_prboom);
-      if (lump != LUMP_NOT_FOUND)
-      {
-        ProcessDehFile(NULL, D_dehout(), lump);
-      }
-    }
-  }
-
-  // process deh files from autoload directory before deh in wads from -file parameter
-  if (autoload)
-    D_AutoloadDehIWadDir();
-
-  if (!dsda_Flag(dsda_arg_nodeh))
-    for (p = -1; (p = W_ListNumFromName("DEHACKED", p)) >= 0; )
-      if (!(lumpinfo[p].source == source_iwad
-            || lumpinfo[p].source == source_pre
-            || lumpinfo[p].source == source_auto_load))
-        ProcessDehFile(NULL, D_dehout(), p);
-
-  // process .deh files from PWADs autoload directories
-  if (autoload)
-    D_AutoloadDehPWadDir();
-
   // Load command line dehacked patches after WAD dehacked patches
 
   // e6y: DEH files preloaded in wrong order
@@ -1715,27 +1447,6 @@ void D_DoomMainSetup(void)
   // Using -deh in BOOM, others use -dehacked.
   // Ty 03/18/98 also allow .bex extension.  .bex overrides if both exist.
 
-  arg = dsda_Arg(dsda_arg_deh);
-  if (arg->found)
-  {
-    int i;
-
-    // e6y
-    // reorganization of the code for looking for bex/deh patches
-    // in all standard dirs (%DOOMWADDIR%, etc)
-    for (i = 0; i < arg->count; ++i)
-    {
-      char *file = NULL;
-
-      file = I_RequireDeh(arg->value.v_string_array[i]);
-
-      // during the beta we have debug output to dehout.txt
-      ProcessDehFile(file,D_dehout(),0);
-      Z_Free(file);
-    }
-  }
-
-  PostProcessDeh();
   dsda_AppendZDoomMobjInfo();
   dsda_ApplyDefaultMapFormat();
 

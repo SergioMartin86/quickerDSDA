@@ -517,7 +517,7 @@ static dboolean P_SmartMove(mobj_t *actor)
 
   // haleyjd: allow all friends of HelperType to also jump down
 
-  if ((actor->type == MT_DOGS || (actor->type == (HelperThing-1) && actor->flags&MF_FRIEND))
+  if ((actor->type == MT_DOGS)
       && target && dog_jumping &&
       !((target->flags ^ actor->flags) & MF_FRIEND) &&
       P_AproxDistance(actor->x - target->x,

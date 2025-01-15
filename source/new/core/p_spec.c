@@ -57,7 +57,6 @@
 #include "sounds.h"
 #include "i_sound.h"
 #include "m_bbox.h"                                         // phares 3/20/98
-#include "d_deh.h"
 #include "r_plane.h"
 #include "hu_stuff.h"
 #include "lprintf.h"
@@ -953,7 +952,6 @@ dboolean P_CanUnlockGenDoor
         !player->cards[it_yellowskull]
       )
       {
-        dsda_AddPlayerMessage(s_PD_ANY, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -965,7 +963,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_redskull])
       )
       {
-        dsda_AddPlayerMessage(skulliscard ? s_PD_REDK : s_PD_REDC, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -977,7 +974,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_blueskull])
       )
       {
-        dsda_AddPlayerMessage(skulliscard ? s_PD_BLUEK : s_PD_BLUEC, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -989,7 +985,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_yellowskull])
       )
       {
-        dsda_AddPlayerMessage(skulliscard ? s_PD_YELLOWK : s_PD_YELLOWC, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -1001,7 +996,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_redcard])
       )
       {
-        dsda_AddPlayerMessage(skulliscard ? s_PD_REDK : s_PD_REDS, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -1013,7 +1007,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_bluecard])
       )
       {
-        dsda_AddPlayerMessage(skulliscard ? s_PD_BLUEK : s_PD_BLUES, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -1025,7 +1018,6 @@ dboolean P_CanUnlockGenDoor
         (!skulliscard || !player->cards[it_yellowcard])
       )
       {
-        dsda_AddPlayerMessage(skulliscard ? s_PD_YELLOWK : s_PD_YELLOWS, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -1044,7 +1036,6 @@ dboolean P_CanUnlockGenDoor
         )
       )
       {
-        dsda_AddPlayerMessage(s_PD_ALL6, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -1068,7 +1059,6 @@ dboolean P_CanUnlockGenDoor
         )
       )
       {
-        dsda_AddPlayerMessage(s_PD_ALL3, player);
         S_StartMobjSound(player->mo,sfx_oof);             // killough 3/20/98
         return false;
       }
@@ -1080,7 +1070,6 @@ dboolean P_CanUnlockGenDoor
 dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
 {
   player_t *player;
-  const char *message = NULL;
   int sfx = sfx_None;
   dboolean successful = true;
 
@@ -1096,7 +1085,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_red_card:
       if (!player->cards[it_redcard])
       {
-        message = legacy ? s_PD_REDC : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1104,7 +1092,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_blue_card:
       if (!player->cards[it_bluecard])
       {
-        message = legacy ? s_PD_BLUEC : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1112,7 +1099,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_yellow_card:
       if (!player->cards[it_yellowcard])
       {
-        message = legacy ? s_PD_YELLOWC : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1120,7 +1106,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_red_skull:
       if (!player->cards[it_redskull])
       {
-        message = legacy ? s_PD_REDS : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1128,7 +1113,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_blue_skull:
       if (!player->cards[it_blueskull])
       {
-        message = legacy ? s_PD_BLUES : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1136,7 +1120,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_yellow_skull:
       if (!player->cards[it_yellowskull])
       {
-        message = legacy ? s_PD_YELLOWS : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1151,7 +1134,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
         !player->cards[it_yellowskull]
       )
       {
-        message = legacy ? s_PD_ANY : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1166,7 +1148,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
         !player->cards[it_yellowskull]
       )
       {
-        message = legacy ? s_PD_ALL6 : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1175,7 +1156,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_redx:
       if (!player->cards[it_redcard] && !player->cards[it_redskull])
       {
-        message = legacy ? s_PD_REDK : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1184,7 +1164,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_bluex:
       if (!player->cards[it_bluecard] && !player->cards[it_blueskull])
       {
-        message = legacy ? s_PD_BLUEK : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1193,7 +1172,6 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
     case zk_yellowx:
       if (!player->cards[it_yellowcard] && !player->cards[it_yellowskull])
       {
-        message = legacy ? s_PD_YELLOWK : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
@@ -1205,17 +1183,11 @@ dboolean P_CheckKeys(mobj_t *mo, zdoom_lock_t lock, dboolean legacy)
         (!player->cards[it_yellowcard] && !player->cards[it_yellowskull])
       )
       {
-        message = legacy ? s_PD_ALL3 : NULL;
         sfx = legacy ? sfx_oof : sfx_None;
         successful = false;
       }
     default:
       break;
-  }
-
-  if (message)
-  {
-    dsda_AddPlayerMessage(message, player);
   }
 
   if (sfx != sfx_None)
