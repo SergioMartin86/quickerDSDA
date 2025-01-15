@@ -532,9 +532,6 @@ void I_CapturePrep (const char *fn)
   }
   lprintf (LO_INFO, "I_CapturePrep: video capture started\n");
   capturing_video = 1;
-
-
-  I_AtExit (I_CaptureFinish, true, "I_CaptureFinish", exit_priority_normal);
 }
 
 

@@ -1548,12 +1548,6 @@ void G_Ticker (void)
     advance_frame = true;
     pause_mask = dsda_MaskPause();
   }
-  else if (dsda_BuildMode() &&
-           dsda_BruteForceEnded() &&
-           dsda_Flag(dsda_arg_quit_after_brute_force))
-  {
-    I_SafeExit(0);
-  }
 
   if (dsda_PausedOutsideDemo())
   {
@@ -4035,14 +4029,10 @@ dboolean G_CheckDemoStatus (void)
     lprintf(LO_INFO, "Timed %u gametics in %u realtics = %-.1f frames per second\n",
              (unsigned) gametic,realtics,
              (unsigned) gametic * (double) TICRATE / realtics);
-    I_SafeExit(0);
   }
 
   if (demoplayback)
   {
-    if (userdemo)
-      I_SafeExit(0);  // killough
-
     G_ReloadDefaults();    // killough 3/1/98
     netgame = false;       // killough 3/29/98
     deathmatch = false;

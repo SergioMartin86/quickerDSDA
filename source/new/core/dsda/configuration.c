@@ -88,7 +88,6 @@ extern int sts_pct_always_gray;
 extern int sts_traditional_keys;
 extern int full_sounds;
 
-void I_Init2(void);
 void M_ChangeDemoSmoothTurns(void);
 void M_ChangeSkyMode(void);
 void M_ChangeMessages(void);
@@ -204,7 +203,6 @@ void dsda_TrackConfigFeatures(void) {
 
 // TODO: automatically go through strict list
 void dsda_UpdateStrictMode(void) {
-  I_Init2(); // side effect of realtic clock rate
   M_ChangeSpeed(); // side effect of always sr50
   dsda_InitKeyFrame();
   M_ChangeSkyMode(); // affected by mouselook setting
@@ -220,7 +218,7 @@ void dsda_UpdateStrictMode(void) {
 dsda_config_t dsda_config[dsda_config_count] = {
   [dsda_config_game_speed] = {
     "game_speed", dsda_config_game_speed,
-    dsda_config_int, 3, 10000, { 100 }, NULL, STRICT_INT(100), I_Init2
+    dsda_config_int, 3, 10000, { 100 }, NULL, STRICT_INT(100), NULL
   },
   [dsda_config_default_complevel] = {
     "default_compatibility_level", dsda_config_default_complevel,

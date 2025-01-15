@@ -619,8 +619,6 @@ static dboolean console_DemoJoin(const char* command, const char* args) {
 }
 
 static dboolean console_GameQuit(const char* command, const char* args) {
-  I_SafeExit(0);
-
   return true;
 }
 

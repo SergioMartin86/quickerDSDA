@@ -1236,23 +1236,6 @@ int quitsounds2[8] =
 
 static void M_QuitResponse(dboolean affirmative)
 {
-  if (!affirmative)
-    return;
-
-  if (!netgame // killough 12/98
-      && !nosfxparm
-      && dsda_IntConfig(dsda_config_quit_sounds))
-  {
-    int i;
-
-    if (gamemode == commercial)
-      S_StartVoidSound(quitsounds2[(gametic>>2)&7]);
-    else
-      S_StartVoidSound(quitsounds[(gametic>>2)&7]);
-  }
-
-  //e6y: I_SafeExit instead of exit - prevent recursive exits
-  I_SafeExit(0); // killough
 }
 
 void M_QuitDOOM(int choice)

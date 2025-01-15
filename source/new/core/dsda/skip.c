@@ -79,7 +79,6 @@ void dsda_EnterSkipMode(void) {
   dsda_ApplySkipSettings();
   dsda_ResetPauseMode();
   S_StopMusic();
-  I_Init2();
 
   if (dsda_BuildMode())
     dsda_ApplyPauseMode(PAUSE_BUILDMODE);
@@ -98,7 +97,6 @@ void dsda_ExitSkipMode(void) {
   demo_warp_reached = false;
   demo_skiptics = 0;
 
-  I_Init2();
   S_Init();
   S_RestartMusic();
 

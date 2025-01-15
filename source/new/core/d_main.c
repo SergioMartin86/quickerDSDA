@@ -196,27 +196,6 @@ void D_PostEvent(event_t *ev)
 {
   dsda_InputTrackEvent(ev);
 
-  // Allow only sensible keys during skipping
-  if (dsda_SkipMode())
-  {
-    if (dsda_InputActivated(dsda_input_quit))
-    {
-      // Immediate exit if quit key is pressed in skip mode
-      I_SafeExit(0);
-    }
-    else
-    {
-      // use key is used for seeing the current frame
-      if (
-        !dsda_InputActivated(dsda_input_use) && !dsda_InputActivated(dsda_input_demo_skip) &&
-        (ev->type == ev_keydown || ev->type == ev_keyup) // is this condition important?
-      )
-      {
-        return;
-      }
-    }
-  }
-
   if (M_Responder(ev))
     dsda_InputFlushTick(); // If the menu used the event, make it invisible
   else
@@ -350,193 +329,6 @@ void D_MustFillBackScreen(void)
 
 void D_Display (fixed_t frac)
 {
-  static dboolean isborderstate        = false;
-  static dboolean borderwillneedredraw = false;
-  static gamestate_t oldgamestate = -1;
-  dboolean wipe;
-  dboolean viewactive = false, isborder = false;
-
-  // e6y
-  if (dsda_SkipMode())
-  {
-    if (HU_DrawDemoProgress(false))
-    if (!dsda_InputActive(dsda_input_use))
-      return;
-
-#ifdef __ENABLE_OPENGL_
-    if (V_IsOpenGLMode())
-    {
-      gld_PreprocessLevel();
-    }
-    #endif
-  }
-
-  if (!dsda_SkipMode() || !dsda_InputActive(dsda_input_use))
-    if (nodrawers)                    // for comparative timing / profiling
-      return;
-
-  if (!I_StartDisplay())
-    return;
-
-  if (setsizeneeded) {               // change the view size if needed
-    R_ExecuteSetViewSize();
-    oldgamestate = -1;            // force background redraw
-  }
-
-#ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode() && !exclusive_fullscreen && !nodrawers)
-    dsda_GLLetterboxClear();
-#endif
-
-  // save the current screen if about to wipe
-  if ((wipe = (gamestate != wipegamestate)))
-  {
-    wipe_StartScreen();
-    R_ResetViewInterpolation();
-  }
-
-  if (gamestate != GS_LEVEL) { // Not a level
-    switch (oldgamestate) {
-    case -1:
-    case GS_LEVEL:
-      V_SetPalette(0); // cph - use default (basic) palette
-    default:
-      break;
-    }
-
-    V_BeginUIDraw();
-    switch (gamestate) {
-    case GS_INTERMISSION:
-      WI_Drawer();
-      break;
-    case GS_FINALE:
-      F_Drawer();
-      break;
-    case GS_DEMOSCREEN:
-      D_PageDrawer();
-      break;
-    default:
-      break;
-    }
-    V_EndUIDraw();
-  }
-  else { // In a level
-    dboolean redrawborderstuff;
-
-    // Work out if the player view is visible, and if there is a border
-    viewactive = automap_off && !inhelpscreens;
-    isborder = viewactive ? R_PartialView() : (!inhelpscreens && automap_active);
-
-    if (oldgamestate != GS_LEVEL || must_fill_back_screen) {
-      must_fill_back_screen = false;
-      R_FillBackScreen ();    // draw the pattern into the back screen
-      redrawborderstuff = isborder;
-    } else {
-      // CPhipps -
-      // If there is a border, and either there was no border last time,
-      // or the border might need refreshing, then redraw it.
-      redrawborderstuff = isborder && (!isborderstate || borderwillneedredraw);
-      // The border may need redrawing next time if the border surrounds the screen,
-      // and there is a menu being displayed
-      borderwillneedredraw = menuactive && isborder && viewactive;
-      // e6y
-      // I should do it because I call R_RenderPlayerView in all cases,
-      // not only if viewactive is true
-      borderwillneedredraw = borderwillneedredraw || automap_on;
-    }
-
-      #ifdef __ENABLE_OPENGL_
-    if (redrawborderstuff || V_IsOpenGLMode()) {
-      // elim - Update viewport and scene offsets whenever the view is changed (user hits "-" or "+")
-      if (redrawborderstuff && V_IsOpenGLMode()) {
-        dsda_GLSetRenderViewportParams();
-      }
-
-      R_DrawViewBorder();
-    }
-    #endif
-
-    // elim - If we go from visible status bar to invisible status bar, update affected viewport params
-    #ifdef __ENABLE_OPENGL_
-    if (!isborder && isborderstate) {
-      dsda_GLUpdateStatusBarVisible();
-    }
-    #endif
-
-    // e6y
-    // Boom colormaps should be applied for everything in R_RenderPlayerView
-    use_boom_cm=true;
-
-    if (frac < 0)
-      frac = I_GetTimeFrac();
-
-    R_InterpolateView(&players[displayplayer], frac);
-
-    DSDA_ADD_CONTEXT(sf_player_view);
-    R_RenderPlayerView(&players[displayplayer]);
-    DSDA_REMOVE_CONTEXT(sf_player_view);
-
-    dsda_UpdateRenderStats();
-
-    // e6y
-    // but should NOT be applied for automap, statusbar and HUD
-    use_boom_cm=false;
-    frame_fixedcolormap = 0;
-
-    if (automap_active)
-    {
-      AM_Drawer(false);
-    }
-
-    R_RestoreInterpolations();
-
-    DSDA_ADD_CONTEXT(sf_status_bar);
-    ST_Drawer(redrawborderstuff || BorderNeedRefresh);
-    DSDA_REMOVE_CONTEXT(sf_status_bar);
-
-    BorderNeedRefresh = false;
-    if (V_IsSoftwareMode())
-      R_DrawViewBorder();
-
-    DSDA_ADD_CONTEXT(sf_hud);
-    HU_Drawer();
-    DSDA_REMOVE_CONTEXT(sf_hud);
-  }
-
-  isborderstate      = isborder;
-  oldgamestate = wipegamestate = gamestate;
-
-  // draw pause pic
-  if (dsda_Paused() && (menuactive != mnact_full)) {
-    D_DrawPause();
-  }
-
-  // menus go directly to the screen
-  M_Drawer();          // menu is drawn even on top of everything
-
-  FakeNetUpdate();     // send out any new accumulation
-
-  HU_DrawDemoProgress(true); //e6y
-
-  // normal update
-  if (!wipe) {}
-  else {
-    // wipe update
-    wipe_EndScreen();
-    D_Wipe();
-  }
-
-  // e6y
-  // Don't thrash cpu during pausing or if the window doesnt have focus
-  // Do not limit FPS
-  
-  // if (dsda_CameraPaused()) {
-  //   I_uSleep(5000);
-  // }
-
-  // dsda_LimitFPS();
-
-  I_EndDisplay();
 }
 
 //
@@ -557,8 +349,6 @@ static void D_DoomLoop(void)
 
   for (;;)
   {
-    if (I_Interrupted())
-      I_SafeExit(0);
 
     WasRenderedInTryRunTics = false;
 
@@ -1695,7 +1485,6 @@ void D_DoomMainSetup(void)
   if (dsda_Flag(dsda_arg_help))
   {
     dsda_PrintArgHelp();
-    I_SafeExit(0);
   }
 
   DoLooseFiles();  // Ty 08/29/98 - handle "loose" files on command line
@@ -1997,10 +1786,6 @@ void D_DoomMainSetup(void)
 
   // Must be after HandleWarp
   dsda_HandleSkip();
-
-  //jff 9/3/98 use logical output routine
-  lprintf(LO_DEBUG, "I_Init: Setting up machine state.\n");
-  I_Init();
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "S_Init: Setting up sound.\n");
