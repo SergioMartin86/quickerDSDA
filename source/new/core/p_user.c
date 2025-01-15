@@ -441,7 +441,7 @@ void P_DeathThink (player_t* player)
   // fall to the ground
 
   onground = (player->mo->z <= player->mo->floorz);
-  if (player->mo->type == g_skullpop_mt || (hexen && player->mo->type == HEXEN_MT_ICECHUNK))
+  if (player->mo->type == g_skullpop_mt)
   {
     // Flying bloody skull
     player->viewheight = 6*FRACUNIT;
@@ -503,36 +503,6 @@ if ((int)player->mo->pitch > -(int)ANG1*19)
 
   if (player->attacker && player->attacker != player->mo)
   {
-    if (hexen)
-    {
-      int dir = P_FaceMobj(player->mo, player->attacker, &delta);
-      if (delta < ANG1 * 10)
-      {                       // Looking at killer, so fade damage and poison counters
-        if (player->damagecount)
-        {
-          player->damagecount--;
-        }
-        if (player->poisoncount)
-        {
-          player->poisoncount--;
-        }
-      }
-      delta = delta / 8;
-      if (delta > ANG1 * 5)
-      {
-        delta = ANG1 * 5;
-      }
-      if (dir)
-      {                       // Turn clockwise
-        player->mo->angle += delta;
-      }
-      else
-      {                       // Turn counter clockwise
-        player->mo->angle -= delta;
-      }
-    }
-    else
-    {
       angle = R_PointToAngle2(player->mo->x,
                               player->mo->y,
                               player->attacker->x,
@@ -554,7 +524,6 @@ if ((int)player->mo->pitch > -(int)ANG1*19)
         player->mo->angle += ANG5;
       else
         player->mo->angle -= ANG5;
-    }
   }
   else if (player->damagecount || player->poisoncount)
   {
@@ -624,9 +593,6 @@ void P_PlayerThink (player_t* player)
     player->mo->flags &= ~MF_JUSTATTACKED;
   }
 
-  if (hexen)
-    player->worldTimer++;
-
   if (player->playerstate == PST_DEAD)
   {
     P_DeathThink(player);
@@ -658,52 +624,6 @@ void P_PlayerThink (player_t* player)
   {
     P_MovePlayer(player);
 
-    if (hexen)
-    {
-      mobj_t *pmo = player->mo;
-      if (player->powers[pw_speed] && !(leveltime & 1)
-          && P_AproxDistance(pmo->momx, pmo->momy) > 12 * FRACUNIT)
-      {
-        mobj_t *speedMo;
-        int playerNum;
-
-        speedMo = P_SpawnMobj(pmo->x, pmo->y, pmo->z, HEXEN_MT_PLAYER_SPEED);
-        if (speedMo)
-        {
-          speedMo->angle = pmo->angle;
-          playerNum = P_GetPlayerNum(player);
-          if (player->pclass == PCLASS_FIGHTER)
-          {
-            // The first type should be blue, and the
-            // third should be the Fighter's original gold color
-            if (playerNum == 0)
-            {
-              speedMo->flags |= 2 << MF_TRANSSHIFT;
-            }
-            else if (playerNum != 2)
-            {
-              speedMo->flags |= playerNum << MF_TRANSSHIFT;
-            }
-          }
-          else if (playerNum)
-          {               // Set color translation bits for player sprites
-            speedMo->flags |= playerNum << MF_TRANSSHIFT;
-          }
-          P_SetTarget(&speedMo->target, pmo);
-          speedMo->special1.i = player->pclass;
-          if (speedMo->special1.i > 2)
-          {
-            speedMo->special1.i = 0;
-          }
-          speedMo->sprite = pmo->sprite;
-          speedMo->floorclip = pmo->floorclip;
-          if (player == &players[consoleplayer])
-          {
-            speedMo->flags2 |= MF2_DONTDRAW;
-          }
-        }
-      }
-    }
   }
 
   P_CalcHeight (player); // Determines view height and bobbing
@@ -714,82 +634,6 @@ void P_PlayerThink (player_t* player)
   if (P_IsSpecialSector(player->mo->subsector->sector))
     P_PlayerInSpecialSector(player);
 
-  if (hexen)
-  {
-    if ((floorType = P_GetThingFloorType(player->mo)) != FLOOR_SOLID)
-    {
-      P_PlayerOnSpecialFlat(player, floorType);
-    }
-
-    switch (player->pclass)
-    {
-      case PCLASS_FIGHTER:
-        if (player->mo->momz <= -35 * FRACUNIT
-            && player->mo->momz >= -40 * FRACUNIT && !player->morphTics
-            && !S_GetSoundPlayingInfo(player->mo,
-                                      hexen_sfx_player_fighter_falling_scream))
-        {
-          S_StartMobjSound(player->mo, hexen_sfx_player_fighter_falling_scream);
-        }
-        break;
-      case PCLASS_CLERIC:
-        if (player->mo->momz <= -35 * FRACUNIT
-            && player->mo->momz >= -40 * FRACUNIT && !player->morphTics
-            && !S_GetSoundPlayingInfo(player->mo,
-                                      hexen_sfx_player_cleric_falling_scream))
-        {
-          S_StartMobjSound(player->mo, hexen_sfx_player_cleric_falling_scream);
-        }
-        break;
-      case PCLASS_MAGE:
-        if (player->mo->momz <= -35 * FRACUNIT
-            && player->mo->momz >= -40 * FRACUNIT && !player->morphTics
-            && !S_GetSoundPlayingInfo(player->mo,
-                                      hexen_sfx_player_mage_falling_scream))
-        {
-          S_StartMobjSound(player->mo, hexen_sfx_player_mage_falling_scream);
-        }
-        break;
-      default:
-        break;
-    }
-
-    if (cmd->arti)
-    {                           // Use an artifact
-      if ((cmd->arti & AFLAG_JUMP) && onground && !player->jumpTics)
-      {
-        if (player->morphTics)
-        {
-          player->mo->momz = 6 * FRACUNIT;
-        }
-        else
-        {
-          player->mo->momz = 9 * FRACUNIT;
-        }
-        player->mo->flags2 &= ~MF2_ONMOBJ;
-        player->jumpTics = 18;
-      }
-      else if (cmd->arti & AFLAG_SUICIDE)
-      {
-        P_DamageMobj(player->mo, NULL, NULL, 10000);
-      }
-      if (cmd->arti == HEXEN_NUMARTIFACTS)
-      {                       // use one of each artifact (except puzzle artifacts)
-        int i;
-
-        for (i = 1; i < hexen_arti_firstpuzzitem; i++)
-        {
-          P_PlayerUseArtifact(player, i);
-        }
-      }
-      else
-      {
-        P_PlayerUseArtifact(player, cmd->arti & AFLAG_MASK);
-      }
-    }
-  }
-  else
-  {
     if (cmd->arti)
     {                           // Use an artifact
       if (cmd->arti == 0xff)
@@ -801,7 +645,6 @@ void P_PlayerThink (player_t* player)
         P_PlayerUseArtifact(player, cmd->arti);
       }
     }
-  }
 
   if (dsda_AllowExCmd())
   {
@@ -832,8 +675,6 @@ void P_PlayerThink (player_t* player)
       if (!prboom_comp[PC_ALLOW_SSG_DIRECT].state)
         newweapon = (cmd->buttons & BT_WEAPONMASK_OLD)>>BT_WEAPONSHIFT;
 
-      if (!hexen)
-      {
         if (
           newweapon == g_wp_fist && player->weaponowned[g_wp_chainsaw]
           && (
@@ -849,7 +690,6 @@ void P_PlayerThink (player_t* player)
             player->weaponowned[wp_supershotgun] &&
             player->readyweapon != wp_supershotgun)
           newweapon = wp_supershotgun;
-      }
     }
 
     // killough 2/8/98, 3/22/98 -- end of weapon selection changes
@@ -974,7 +814,7 @@ void P_PlayerThink (player_t* player)
   if (player->powers[pw_ironfeet] > 0)        // killough
     player->powers[pw_ironfeet]--;
 
-  if (player->powers[pw_flight] && (!hexen || netgame))
+  if (player->powers[pw_flight])
   {
     if (!--player->powers[pw_flight])
     {
@@ -1226,28 +1066,12 @@ void P_PlayerUseArtifact(player_t * player, artitype_t arti)
                 P_PlayerRemoveArtifact(player, i);
                 if (player == &players[consoleplayer])
                 {
-                    if (hexen)
-                    {
-                        if (arti < hexen_arti_firstpuzzitem)
-                        {
-                            S_StartVoidSound(hexen_sfx_artifact_use);
-                        }
-                        else
-                        {
-                            S_StartVoidSound(hexen_sfx_puzzle_success);
-                        }
-                    }
-                    else
-                    {
                         S_StartVoidSound(heretic_sfx_artiuse);
-                    }
                     ArtifactFlash = 4;
                 }
             }
-            else if (!hexen || arti < hexen_arti_firstpuzzitem)
-            {                   // Unable to use artifact, advance pointer
+            else 
                 P_PlayerNextArtifact(player);
-            }
             break;
         }
     }
@@ -1259,8 +1083,6 @@ dboolean P_UseArtifact(player_t * player, artitype_t arti)
 {
     mobj_t *mo;
     angle_t angle;
-
-    if (hexen) return Hexen_P_UseArtifact(player, arti);
 
     switch (arti)
     {
@@ -1393,16 +1215,12 @@ void Raven_P_MovePlayer(player_t * player)
         {
           if (onground || player->mo->flags2 & MF2_FLY)
               P_ForwardThrust(player, player->mo->angle, cmd->forwardmove * 2048);
-          else if (hexen)
-              P_ForwardThrust(player, player->mo->angle, map_info.air_control);
         }
 
         if (cmd->sidemove)
         {
           if (onground || player->mo->flags2 & MF2_FLY)
               P_Thrust(player, player->mo->angle - ANG90, cmd->sidemove * 2048);
-          else if (hexen)
-              P_Thrust(player, player->mo->angle, map_info.air_control);
         }
     }
 
@@ -1474,10 +1292,6 @@ void Raven_P_MovePlayer(player_t * player)
             {
                 player->mo->flags2 |= MF2_FLY;
                 player->mo->flags |= MF_NOGRAVITY;
-                if (hexen && player->mo->momz <= -39 * FRACUNIT)
-                {               // stop falling scream
-                    S_StopSound(player->mo);
-                }
             }
         }
         else

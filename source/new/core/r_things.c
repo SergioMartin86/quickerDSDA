@@ -1028,14 +1028,7 @@ static void R_DrawPSprite (pspdef_t *psp)
     int state;
     int weapon_attack_alignment;
 
-    if (hexen)
-    {
-      winfo = &hexen_weaponinfo[viewplayer->readyweapon][viewplayer->pclass];
-    }
-    else
-    {
       winfo = &weaponinfo[viewplayer->readyweapon];
-    }
 
     state = viewplayer->psprites[ps_weapon].state - states;
     weapon_attack_alignment = dsda_IntConfig(dsda_config_weapon_attack_alignment);

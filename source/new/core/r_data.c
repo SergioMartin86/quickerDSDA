@@ -380,18 +380,9 @@ static void R_InitColormaps(void)
 {
   int i;
   // MAP_FORMAT_TODO: not sure about this
-  if (hexen)
-  {
-    firstcolormaplump = -1;
-    lastcolormaplump = -1;
-    numcolormaps = 1;
-  }
-  else
-  {
     firstcolormaplump = W_GetNumForName("C_START");
     lastcolormaplump  = W_GetNumForName("C_END");
     numcolormaps = lastcolormaplump - firstcolormaplump;
-  }
   colormaps = Z_Malloc(sizeof(*colormaps) * numcolormaps);
   colormaps[0] = (const lighttable_t *)W_LumpByName("COLORMAP");
   for (i=1; i<numcolormaps; i++)

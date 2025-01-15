@@ -233,7 +233,7 @@ static dboolean R_FakeContrast(seg_t *seg)
 {
   return fake_contrast_mode != FAKE_CONTRAST_MODE_OFF &&
          !(map_info.flags & MI_EVEN_LIGHTING) &&
-         seg && !(seg->sidedef->flags & SF_NOFAKECONTRAST) && !hexen;
+         seg && !(seg->sidedef->flags & SF_NOFAKECONTRAST);
 }
 
 static dboolean R_SmoothLighting(seg_t *seg)

@@ -898,14 +898,7 @@ static void Raven_S_StartSoundAtVolume(void *_origin, int sound_id, int volume, 
     params.separation = 128 - (FixedMul(S_STEREO_SWING,finesine[angle])>>FRACBITS);
   }
 
-  if (!hexen || sfx->pitch)
-  {
     params.pitch = (byte) (NORM_PITCH + (M_Random() & 7) - (M_Random() & 7));
-  }
-  else
-  {
-    params.pitch = NORM_PITCH;
-  }
 
   channels[cnum].pitch = params.pitch;
   channels[cnum].origin = origin;

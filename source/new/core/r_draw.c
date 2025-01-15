@@ -369,23 +369,6 @@ void R_InitTranslationTables (void)
 #define MAXTRANS 3
   byte transtocolour[MAXTRANS];
 
-  if (hexen)
-  {
-    int lumpnum = W_GetNumForName("trantbl0");
-    translationtables = Z_Malloc(256 * 3 * (g_maxplayers - 1));
-
-    for (i = 0; i < g_maxplayers; i++)
-      playernumtotrans[i] = i;
-
-    for (i = 0; i < 3 * (g_maxplayers - 1); i++)
-    {
-        const byte* transLump = W_LumpByNum(lumpnum + i);
-        memcpy(translationtables + i * 256, transLump, 256);
-    }
-
-    return;
-  }
-
   // killough 5/2/98:
   // Remove dependency of colormaps aligned on 256-byte boundary
 
