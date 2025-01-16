@@ -85,7 +85,6 @@ quickerDSDASrc =  [
  'core/heretic/sb_bar.c',
  'core/heretic/sounds.c',
  'core/hexen/a_action.c',
- 'core/hexen/info.c',
  'core/hexen/f_finale.c',
  'core/hexen/h2_main.c',
  'core/hexen/in_lude.c',

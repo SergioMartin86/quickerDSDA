@@ -99,7 +99,6 @@
 #include "dsda/time.h"
 #include "dsda/utility.h"
 #include "dsda/wad_stats.h"
-#include "dsda/zipfile.h"
 
 #include "heretic/sb_bar.h"
 
