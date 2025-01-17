@@ -20,7 +20,6 @@
 #include "v_video.h"
 
 #include "dsda/args.h"
-#include "dsda/messenger.h"
 #include "dsda/utility.h"
 
 #include "preferences.h"
@@ -74,23 +73,10 @@ void dsda_LoadWadPreferences(void) {
 }
 
 static void dsda_HandleWadPreferences(void) {
-  DO_ONCE
-    if (wad_preferences.opengl && V_IsSoftwareMode())
-      dsda_AddAlert("This wad may have rendering errors\nin software mode!");
-
-    if (wad_preferences.software && V_IsOpenGLMode())
-      dsda_AddAlert("This wad may have rendering errors\nin opengl mode!");
-  END_ONCE
 }
 
 void dsda_HandleMapPreferences(void) {
   dsda_HandleWadPreferences();
-
-  if (map_preferences.opengl && V_IsSoftwareMode())
-    dsda_AddAlert("This level may have rendering errors\nin software mode!");
-
-  if (map_preferences.software && V_IsOpenGLMode())
-    dsda_AddAlert("This level may have rendering errors\nin opengl mode!");
 
   memset(&map_preferences, 0, sizeof(map_preferences));
 }

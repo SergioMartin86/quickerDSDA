@@ -51,7 +51,6 @@
 #include "dsda.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
-#include "dsda/messenger.h"
 #include "dsda/skill_info.h"
 
 // Ty 03/07/98 - add deh externals

@@ -84,7 +84,6 @@
 #include "dsda/excmd.h"
 #include "dsda/features.h"
 #include "dsda/mapinfo.h"
-#include "dsda/messenger.h"
 #include "dsda/save.h"
 #include "dsda/settings.h"
 #include "dsda/input.h"
@@ -930,8 +929,6 @@ static void G_DoLoadLevel (void)
 
   // [RH] Set up details about sky rendering
   R_InitSkyMap ();
-
-  dsda_InitMessenger();
 
   levelstarttic = gametic;        // for time calculation
 

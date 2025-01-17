@@ -69,8 +69,6 @@
 #include "dsda/line_special.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
-#include "dsda/messenger.h"
-#include "dsda/scroll.h"
 #include "dsda/thing_id.h"
 #include "dsda/utility.h"
 
@@ -3208,7 +3206,6 @@ static void Add_WallScroller(fixed_t dx, fixed_t dy, const line_t *l,
     y = -FixedDiv(FixedMul(dx, l->dy) - FixedMul(dy, l->dx), d);
   }
 
-  dsda_AddControlSideScroller(x, y, control, *l->sidenum, accel, 0);
 }
 
 // Amount (dx,dy) vector linedef is shifted right to get scroll amount
@@ -3254,13 +3251,11 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
 
     case 250:   // scroll effect ceiling
       FIND_SECTORS(id_p, l->tag)
-        dsda_AddControlCeilingScroller(-dx, dy, control, *id_p, accel, 0);
       break;
 
     case 251:   // scroll effect floor
     case 253:   // scroll and carry objects on floor
       FIND_SECTORS(id_p, l->tag)
-        dsda_AddControlFloorScroller(-dx, dy, control, *id_p, accel, 0);
       if (special != 253)
         break;
       // fallthrough
@@ -3269,7 +3264,6 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
       dx = FixedMul(dx, CARRYFACTOR);
       dy = FixedMul(dy, CARRYFACTOR);
       FIND_SECTORS(id_p, l->tag)
-        dsda_AddControlFloorCarryScroller(dx, dy, control, *id_p, accel, 0);
       break;
 
       // killough 3/1/98: scroll wall according to linedef
@@ -3282,7 +3276,6 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
 
     case 255:    // killough 3/2/98: scroll according to sidedef offsets
       side = lines[i].sidenum[0];
-      dsda_AddSideScroller(-sides[side].textureoffset, sides[side].rowoffset, side, 0);
       break;
 
     case 1024: // special 255 with tag control
@@ -3302,16 +3295,13 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
       dy = sides[side].rowoffset / 8;
       FIND_LINES(id_p, l->tag)
         if (*id_p != i)
-          dsda_AddControlSideScroller(dx, dy, control, lines[*id_p].sidenum[0], accel, 0);
 
       break;
 
     case 48:                  // scroll first side
-      dsda_AddSideScroller(FRACUNIT, 0, lines[i].sidenum[0], 0);
       break;
 
     case 85:                  // jff 1/30/98 2-way scroll
-      dsda_AddSideScroller(-FRACUNIT, 0, lines[i].sidenum[0], 0);
       break;
   }
 }

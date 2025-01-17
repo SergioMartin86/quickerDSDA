@@ -41,7 +41,6 @@
 
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
-#include "dsda/messenger.h"
 
 ///////////////////////////////////////////////////////////////
 //
