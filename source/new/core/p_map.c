@@ -330,7 +330,7 @@ dboolean P_MoveThing(mobj_t *thing, fixed_t x, fixed_t y, fixed_t z, dboolean fo
   if (P_TestMobjLocation(thing))
   {
     P_UnsetThingPosition(thing);
-    P_SetThingPosition(thing);
+    P_SetThingPosition(thing, 1);
 
     if (fog)
     {
@@ -375,7 +375,7 @@ void P_UnqualifiedMove(mobj_t *thing, fixed_t x, fixed_t y)
   sector = R_PointInSector(thing->x, thing->y);
   thing->z = thing->floorz = sector->floorheight;
   thing->ceilingz = sector->ceilingheight;
-  P_SetThingPosition(thing);
+  P_SetThingPosition(thing, 1);
 }
 
 //
@@ -448,7 +448,7 @@ dboolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y, dboolean boss)
   thing->x = x;
   thing->y = y;
 
-  P_SetThingPosition (thing);
+  P_SetThingPosition (thing, 1);
 
   thing->PrevX = x;
   thing->PrevY = y;
@@ -1388,7 +1388,7 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
   thing->x = x;
   thing->y = y;
 
-  P_SetThingPosition (thing);
+  P_SetThingPosition (thing, 1);
 
   if (thing->flags2 & MF2_FOOTCLIP
       && P_GetThingFloorType(thing) != FLOOR_SOLID)
@@ -3495,7 +3495,7 @@ static dboolean Hexen_P_TryMove(mobj_t* thing, fixed_t x, fixed_t y)
     thing->x = x;
     thing->y = y;
 
-    P_SetThingPosition(thing);
+    P_SetThingPosition(thing, 1);
 
     if (thing->flags2 & MF2_FOOTCLIP)
     {

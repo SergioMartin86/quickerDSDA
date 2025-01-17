@@ -99,7 +99,7 @@ void check_intercept(void);
 
 void    P_LineOpening (const line_t *linedef, const mobj_t *actor);
 void    P_UnsetThingPosition(mobj_t *thing);
-void    P_SetThingPosition(mobj_t *thing);
+void    P_SetThingPosition(mobj_t *thing, int refind);
 dboolean P_BlockLinesIterator (int x, int y, dboolean func(line_t *));
 dboolean P_BlockLinesIterator2(int x, int y, dboolean func(line_t *));
 dboolean P_BlockThingsIterator(int x, int y, dboolean func(mobj_t *));

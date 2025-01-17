@@ -377,9 +377,10 @@ void P_UnsetThingPosition (mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
-void P_SetThingPosition(mobj_t *thing)
+void P_SetThingPosition(mobj_t *thing, int refind)
 {                                                      // link into subsector
-  subsector_t *ss = thing->subsector = R_PointInSubsector(thing->x, thing->y);
+  if (refind == 1) thing->subsector = R_PointInSubsector(thing->x, thing->y);
+  subsector_t *ss = thing->subsector;
   if (!(thing->flags & MF_NOSECTOR))
     {
       // invisible things don't go into the sector links

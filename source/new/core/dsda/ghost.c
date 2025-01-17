@@ -265,7 +265,7 @@ void dsda_SpawnGhost(void) {
     mobj->frame  = ghost_state->frame;
     mobj->touching_sectorlist = NULL;
 
-    P_SetThingPosition(mobj);
+    P_SetThingPosition(mobj, 1);
 
     mobj->dropoffz =
     mobj->floorz   = mobj->subsector->sector->floorheight;
@@ -341,6 +341,6 @@ void dsda_UpdateGhosts(void* _void) {
     mobj->sprite = ghost->frame.sprite;
     mobj->frame = ghost->frame.frame;
 
-    P_SetThingPosition(mobj);
+    P_SetThingPosition(mobj, 1);
   }
 }

@@ -1415,7 +1415,7 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
 
   // set subsector and/or block links
 
-  P_SetThingPosition (mobj);
+  P_SetThingPosition (mobj, 1);
 
   mobj->dropoffz =           /* killough 11/98: for tracking dropoffs */
   mobj->floorz   = mobj->subsector->sector->floorheight;
@@ -2036,7 +2036,7 @@ spawnit:
     {
       P_UnsetThingPosition(mobj);
       mobj->flags |= MF_NOSECTOR;
-      P_SetThingPosition(mobj);
+      P_SetThingPosition(mobj, 1);
     }
 
     if (options & MTF_COUNTSECRET)

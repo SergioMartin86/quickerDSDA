@@ -1950,7 +1950,7 @@ void A_Fire(mobj_t *actor)
   actor->x = dest->x + FixedMul(24*FRACUNIT, finecosine[an]);
   actor->y = dest->y + FixedMul(24*FRACUNIT, finesine[an]);
   actor->z = dest->z;
-  P_SetThingPosition(actor);
+  P_SetThingPosition(actor, 1);
 }
 
 //
@@ -3380,7 +3380,7 @@ void A_AddFlags(mobj_t* actor)
   actor->flags2 |= flags2;
 
   if (update_blockmap)
-    P_SetThingPosition(actor);
+    P_SetThingPosition(actor, 1);
 }
 
 //
@@ -3412,7 +3412,7 @@ void A_RemoveFlags(mobj_t* actor)
   actor->flags2 &= ~flags2;
 
   if (update_blockmap)
-    P_SetThingPosition(actor);
+    P_SetThingPosition(actor, 1);
 }
 
 

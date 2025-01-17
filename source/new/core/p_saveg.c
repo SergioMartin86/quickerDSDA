@@ -1256,7 +1256,8 @@ void P_UnArchiveThinkers(void) {
           else
             mobj->tranmap = NULL;
 
-          P_SetThingPosition (mobj);
+          
+          P_SetThingPosition (mobj, 0);
 
           // killough 2/28/98:
           // Fix for falling down into a wall after savegame loaded:
