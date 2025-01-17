@@ -44,7 +44,6 @@
 #include "dsda/map_format.h"
 
 #include "hexen/p_acs.h"
-#include "hexen/sn_sonix.h"
 
 platlist_t *activeplats;       // killough 2/14/98: made global again
 
@@ -701,146 +700,11 @@ void P_RemoveAllActivePlats(void)
 
 void T_HexenPlatRaise(plat_t * plat)
 {
-    result_e res;
-
-    switch (plat->status)
-    {
-        case up:
-            res = T_MoveFloorPlane(plat->sector, plat->speed, plat->high, plat->crush, 1, true);
-            if (res == crushed && plat->crush == NO_CRUSH)
-            {
-                plat->count = plat->wait;
-                plat->status = down;
-                SN_StartSequence((mobj_t *) & plat->sector->soundorg,
-                                 SEQ_PLATFORM + plat->sector->seqType);
-            }
-            else if (res == pastdest)
-            {
-                plat->count = plat->wait;
-                plat->status = waiting;
-                SN_StopSequence((mobj_t *) & plat->sector->soundorg);
-                switch (plat->type)
-                {
-                    case PLAT_DOWNWAITUPSTAY:
-                    case PLAT_DOWNBYVALUEWAITUPSTAY:
-                        P_RemoveActivePlat(plat);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            break;
-        case down:
-            res = T_MoveFloorPlane(plat->sector, plat->speed, plat->low, NO_CRUSH, -1, true);
-            if (res == pastdest)
-            {
-                plat->count = plat->wait;
-                plat->status = waiting;
-                switch (plat->type)
-                {
-                    case PLAT_UPWAITDOWNSTAY:
-                    case PLAT_UPBYVALUEWAITDOWNSTAY:
-                        P_RemoveActivePlat(plat);
-                        break;
-                    default:
-                        break;
-                }
-                SN_StopSequence((mobj_t *) & plat->sector->soundorg);
-            }
-            break;
-        case waiting:
-            if (!--plat->count)
-            {
-                if (plat->sector->floorheight == plat->low)
-                    plat->status = up;
-                else
-                    plat->status = down;
-                SN_StartSequence((mobj_t *) & plat->sector->soundorg,
-                                 SEQ_PLATFORM + plat->sector->seqType);
-            }
-    }
 }
 
 int EV_DoHexenPlat(line_t * line, byte * args, plattype_e type, int amount)
 {
-    plat_t *plat;
-    const int *id_p;
-    int rtn;
-    sector_t *sec;
-
-    rtn = 0;
-
-    FIND_SECTORS(id_p, args[0])
-    {
-        sec = &sectors[*id_p];
-        if (sec->floordata || sec->ceilingdata)
-            continue;
-
-        //
-        // Find lowest & highest floors around sector
-        //
-        rtn = 1;
-        plat = Z_MallocLevel(sizeof(*plat));
-        memset(plat, 0, sizeof(*plat));
-        P_AddThinker(&plat->thinker);
-
-        plat->type = type;
-        plat->sector = sec;
-        plat->sector->floordata = plat;
-        plat->thinker.function = T_PlatRaise;
-        plat->crush = NO_CRUSH;
-        plat->tag = args[0];
-        plat->speed = args[1] * (FRACUNIT / 8);
-        switch (type)
-        {
-            case PLAT_DOWNWAITUPSTAY:
-                plat->low = P_FindLowestFloorSurrounding(sec) + 8 * FRACUNIT;
-                if (plat->low > sec->floorheight)
-                    plat->low = sec->floorheight;
-                plat->high = sec->floorheight;
-                plat->wait = args[2];
-                plat->status = down;
-                break;
-            case PLAT_DOWNBYVALUEWAITUPSTAY:
-                plat->low = sec->floorheight - args[3] * 8 * FRACUNIT;
-                if (plat->low > sec->floorheight)
-                    plat->low = sec->floorheight;
-                plat->high = sec->floorheight;
-                plat->wait = args[2];
-                plat->status = down;
-                break;
-            case PLAT_UPWAITDOWNSTAY:
-                plat->high = P_FindHighestFloorSurrounding(sec);
-                if (plat->high < sec->floorheight)
-                    plat->high = sec->floorheight;
-                plat->low = sec->floorheight;
-                plat->wait = args[2];
-                plat->status = up;
-                break;
-            case PLAT_UPBYVALUEWAITDOWNSTAY:
-                plat->high = sec->floorheight + args[3] * 8 * FRACUNIT;
-                if (plat->high < sec->floorheight)
-                    plat->high = sec->floorheight;
-                plat->low = sec->floorheight;
-                plat->wait = args[2];
-                plat->status = up;
-                break;
-            case PLAT_PERPETUALRAISE:
-                plat->low = P_FindLowestFloorSurrounding(sec) + 8 * FRACUNIT;
-                if (plat->low > sec->floorheight)
-                    plat->low = sec->floorheight;
-                plat->high = P_FindHighestFloorSurrounding(sec);
-                if (plat->high < sec->floorheight)
-                    plat->high = sec->floorheight;
-                plat->wait = args[2];
-                plat->status = P_Random(pr_hexen) & 1;
-                break;
-        }
-        P_AddActivePlat(plat);
-        SN_StartSequence((mobj_t *) & sec->soundorg,
-                         SEQ_PLATFORM + sec->seqType);
-    }
-    return rtn;
+return 0;
 }
 
 // hexen_note: why set the tags? not sure if this is correct

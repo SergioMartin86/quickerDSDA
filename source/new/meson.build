@@ -85,7 +85,6 @@ quickerDSDASrc =  [
  'core/hexen/p_anim.c',
  'core/hexen/p_things.c',
  'core/hexen/po_man.c',
- 'core/hexen/sn_sonix.c',
  'core/hu_lib.c',
  'core/hu_stuff.c',
  'core/info.c',

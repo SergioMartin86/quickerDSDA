@@ -28,7 +28,6 @@
 #include "p_maputl.h"
 
 #include "hexen/p_acs.h"
-#include "hexen/sn_sonix.h"
 
 #include "dsda/map_format.h"
 #include "dsda/preferences.h"
@@ -112,7 +111,6 @@ static void StopPolyEvent(polyevent_t * pe)
   {
       poly->specialdata = NULL;
   }
-  SN_StopSequence((mobj_t *) & poly->startSpot);
   P_PolyobjFinished(poly->tag);
   P_RemoveThinker(&pe->thinker);
 }
@@ -200,7 +198,6 @@ dboolean EV_RotateZDoomPoly(line_t * line, int polyNum, int speed,
     }
     pe->speed = (speed * direction * (ANG90 / 64)) >> 3;
     poly->specialdata = pe;
-    SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
 
     while ((mirror = GetPolyobjMirror(polyNum)) != 0)
     {
@@ -241,7 +238,6 @@ dboolean EV_RotateZDoomPoly(line_t * line, int polyNum, int speed,
         direction = -direction;
         pe->speed = (speed * direction * (ANG90 / 64)) >> 3;
         polyNum = mirror;
-        SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
     }
     return true;
 }
@@ -288,7 +284,6 @@ static void EV_SpawnMovePolyEvent(int polyNum, polyobj_t *poly, fixed_t speed,
     pe->angle = an >> ANGLETOFINESHIFT;
     pe->xSpeed = FixedMul(pe->speed, finecosine[pe->angle]);
     pe->ySpeed = FixedMul(pe->speed, finesine[pe->angle]);
-    SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
 
     while ((mirror = GetPolyobjMirror(polyNum)) != 0)
     {
@@ -309,7 +304,6 @@ static void EV_SpawnMovePolyEvent(int polyNum, polyobj_t *poly, fixed_t speed,
         pe->xSpeed = FixedMul(pe->speed, finecosine[pe->angle]);
         pe->ySpeed = FixedMul(pe->speed, finesine[pe->angle]);
         polyNum = mirror;
-        SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
     }
 }
 
@@ -391,8 +385,6 @@ void T_PolyDoor(polydoor_t * pd)
         if (!--pd->tics)
         {
             poly = GetPolyobj(pd->polyobj);
-            SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE +
-                             poly->seqType);
         }
         return;
     }
@@ -406,7 +398,6 @@ void T_PolyDoor(polydoor_t * pd)
                 if (pd->dist <= 0)
                 {
                     poly = GetPolyobj(pd->polyobj);
-                    SN_StopSequence((mobj_t *) & poly->startSpot);
                     if (!pd->close)
                     {
                         pd->dist = pd->totalDist;
@@ -443,8 +434,6 @@ void T_PolyDoor(polydoor_t * pd)
                     pd->xSpeed = -pd->xSpeed;
                     pd->ySpeed = -pd->ySpeed;
                     pd->close = false;
-                    SN_StartSequence((mobj_t *) & poly->startSpot,
-                                     SEQ_DOOR_STONE + poly->seqType);
                 }
             }
             break;
@@ -460,7 +449,6 @@ void T_PolyDoor(polydoor_t * pd)
                 if (pd->dist <= 0)
                 {
                     poly = GetPolyobj(pd->polyobj);
-                    SN_StopSequence((mobj_t *) & poly->startSpot);
                     if (!pd->close)
                     {
                         pd->dist = pd->totalDist;
@@ -491,8 +479,6 @@ void T_PolyDoor(polydoor_t * pd)
                     pd->dist = pd->totalDist - pd->dist;
                     pd->speed = -pd->speed;
                     pd->close = false;
-                    SN_StartSequence((mobj_t *) & poly->startSpot,
-                                     SEQ_DOOR_STONE + poly->seqType);
                 }
             }
             break;
@@ -538,7 +524,6 @@ dboolean EV_OpenZDoomPolyDoor(line_t * line, int polyNum, int speed,
         pd->direction = an >> ANGLETOFINESHIFT;
         pd->xSpeed = FixedMul(pd->speed, finecosine[pd->direction]);
         pd->ySpeed = FixedMul(pd->speed, finesine[pd->direction]);
-        SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
     }
     else if (type == PODOOR_SWING)
     {
@@ -547,7 +532,6 @@ dboolean EV_OpenZDoomPolyDoor(line_t * line, int polyNum, int speed,
         pd->speed = (speed * pd->direction * (ANG90 / 64)) >> 3;
         pd->totalDist = angle * (ANG90 / 64);
         pd->dist = pd->totalDist;
-        SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
     }
 
     poly->specialdata = pd;
@@ -576,7 +560,6 @@ dboolean EV_OpenZDoomPolyDoor(line_t * line, int polyNum, int speed,
             pd->direction = an >> ANGLETOFINESHIFT;
             pd->xSpeed = FixedMul(pd->speed, finecosine[pd->direction]);
             pd->ySpeed = FixedMul(pd->speed, finesine[pd->direction]);
-            SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
         }
         else if (type == PODOOR_SWING)
         {
@@ -585,7 +568,6 @@ dboolean EV_OpenZDoomPolyDoor(line_t * line, int polyNum, int speed,
             pd->speed = (speed * pd->direction * (ANG90 / 64)) >> 3;
             pd->totalDist = angle * (ANG90 / 64);
             pd->dist = pd->totalDist;
-            SN_StartSequence((mobj_t *) & poly->startSpot, SEQ_DOOR_STONE + poly->seqType);
         }
         polyNum = mirror;
     }

@@ -74,7 +74,6 @@
 #include "hexen/p_acs.h"
 #include "hexen/p_anim.h"
 #include "hexen/po_man.h"
-#include "hexen/sn_sonix.h"
 
 #include "config.h"
 
@@ -3905,11 +3904,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   R_SmoothPlaying_Reset(NULL);
 
   P_InitLightning();
-
-  if (map_format.sndseq)
-  {
-    SN_StopAllSequences();
-  }
 
 }
 

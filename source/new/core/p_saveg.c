@@ -48,8 +48,6 @@
 #include "hexen/p_acs.h"
 #include "hexen/p_anim.h"
 #include "hexen/po_man.h"
-#include "hexen/sn_sonix.h"
-#include "hexen/sv_save.h"
 
 #include "dsda/map_format.h"
 #include "dsda/msecnode.h"
@@ -1794,89 +1792,10 @@ void P_UnArchiveScripts(void)
 
 void P_ArchiveSounds(void)
 {
-  seqnode_t *node;
-  sector_t *sec;
-  int difference;
-  int i;
-
-  if (!map_format.sndseq) return;
-
-  P_SAVE_X(ActiveSequences);
-
-  for (node = SequenceListHead; node; node = node->next)
-  {
-    P_SAVE_X(node->sequence);
-    P_SAVE_X(node->delayTics);
-    P_SAVE_X(node->volume);
-
-    difference = SN_GetSequenceOffset(node->sequence, node->sequencePtr);
-    P_SAVE_X(difference);
-    P_SAVE_X(node->currentSoundID);
-
-    for (i = 0; i < po_NumPolyobjs; i++)
-    {
-      if (node->mobj == (mobj_t *) &polyobjs[i].startSpot)
-      {
-        break;
-      }
-    }
-
-    if (i == po_NumPolyobjs)
-    {                       // Sound is attached to a sector, not a polyobj
-      sec = R_PointInSector(node->mobj->x, node->mobj->y);
-      difference = (int) (sec - sectors);
-      P_SAVE_BYTE(0);   // 0 -- sector sound origin
-    }
-    else
-    {
-      difference = i;
-      P_SAVE_BYTE(1);   // 1 -- polyobj sound origin
-    }
-
-    P_SAVE_X(difference);
-  }
 }
 
 void P_UnArchiveSounds(void)
 {
-  int i;
-  int numSequences;
-  int sequence;
-  int delayTics;
-  int volume;
-  int seqOffset;
-  int soundID;
-  byte polySnd;
-  int secNum;
-  mobj_t *sndMobj;
-
-  if (!map_format.sndseq) return;
-
-  P_LOAD_X(numSequences);
-
-  i = 0;
-  while (i < numSequences)
-  {
-    P_LOAD_X(sequence);
-    P_LOAD_X(delayTics);
-    P_LOAD_X(volume);
-    P_LOAD_X(seqOffset);
-    P_LOAD_X(soundID);
-    P_LOAD_BYTE(polySnd);
-    P_LOAD_X(secNum);
-
-    if (!polySnd)
-    {
-      sndMobj = (mobj_t *) &sectors[secNum].soundorg;
-    }
-    else
-    {
-      sndMobj = (mobj_t *) &polyobjs[secNum].startSpot;
-    }
-    SN_StartSequence(sndMobj, sequence);
-    SN_ChangeNodeData(i, seqOffset, delayTics, volume, soundID);
-    i++;
-  }
 }
 
 void P_ArchiveAmbientSound(void)

@@ -28,7 +28,6 @@
 
 #include "hexen/p_things.h"
 #include "hexen/po_man.h"
-#include "hexen/sn_sonix.h"
 
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
@@ -1692,7 +1691,6 @@ static int CmdSoundSequence(void)
     {
         mobj = (mobj_t *) & ACScript->line->frontsector->soundorg;
     }
-    SN_StartSequenceName(mobj, StringLookup(Pop()));
     return SCRIPT_CONTINUE;
 }
 
