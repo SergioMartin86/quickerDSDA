@@ -30,8 +30,6 @@
 #include "lprintf.h"
 #include "e6y.h"
 
-#include "heretic/sb_bar.h"
-
 #include "dsda.h"
 #include "dsda/args.h"
 #include "dsda/configuration.h"

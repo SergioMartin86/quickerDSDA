@@ -58,7 +58,6 @@
 #include "dsda/settings.h"
 
 // heretic needs
-#include "heretic/def.h"
 #include "sounds.h"
 #include "p_inter.h"
 #include "m_random.h"

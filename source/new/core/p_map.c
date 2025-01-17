@@ -56,8 +56,6 @@
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
 
-#include "heretic/def.h"
-
 static mobj_t    *tmthing;
 static mobj_t    *tsthing; // hexen
 static fixed_t   tmx;

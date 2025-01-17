@@ -4560,8 +4560,6 @@ static void P_SpawnPushers(void)
 
 // heretic
 
-#include "heretic/def.h"
-
 typedef enum
 {
     afxcmd_play,                // (sound)

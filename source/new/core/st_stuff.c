@@ -51,8 +51,6 @@
 #include "dsda/stretch.h"
 #include "dsda/text_color.h"
 
-#include "heretic/sb_bar.h"
-
 //
 // STATUS BAR DATA
 //

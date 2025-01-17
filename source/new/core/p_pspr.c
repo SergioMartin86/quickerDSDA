@@ -1451,7 +1451,6 @@ void P_MovePsprites(player_t *player)
 
 // heretic
 
-#include "heretic/def.h"
 #include "p_user.h"
 #include "p_maputl.h"
 
@@ -2420,8 +2419,6 @@ void P_CloseWeapons(void)
 }
 
 // hexen
-
-#include "heretic/sb_bar.h"
 
 extern fixed_t FloatBobOffsets[64];
 

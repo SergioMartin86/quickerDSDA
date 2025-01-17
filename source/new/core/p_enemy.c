@@ -3425,8 +3425,6 @@ void A_RemoveFlags(mobj_t* actor)
 
 // heretic
 
-#include "heretic/def.h"
-
 #define MAX_BOSS_SPOTS 8
 
 typedef struct
@@ -6718,8 +6716,6 @@ void A_FiredSplotch(mobj_t * actor)
         mo->momz = FRACUNIT * 3 + (P_Random(pr_hexen) << 10);
     }
 }
-
-#include "heretic/sb_bar.h"
 
 void A_FreezeDeath(mobj_t * actor)
 {

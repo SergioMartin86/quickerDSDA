@@ -27,7 +27,6 @@
 #include "d_main.h"
 #include "v_video.h"
 #include "hu_stuff.h"
-#include "heretic/def.h"
 
 #include "global.h"
 

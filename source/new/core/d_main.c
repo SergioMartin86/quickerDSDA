@@ -100,8 +100,6 @@
 #include "dsda/utility.h"
 #include "dsda/wad_stats.h"
 
-#include "heretic/sb_bar.h"
-
 // NSM
 #include "i_capture.h"
 
@@ -206,8 +204,6 @@ static void D_Wipe(void)
   {
       dsda_TrackFeature(uf_wipescreen);
 
-    // If there's no screen wipe, we still need to refresh the status bar
-    SB_Start();
     return;
   }
 

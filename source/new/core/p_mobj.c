@@ -64,9 +64,6 @@
 #include "dsda/tranmap.h"
 #include "dsda/utility.h"
 
-#include "heretic/def.h"
-#include "heretic/sb_bar.h"
-
 // heretic_note: static NUMSTATES arrays here - probably fine?
 // NUMSTATES > HERETIC_NUMSTATES
 

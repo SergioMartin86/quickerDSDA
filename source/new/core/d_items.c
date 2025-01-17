@@ -208,8 +208,6 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
 
 // heretic
 
-#include "heretic/def.h"
-
 weaponinfo_t wpnlev1info[NUMWEAPONS] = {
   {                           // Staff
     am_noammo,                 // ammo

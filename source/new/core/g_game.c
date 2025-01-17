@@ -263,7 +263,6 @@ char         savedescription[SAVEDESCLEN];  // Description to save in savegame i
 
 // heretic
 #include "p_user.h"
-#include "heretic/def.h"
 
 int lookheld;
 
@@ -272,7 +271,6 @@ static dboolean InventoryMoveRight(void);
 // end heretic
 
 // hexen
-#include "heretic/sb_bar.h"
 
 // Position indicator for cooperative net-play reborn
 int RebornPosition;
