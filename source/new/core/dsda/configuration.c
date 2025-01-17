@@ -111,7 +111,6 @@ void gld_ResetAutomapTransparency(void);
 #else
 void gld_ResetAutomapTransparency(void){}
 #endif
-void M_ChangeUncappedFrameRate(void);
 void R_SetViewSize(void);
 void M_ChangeApplyPalette(void);
 void M_ChangeStretch(void);
@@ -1109,7 +1108,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_uncapped_framerate] = {
     "uncapped_framerate", dsda_config_uncapped_framerate,
-    CONF_BOOL(1), NULL, NOT_STRICT, M_ChangeUncappedFrameRate
+    CONF_BOOL(1), NULL, NOT_STRICT, NULL
   },
   [dsda_config_fps_limit] = {
     "dsda_fps_limit", dsda_config_fps_limit,

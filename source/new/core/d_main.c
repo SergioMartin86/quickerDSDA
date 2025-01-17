@@ -70,7 +70,6 @@
 #include "p_setup.h"
 #include "r_draw.h"
 #include "r_main.h"
-#include "r_fps.h"
 #include "d_main.h"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 #include "e6y.h"
@@ -298,68 +297,6 @@ void D_Display (fixed_t frac)
 {
 }
 
-//
-//  D_DoomLoop()
-//
-// Not a globally visible function,
-//  just included for source reference,
-//  called by D_DoomMain, never exits.
-// Manages timing and IO,
-//  calls all ?_Responder, ?_Ticker, and ?_Drawer,
-//  calls I_GetTime, I_StartFrame, and I_StartTic
-//
-
-static void D_DoomLoop(void)
-{
-  if (dsda_IntConfig(dsda_config_startup_delay_ms) > 0)
-    I_uSleep(dsda_IntConfig(dsda_config_startup_delay_ms) * 1000);
-
-  for (;;)
-  {
-
-    WasRenderedInTryRunTics = false;
-
-    // process one or more tics
-    if (singletics)
-    {
-      G_BuildTiccmd (&local_cmds[consoleplayer]);
-      if (advancedemo)
-        D_DoAdvanceDemo ();
-      G_Ticker ();
-      gametic++;
-      maketic++;
-    }
-    else
-      TryRunTics (); // will run at least one tic
-
-    // Update display, next frame, with current state.
-    if (!movement_smooth || !WasRenderedInTryRunTics || gamestate != wipegamestate)
-    {
-      // NSM
-      if (capturing_video && !dsda_SkipMode())
-      {
-        dboolean first = true;
-        int cap_step = TICRATE * FRACUNIT / cap_fps;
-        cap_frac += cap_step;
-        while(cap_frac <= FRACUNIT)
-        {
-          isExtraDDisplay = !first;
-          first = false;
-
-          D_Display(cap_frac);
-
-          isExtraDDisplay = false;
-          cap_frac += cap_step;
-        }
-        cap_frac -= FRACUNIT + cap_step;
-      }
-      else
-      {
-        D_Display(-1);
-      }
-    }
-  }
-}
 
 //
 //  DEMO LOOP
@@ -1427,9 +1364,6 @@ void D_DoomMainSetup(void)
       D_StartTitle();                 // start up intro loop
   }
 
-  // do not try to interpolate during timedemo
-  M_ChangeUncappedFrameRate();
-
   lprintf(LO_DEBUG, "\n"); // Separator after setup
 }
 
@@ -1440,8 +1374,6 @@ void D_DoomMainSetup(void)
 void D_DoomMain(void)
 {
   D_DoomMainSetup(); // CPhipps - setup out of main execution stack
-
-  D_DoomLoop ();  // never returns
 }
 
 

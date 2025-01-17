@@ -55,7 +55,6 @@
 #include "i_system.h"
 #include "i_main.h"
 #include "i_video.h"
-#include "r_fps.h"
 #include "lprintf.h"
 #include "e6y.h"
 
@@ -85,9 +84,6 @@ void FakeNetUpdate(void)
 {
   static int lastmadetic;
 
-  if (isExtraDDisplay)
-    return;
-
   { // Build new ticcmds
     int newtics = dsda_GetTick() - lastmadetic;
     lastmadetic += newtics;
@@ -111,36 +107,4 @@ int ms_to_next_tick;
 
 void TryRunTics (void)
 {
-  int runtics;
-  int entertime = dsda_GetTick();
-
-  // Wait for tics to run
-  while (1) {
-    FakeNetUpdate();
-    runtics = maketic - gametic;
-    if (!runtics) {
-      if (!movement_smooth) {
-          I_uSleep(ms_to_next_tick*1000);
-      }
-
-      if (gametic > 0)
-      {
-        WasRenderedInTryRunTics = true;
-        if (movement_smooth && gamestate==wipegamestate)
-        {
-          isExtraDDisplay = true;
-          D_Display(-1);
-          isExtraDDisplay = false;
-        }
-      }
-    } else break;
-  }
-
-  while (runtics--) {
-    if (advancedemo)
-      D_DoAdvanceDemo ();
-    G_Ticker ();
-    gametic++;
-    FakeNetUpdate();
-  }
 }

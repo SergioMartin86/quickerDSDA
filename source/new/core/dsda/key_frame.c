@@ -22,7 +22,6 @@
 #include "p_saveg.h"
 #include "p_map.h"
 #include "r_draw.h"
-#include "r_fps.h"
 #include "r_main.h"
 #include "g_game.h"
 #include "m_file.h"

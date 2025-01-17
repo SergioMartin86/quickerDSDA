@@ -70,7 +70,6 @@
 #include "doomdef.h"
 #include "d_player.h"
 #include "m_fixed.h"
-#include "r_fps.h"
 #include "e6y.h"
 #include "i_system.h"
 

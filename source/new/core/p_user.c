@@ -45,7 +45,6 @@
 #include "p_spec.h"
 #include "p_user.h"
 #include "smooth.h"
-#include "r_fps.h"
 #include "g_game.h"
 #include "p_tick.h"
 #include "e6y.h"//e6y
@@ -559,18 +558,6 @@ void P_PlayerThink (player_t* player)
   ticcmd_t*    cmd;
   weapontype_t newweapon;
   int floorType;
-
-  if (movement_smooth)
-  {
-    player->prev_viewz = player->viewz;
-    player->prev_viewangle = R_SmoothPlaying_Get(player);
-    player->prev_viewpitch = dsda_PlayerPitch(player);
-
-    if (&players[displayplayer] == player)
-    {
-      P_ResetWalkcam();
-    }
-  }
 
   // killough 2/8/98, 3/21/98:
   if (player->cheats & CF_NOCLIP)

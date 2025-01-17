@@ -109,7 +109,6 @@ quickerDSDASrc =  [
  'core/r_bsp.c',
  'core/r_data.c',
  'core/r_draw.c',
- 'core/r_fps.c',
  'core/r_main.c',
  'core/r_patch.c',
  'core/r_plane.c',

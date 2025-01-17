@@ -75,7 +75,6 @@
 #include "i_main.h"
 #include "i_system.h"
 #include "smooth.h"
-#include "r_fps.h"
 #include "e6y.h"//e6y
 
 #include "dsda.h"
@@ -1054,7 +1053,6 @@ dboolean G_Responder (event_t* ev)
 
     ST_Start();    // killough 3/7/98: switch status bar views too
     HU_Start();
-    R_ActivateSectorInterpolations();
     R_SmoothPlaying_Reset(NULL);
     return true;
   }
@@ -2016,7 +2014,6 @@ void G_AfterLoad(void)
 {
   dsda_ResetTrackers();
 
-  R_ActivateSectorInterpolations(); //e6y
   R_SmoothPlaying_Reset(NULL); // e6y
 
   RecalculateDrawnSubsectors();

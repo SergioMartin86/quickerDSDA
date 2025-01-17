@@ -50,7 +50,6 @@
 #include "lprintf.h" //jff 10/6/98 for debug outputs
 #include "v_video.h"
 #include "smooth.h"
-#include "r_fps.h"
 #include "r_plane.h"
 #include "g_overflow.h"
 #include "e6y.h"//e6y
@@ -3623,8 +3622,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   main_tranmap = dsda_DefaultTranMap();
 
   dsda_WatchBeforeLevelSetup();
-
-  R_StopAllInterpolations();
 
   totallive = totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
   wminfo.partime = 180;
