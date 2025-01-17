@@ -3392,26 +3392,12 @@ static void P_VerifyLevelComponents(int lumpnum)
 
 static void P_UpdateMapFormat()
 {
-  if (udmf_map)
-  {
-    dsda_ApplyZDoomMapFormat();
-  }
-  else
-  {
     if (dsda_UseMapinfo())
       DO_ONCE
         lprintf(LO_WARN, "Some features of MAPINFO may not work with non-udmf maps!\n");
       END_ONCE
 
-    if (has_behavior)
-    {
-      dsda_ApplyZDoomMapFormat();
-    }
-    else
-    {
       dsda_ApplyDefaultMapFormat();
-    }
-  }
 }
 
 static void P_UpdateLevelComponents(int lumpnum) {
