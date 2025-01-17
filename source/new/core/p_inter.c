@@ -34,7 +34,6 @@
 #include "doomstat.h"
 #include "m_random.h"
 #include "r_main.h"
-#include "smooth.h"
 #include "sounds.h"
 #include "p_tick.h"
 #include "lprintf.h"

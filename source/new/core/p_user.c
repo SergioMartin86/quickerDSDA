@@ -44,7 +44,6 @@
 #include "p_enemy.h"
 #include "p_spec.h"
 #include "p_user.h"
-#include "smooth.h"
 #include "g_game.h"
 #include "p_tick.h"
 #include "e6y.h"//e6y
@@ -348,10 +347,6 @@ void P_MovePlayer (player_t* player)
   mo = player->mo;
   mo->angle += cmd->angleturn << 16;
 
-  if (demo_smoothturns && player == &players[displayplayer])
-  {
-    R_SmoothPlaying_Add(cmd->angleturn << 16);
-  }
 
   onground = (mo->z <= mo->floorz || mo->flags2 & MF2_ONMOBJ);
 
@@ -534,8 +529,6 @@ if ((int)player->mo->pitch > -(int)ANG1*19)
   {
     dsda_DeathUse(player);
   }
-
-  R_SmoothPlaying_Reset(player); // e6y
 }
 
 void P_PlayerEndFlight(player_t * player)

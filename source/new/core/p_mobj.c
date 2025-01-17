@@ -46,7 +46,6 @@
 #include "p_inter.h"
 #include "p_user.h"
 #include "lprintf.h"
-#include "smooth.h"
 #include "p_enemy.h"
 #include "p_spec.h"
 #include "g_overflow.h"
@@ -1711,7 +1710,6 @@ void P_SpawnPlayer (int n, const mapthing_t* mthing)
       p->cards[i] = true;
   }
 
-  R_SmoothPlaying_Reset(p); // e6y
 }
 
 /*

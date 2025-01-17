@@ -40,7 +40,6 @@
 #include "p_tick.h"
 #include "sounds.h"
 #include "p_user.h"
-#include "smooth.h"
 #include "m_random.h"
 
 #include "dsda/id_list.h"
@@ -279,7 +278,6 @@ static int P_TeleportToDestination(mobj_t *destination, line_t *line, mobj_t *th
     }
 
     // e6y
-    R_ResetAfterTeleport(player);
   }
 
   return 1;
@@ -507,9 +505,6 @@ int EV_SilentLineTeleport(line_t *line, int side, mobj_t *thing,
         if (!P_TeleportMove(thing, x, y, false)) /* killough 8/9/98 */
           return 0;
 
-        // e6y
-        if (player && player->mo == thing)
-          R_ResetAfterTeleport(player);
 
         // Adjust z position to be same height above ground as before.
         // Ground level at the exit is measured as the higher of the
@@ -544,9 +539,6 @@ int EV_SilentLineTeleport(line_t *line, int side, mobj_t *thing,
             player->deltaviewheight = deltaviewheight;
           }
 
-        // e6y
-        if (player && player->mo == thing)
-          R_ResetAfterTeleport(player);
 
         return 1;
       }

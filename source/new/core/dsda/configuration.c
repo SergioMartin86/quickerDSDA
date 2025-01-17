@@ -24,7 +24,6 @@
 #include "lprintf.h"
 #include "r_main.h"
 #include "r_segs.h"
-#include "smooth.h"
 #include "v_video.h"
 #include "z_zone.h"
 
@@ -77,8 +76,6 @@ typedef struct {
 
 extern int dsda_input_profile;
 extern int weapon_preferences[2][NUMWEAPONS + 1];
-extern int demo_smoothturns;
-extern int demo_smoothturnsfactor;
 extern int sts_always_red;
 extern int sts_pct_always_gray;
 extern int sts_traditional_keys;
@@ -208,12 +205,12 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_demo_smoothturns] = {
     "demo_smoothturns", dsda_config_demo_smoothturns,
-    CONF_BOOL(0), &demo_smoothturns,
+    CONF_BOOL(0), NULL,
     NOT_STRICT, NULL
   },
   [dsda_config_demo_smoothturnsfactor] = {
     "demo_smoothturnsfactor", dsda_config_demo_smoothturnsfactor,
-    dsda_config_int, 1, SMOOTH_PLAYING_MAXFACTOR, { 6 }, &demo_smoothturnsfactor,
+    dsda_config_int, 1, 0, { 6 }, NULL,
     NOT_STRICT, NULL
   },
   [dsda_config_weapon_attack_alignment] = {

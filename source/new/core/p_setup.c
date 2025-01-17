@@ -49,7 +49,6 @@
 #include "p_enemy.h"
 #include "lprintf.h" //jff 10/6/98 for debug outputs
 #include "v_video.h"
-#include "smooth.h"
 #include "r_plane.h"
 #include "g_overflow.h"
 #include "e6y.h"//e6y
@@ -3247,7 +3246,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
     P_SyncWalkcam(true, true);
   }
 
-  R_SmoothPlaying_Reset(NULL);
 
 }
 

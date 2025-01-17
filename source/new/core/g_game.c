@@ -74,7 +74,6 @@
 #include "lprintf.h"
 #include "i_main.h"
 #include "i_system.h"
-#include "smooth.h"
 #include "e6y.h"//e6y
 
 #include "dsda.h"
@@ -1041,7 +1040,6 @@ dboolean G_Responder (event_t* ev)
 
     ST_Start();    // killough 3/7/98: switch status bar views too
     HU_Start();
-    R_SmoothPlaying_Reset(NULL);
     return true;
   }
 
@@ -1304,7 +1302,6 @@ void G_Ticker (void)
             gameaction = ga_loadgame;
             forced_loadgame = true;
             load_via_cmd = true;
-            R_SmoothPlaying_Reset(NULL);
           }
 
           if (ex->actions & XC_LOOK && ex->look != XC_LOOK_RESET && !dsda_MouseLook())
@@ -1922,7 +1919,6 @@ void G_LoadGame(int slot)
   gameaction = ga_loadgame;
   savegameslot = slot;
   load_via_cmd = false;
-  R_SmoothPlaying_Reset(NULL); // e6y
 }
 
 // killough 5/15/98:
@@ -1973,8 +1969,6 @@ void RecalculateDrawnSubsectors(void)
 void G_AfterLoad(void)
 {
   dsda_ResetTrackers();
-
-  R_SmoothPlaying_Reset(NULL); // e6y
 
   RecalculateDrawnSubsectors();
 
