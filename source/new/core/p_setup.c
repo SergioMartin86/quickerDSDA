@@ -71,11 +71,6 @@
 #include "dsda/udmf.h"
 #include "dsda/utility.h"
 
-#include "hexen/p_acs.h"
-#include "hexen/p_anim.h"
-#include "hexen/po_man.h"
-#include "hexen/sn_sonix.h"
-
 #include "config.h"
 
 //
@@ -3477,9 +3472,6 @@ static void P_UpdateUDMFLevelComponents(int lumpnum)
     I_Error("P_SetupLevel: Level wad structure is incomplete. There is no ZNODES lump.");
 }
 
-void PO_LoadThings(int lump);
-void PO_LoadUDMFThings(int lump);
-
 map_loader_t udmf_map_loader = {
   .load_vertexes = P_LoadUDMFVertexes,
   .load_sectors = P_LoadUDMFSectors,
@@ -3488,7 +3480,7 @@ map_loader_t udmf_map_loader = {
   .allocate_sidedefs = P_AllocateUDMFSideDefs,
   .load_sidedefs = P_LoadUDMFSideDefs,
   .update_level_components = P_UpdateUDMFLevelComponents,
-  .po_load_things = PO_LoadUDMFThings,
+  .po_load_things = NULL,
 };
 
 map_loader_t legacy_map_loader = {
@@ -3499,7 +3491,7 @@ map_loader_t legacy_map_loader = {
   .allocate_sidedefs = P_AllocateSideDefs,
   .load_sidedefs = P_LoadSideDefs,
   .update_level_components = P_UpdateLevelComponents,
-  .po_load_things = PO_LoadThings,
+  .po_load_things = NULL,
 };
 
 map_loader_t map_loader;
@@ -3808,8 +3800,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
     A_ResetPlayerCorpseQueue();
   }
 
-  po_NumPolyobjs = 0; // hexen
-
   /* cph - reset all multiplayer starts */
   memset(playerstarts,0,sizeof(playerstarts));
   deathmatch_p = deathmatchstarts;
@@ -3818,22 +3808,7 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   P_MapStart();
 
-  if (map_format.polyobjs)
-  {
-    PO_ResetBlockMap(true);
-  }
-
   map_loader.load_things(level_components.things);
-
-  if (map_format.polyobjs)
-  {
-    PO_Init(level_components.things);       // Initialize the polyobjs
-  }
-
-  if (map_format.acs)
-  {
-    P_LoadACScripts(level_components.behavior);     // ACS object code
-  }
 
   // if deathmatch, randomly spawn the active players
   if (deathmatch)
@@ -3904,13 +3879,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   R_SmoothPlaying_Reset(NULL);
 
-  P_InitLightning();
-
-  if (map_format.sndseq)
-  {
-    SN_StopAllSequences();
-  }
-
 }
 
 //
@@ -3919,7 +3887,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 void P_Init (void)
 {
   P_InitSwitchList();
-  P_InitFTAnims();
   P_InitPicAnims();
   P_InitTerrainTypes();
   P_InitLava();

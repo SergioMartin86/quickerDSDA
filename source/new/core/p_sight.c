@@ -157,33 +157,6 @@ dboolean P_SightBlockLinesIterator(int x, int y)
   if (offset < 0)
     return true;
 
-  if (map_format.polyobjs)
-  {
-    polyblock_t *polyLink;
-    seg_t **segList;
-    int i;
-    extern polyblock_t **PolyBlockMap;
-
-    polyLink = PolyBlockMap[offset];
-    while (polyLink)
-    {
-      if (polyLink->polyobj)
-      {                       // only check non-empty links
-        if (polyLink->polyobj->validcount != validcount)
-        {
-          segList = polyLink->polyobj->segs;
-
-          for (i = 0; i < polyLink->polyobj->numsegs; i++, segList++)
-            if (!P_SightCheckLine((*segList)->linedef))
-              return false;
-
-          polyLink->polyobj->validcount = validcount;
-        }
-      }
-      polyLink = polyLink->next;
-    }
-  }
-
   offset = *(blockmap+offset);
 
   for (list = blockmaplump + offset; *list != -1; list++)

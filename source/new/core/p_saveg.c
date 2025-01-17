@@ -599,61 +599,10 @@ static dboolean P_IsPolyObjThinker(thinker_t *th)
 
 void P_ArchivePolyObjSpecialData(void)
 {
-  thinker_t *th;
-
-  if (!map_format.polyobjs) return;
-
-  for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-  {
-    if (P_IsPolyObjThinker(th))
-    {
-      int i;
-      int count = 0;
-
-      for (i = 0; i < po_NumPolyobjs; ++i)
-      {
-        if (polyobjs[i].specialdata == th)
-          ++count;
-      }
-
-      P_SAVE_X(count);
-
-      for (i = 0; i < po_NumPolyobjs; ++i)
-      {
-        if (polyobjs[i].specialdata == th)
-        {
-          P_SAVE_X(i);
-        }
-      }
-    }
-  }
 }
 
 void P_UnArchivePolyObjSpecialData(void)
 {
-  thinker_t *th;
-
-  if (!map_format.polyobjs) return;
-
-  for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-  {
-    if (P_IsPolyObjThinker(th))
-    {
-      int i;
-      int count;
-
-      P_LOAD_X(count);
-
-      for (i = 0; i < count; ++i)
-      {
-        int j;
-
-        P_LOAD_X(j);
-
-        polyobjs[j].specialdata = th;
-      }
-    }
-  }
 }
 
 // dsda - fix save / load synchronization
@@ -1576,89 +1525,10 @@ static void P_UnArchiveVertex(vertex_t *v)
 
 void P_ArchivePolyobjs(void)
 {
-  int i;
-
-  if (!map_format.polyobjs) return;
-
-  for (i = 0; i < po_NumPolyobjs; i++)
-  {
-    int seg_i;
-    polyobj_t *po;
-
-    po = &polyobjs[i];
-
-    for (seg_i = 0; seg_i < po->numsegs; ++seg_i) {
-      seg_t *seg;
-      line_t *line;
-
-      seg = po->segs[seg_i];
-      line = seg->linedef;
-
-      P_ArchiveVertex(seg->v1);
-      P_ArchiveVertex(seg->v2);
-
-      P_SAVE_X(seg->angle);
-      P_SAVE_X(line->slopetype);
-      P_SAVE_ARRAY(line->bbox);
-      P_SAVE_X(line->dx);
-      P_SAVE_X(line->dy);
-
-      P_ArchiveVertex(&po->originalPts[seg_i]);
-      P_ArchiveVertex(&po->prevPts[seg_i]);
-    }
-
-    P_SAVE_X(po->angle);
-    P_SAVE_X(po->startSpot.x);
-    P_SAVE_X(po->startSpot.y);
-  }
 }
 
 void P_UnArchivePolyobjs(void)
 {
-  void UnLinkPolyobj(polyobj_t * po);
-  void LinkPolyobj(polyobj_t * po);
-  void ResetPolySubSector(polyobj_t *po);
-
-  int i;
-
-  if (!map_format.polyobjs) return;
-
-  for (i = 0; i < po_NumPolyobjs; i++)
-  {
-    int seg_i;
-    polyobj_t *po;
-
-    po = &polyobjs[i];
-
-    UnLinkPolyobj(po);
-
-    for (seg_i = 0; seg_i < po->numsegs; ++seg_i) {
-      seg_t *seg;
-      line_t *line;
-
-      seg = po->segs[seg_i];
-      line = seg->linedef;
-
-      P_UnArchiveVertex(seg->v1);
-      P_UnArchiveVertex(seg->v2);
-
-      P_LOAD_X(seg->angle);
-      P_LOAD_X(line->slopetype);
-      P_LOAD_ARRAY(line->bbox);
-      P_LOAD_X(line->dx);
-      P_LOAD_X(line->dy);
-
-      P_UnArchiveVertex(&po->originalPts[seg_i]);
-      P_UnArchiveVertex(&po->prevPts[seg_i]);
-    }
-
-    P_LOAD_X(po->angle);
-    P_LOAD_X(po->startSpot.x);
-    P_LOAD_X(po->startSpot.y);
-
-    LinkPolyobj(po);
-    ResetPolySubSector(po);
-  }
 }
 
 void P_ArchiveScripts(void)

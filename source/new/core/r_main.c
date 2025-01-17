@@ -68,8 +68,6 @@
 #include "dsda/signal_context.h"
 #include "dsda/stretch.h"
 
-#include "hexen/a_action.h"
-
 // e6y
 // Now they are variables. Depends from render_doom_lightmaps variable.
 // Unify colour maping logic by cph is removed, because of bugs.
@@ -1019,18 +1017,8 @@ static void R_InitDrawScene(void)
 
 static void R_RenderBSPNodes(void)
 {
-  // Make displayed player invisible locally
-  if (localQuakeHappening[displayplayer] && gamestate == GS_LEVEL)
-  {
-    players[displayplayer].mo->flags2 |= MF2_DONTDRAW;
-    R_RenderBSPNode(numnodes - 1);  // head node is the last node output
-    players[displayplayer].mo->flags2 &= ~MF2_DONTDRAW;
-  }
-  else
-  {
     // The head node is the last node output.
     R_RenderBSPNode(numnodes - 1);
-  }
 
   if (map_format.zdoom && V_IsOpenGLMode())
   {
