@@ -67,7 +67,6 @@
 #include "dsda/settings.h"
 #include "dsda/skip.h"
 #include "dsda/tranmap.h"
-#include "dsda/udmf.h"
 #include "dsda/utility.h"
 
 #include "config.h"
@@ -121,7 +120,6 @@ int firstglvertex = 0;
 static nodes_version_t nodesVersion = DEFAULT_BSP_NODES;
 dboolean use_gl_nodes = false;
 dboolean has_behavior;
-dboolean udmf_map;
 
 // figgi 08/21/00 -- glSegs
 typedef struct
@@ -378,20 +376,6 @@ static void P_LoadVertexes(int lump)
     vertexes[i].x = LittleShort(ml->x)<<FRACBITS;
     vertexes[i].y = LittleShort(ml->y)<<FRACBITS;
     ml++;
-  }
-}
-
-static void P_LoadUDMFVertexes(int lump)
-{
-  int i;
-
-  numvertexes = udmf.num_vertices;
-  vertexes = calloc_IfSameLevel(vertexes, numvertexes, sizeof(vertex_t));
-
-  for (i = 0; i < numvertexes; ++i)
-  {
-    vertexes[i].x = dsda_StringToFixed(udmf.vertices[i].x);
-    vertexes[i].y = dsda_StringToFixed(udmf.vertices[i].y);
   }
 }
 
@@ -803,135 +787,6 @@ static void P_LoadSectors (int lump)
     ss->tag = LittleShort(ms->tag);
 
     dsda_AddSectorID(ss->tag, i);
-  }
-}
-
-static void P_LoadUDMFSectors(int lump)
-{
-  int i;
-
-  numsectors = udmf.num_sectors;
-  sectors = calloc_IfSameLevel(sectors, numsectors, sizeof(sector_t));
-
-  dsda_ResetSectorIDList(numsectors);
-
-  for (i = 0; i < numsectors; ++i)
-  {
-    sector_t *ss = &sectors[i];
-    const udmf_sector_t *ms = &udmf.sectors[i];
-
-    P_InitializeSectorDefaults(ss);
-
-    ss->iSectorID = i;
-    ss->floorheight = dsda_IntToFixed(ms->heightfloor);
-    ss->ceilingheight = dsda_IntToFixed(ms->heightceiling);
-    ss->floorpic = R_FlatNumForName(ms->texturefloor);
-    ss->ceilingpic = R_FlatNumForName(ms->textureceiling);
-    ss->lightlevel = ms->lightlevel;
-    ss->lightlevel_floor = ms->lightfloor;
-    ss->lightlevel_ceiling = ms->lightceiling;
-    ss->special = ms->special;
-    ss->tag = ms->id;
-    ss->floor_xoffs = dsda_FloatToFixed(ms->xpanningfloor);
-    ss->floor_yoffs = dsda_FloatToFixed(ms->ypanningfloor);
-    ss->floor_rotation = dsda_DegreesToAngle(ms->rotationfloor);
-    ss->floor_xscale = dsda_FloatToFixed(ms->xscalefloor);
-    ss->floor_yscale = dsda_FloatToFixed(ms->yscalefloor);
-    ss->ceiling_xoffs = dsda_FloatToFixed(ms->xpanningceiling);
-    ss->ceiling_yoffs = dsda_FloatToFixed(ms->ypanningceiling);
-    ss->ceiling_rotation = dsda_DegreesToAngle(ms->rotationceiling);
-    ss->ceiling_xscale = dsda_FloatToFixed(ms->xscaleceiling);
-    ss->ceiling_yscale = dsda_FloatToFixed(ms->yscaleceiling);
-    ss->gravity = dsda_StringToFixed(ms->gravity);
-
-    if (ms->frictionfactor)
-    {
-      P_ResolveFrictionFactor(dsda_StringToFixed(ms->frictionfactor), ss);
-    }
-
-    if (ms->movefactor)
-    {
-      ss->movefactor = dsda_StringToFixed(ms->movefactor);
-      ss->flags |= SECF_FRICTION;
-    }
-
-    ss->damage.amount = ms->damageamount;
-    ss->damage.leakrate = ms->leakiness;
-    ss->damage.interval = ms->damageinterval;
-
-    if (ms->colormap)
-    {
-      ss->colormap = R_ColormapNumForName(ms->colormap);
-      if (ss->colormap < 0)
-      {
-        lprintf(LO_WARN, "Unknown colormap %s in sector %d.\n", ms->colormap, i);
-        ss->colormap = 0;
-      }
-    }
-
-    if (ms->skyfloor)
-    {
-      ss->floorsky = R_TextureNumForName(ms->skyfloor) | PL_SKYFLAT_SECTOR;
-    }
-
-    if (ms->skyceiling)
-    {
-      ss->ceilingsky = R_TextureNumForName(ms->skyceiling) | PL_SKYFLAT_SECTOR;
-    }
-
-    if ((ms->xscrollfloor || ms->yscrollfloor) && ms->scrollfloormode)
-      dsda_AddZDoomFloorScroller(dsda_FloatToFixed(ms->xscrollfloor),
-                                 dsda_FloatToFixed(ms->yscrollfloor), i, ms->scrollfloormode);
-
-    if ((ms->xscrollceiling || ms->yscrollceiling) && ms->scrollceilingmode)
-      dsda_AddZDoomCeilingScroller(dsda_FloatToFixed(ms->xscrollceiling),
-                                   dsda_FloatToFixed(ms->yscrollceiling), i, ms->scrollceilingmode);
-
-    if ((ms->xthrust || ms->ythrust) && ms->thrustgroup && ms->thrustlocation)
-      dsda_AddThruster(dsda_StringToFixed(ms->xthrust), dsda_StringToFixed(ms->ythrust),
-                       i, ms->thrustgroup + (ms->thrustlocation << THRUST_LOCATION_SHIFT));
-
-    if (ms->flags & UDMF_SECF_DAMAGEHAZARD)
-      ss->flags |= SECF_HAZARD;
-
-    if (ms->flags & UDMF_SECF_DAMAGETERRAINEFFECT)
-      ss->flags |= SECF_DMGTERRAINFX;
-
-    if (ms->flags & UDMF_SECF_NOATTACK)
-      ss->flags |= SECF_NOATTACK;
-
-    if (ms->flags & UDMF_SECF_SILENT)
-      ss->flags |= SECF_SILENT;
-
-    if (ms->flags & UDMF_SECF_LIGHTFLOORABSOLUTE)
-      ss->flags |= SECF_LIGHTFLOORABSOLUTE;
-
-    if (ms->flags & UDMF_SECF_LIGHTCEILINGABSOLUTE)
-      ss->flags |= SECF_LIGHTCEILINGABSOLUTE;
-
-    if (ms->flags & UDMF_SECF_HIDDEN)
-      ss->flags |= SECF_HIDDEN;
-
-    if (ss->tag > 0)
-      dsda_AddSectorID(ss->tag, i);
-
-    if (ms->moreids)
-    {
-      char **more_ids;
-
-      more_ids = dsda_SplitString(ms->moreids, " ");
-
-      if (more_ids)
-      {
-        int j, id;
-
-        for (j = 0; more_ids[j]; ++j)
-          if (sscanf(more_ids[j], "%d", &id) == 1 && id > 0)
-            dsda_AddSectorID(id, i);
-
-        Z_Free(more_ids);
-      }
-    }
   }
 }
 
@@ -1679,122 +1534,6 @@ static void P_LoadThings(int lump)
   P_PostProcessThings(mobjcount, mobjlist);
 }
 
-static void P_LoadUDMFThings(int lump)
-{
-  int i, numthings;
-  int mobjcount;
-  mobj_t **mobjlist;
-
-  numthings = udmf.num_things;
-  mobjcount = 0;
-  mobjlist = Z_Malloc(numthings * sizeof(mobjlist[0]));
-
-  for (i = 0; i < numthings; i++)
-  {
-    mapthing_t mt;
-    const udmf_thing_t *dmt = &udmf.things[i];
-
-    mt.tid = dmt->id;
-    mt.x = dsda_StringToFixed(dmt->x);
-    mt.y = dsda_StringToFixed(dmt->y);
-    mt.height = dsda_StringToFixed(dmt->height);
-    mt.angle = dmt->angle;
-    mt.type = dmt->type;
-    mt.options = 0;
-    mt.special = dmt->special;
-    mt.special_args[0] = dmt->arg0;
-    mt.special_args[1] = dmt->arg1;
-    mt.special_args[2] = dmt->arg2;
-    mt.special_args[3] = dmt->arg3;
-    mt.special_args[4] = dmt->arg4;
-    mt.gravity = dsda_StringToFixed(dmt->gravity);
-    mt.health = dsda_StringToFixed(dmt->health);
-    mt.alpha = dmt->alpha;
-
-    if (mt.special == zl_sector_set_colormap || mt.special == zl_map_set_colormap)
-    {
-      if (dmt->arg0str)
-        mt.special_args[0] = R_ColormapNumForName(dmt->arg0str);
-      else
-        mt.special_args[0] = -1;
-
-      if (mt.special_args[0] < 0)
-      {
-        lprintf(LO_WARN, "Unknown colormap in thing %d action.\n", i);
-        mt.special = 0;
-      }
-    }
-
-    if (mt.special == zl_music_change_song)
-    {
-      if (dmt->arg0str)
-        mt.special_args[0] = W_CheckNumForName(dmt->arg0str);
-      else
-        mt.special_args[0] = LUMP_NOT_FOUND;
-
-      if (mt.special_args[0] == LUMP_NOT_FOUND)
-      {
-        lprintf(LO_WARN, "Unknown song lump in thing %d action.\n", i);
-        mt.special = 0;
-      }
-    }
-
-    if (dmt->flags & UDMF_TF_SKILL1)
-      mt.options |= MTF_SKILL1;
-
-    if (dmt->flags & UDMF_TF_SKILL2)
-      mt.options |= MTF_SKILL2;
-
-    if (dmt->flags & UDMF_TF_SKILL3)
-      mt.options |= MTF_SKILL3;
-
-    if (dmt->flags & UDMF_TF_SKILL4)
-      mt.options |= MTF_SKILL4;
-
-    if (dmt->flags & UDMF_TF_SKILL5)
-      mt.options |= MTF_SKILL5;
-
-    if (dmt->flags & UDMF_TF_AMBUSH)
-      mt.options |= MTF_AMBUSH;
-
-    if (dmt->flags & UDMF_TF_SINGLE)
-      mt.options |= MTF_GSINGLE;
-
-    if (dmt->flags & UDMF_TF_DM)
-      mt.options |= MTF_GDEATHMATCH;
-
-    if (dmt->flags & UDMF_TF_COOP)
-      mt.options |= MTF_GCOOP;
-
-    if (dmt->flags & UDMF_TF_FRIEND)
-      mt.options |= MTF_FRIENDLY;
-
-    if (dmt->flags & UDMF_TF_DORMANT)
-      mt.options |= MTF_DORMANT;
-
-    if (dmt->flags & UDMF_TF_CLASS1)
-      mt.options |= MTF_FIGHTER;
-
-    if (dmt->flags & UDMF_TF_CLASS2)
-      mt.options |= MTF_CLERIC;
-
-    if (dmt->flags & UDMF_TF_CLASS3)
-      mt.options |= MTF_MAGE;
-
-    if (dmt->flags & UDMF_TF_TRANSLUCENT)
-      mt.options |= MTF_TRANSLUCENT;
-
-    if (dmt->flags & UDMF_TF_INVISIBLE)
-      mt.options |= MTF_INVISIBLE;
-
-    if (dmt->flags & UDMF_TF_COUNTSECRET)
-      mt.options |= MTF_COUNTSECRET;
-
-    P_PostProcessMapThing(&mt, i, &mobjcount, mobjlist);
-  }
-
-  P_PostProcessThings(mobjcount, mobjlist);
-}
 
 //
 // P_LoadLineDefs
@@ -2064,197 +1803,6 @@ static void P_LoadLineDefs (int lump)
   }
 }
 
-static void P_LoadUDMFLineDefs(int lump)
-{
-  int i;
-
-  numlines = udmf.num_lines;
-  lines = calloc_IfSameLevel(lines, numlines, sizeof(line_t));
-
-  dsda_ResetLineIDList(numlines);
-
-  for (i = 0; i < numlines; ++i)
-  {
-    line_t *ld = &lines[i];
-    const udmf_line_t *mld = &udmf.lines[i];
-
-    ld->iLineID=i; // proff 04/05/2000: needed for OpenGL
-
-    ld->flags = (mld->flags & ML_BOOM);
-    ld->special = mld->special;
-    ld->tag = (mld->id >= 0 ? mld->id : 0);
-    ld->special_args[0] = mld->arg0;
-    ld->special_args[1] = mld->arg1;
-    ld->special_args[2] = mld->arg2;
-    ld->special_args[3] = mld->arg3;
-    ld->special_args[4] = mld->arg4;
-    ld->v1 = &vertexes[mld->v1];
-    ld->v2 = &vertexes[mld->v2];
-    ld->sidenum[0] = mld->sidefront;
-    ld->sidenum[1] = mld->sideback;
-    ld->alpha = mld->alpha;
-    ld->locknumber = mld->locknumber;
-    ld->automap_style = mld->automapstyle;
-    ld->health = mld->health;
-    ld->healthgroup = mld->healthgroup;
-
-    if (ld->special == zl_sector_set_colormap || ld->special == zl_map_set_colormap)
-    {
-      if (mld->arg0str)
-        ld->special_args[0] = R_ColormapNumForName(mld->arg0str);
-      else
-        ld->special_args[0] = -1;
-
-      if (ld->special_args[0] < 0)
-      {
-        lprintf(LO_WARN, "Unknown colormap in line %d action.\n", i);
-        ld->special = 0;
-      }
-    }
-
-    if (ld->special == zl_music_change_song)
-    {
-      if (mld->arg0str)
-        ld->special_args[0] = W_CheckNumForName(mld->arg0str);
-      else
-        ld->special_args[0] = LUMP_NOT_FOUND;
-
-      if (ld->special_args[0] == LUMP_NOT_FOUND)
-      {
-        lprintf(LO_WARN, "Unknown song lump in line %d action.\n", i);
-        ld->special = 0;
-      }
-    }
-
-    if (mld->flags & UDMF_ML_PLAYERCROSS)
-      ld->activation |= SPAC_CROSS;
-
-    if (mld->flags & UDMF_ML_PLAYERUSE)
-      ld->activation |= SPAC_USE;
-
-    if (mld->flags & UDMF_ML_MONSTERCROSS)
-      ld->activation |= SPAC_MCROSS;
-
-    if (mld->flags & UDMF_ML_IMPACT)
-      ld->activation |= SPAC_IMPACT;
-
-    if (mld->flags & UDMF_ML_PLAYERPUSH)
-      ld->activation |= SPAC_PUSH;
-
-    if (mld->flags & UDMF_ML_MISSILECROSS)
-      ld->activation |= SPAC_PCROSS;
-
-    if (mld->flags & UDMF_ML_ANYCROSS)
-      ld->activation |= SPAC_ANYCROSS | SPAC_CROSS | SPAC_MCROSS;
-
-    if (mld->flags & UDMF_ML_PLAYERUSEBACK)
-      ld->activation |= SPAC_USEBACK;
-
-    if (mld->flags & UDMF_ML_MONSTERPUSH)
-      ld->activation |= SPAC_MPUSH;
-
-    if (mld->flags & UDMF_ML_MONSTERUSE)
-      ld->activation |= SPAC_MUSE;
-
-    if (mld->flags & UDMF_ML_DAMAGESPECIAL)
-      ld->activation |= SPAC_DAMAGE;
-
-    if (mld->flags & UDMF_ML_DEATHSPECIAL)
-      ld->activation |= SPAC_DEATH;
-
-    if (mld->flags & UDMF_ML_REPEATSPECIAL)
-      ld->flags |= ML_REPEATSPECIAL;
-
-    if (mld->flags & UDMF_ML_MONSTERACTIVATE)
-      ld->flags |= ML_MONSTERSCANACTIVATE;
-
-    if (mld->flags & UDMF_ML_BLOCKPLAYERS)
-      ld->flags |= ML_BLOCKPLAYERS;
-
-    if (mld->flags & UDMF_ML_BLOCKEVERYTHING)
-      ld->flags |= ML_BLOCKING | ML_BLOCKEVERYTHING;
-
-    if (mld->flags & UDMF_ML_BLOCKLANDMONSTERS)
-      ld->flags |= ML_BLOCKLANDMONSTERS;
-
-    if (mld->flags & UDMF_ML_BLOCKFLOATERS)
-      ld->flags |= ML_BLOCKFLOATERS;
-
-    if (mld->flags & UDMF_ML_BLOCKSIGHT)
-      ld->flags |= ML_BLOCKSIGHT;
-
-    if (mld->flags & UDMF_ML_BLOCKHITSCAN)
-      ld->flags |= ML_BLOCKHITSCAN;
-
-    if (mld->flags & UDMF_ML_BLOCKPROJECTILES)
-      ld->flags |= ML_BLOCKPROJECTILES;
-
-    if (mld->flags & UDMF_ML_BLOCKUSE)
-      ld->flags |= ML_BLOCKUSE;
-
-    if (mld->flags & UDMF_ML_CLIPMIDTEX)
-      ld->flags |= ML_CLIPMIDTEX;
-
-    if (mld->flags & UDMF_ML_JUMPOVER)
-      ld->flags |= ML_JUMPOVER;
-
-    if (mld->flags & UDMF_ML_MIDTEX3D)
-      ld->flags |= ML_3DMIDTEX;
-
-    if (mld->flags & UDMF_ML_MIDTEX3DIMPASSIBLE)
-      ld->flags |= ML_3DMIDTEXIMPASSIBLE;
-
-    if (mld->flags & UDMF_ML_FIRSTSIDEONLY)
-      ld->flags |= ML_FIRSTSIDEONLY;
-
-    if (mld->flags & UDMF_ML_REVEALED)
-      ld->flags |= ML_REVEALED;
-
-    if (mld->flags & UDMF_ML_CHECKSWITCHRANGE)
-      ld->flags |= ML_CHECKSWITCHRANGE;
-
-    if (mld->flags & UDMF_ML_TRANSLUCENT)
-      ld->alpha = 0.75f;
-
-    if (mld->flags & UDMF_ML_TRANSPARENT)
-      ld->alpha = 0.25f;
-
-    if (mld->flags & UDMF_ML_WRAPMIDTEX)
-      ld->flags |= ML_WRAPMIDTEX;
-
-    P_CalculateLineDefProperties(ld);
-
-    if (ld->alpha < 1.f)
-      ld->tranmap = dsda_TranMap(dsda_FloatToPercent(ld->alpha));
-
-    if (ld->healthgroup)
-      dsda_AddLineToHealthGroup(ld);
-
-    if (ld->tag > 0)
-      dsda_AddLineID(ld->tag, i);
-
-    if (mld->moreids)
-    {
-      char **more_ids;
-
-      more_ids = dsda_SplitString(mld->moreids, " ");
-
-      if (more_ids)
-      {
-        int j, id;
-
-        for (j = 0; more_ids[j]; ++j)
-          if (sscanf(more_ids[j], "%d", &id) == 1 && id > 0)
-            dsda_AddLineID(id, i);
-
-        Z_Free(more_ids);
-      }
-    }
-
-    if (ld->flags & ML_WRAPMIDTEX)
-      dsda_PreferOpenGL();
-  }
-}
 
 void P_PostProcessCompatibleLineSpecial(line_t *ld)
 {
@@ -2358,12 +1906,6 @@ static void P_AllocateSideDefs (int lump)
   sides = calloc_IfSameLevel(sides, numsides, sizeof(side_t));
 }
 
-static void P_AllocateUDMFSideDefs(int lump)
-{
-  numsides = udmf.num_sides;
-  sides = calloc_IfSameLevel(sides, numsides, sizeof(side_t));
-}
-
 void P_PostProcessCompatibleSidedefSpecial(side_t *sd, const mapsidedef_t *msd, sector_t *sec, int i)
 {
   // killough 4/4/98: allow sidedef texture names to be overloaded
@@ -2457,72 +1999,6 @@ static void P_LoadSideDefs(int lump)
     }
 
     map_format.post_process_sidedef_special(sd, msd, sec, i);
-  }
-}
-
-static void P_LoadUDMFSideDefs(int lump)
-{
-  int i;
-
-  for (i = 0; i < numsides; ++i)
-  {
-    const udmf_side_t *msd = &udmf.sides[i];
-    side_t *sd = &sides[i];
-
-    sd->textureoffset = dsda_IntToFixed(msd->offsetx);
-    sd->rowoffset = dsda_IntToFixed(msd->offsety);
-
-    sd->textureoffset_top = dsda_IntToFixed(msd->offsetx_top);
-    sd->textureoffset_mid = dsda_IntToFixed(msd->offsetx_mid);
-    sd->textureoffset_bottom = dsda_IntToFixed(msd->offsetx_bottom);
-    sd->rowoffset_top = dsda_IntToFixed(msd->offsety_top);
-    sd->rowoffset_mid = dsda_IntToFixed(msd->offsety_mid);
-    sd->rowoffset_bottom = dsda_IntToFixed(msd->offsety_bottom);
-
-    sd->scalex_top = dsda_FloatToFixed(msd->scalex_top);
-    sd->scaley_top = dsda_FloatToFixed(msd->scaley_top);
-    sd->scalex_mid = dsda_FloatToFixed(msd->scalex_mid);
-    sd->scaley_mid = dsda_FloatToFixed(msd->scaley_mid);
-    sd->scalex_bottom = dsda_FloatToFixed(msd->scalex_bottom);
-    sd->scaley_bottom = dsda_FloatToFixed(msd->scaley_bottom);
-
-    sd->lightlevel = msd->light;
-    sd->lightlevel_top = msd->light_top;
-    sd->lightlevel_mid = msd->light_mid;
-    sd->lightlevel_bottom = msd->light_bottom;
-
-    if (msd->xscroll || msd->yscroll)
-      dsda_AddSideScroller(dsda_FloatToFixed(msd->xscroll),
-                           dsda_FloatToFixed(msd->yscroll), i, 0);
-
-    if (msd->xscrolltop || msd->yscrolltop)
-      dsda_AddSideScroller(dsda_FloatToFixed(msd->xscrolltop),
-                           dsda_FloatToFixed(msd->yscrolltop), i, SCROLL_TOP);
-
-    if (msd->xscrollmid || msd->yscrollmid)
-      dsda_AddSideScroller(dsda_FloatToFixed(msd->xscrollmid),
-                           dsda_FloatToFixed(msd->yscrollmid), i, SCROLL_MID);
-
-    if (msd->xscrollbottom || msd->yscrollbottom)
-      dsda_AddSideScroller(dsda_FloatToFixed(msd->xscrollbottom),
-                           dsda_FloatToFixed(msd->yscrollbottom), i, SCROLL_BOTTOM);
-
-    sd->flags = msd->flags;
-
-    if (msd->sector >= numsectors)
-      I_Error("Invalid level data: sidedef %d's sector index is out of range", i);
-
-    sd->sector = &sectors[msd->sector];
-
-    sd->midtexture = R_SafeTextureNumForName(msd->texturemiddle, i);
-    sd->toptexture = R_SafeTextureNumForName(msd->texturetop, i);
-    sd->bottomtexture = R_SafeTextureNumForName(msd->texturebottom, i);
-
-    if (sd->scalex_top != FRACUNIT || sd->scaley_top != FRACUNIT ||
-        sd->scalex_mid != FRACUNIT || sd->scaley_mid != FRACUNIT ||
-        sd->scalex_bottom != FRACUNIT || sd->scaley_bottom != FRACUNIT ||
-        sd->flags & SF_WRAPMIDTEX)
-      dsda_PreferOpenGL();
   }
 }
 
@@ -3318,22 +2794,6 @@ dboolean P_CheckLumpsForSameSource(int lump1, int lump2)
   return true;
 }
 
-static dboolean P_CheckForUDMF(int lumpnum)
-{
-  int i;
-
-  i = lumpnum + ML_TEXTMAP;
-  if (P_CheckLumpsForSameSource(lumpnum, i))
-  {
-    if (!strncasecmp(lumpinfo[i].name, "TEXTMAP", 8))
-    {
-      dsda_ParseUDMF(W_LumpByNum(i), W_LumpLength(i), I_Error);
-      return true;
-    }
-  }
-
-  return false;
-}
 
 static dboolean P_CheckForBehavior(int lumpnum)
 {
@@ -3409,54 +2869,6 @@ static void P_UpdateLevelComponents(int lumpnum) {
   has_behavior = P_CheckForBehavior(lumpnum);
 }
 
-static void P_UpdateUDMFLevelComponents(int lumpnum)
-{
-  int i;
-
-  level_components.label = lumpnum;
-  level_components.things = LUMP_NOT_FOUND;
-  level_components.linedefs = LUMP_NOT_FOUND;
-  level_components.sidedefs = LUMP_NOT_FOUND;
-  level_components.vertexes = LUMP_NOT_FOUND;
-  level_components.segs = LUMP_NOT_FOUND;
-  level_components.ssectors = LUMP_NOT_FOUND;
-  level_components.nodes = LUMP_NOT_FOUND;
-  level_components.sectors = LUMP_NOT_FOUND;
-  level_components.reject = LUMP_NOT_FOUND;
-  level_components.blockmap = LUMP_NOT_FOUND;
-  level_components.behavior = LUMP_NOT_FOUND;
-  level_components.znodes = LUMP_NOT_FOUND;
-
-  for (i = lumpnum + ML_TEXTMAP + 1; ; ++i)
-  {
-    const char* name;
-
-    name = W_LumpName(i);
-    if (!name || !strncasecmp(name, "ENDMAP", 8))
-      break;
-    else if (!strncasecmp(name, "ZNODES", 8))
-      level_components.znodes = i;
-    else if (!strncasecmp(name, "BLOCKMAP", 8))
-      level_components.blockmap = i;
-    else if (!strncasecmp(name, "REJECT", 8))
-      level_components.reject = i;
-  }
-
-  if (level_components.znodes == LUMP_NOT_FOUND)
-    I_Error("P_SetupLevel: Level wad structure is incomplete. There is no ZNODES lump.");
-}
-
-map_loader_t udmf_map_loader = {
-  .load_vertexes = P_LoadUDMFVertexes,
-  .load_sectors = P_LoadUDMFSectors,
-  .load_things = P_LoadUDMFThings,
-  .load_linedefs = P_LoadUDMFLineDefs,
-  .allocate_sidedefs = P_AllocateUDMFSideDefs,
-  .load_sidedefs = P_LoadUDMFSideDefs,
-  .update_level_components = P_UpdateUDMFLevelComponents,
-  .po_load_things = NULL,
-};
-
 map_loader_t legacy_map_loader = {
   .load_vertexes = P_LoadVertexes,
   .load_sectors = P_LoadSectors,
@@ -3472,9 +2884,7 @@ map_loader_t map_loader;
 
 void P_UpdateMapLoader(int lumpnum)
 {
-  udmf_map = P_CheckForUDMF(lumpnum);
-
-  map_loader = udmf_map ? udmf_map_loader : legacy_map_loader;
+  map_loader = legacy_map_loader;
 }
 
 //
