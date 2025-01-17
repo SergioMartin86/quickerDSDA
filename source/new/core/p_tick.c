@@ -39,6 +39,8 @@
 #include "r_fps.h"
 #include "e6y.h"
 
+#include "hexen/p_anim.h"
+
 #include "dsda.h"
 #include "dsda/pause.h"
 
@@ -349,6 +351,7 @@ void P_Ticker (void)
 
     P_RunThinkers();
     P_UpdateSpecials();
+    P_AnimateSurfaces();
     P_RespawnSpecials();
     P_AmbientSound();
 

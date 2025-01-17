@@ -866,6 +866,20 @@ static void R_Subsector(int num)
       R_AddSprites(sub, (floorlightlevel+ceilinglightlevel)/2);
     }
   }
+
+  // hexen
+  if (sub->poly) // Render the polyobj in the subsector first
+    R_AddPolyLines(sub->poly);
+
+  count = sub->numlines;
+  line = &segs[sub->firstline];
+  while (count--)
+  {
+    if (line->linedef)
+      R_AddLine (line);
+    line++;
+    curline = NULL; /* cph 2001/11/18 - must clear curline now we're done with it, so R_ColourMap doesn't try using it for other things */
+  }
 }
 
 //
@@ -900,4 +914,13 @@ void R_RenderBSPNode(int bspnum)
 
 void R_ForceRenderPolyObjs(void)
 {
+  int i;
+
+  ignore_gl_range_clipping = true;
+
+  for (i = 0; i < po_NumPolyobjs; i++)
+    if (polyobjs[i].subsector)
+      R_AddPolyLines(&polyobjs[i]);
+
+  ignore_gl_range_clipping = false;
 }

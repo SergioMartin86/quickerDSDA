@@ -49,6 +49,8 @@
 #include "dsda/scroll.h"
 #include "dsda/settings.h"
 
+#include "hexen/a_action.h"
+
 int movement_smooth;
 dboolean isExtraDDisplay = false;
 

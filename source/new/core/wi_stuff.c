@@ -48,6 +48,7 @@
 #include "dsda/mapinfo.h"
 
 #include "heretic/in_lude.h"
+#include "hexen/in_lude.h"
 
 // Ty 03/17/98: flag that new par times have been loaded in d_deh
 extern dboolean deh_pars;
