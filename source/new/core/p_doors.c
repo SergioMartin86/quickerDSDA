@@ -43,8 +43,6 @@
 #include "dsda/map_format.h"
 #include "dsda/messenger.h"
 
-#include "hexen/p_acs.h"
-
 ///////////////////////////////////////////////////////////////
 //
 // Door action routines, called once per tick

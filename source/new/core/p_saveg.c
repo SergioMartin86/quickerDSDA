@@ -45,7 +45,6 @@
 #include "e6y.h"//e6y
 
 #include "hexen/a_action.h"
-#include "hexen/p_acs.h"
 #include "hexen/p_anim.h"
 
 #include "dsda/map_format.h"
@@ -948,17 +947,6 @@ void P_ArchiveThinkers(void) {
       continue;
     }
 
-    if (th->function == T_InterpretACS)
-    {
-      acs_t *acs;
-      P_SAVE_BYTE(tc_acs);
-      P_SAVE_TYPE_REF(th, acs, acs_t);
-      P_ReplaceMobjWithIndex(&acs->activator);
-      acs->line = (line_t *) (acs->line ? acs->line - lines : -1);
-
-      continue;
-    }
-
     if (th->function == T_BuildPillar)
     {
       pillar_t *pillar;
@@ -1119,7 +1107,6 @@ void P_UnArchiveThinkers(void) {
         tc == tc_friction       ? sizeof(friction_t)       :
         tc == tc_light          ? sizeof(light_t)          :
         tc == tc_phase          ? sizeof(phase_t)          :
-        tc == tc_acs            ? sizeof(acs_t)            :
         tc == tc_pillar         ? sizeof(pillar_t)         :
         tc == tc_floor_waggle   ? sizeof(planeWaggle_t)    :
         tc == tc_ceiling_waggle ? sizeof(planeWaggle_t)    :
@@ -1419,16 +1406,6 @@ void P_UnArchiveThinkers(void) {
           break;
         }
 
-      case tc_acs:
-        {
-          acs_t *acs = Z_MallocLevel(sizeof(*acs));
-          P_LOAD_P(acs);
-          acs->line = (intptr_t) acs->line != -1 ? &lines[(size_t) acs->line] : NULL;
-          acs->thinker.function = T_InterpretACS;
-          P_AddThinker(&acs->thinker);
-          break;
-        }
-
       case tc_pillar:
         {
           pillar_t *pillar = Z_MallocLevel(sizeof(*pillar));
@@ -1523,11 +1500,7 @@ void P_UnArchiveThinkers(void) {
 
   for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
   {
-    if (th->function == T_InterpretACS)
-    {
-      P_ReplaceIndexWithMobj(&((acs_t *) th)->activator, mobj_p, mobj_count);
-    }
-    else if (P_IsMobjThinker(th))
+    if (P_IsMobjThinker(th))
     {
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->target, mobj_p, mobj_count);
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->tracer, mobj_p, mobj_count);
@@ -1587,28 +1560,10 @@ void P_UnArchiveThinkers(void) {
 
 void P_ArchiveACS(void)
 {
-  size_t size;
-
-  if (!map_format.acs) return;
-
-  size = sizeof(*WorldVars) * MAX_ACS_WORLD_VARS;
-  P_SAVE_SIZE(WorldVars, size);
-
-  size = sizeof(*ACSStore) * (MAX_ACS_STORE + 1);
-  P_SAVE_SIZE(ACSStore, size);
 }
 
 void P_UnArchiveACS(void)
 {
-  size_t size;
-
-  if (!map_format.acs) return;
-
-  size = sizeof(*WorldVars) * MAX_ACS_WORLD_VARS;
-  P_LOAD_SIZE(WorldVars, size);
-
-  size = sizeof(*ACSStore) * (MAX_ACS_STORE + 1);
-  P_LOAD_SIZE(ACSStore, size);
 }
 
 static void P_ArchiveVertex(vertex_t *v)
@@ -1635,28 +1590,10 @@ void P_UnArchivePolyobjs(void)
 
 void P_ArchiveScripts(void)
 {
-  size_t size;
-
-  if (!map_format.acs) return;
-
-  size = sizeof(*ACSInfo) * ACScriptCount;
-  P_SAVE_SIZE(ACSInfo, size);
-
-  size = sizeof(*MapVars) * MAX_ACS_MAP_VARS;
-  P_SAVE_SIZE(MapVars, size);
 }
 
 void P_UnArchiveScripts(void)
 {
-  size_t size;
-
-  if (!map_format.acs) return;
-
-  size = sizeof(*ACSInfo) * ACScriptCount;
-  P_LOAD_SIZE(ACSInfo, size);
-
-  size = sizeof(*MapVars) * MAX_ACS_MAP_VARS;
-  P_LOAD_SIZE(MapVars, size);
 }
 
 void P_ArchiveSounds(void)

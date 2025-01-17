@@ -5592,7 +5592,6 @@ void P_PlayerInHexenSector(player_t * player, sector_t * sector)
 #include "hexen/a_action.h"
 #include "hexen/p_anim.h"
 #include "hexen/p_things.h"
-#include "hexen/p_acs.h"
 
 static dboolean P_ArgToCrushType(int arg)
 {

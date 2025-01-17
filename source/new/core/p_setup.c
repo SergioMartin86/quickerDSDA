@@ -71,7 +71,6 @@
 #include "dsda/udmf.h"
 #include "dsda/utility.h"
 
-#include "hexen/p_acs.h"
 #include "hexen/p_anim.h"
 
 #include "config.h"
@@ -3812,11 +3811,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   P_MapStart();
 
   map_loader.load_things(level_components.things);
-
-  if (map_format.acs)
-  {
-    P_LoadACScripts(level_components.behavior);     // ACS object code
-  }
 
   // if deathmatch, randomly spawn the active players
   if (deathmatch)

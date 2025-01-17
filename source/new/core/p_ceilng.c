@@ -39,8 +39,6 @@
 #include "sounds.h"
 #include "e6y.h"//e6y
 
-#include "hexen/p_acs.h"
-
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
 
@@ -609,7 +607,6 @@ void P_RemoveActiveCeiling(ceiling_t* ceiling)
   ceilinglist_t *list = ceiling->list;
   ceiling->sector->ceilingdata = NULL;  //jff 2/22/98
   P_RemoveThinker(&ceiling->thinker);
-  P_TagFinished(ceiling->sector->tag);
   if ((*list->prev = list->next))
     list->next->prev = list->prev;
   Z_Free(list);

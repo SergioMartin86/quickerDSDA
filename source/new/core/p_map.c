@@ -3566,8 +3566,6 @@ static mobj_t *PuzzleItemUser;
 static int PuzzleItemType;
 static dboolean PuzzleActivated;
 
-#include "hexen/p_acs.h"
-
 dboolean PTR_PuzzleItemTraverse(intercept_t * in)
 {
     mobj_t *mobj;
@@ -3620,7 +3618,6 @@ dboolean PTR_PuzzleItemTraverse(intercept_t * in)
         args[1] = in->d.line->special_args[3];
         args[2] = in->d.line->special_args[4];
 
-        P_StartACS(in->d.line->special_args[1], 0, args, PuzzleItemUser, in->d.line, 0);
         in->d.line->special = 0;
         PuzzleActivated = true;
         return false;           // Stop searching
@@ -3640,7 +3637,6 @@ dboolean PTR_PuzzleItemTraverse(intercept_t * in)
     args[1] = mobj->special_args[3];
     args[2] = mobj->special_args[4];
 
-    P_StartACS(mobj->special_args[1], 0, args, PuzzleItemUser, NULL, 0);
     mobj->special = 0;
     PuzzleActivated = true;
     return false;               // Stop searching

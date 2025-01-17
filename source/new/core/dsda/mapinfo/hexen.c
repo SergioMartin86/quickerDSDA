@@ -25,8 +25,6 @@
 #include "sounds.h"
 #include "w_wad.h"
 
-#include "hexen/p_acs.h"
-
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
 #include "dsda/sndinfo.h"

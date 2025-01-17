@@ -45,8 +45,6 @@
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
 
-#include "hexen/p_acs.h"
-
 ///////////////////////////////////////////////////////////////////////
 //
 // Floor motion and Elevator action routines
@@ -1916,7 +1914,6 @@ static void T_PlaneWaggle(planeWaggle_t * waggle, fixed_t * planeheight, void **
         (*planeheight) = waggle->originalHeight;
         P_ChangeSector(waggle->sector, true);
         (*planedata) = NULL;
-        P_TagFinished(waggle->sector->tag);
         P_RemoveThinker(&waggle->thinker);
         return;
       }
