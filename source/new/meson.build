@@ -31,7 +31,6 @@ quickerDSDASrc =  [
  'core/dsda/mapinfo/doom.c',
  'core/dsda/mapinfo/doom/parser.cpp',
  'core/dsda/mapinfo/legacy.c',
- 'core/dsda/mapinfo/u.c',
  'core/dsda/memory.c',
  'core/dsda/messenger.c',
  'core/dsda/mobjinfo.c',

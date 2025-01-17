@@ -25,7 +25,6 @@
 #include "dsda/episode.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo/doom.h"
-#include "dsda/mapinfo/u.h"
 #include "dsda/mapinfo/legacy.h"
 
 #include "mapinfo.h"
@@ -39,9 +38,6 @@ int dsda_NameToMap(const char* name, int* episode, int* map) {
     return found;
 
 
-  if (dsda_UNameToMap(&found, name, episode, map))
-    return found;
-
   dsda_LegacyNameToMap(&found, name, episode, map);
 
   return found;
@@ -52,17 +48,11 @@ void dsda_FirstMap(int* episode, int* map) {
     return;
 
 
-  if (dsda_UFirstMap(episode, map))
-    return;
-
   dsda_LegacyFirstMap(episode, map);
 }
 
 void dsda_NewGameMap(int* episode, int* map) {
   if (dsda_DoomNewGameMap(episode, map))
-    return;
-
-  if (dsda_UNewGameMap(episode, map))
     return;
 
   dsda_LegacyNewGameMap(episode, map);
@@ -72,17 +62,11 @@ void dsda_ResolveWarp(int* args, int arg_count, int* episode, int* map) {
   if (dsda_DoomResolveWarp(args, arg_count, episode, map))
     return;
 
-  if (dsda_UResolveWarp(args, arg_count, episode, map))
-    return;
-
   dsda_LegacyResolveWarp(args, arg_count, episode, map);
 }
 
 void dsda_NextMap(int* episode, int* map) {
   if (dsda_DoomNextMap(episode, map))
-    return;
-
-  if (dsda_UNextMap(episode, map))
     return;
 
   dsda_LegacyNextMap(episode, map);
@@ -92,17 +76,11 @@ void dsda_PrevMap(int* episode, int* map) {
   if (dsda_DoomPrevMap(episode, map))
     return;
 
-  if (dsda_UPrevMap(episode, map))
-    return;
-
   dsda_LegacyPrevMap(episode, map);
 }
 
 void dsda_ShowNextLocBehaviour(int* behaviour) {
   if (dsda_DoomShowNextLocBehaviour(behaviour))
-    return;
-
-  if (dsda_UShowNextLocBehaviour(behaviour))
     return;
 
   dsda_LegacyShowNextLocBehaviour(behaviour);
@@ -112,9 +90,6 @@ int dsda_SkipDrawShowNextLoc(void) {
   int skip;
 
   if (dsda_DoomSkipDrawShowNextLoc(&skip))
-    return skip;
-
-  if (dsda_USkipDrawShowNextLoc(&skip))
     return skip;
 
   dsda_LegacySkipDrawShowNextLoc(&skip);
@@ -128,9 +103,6 @@ static fixed_t dsda_Gravity(void) {
   if (dsda_DoomGravity(&gravity))
     return gravity;
 
-  if (dsda_UGravity(&gravity))
-    return gravity;
-
   dsda_LegacyGravity(&gravity);
 
   return gravity;
@@ -140,9 +112,6 @@ static fixed_t dsda_AirControl(void) {
   fixed_t air_control;
 
   if (dsda_DoomAirControl(&air_control))
-    return air_control;
-
-  if (dsda_UAirControl(&air_control))
     return air_control;
 
   dsda_LegacyAirControl(&air_control);
@@ -156,9 +125,6 @@ static map_info_flags_t dsda_MapFlags(void) {
   if (dsda_DoomMapFlags(&flags))
     return flags;
 
-  if (dsda_UMapFlags(&flags))
-    return flags;
-
   dsda_LegacyMapFlags(&flags);
 
   return flags;
@@ -170,9 +136,6 @@ static int dsda_MapColorMap(void) {
   if (dsda_DoomMapColorMap(&colormap))
     return colormap;
 
-  if (dsda_UMapColorMap(&colormap))
-    return colormap;
-
   dsda_LegacyMapColorMap(&colormap);
 
   return colormap;
@@ -180,7 +143,6 @@ static int dsda_MapColorMap(void) {
 
 static void dsda_UpdateMapInfo(void) {
   dsda_DoomUpdateMapInfo();
-  dsda_UUpdateMapInfo();
   dsda_LegacyUpdateMapInfo();
 
   map_info.flags = dsda_MapFlags();
@@ -220,13 +182,11 @@ dboolean dsda_FinaleShortcut(void) {
 
 void dsda_UpdateLastMapInfo(void) {
   dsda_DoomUpdateLastMapInfo();
-  dsda_UUpdateLastMapInfo();
   dsda_LegacyUpdateLastMapInfo();
 }
 
 void dsda_UpdateNextMapInfo(void) {
   dsda_DoomUpdateNextMapInfo();
-  dsda_UUpdateNextMapInfo();
   dsda_LegacyUpdateNextMapInfo();
 }
 
@@ -234,9 +194,6 @@ int dsda_ResolveCLEV(int* episode, int* map) {
   int clev;
 
   if (dsda_DoomResolveCLEV(&clev, episode, map))
-    return clev;
-
-  if (dsda_UResolveCLEV(&clev, episode, map))
     return clev;
 
   dsda_LegacyResolveCLEV(&clev, episode, map);
@@ -250,9 +207,6 @@ int dsda_ResolveINIT(void) {
   if (dsda_DoomResolveINIT(&init))
     return init;
 
-  if (dsda_UResolveINIT(&init))
-    return init;
-
   dsda_LegacyResolveINIT(&init);
 
   return init;
@@ -264,9 +218,6 @@ int dsda_MusicIndexToLumpNum(int music_index) {
   if (dsda_DoomMusicIndexToLumpNum(&lump, music_index))
     return lump;
 
-  if (dsda_UMusicIndexToLumpNum(&lump, music_index))
-    return lump;
-
   dsda_LegacyMusicIndexToLumpNum(&lump, music_index);
 
   return lump;
@@ -276,17 +227,11 @@ void dsda_MapMusic(int* music_index, int* music_lump, int episode, int map) {
   if (dsda_DoomMapMusic(music_index, music_lump, episode, map))
     return;
 
-  if (dsda_UMapMusic(music_index, music_lump, episode, map))
-    return;
-
   dsda_LegacyMapMusic(music_index, music_lump, episode, map);
 }
 
 void dsda_IntermissionMusic(int* music_index, int* music_lump) {
   if (dsda_DoomIntermissionMusic(music_index, music_lump))
-    return;
-
-  if (dsda_UIntermissionMusic(music_index, music_lump))
     return;
 
   dsda_LegacyIntermissionMusic(music_index, music_lump);
@@ -296,16 +241,11 @@ void dsda_InterMusic(int* music_index, int* music_lump) {
   if (dsda_DoomInterMusic(music_index, music_lump))
     return;
 
-  if (dsda_UInterMusic(music_index, music_lump))
-    return;
-
   dsda_LegacyInterMusic(music_index, music_lump);
 }
 
 typedef enum {
   finale_owner_legacy,
-  finale_owner_u,
-  finale_owner_hexen,
   finale_owner_doom,
 } finale_owner_t;
 
@@ -314,11 +254,6 @@ static finale_owner_t finale_owner = finale_owner_legacy;
 void dsda_StartFinale(void) {
   if (dsda_DoomStartFinale()) {
     finale_owner = finale_owner_doom;
-    return;
-  }
-
-  if (dsda_UStartFinale()) {
-    finale_owner = finale_owner_u;
     return;
   }
 
@@ -333,20 +268,6 @@ int dsda_FTicker(void) {
 
     return true;
   }
-
-  if (finale_owner == finale_owner_hexen) {
-      finale_owner = finale_owner_legacy;
-
-    return true;
-  }
-
-  if (finale_owner == finale_owner_u) {
-    if (!dsda_UFTicker())
-      finale_owner = finale_owner_legacy;
-
-    return true;
-  }
-
   dsda_LegacyFTicker();
   return false;
 }
@@ -354,16 +275,6 @@ int dsda_FTicker(void) {
 int dsda_FDrawer(void) {
   if (finale_owner == finale_owner_doom) {
     dsda_DoomFDrawer();
-
-    return true;
-  }
-
-  if (finale_owner == finale_owner_hexen) {
-    return true;
-  }
-
-  if (finale_owner == finale_owner_u) {
-    dsda_UFDrawer();
 
     return true;
   }
@@ -376,9 +287,6 @@ int dsda_BossAction(mobj_t* mo) {
   if (dsda_DoomBossAction(mo))
     return true;
 
-  if (dsda_UBossAction(mo))
-    return true;
-
   dsda_LegacyBossAction(mo);
   return false;
 }
@@ -387,9 +295,6 @@ const char* dsda_MapLumpName(int episode, int map) {
   const char* name;
 
   if (dsda_DoomMapLumpName(&name, episode, map))
-    return name;
-
-  if (dsda_UMapLumpName(&name, episode, map))
     return name;
 
   dsda_LegacyMapLumpName(&name, episode, map);
@@ -401,9 +306,6 @@ void dsda_HUTitle(dsda_string_t* str) {
   if (dsda_DoomHUTitle(str))
     return;
 
-  if (dsda_UHUTitle(str))
-    return;
-
   dsda_LegacyHUTitle(str);
 }
 
@@ -411,9 +313,6 @@ const char* dsda_MapAuthor(void) {
   const char* author;
 
   if (dsda_DoomMapAuthor(&author))
-    return author;
-
-  if (dsda_UMapAuthor(&author))
     return author;
 
   dsda_LegacyMapAuthor(&author);
@@ -427,9 +326,6 @@ int dsda_SkyTexture(void) {
   if (dsda_DoomSkyTexture(&sky))
     return sky;
 
-  if (dsda_USkyTexture(&sky))
-    return sky;
-
   dsda_LegacySkyTexture(&sky);
 
   return sky;
@@ -439,17 +335,11 @@ void dsda_PrepareInitNew(void) {
   if (dsda_DoomPrepareInitNew())
     return;
 
-  if (dsda_UPrepareInitNew())
-    return;
-
   dsda_LegacyPrepareInitNew();
 }
 
 void dsda_PrepareIntermission(int* behaviour) {
   if (dsda_DoomPrepareIntermission(behaviour))
-    return;
-
-  if (dsda_UPrepareIntermission(behaviour))
     return;
 
   dsda_LegacyPrepareIntermission(behaviour);
@@ -459,9 +349,6 @@ void dsda_PrepareFinale(int* behaviour) {
   if (dsda_DoomPrepareFinale(behaviour))
     return;
 
-  if (dsda_UPrepareFinale(behaviour))
-    return;
-
   dsda_LegacyPrepareFinale(behaviour);
 }
 
@@ -469,7 +356,6 @@ void dsda_LoadMapInfo(void) {
   dsda_AddOriginalEpisodes();
 
   dsda_DoomLoadMapInfo();
-  dsda_ULoadMapInfo();
   dsda_LegacyLoadMapInfo();
 
   dsda_AddCustomEpisodes();
@@ -479,9 +365,6 @@ const char* dsda_ExitPic(void) {
   const char* exit_pic;
 
   if (dsda_DoomExitPic(&exit_pic))
-    return exit_pic;
-
-  if (dsda_UExitPic(&exit_pic))
     return exit_pic;
 
   dsda_LegacyExitPic(&exit_pic);
@@ -494,9 +377,6 @@ const char* dsda_EnterPic(void) {
   if (dsda_DoomEnterPic(&enter_pic))
     return enter_pic;
 
-  if (dsda_UEnterPic(&enter_pic))
-    return enter_pic;
-
   dsda_LegacyEnterPic(&enter_pic);
   return enter_pic;
 }
@@ -507,9 +387,6 @@ const char* dsda_BorderTexture(void) {
   if (dsda_DoomBorderTexture(&border_texture))
     return border_texture;
 
-  if (dsda_UBorderTexture(&border_texture))
-    return border_texture;
-
   dsda_LegacyBorderTexture(&border_texture);
   return border_texture;
 }
@@ -518,17 +395,11 @@ void dsda_PrepareEntering(void) {
   if (dsda_DoomPrepareEntering())
     return;
 
-  if (dsda_UPrepareEntering())
-    return;
-
   dsda_LegacyPrepareEntering();
 }
 
 void dsda_PrepareFinished(void) {
   if (dsda_DoomPrepareFinished())
-    return;
-
-  if (dsda_UPrepareFinished())
     return;
 
   dsda_LegacyPrepareFinished();
@@ -540,9 +411,6 @@ int dsda_MapLightning(void) {
   if (dsda_DoomMapLightning(&lightning))
     return lightning;
 
-  if (dsda_UMapLightning(&lightning))
-    return lightning;
-
   dsda_LegacyMapLightning(&lightning);
 
   return lightning;
@@ -552,9 +420,6 @@ void dsda_ApplyFadeTable(void) {
   if (dsda_DoomApplyFadeTable())
     return;
 
-  if (dsda_UApplyFadeTable())
-    return;
-
   dsda_LegacyApplyFadeTable();
 }
 
@@ -562,9 +427,6 @@ int dsda_MapCluster(int map) {
   int cluster;
 
   if (dsda_DoomMapCluster(&cluster, map))
-    return cluster;
-
-  if (dsda_UMapCluster(&cluster, map))
     return cluster;
 
   dsda_LegacyMapCluster(&cluster, map);
@@ -578,9 +440,6 @@ short dsda_Sky1Texture(void) {
   if (dsda_DoomSky1Texture(&texture))
     return texture;
 
-  if (dsda_USky1Texture(&texture))
-    return texture;
-
   dsda_LegacySky1Texture(&texture);
 
   return texture;
@@ -592,9 +451,6 @@ short dsda_Sky2Texture(void) {
   if (dsda_DoomSky2Texture(&texture))
     return texture;
 
-  if (dsda_USky2Texture(&texture))
-    return texture;
-
   dsda_LegacySky2Texture(&texture);
 
   return texture;
@@ -602,10 +458,6 @@ short dsda_Sky2Texture(void) {
 
 void dsda_InitSky(void) {
   if (dsda_DoomInitSky())
-    return;
-
-
-  if (dsda_UInitSky())
     return;
 
   dsda_LegacyInitSky();
