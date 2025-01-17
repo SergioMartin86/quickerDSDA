@@ -1,3 +1,4 @@
 *.rom
+callgrind*
 *.bin
 *.gbc

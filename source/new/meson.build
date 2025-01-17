@@ -69,7 +69,6 @@ quickerDSDASrc =  [
  'core/i_capture.c',
  'core/i_glob.c',
  'core/lprintf.c',
- 'core/md5.c',
  'core/m_argv.c',
  'core/m_bbox.c',
  'core/m_file.c',

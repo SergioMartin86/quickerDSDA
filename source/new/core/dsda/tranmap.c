@@ -17,7 +17,6 @@
 
 #include <string.h>
 
-#include "md5.h"
 #include "lprintf.h"
 #include "m_file.h"
 #include "w_wad.h"
@@ -36,14 +35,10 @@ static const int tranmap_length = 256 * 256;
 static const byte* tranmap_data[100];
 
 static void dsda_CalculatePlaypalCksum(void) {
-  struct MD5Context md5;
   int lump;
 
   lump = W_GetNumForName("PLAYPAL");
 
-  MD5Init(&md5);
-  MD5Update(&md5, W_LumpByNum(lump), W_LumpLength(lump));
-  MD5Final(playpal_cksum.bytes, &md5);
   dsda_TranslateCheckSum(&playpal_cksum);
 }
 
