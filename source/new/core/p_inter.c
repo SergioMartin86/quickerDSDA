@@ -414,9 +414,6 @@ dboolean P_GivePower(player_t *player, int power)
 // P_TouchSpecialThing
 //
 
-static void Heretic_P_TouchSpecialThing(mobj_t * special, mobj_t * toucher);
-static void Hexen_P_TouchSpecialThing(mobj_t * special, mobj_t * toucher);
-
 void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 {
   player_t *player;

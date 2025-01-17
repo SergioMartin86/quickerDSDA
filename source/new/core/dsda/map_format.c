@@ -248,9 +248,6 @@ void T_MoveHexenCeiling(ceiling_t * ceiling);
 int EV_CompatibleTeleport(short thing_id, int tag, line_t *line, int side, mobj_t *thing, int flags);
 int EV_HereticTeleport(short thing_id, int tag, line_t * line, int side, mobj_t * thing, int flags);
 
-void T_BuildHexenPillar(pillar_t * pillar);
-void T_BuildZDoomPillar(pillar_t * pillar);
-
 void T_CompatiblePlatRaise(plat_t * plat);
 void T_HexenPlatRaise(plat_t * plat);
 void T_ZDoomPlatRaise(plat_t * plat);
@@ -299,7 +296,7 @@ static const map_format_t zdoom_map_format = {
   .t_vertical_door = T_VerticalCompatibleDoor,
   .t_move_floor = T_MoveCompatibleFloor,
   .t_move_ceiling = T_MoveCompatibleCeiling,
-  .t_build_pillar = T_BuildZDoomPillar,
+  .t_build_pillar = NULL,
   .t_plat_raise = T_ZDoomPlatRaise,
   .ev_teleport = EV_CompatibleTeleport,
   .player_thrust = P_CompatiblePlayerThrust,
@@ -354,7 +351,7 @@ static const map_format_t hexen_map_format = {
   .t_vertical_door = T_VerticalHexenDoor,
   .t_move_floor = T_MoveHexenFloor,
   .t_move_ceiling = T_MoveHexenCeiling,
-  .t_build_pillar = T_BuildHexenPillar,
+  .t_build_pillar = NULL,
   .t_plat_raise = T_HexenPlatRaise,
   .ev_teleport = NULL, // not used
   .player_thrust = P_HexenPlayerThrust,

@@ -953,24 +953,6 @@ void P_ArchiveThinkers(void) {
       continue;
     }
 
-    if (th->function == T_FloorWaggle)
-    {
-      planeWaggle_t *floor_waggle;
-      P_SAVE_BYTE(tc_floor_waggle);
-      P_SAVE_TYPE_REF(th, floor_waggle, planeWaggle_t);
-      floor_waggle->sector = (sector_t *)(intptr_t)(floor_waggle->sector->iSectorID);
-      continue;
-    }
-
-    if (th->function == T_CeilingWaggle)
-    {
-      planeWaggle_t *ceiling_waggle;
-      P_SAVE_BYTE(tc_ceiling_waggle);
-      P_SAVE_TYPE_REF(th, ceiling_waggle, planeWaggle_t);
-      ceiling_waggle->sector = (sector_t *)(intptr_t)(ceiling_waggle->sector->iSectorID);
-      continue;
-    }
-
     if (P_IsMobjThinker(th))
     {
       mobj_t *mobj;
@@ -1411,28 +1393,6 @@ void P_UnArchiveThinkers(void) {
           pillar->sector->floordata = pillar;
           pillar->thinker.function = T_BuildPillar;
           P_AddThinker(&pillar->thinker);
-          break;
-        }
-
-      case tc_floor_waggle:
-        {
-          planeWaggle_t *waggle = Z_MallocLevel(sizeof(*waggle));
-          P_LOAD_P(waggle);
-          waggle->sector = &sectors[(size_t)waggle->sector];
-          waggle->sector->floordata = waggle;
-          waggle->thinker.function = T_FloorWaggle;
-          P_AddThinker(&waggle->thinker);
-          break;
-        }
-
-      case tc_ceiling_waggle:
-        {
-          planeWaggle_t *waggle = Z_MallocLevel(sizeof(*waggle));
-          P_LOAD_P(waggle);
-          waggle->sector = &sectors[(size_t)waggle->sector];
-          waggle->sector->floordata = waggle;
-          waggle->thinker.function = T_CeilingWaggle;
-          P_AddThinker(&waggle->thinker);
           break;
         }
 
