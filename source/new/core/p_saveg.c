@@ -168,22 +168,6 @@ void P_ArchiveWorld (void)
     P_SAVE_X(sec->tag);
     P_SAVE_X(sec->seqType);
     P_SAVE_X(sec->flags);
-
-    // zdoom
-    P_SAVE_X(sec->gravity);
-    P_SAVE_X(sec->damage);
-    P_SAVE_X(sec->lightlevel_floor);
-    P_SAVE_X(sec->lightlevel_ceiling);
-    P_SAVE_X(sec->floor_rotation);
-    P_SAVE_X(sec->ceiling_rotation);
-    P_SAVE_X(sec->floor_xscale);
-    P_SAVE_X(sec->floor_yscale);
-    P_SAVE_X(sec->ceiling_xscale);
-    P_SAVE_X(sec->ceiling_yscale);
-    P_SAVE_X(sec->floor_xoffs);
-    P_SAVE_X(sec->floor_yoffs);
-    P_SAVE_X(sec->ceiling_xoffs);
-    P_SAVE_X(sec->ceiling_yoffs);
   }
 
   for (i = 0, li = lines; i < numlines; i++, li++)
@@ -225,22 +209,6 @@ void P_UnArchiveWorld (void)
     P_LOAD_X(sec->tag);
     P_LOAD_X(sec->seqType);
     P_LOAD_X(sec->flags);
-
-    // zdoom
-    P_LOAD_X(sec->gravity);
-    P_LOAD_X(sec->damage);
-    P_LOAD_X(sec->lightlevel_floor);
-    P_LOAD_X(sec->lightlevel_ceiling);
-    P_LOAD_X(sec->floor_rotation);
-    P_LOAD_X(sec->ceiling_rotation);
-    P_LOAD_X(sec->floor_xscale);
-    P_LOAD_X(sec->floor_yscale);
-    P_LOAD_X(sec->ceiling_xscale);
-    P_LOAD_X(sec->ceiling_yscale);
-    P_LOAD_X(sec->floor_xoffs);
-    P_LOAD_X(sec->floor_yoffs);
-    P_LOAD_X(sec->ceiling_xoffs);
-    P_LOAD_X(sec->ceiling_yoffs);
 
     sec->ceilingdata = 0; //jff 2/22/98 now three thinker fields, not two
     sec->floordata = 0;
