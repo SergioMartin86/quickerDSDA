@@ -1357,33 +1357,7 @@ return 0;
 
 int EV_DoFloorAndCeiling(line_t * line, byte * args, dboolean raise)
 {
-    dboolean floor, ceiling;
-    const int *id_p;
-    sector_t *sec;
-
-    if (raise)
-    {
-        floor = Hexen_EV_DoFloor(line, args, FLEV_RAISEFLOORBYVALUE);
-        FIND_SECTORS(id_p, args[0])
-        {
-            sec = &sectors[*id_p];
-            sec->floordata = NULL;
-            sec->ceilingdata = NULL;
-        }
-        ceiling = Hexen_EV_DoCeiling(line, args, CLEV_RAISEBYVALUE);
-    }
-    else
-    {
-        floor = Hexen_EV_DoFloor(line, args, FLEV_LOWERFLOORBYVALUE);
-        FIND_SECTORS(id_p, args[0])
-        {
-            sec = &sectors[*id_p];
-            sec->floordata = NULL;
-            sec->ceilingdata = NULL;
-        }
-        ceiling = Hexen_EV_DoCeiling(line, args, CLEV_LOWERBYVALUE);
-    }
-    return (floor | ceiling);
+    return 0;
 }
 
 #define STAIR_SECTOR_TYPE       26
