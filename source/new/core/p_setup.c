@@ -64,7 +64,6 @@
 #include "dsda/preferences.h"
 #include "dsda/scroll.h"
 #include "dsda/settings.h"
-#include "dsda/skip.h"
 #include "dsda/tranmap.h"
 #include "dsda/utility.h"
 

@@ -90,7 +90,6 @@
 #include "dsda/settings.h"
 #include "dsda/signal_context.h"
 #include "dsda/skill_info.h"
-#include "dsda/skip.h"
 #include "dsda/sndinfo.h"
 #include "dsda/time.h"
 #include "dsda/utility.h"
@@ -1304,9 +1303,6 @@ void D_DoomMainSetup(void)
 
   // Must be after P_Init
   HandleWarp();
-
-  // Must be after HandleWarp
-  dsda_HandleSkip();
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");

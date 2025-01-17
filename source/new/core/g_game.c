@@ -92,7 +92,6 @@
 #include "dsda/options.h"
 #include "dsda/pause.h"
 #include "dsda/skill_info.h"
-#include "dsda/skip.h"
 #include "dsda/time.h"
 #include "dsda/tracker.h"
 #include "dsda/split_tracker.h"
@@ -483,7 +482,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   strict_input = dsda_StrictMode();
 
   G_SetSpeed(false);
-  dsda_EvaluateSkipModeBuildTiccmd();
 
   memset(cmd, 0, sizeof(*cmd));
 
@@ -1231,17 +1229,6 @@ void G_Ticker (void)
     }
   }
 
-  dsda_EvaluateSkipModeGTicker();
-
-  if (!dsda_SkipMode() && gamestate == GS_LEVEL)
-  {
-    DO_ONCE
-      dsda_arg_t *arg;
-
-      arg = dsda_Arg(dsda_arg_command);
-    END_ONCE
-  }
-
   if (dsda_AdvanceFrame())
   {
     advance_frame = true;
@@ -1842,7 +1829,6 @@ void G_DoWorldDone (void)
   dsda_UpdateGameMap(wminfo.nextep + 1, wminfo.next + 1);
   G_DoLoadLevel();
   gameaction = ga_nothing;
-  dsda_EvaluateSkipModeDoWorldDone();
 }
 
 extern dboolean setsizeneeded;
@@ -2450,8 +2436,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   totalleveltimes = 0; // cph
   levels_completed = 0;
 
-  dsda_EvaluateSkipModeInitNew();
-
   dsda_InitSky();
 
   G_DoLoadLevel ();
@@ -2837,7 +2821,6 @@ void G_DoTeleportNewMap(void)
     gamestate = GS_LEVEL;
     gameaction = ga_nothing;
     RebornPosition = leave_data.position;
-    dsda_EvaluateSkipModeDoTeleportNewMap();
 }
 
 void Hexen_G_DoReborn(int playernum)

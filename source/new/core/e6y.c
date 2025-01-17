@@ -69,7 +69,6 @@
 #include "dsda/args.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
-#include "dsda/skip.h"
 #include "dsda/stretch.h"
 #include <math.h>
 
@@ -415,8 +414,6 @@ timetable_t *stats = NULL;
 void e6y_G_DoCompleted(void)
 {
   int i;
-
-  dsda_EvaluateSkipModeDoCompleted();
 
   if(!stats_level)
     return;
