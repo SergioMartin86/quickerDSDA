@@ -4791,6 +4791,9 @@ dboolean Raven_P_LookForPlayers(mobj_t * actor, dboolean allaround)
 
 // hexen
 
+#include "hexen/a_action.h"
+#include "hexen/p_acs.h"
+
 extern fixed_t FloatBobOffsets[64];
 
 // Corpse queue for monsters - this should be saved out
@@ -7749,18 +7752,98 @@ void KSpiritInit(mobj_t * spirit, mobj_t * korax);
 
 void A_KoraxChase(mobj_t * actor)
 {
+    mobj_t *spot;
+    int lastfound;
+    byte args[3] = {0, 0, 0};
+
+    if ((!actor->special2.i) &&
+        (actor->health <= (P_MobjSpawnHealth(actor) / 2)))
+    {
+        lastfound = 0;
+        spot = P_FindMobjFromTID(KORAX_FIRST_TELEPORT_TID, &lastfound);
+        if (spot)
+        {
+            P_Teleport(actor, spot->x, spot->y, spot->angle, true);
+        }
+
+        CheckACSPresent(249);
+        P_StartACS(249, 0, args, actor, NULL, 0);
+        actor->special2.i = 1;    // Don't run again
+
+        return;
+    }
+
+    if (!actor->target)
+        return;
+    if (P_Random(pr_hexen) < 30)
+    {
+        P_SetMobjState(actor, actor->info->missilestate);
+    }
+    else if (P_Random(pr_hexen) < 30)
+    {
+    }
+
+    // Teleport away
+    if (actor->health < (P_MobjSpawnHealth(actor) >> 1))
+    {
+        if (P_Random(pr_hexen) < 10)
+        {
+            lastfound = actor->special1.i;
+            spot = P_FindMobjFromTID(KORAX_TELEPORT_TID, &lastfound);
+            actor->special1.i = lastfound;
+            if (spot)
+            {
+                P_Teleport(actor, spot->x, spot->y, spot->angle, true);
+            }
+        }
+    }
 }
 
 void A_KoraxStep(mobj_t * actor)
 {
+    A_Chase(actor);
 }
 
 void A_KoraxStep2(mobj_t * actor)
 {
+    A_Chase(actor);
 }
 
 void A_KoraxBonePop(mobj_t * actor)
 {
+    mobj_t *mo;
+    byte args[5];
+
+    args[0] = args[1] = args[2] = args[3] = args[4] = 0;
+
+    // Spawn 6 spirits equalangularly
+    mo = P_SpawnMissileAngle(actor, HEXEN_MT_KORAX_SPIRIT1, ANG60 * 0,
+                             5 * FRACUNIT);
+    if (mo)
+        KSpiritInit(mo, actor);
+    mo = P_SpawnMissileAngle(actor, HEXEN_MT_KORAX_SPIRIT2, ANG60 * 1,
+                             5 * FRACUNIT);
+    if (mo)
+        KSpiritInit(mo, actor);
+    mo = P_SpawnMissileAngle(actor, HEXEN_MT_KORAX_SPIRIT3, ANG60 * 2,
+                             5 * FRACUNIT);
+    if (mo)
+        KSpiritInit(mo, actor);
+    mo = P_SpawnMissileAngle(actor, HEXEN_MT_KORAX_SPIRIT4, ANG60 * 3,
+                             5 * FRACUNIT);
+    if (mo)
+        KSpiritInit(mo, actor);
+    mo = P_SpawnMissileAngle(actor, HEXEN_MT_KORAX_SPIRIT5, ANG60 * 4,
+                             5 * FRACUNIT);
+    if (mo)
+        KSpiritInit(mo, actor);
+    mo = P_SpawnMissileAngle(actor, HEXEN_MT_KORAX_SPIRIT6, ANG60 * 5,
+                             5 * FRACUNIT);
+    if (mo)
+        KSpiritInit(mo, actor);
+
+    CheckACSPresent(255);
+    P_StartACS(255, 0, args, actor, NULL, 0);   // Death script
 }
 
 void KSpiritInit(mobj_t * spirit, mobj_t * korax)
@@ -7844,6 +7927,52 @@ void A_KoraxMissile(mobj_t * actor)
 
 void A_KoraxCommand(mobj_t * actor)
 {
+    byte args[5];
+    fixed_t x, y, z;
+    angle_t ang;
+    int numcommands;
+
+    // Shoot stream of lightning to ceiling
+    ang = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
+    x = actor->x + FixedMul(KORAX_COMMAND_OFFSET, finecosine[ang]);
+    y = actor->y + FixedMul(KORAX_COMMAND_OFFSET, finesine[ang]);
+    z = actor->z + KORAX_COMMAND_HEIGHT;
+    P_SpawnMobj(x, y, z, HEXEN_MT_KORAX_BOLT);
+
+    args[0] = args[1] = args[2] = args[3] = args[4] = 0;
+
+    if (actor->health <= (P_MobjSpawnHealth(actor) >> 1))
+    {
+        numcommands = 5;
+    }
+    else
+    {
+        numcommands = 4;
+    }
+
+    switch (P_Random(pr_hexen) % numcommands)
+    {
+        case 0:
+            CheckACSPresent(250);
+            P_StartACS(250, 0, args, actor, NULL, 0);
+            break;
+        case 1:
+            CheckACSPresent(251);
+            P_StartACS(251, 0, args, actor, NULL, 0);
+            break;
+        case 2:
+            CheckACSPresent(252);
+            P_StartACS(252, 0, args, actor, NULL, 0);
+            break;
+        case 3:
+            CheckACSPresent(253);
+            P_StartACS(253, 0, args, actor, NULL, 0);
+            break;
+        case 4:
+            CheckACSPresent(254);
+            P_StartACS(254, 0, args, actor, NULL, 0);
+            break;
+    }
 }
 
 #define KORAX_DELTAANGLE			(85*ANG1)

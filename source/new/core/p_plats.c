@@ -43,6 +43,9 @@
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
 
+#include "hexen/p_acs.h"
+#include "hexen/sn_sonix.h"
+
 platlist_t *activeplats;       // killough 2/14/98: made global again
 
 //
@@ -670,6 +673,7 @@ void P_RemoveActivePlat(plat_t* plat)
 {
   platlist_t *list = plat->list;
   plat->sector->floordata = NULL; //jff 2/23/98 multiple thinkers
+  P_TagFinished(plat->sector->tag);
   P_RemoveThinker(&plat->thinker);
   if ((*list->prev = list->next))
     list->next->prev = list->prev;
@@ -707,11 +711,14 @@ void T_HexenPlatRaise(plat_t * plat)
             {
                 plat->count = plat->wait;
                 plat->status = down;
+                SN_StartSequence((mobj_t *) & plat->sector->soundorg,
+                                 SEQ_PLATFORM + plat->sector->seqType);
             }
             else if (res == pastdest)
             {
                 plat->count = plat->wait;
                 plat->status = waiting;
+                SN_StopSequence((mobj_t *) & plat->sector->soundorg);
                 switch (plat->type)
                 {
                     case PLAT_DOWNWAITUPSTAY:
@@ -738,6 +745,7 @@ void T_HexenPlatRaise(plat_t * plat)
                     default:
                         break;
                 }
+                SN_StopSequence((mobj_t *) & plat->sector->soundorg);
             }
             break;
         case waiting:
@@ -747,6 +755,8 @@ void T_HexenPlatRaise(plat_t * plat)
                     plat->status = up;
                 else
                     plat->status = down;
+                SN_StartSequence((mobj_t *) & plat->sector->soundorg,
+                                 SEQ_PLATFORM + plat->sector->seqType);
             }
     }
 }
@@ -827,6 +837,8 @@ int EV_DoHexenPlat(line_t * line, byte * args, plattype_e type, int amount)
                 break;
         }
         P_AddActivePlat(plat);
+        SN_StartSequence((mobj_t *) & sec->soundorg,
+                         SEQ_PLATFORM + sec->seqType);
     }
     return rtn;
 }

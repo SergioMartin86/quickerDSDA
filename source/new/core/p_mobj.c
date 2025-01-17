@@ -67,6 +67,8 @@
 #include "heretic/def.h"
 #include "heretic/sb_bar.h"
 
+#include "hexen/po_man.h"
+
 // heretic_note: static NUMSTATES arrays here - probably fine?
 // NUMSTATES > HERETIC_NUMSTATES
 
@@ -1945,6 +1947,11 @@ mobj_t* P_SpawnMapThing (const mapthing_t* mthing, int index)
 
       return NULL;
   	}
+  }
+
+  if (PO_Detect(mthing->type))
+  {
+    return NULL;
   }
 
   // check for players specially

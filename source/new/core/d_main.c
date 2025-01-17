@@ -102,6 +102,8 @@
 
 #include "heretic/sb_bar.h"
 
+#include "hexen/sn_sonix.h"
+
 // NSM
 #include "i_capture.h"
 
@@ -1373,6 +1375,11 @@ void D_DoomMainSetup(void)
   lprintf(LO_DEBUG, "M_Init: Init miscellaneous info.\n");
 
   dsda_LoadSndInfo();
+
+  if (map_format.sndseq)
+  {
+    SN_InitSequenceScript();
+  }
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "R_Init: Init DOOM refresh daemon - ");

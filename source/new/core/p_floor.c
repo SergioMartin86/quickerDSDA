@@ -45,6 +45,9 @@
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
 
+#include "hexen/p_acs.h"
+#include "hexen/sn_sonix.h"
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Floor motion and Elevator action routines
@@ -307,6 +310,64 @@ void T_MoveCompatibleFloor(floormove_t * floor)
 
 void T_MoveHexenFloor(floormove_t * floor)
 {
+    result_e res;
+
+    if (floor->resetDelayCount)
+    {
+        floor->resetDelayCount--;
+        if (!floor->resetDelayCount)
+        {
+            floor->floordestheight = floor->resetHeight;
+            floor->direction = -floor->direction;
+            floor->resetDelay = 0;
+            floor->delayCount = 0;
+            floor->delayTotal = 0;
+        }
+    }
+    if (floor->delayCount)
+    {
+        floor->delayCount--;
+        if (!floor->delayCount && floor->textureChange)
+        {
+            floor->sector->floorpic += floor->textureChange;
+        }
+        return;
+    }
+
+    res = T_MoveFloorPlane(floor->sector, floor->speed,
+                           floor->floordestheight, floor->crush,
+                           floor->direction, true);
+
+    if (floor->type == FLEV_RAISEBUILDSTEP)
+    {
+        if ((floor->direction == 1 && floor->sector->floorheight >=
+             floor->stairsDelayHeight) || (floor->direction == -1 &&
+                                           floor->sector->floorheight <=
+                                           floor->stairsDelayHeight))
+        {
+            floor->delayCount = floor->delayTotal;
+            floor->stairsDelayHeight += floor->stairsDelayHeightDelta;
+        }
+    }
+    if (res == pastdest)
+    {
+        SN_StopSequence((mobj_t *) & floor->sector->soundorg);
+        if (floor->delayTotal)
+        {
+            floor->delayTotal = 0;
+        }
+        if (floor->resetDelay)
+        {
+            return;
+        }
+        floor->sector->floordata = NULL;
+        if (floor->textureChange)
+        {
+            floor->sector->floorpic -= floor->textureChange;
+        }
+        P_TagFinished(floor->sector->tag);
+        P_RemoveThinker(&floor->thinker);
+    }
 }
 
 void T_MoveFloor(floormove_t* floor)
@@ -1465,6 +1526,11 @@ int Hexen_EV_DoFloor(line_t * line, byte * args, floor_e floortype)
                 break;
         }
     }
+    if (rtn)
+    {
+        SN_StartSequence((mobj_t *) & floor->sector->soundorg,
+                         SEQ_PLATFORM + floor->sector->seqType);
+    }
     return rtn;
 }
 
@@ -1595,6 +1661,7 @@ static void ProcessStairSector(sector_t * sec, int type, int height,
         default:
             break;
     }
+    SN_StartSequence((mobj_t *) & sec->soundorg, SEQ_PLATFORM + sec->seqType);
     //
     // Find next sector to raise
     // Find nearby sector with sector special equal to type
@@ -1882,6 +1949,22 @@ int Hexen_EV_BuildStairs(line_t * line, byte * args, int direction, stairs_e sta
 
 void T_BuildHexenPillar(pillar_t * pillar)
 {
+    result_e res1;
+    result_e res2;
+
+    // First, raise the floor
+    res1 = T_MoveFloorPlane(pillar->sector, pillar->floorSpeed, pillar->floordest,
+                            pillar->crush, pillar->direction, true);
+    // Then, lower the ceiling
+    res2 = T_MoveCeilingPlane(pillar->sector, pillar->ceilingSpeed, pillar->ceilingdest,
+                              pillar->crush, -pillar->direction, true);
+    if (res1 == pastdest && res2 == pastdest)
+    {
+        pillar->sector->floordata = NULL;
+        SN_StopSequence((mobj_t *) & pillar->sector->soundorg);
+        P_TagFinished(pillar->sector->tag);
+        P_RemoveThinker(&pillar->thinker);
+    }
 }
 
 void T_BuildZDoomPillar(pillar_t * pillar)
@@ -2079,6 +2162,8 @@ int EV_BuildPillar(line_t * line, byte * args, int crush)
         pillar->ceilingdest = newHeight;
         pillar->direction = 1;
         pillar->crush = P_ConvertHexenCrush(crush * args[3]);
+        SN_StartSequence((mobj_t *) & pillar->sector->soundorg,
+                         SEQ_PLATFORM + pillar->sector->seqType);
     }
     return rtn;
 }
@@ -2143,6 +2228,8 @@ int EV_OpenPillar(line_t * line, byte * args)
                                   sec->ceilingheight - pillar->ceilingdest));
         }
         pillar->direction = -1; // open the pillar
+        SN_StartSequence((mobj_t *) & pillar->sector->soundorg,
+                         SEQ_PLATFORM + pillar->sector->seqType);
     }
     return rtn;
 }
@@ -2206,7 +2293,9 @@ int EV_FloorCrushStop(line_t * line, byte * args)
             continue;
         }
         // Completely remove the crushing floor
+        SN_StopSequence((mobj_t *) & floor->sector->soundorg);
         floor->sector->floordata = NULL;
+        P_TagFinished(floor->sector->tag);
         P_RemoveThinker(&floor->thinker);
         rtn = 1;
     }
@@ -2236,6 +2325,7 @@ static void T_PlaneWaggle(planeWaggle_t * waggle, fixed_t * planeheight, void **
         (*planeheight) = waggle->originalHeight;
         P_ChangeSector(waggle->sector, true);
         (*planedata) = NULL;
+        P_TagFinished(waggle->sector->tag);
         P_RemoveThinker(&waggle->thinker);
         return;
       }
