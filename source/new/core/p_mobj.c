@@ -1317,7 +1317,6 @@ dboolean P_SpawnProjectile(short thing_id, mobj_t *source, int spawn_num, angle_
           }
           else
           {
-            dsda_WatchFailedSpawn(new_mobj);
             P_RemoveMobj(new_mobj);
           }
         }
@@ -1351,7 +1350,6 @@ dboolean P_SpawnThing(short thing_id, mobj_t *source, int spawn_num,
     new_mobj = P_SpawnMobj(spawn_location->x, spawn_location->y, spawn_location->z, type);
     if (!P_TestMobjLocation(new_mobj))
     {
-      dsda_WatchFailedSpawn(new_mobj);
       P_RemoveMobj(new_mobj);
     }
     else
@@ -1497,8 +1495,6 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   P_AddThinker(&mobj->thinker);
   if (!((mobj->flags ^ MF_COUNTKILL) & (MF_FRIEND | MF_COUNTKILL)))
     totallive++;
-
-  dsda_WatchSpawn(mobj);
 
   return mobj;
 }

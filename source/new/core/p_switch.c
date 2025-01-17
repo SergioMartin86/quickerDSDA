@@ -387,8 +387,6 @@ P_UseSpecialLine
   int           side,
   dboolean      bossaction)
 {
-  dsda_WatchLineActivation(line, thing);
-
   // e6y
   // b.m. side test was broken in boom201
   if (compatibility_level != boom_201_compatibility)

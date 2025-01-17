@@ -1306,8 +1306,6 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
       tmfloorz - thing->z > 24*FRACUNIT
     )
     {
-      dsda_WatchLedgeImpact(thing, tmfloorz);
-
       map_format.check_impact(thing);
       return tmunstuck
         && !(ceilingline && untouched(ceilingline))
@@ -2587,7 +2585,6 @@ dboolean PIT_ChangeSector (mobj_t* thing)
     int t;
 
     P_DamageMobj(thing, NULL, NULL, crushchange);
-    dsda_WatchCrush(thing, crushchange);
 
       // spray blood in a random direction
       mo = P_SpawnMobj (thing->x,

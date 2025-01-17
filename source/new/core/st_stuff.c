@@ -49,7 +49,6 @@
 
 #include "dsda/settings.h"
 #include "dsda/stretch.h"
-#include "dsda/text_color.h"
 
 //
 // STATUS BAR DATA
@@ -375,17 +374,6 @@ static void ST_Stop(void);
 
 void ST_LoadTextColors(void)
 {
-  cr_health_bad = dsda_TextCR(dsda_tc_stbar_health_bad);
-  cr_health_warning = dsda_TextCR(dsda_tc_stbar_health_warning);
-  cr_health_ok = dsda_TextCR(dsda_tc_stbar_health_ok);
-  cr_health_super = dsda_TextCR(dsda_tc_stbar_health_super);
-  cr_armor_zero = dsda_TextCR(dsda_tc_stbar_armor_zero);
-  cr_armor_one = dsda_TextCR(dsda_tc_stbar_armor_one);
-  cr_armor_two = dsda_TextCR(dsda_tc_stbar_armor_two);
-  cr_ammo_bad = dsda_TextCR(dsda_tc_stbar_ammo_bad);
-  cr_ammo_warning = dsda_TextCR(dsda_tc_stbar_ammo_warning);
-  cr_ammo_ok = dsda_TextCR(dsda_tc_stbar_ammo_ok);
-  cr_ammo_full = dsda_TextCR(dsda_tc_stbar_ammo_full);
 }
 
 // [FG] support widescreen status bar backgrounds

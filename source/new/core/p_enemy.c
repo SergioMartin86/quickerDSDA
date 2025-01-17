@@ -1796,8 +1796,6 @@ dboolean P_RaiseThing(mobj_t *corpse, mobj_t *raiser)
     corpse->flags = (corpse->flags & ~MF_FRIEND) | (raiser->flags & MF_FRIEND);
   }
 
-  dsda_WatchResurrection(corpse, raiser);
-
   if (!((corpse->flags ^ MF_COUNTKILL) & (MF_FRIEND | MF_COUNTKILL)))
     totallive++;
 
@@ -1873,8 +1871,6 @@ static dboolean P_HealCorpse(mobj_t* actor, int radius, statenum_t healstate, sf
           corpsehit->flags =
             (info->flags & ~MF_FRIEND) | (actor->flags & MF_FRIEND);
           corpsehit->flags = corpsehit->flags | MF_RESSURECTED;//e6y
-
-          dsda_WatchResurrection(corpsehit, actor);
 
           if (!((corpsehit->flags ^ MF_COUNTKILL) & (MF_FRIEND | MF_COUNTKILL)))
             totallive++;
@@ -2732,8 +2728,6 @@ void A_SpawnFly(mobj_t *mo)
 
   //e6y: monsters spawned by Icon of Sin should not be countable for total killed.
   newmobj->flags |= MF_RESSURECTED;
-
-  dsda_WatchIconSpawn(newmobj);
 
   /* killough 8/29/98: add to appropriate thread */
   P_UpdateThinker(&newmobj->thinker);

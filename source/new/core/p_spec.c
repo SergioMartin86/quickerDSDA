@@ -1408,8 +1408,6 @@ static void P_CollectSecretCommon(sector_t *sector, player_t *player)
   sector->flags &= ~SECF_SECRET;
 
   P_PlayerCollectSecret(player);
-
-  dsda_WatchSecret();
 }
 
 static void P_CollectSecretVanilla(sector_t *sector, player_t *player)
@@ -1507,8 +1505,6 @@ void P_CrossHexenSpecialLine(line_t *line, int side, mobj_t *thing, dboolean bos
 void P_CrossCompatibleSpecialLine(line_t *line, int side, mobj_t *thing, dboolean bossaction)
 {
   int ok;
-
-  dsda_WatchLineActivation(line, thing);
 
   //  Things that should never trigger lines
   //

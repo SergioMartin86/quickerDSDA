@@ -344,11 +344,9 @@ void P_Ticker (void)
     P_RunThinkers();
     P_UpdateSpecials();
     P_RespawnSpecials();
-    P_AmbientSound();
 
     P_MapEnd();
 
-    dsda_WatchPTickCompleted();
   }
 
   leveltime++;                       // for par times

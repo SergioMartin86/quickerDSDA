@@ -454,7 +454,6 @@ static void P_FireWeapon(player_t *player)
   if (!P_CheckAmmo(player))
     return;
 
-  dsda_WatchWeaponFire(player->readyweapon);
 
   P_SetMobjState(player->mo, pclass.fire_weapon_state);
 

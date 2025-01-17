@@ -1274,7 +1274,6 @@ void G_Ticker (void)
     }
 
     dsda_InputFlushTick();
-    dsda_WatchCommand();
 
     // check for special buttons
     for (i = 0; i < g_maxplayers; i++)
@@ -1319,7 +1318,6 @@ void G_Ticker (void)
       }
     }
 
-    dsda_DisplayNotifications();
   }
 
   // cph - if the gamestate changed, we may need to clean up the old gamestate
@@ -1645,8 +1643,6 @@ void G_DeathMatchSpawnPlayer (int playernum)
 
 void G_DoReborn (int playernum)
 {
-  dsda_WatchReborn(playernum);
-
   if (!netgame && !(map_info.flags & MI_ALLOW_RESPAWN) && !(skill_info.flags & SI_PLAYER_RESPAWN))
     gameaction = ga_loadlevel;      // reload the level from scratch
   else
@@ -1744,7 +1740,6 @@ void G_DoCompleted (void)
       G_PlayerFinishLevel(i);        // take away cards and stuff
 
   e6y_G_DoCompleted();
-  dsda_WatchLevelCompletion();
 
   wminfo.nextep = wminfo.epsd = gameepisode -1;
   wminfo.last = gamemap -1;
@@ -2036,7 +2031,6 @@ void G_DeferedInitNew(int skill, int episode, int map)
   d_map = map;
   gameaction = ga_newgame;
 
-  dsda_WatchDeferredInitNew(skill, episode, map);
 }
 
 /* cph -
@@ -2287,8 +2281,6 @@ void G_DoNewGame (void)
 
   G_InitNew (d_skill, realEpisode, realMap, true);
   gameaction = ga_nothing;
-
-  dsda_WatchNewGame();
 
   //jff 4/26/98 wake up the status bar in case were coming out of a DM demo
   ST_Start();

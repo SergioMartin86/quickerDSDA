@@ -3610,8 +3610,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   main_tranmap = dsda_DefaultTranMap();
 
-  dsda_WatchBeforeLevelSetup();
-
   totallive = totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
   wminfo.partime = 180;
   wminfo.fake_partime = 0;
@@ -3658,8 +3656,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   current_episode = episode;
   current_map = map;
   current_nodesVersion = nodesVersion;
-
-  dsda_WatchNewLevel();
 
   if (!samelevel)
   {
@@ -3810,8 +3806,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   // set up world state
   P_SpawnSpecials();
-
-  dsda_WatchAfterLevelSetup();
 
   P_MapEnd();
 

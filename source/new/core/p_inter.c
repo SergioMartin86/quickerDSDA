@@ -359,8 +359,6 @@ void P_GiveCard(player_t *player, card_t card)
     return;
   player->bonuscount = BONUSADD;
   player->cards[card] = 1;
-
-  dsda_WatchCard(card);
 }
 
 //
@@ -755,8 +753,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
   if (!((target->flags ^ MF_COUNTKILL) & (MF_FRIEND | MF_COUNTKILL)))
     totallive--;
 
-  dsda_WatchDeath(target);
-
   if (map_format.hexen && target->special)
   {
     map_format.execute_line_special(
@@ -767,11 +763,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 
   if (source && source->player)
   {
-    // count for intermission
-    if (target->flags & MF_COUNTKILL)
-    {
-      dsda_WatchKill(source->player, target);
-    }
     if (target->player)
     {
       source->player->frags[target->player-players]++;
@@ -783,14 +774,12 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
       if ((compatibility_level < lxdoom_1_compatibility) || !netgame) {
         if (!netgame)
         {
-          dsda_WatchKill(&players[0], target);
         }
         else
         {
           if (!deathmatch) {
             if (target->lastenemy && target->lastenemy->health > 0 && target->lastenemy->player)
             {
-              dsda_WatchKill(target->lastenemy->player, target);
             }
             else
             {
@@ -799,7 +788,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
               {
                 if (playeringame[player])
                 {
-                  dsda_WatchKill(&players[player], target);
                   break;
                 }
               }
@@ -815,7 +803,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
           // CPhipps - not a bug as such, but certainly an inconsistency.
           if (target->lastenemy && target->lastenemy->health > 0 && target->lastenemy->player) // Fighting a player
           {
-            dsda_WatchKill(target->lastenemy->player, target);
           }
           else {
             // cph - randomely choose a player in the game to be credited
@@ -833,7 +820,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
                 if (playeringame[i])
                   if (!player--)
                   {
-                    dsda_WatchKill(&players[i], target);
                   }
             }
           }
@@ -1052,8 +1038,6 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
     if (player->damagecount > 100)
       player->damagecount = 100;  // teleport stomp does 10k points...
   }
-
-  dsda_WatchDamage(target, inflictor, source, damage);
 
   // do the damage
   target->health -= damage;

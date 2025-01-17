@@ -20,7 +20,6 @@
 #include "dsda/args.h"
 #include "dsda/configuration.h"
 #include "dsda/mapinfo/doom/parser.h"
-#include "dsda/text_color.h"
 #include "dsda/utility.h"
 
 #include "skill_info.h"
@@ -161,9 +160,6 @@ void dsda_CopySkillInfo(int i, const doom_mapinfo_skill_t* info) {
 
   if (info->pic_name)
     skill_infos[i].pic_name = Z_Strdup(info->pic_name);
-
-  if (info->text_color)
-    skill_infos[i].text_color = dsda_ColorNameToIndex(info->text_color);
 
   skill_infos[i].flags = info->flags;
 }
