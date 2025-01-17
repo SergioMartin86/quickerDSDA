@@ -363,9 +363,6 @@ void P_GiveCard(player_t *player, card_t card)
   player->bonuscount = BONUSADD;
   player->cards[card] = 1;
 
-  if (player == &players[consoleplayer])
-    playerkeys |= 1 << card;
-
   dsda_WatchCard(card);
 }
 
@@ -1517,10 +1514,6 @@ static void Heretic_P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         P_RemoveMobj(special);
     }
     player->bonuscount += BONUSADD;
-    if (player == &players[consoleplayer])
-    {
-        SB_PaletteFlash(false);
-    }
 }
 
 dboolean P_GiveArtifact(player_t * player, artitype_t arti, mobj_t * mo)
@@ -2171,10 +2164,6 @@ void TryPickupWeapon(player_t * player, pclass_t weaponClass,
     }
 
     player->bonuscount += BONUSADD;
-    if (player == &players[consoleplayer])
-    {
-        SB_PaletteFlash(false);
-    }
 }
 
 static void TryPickupWeaponPiece(player_t * player, pclass_t matchClass,
@@ -2264,10 +2253,6 @@ static void TryPickupWeaponPiece(player_t * player, pclass_t matchClass,
         }
     }
     player->bonuscount += BONUSADD;
-    if (player == &players[consoleplayer])
-    {
-      SB_PaletteFlash(false);
-    }
 
     // Check if fourth weapon assembled
     if (checkAssembled)
@@ -2300,9 +2285,6 @@ int P_GiveKey(player_t * player, card_t key)
     }
     player->bonuscount += BONUSADD;
     player->cards[key] = true;
-
-    if (player == &players[consoleplayer])
-      playerkeys |= 1 << key;
 
     return true;
 }
@@ -2490,10 +2472,6 @@ static void Hexen_P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
                 break;
             }
             player->bonuscount += BONUSADD;
-            if (player == &players[consoleplayer])
-            {
-                SB_PaletteFlash(false);
-            }
             return;
 
             // Artifacts
@@ -2702,10 +2680,6 @@ static void Hexen_P_TouchSpecialThing(mobj_t * special, mobj_t * toucher)
         P_RemoveMobj(special);
     }
     player->bonuscount += BONUSADD;
-    if (player == &players[consoleplayer])
-    {
-        SB_PaletteFlash(false);
-    }
 }
 
 // Search thinker list for minotaur

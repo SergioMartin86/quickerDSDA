@@ -987,197 +987,20 @@ void P_ArtiTele(player_t * player)
 
 void P_PlayerNextArtifact(player_t * player)
 {
-    if (player == &players[consoleplayer])
-    {
-        inv_ptr--;
-        if (inv_ptr < 6)
-        {
-            curpos--;
-            if (curpos < 0)
-            {
-                curpos = 0;
-            }
-        }
-        if (inv_ptr < 0)
-        {
-            inv_ptr = player->inventorySlotNum - 1;
-            if (inv_ptr < 6)
-            {
-                curpos = inv_ptr;
-            }
-            else
-            {
-                curpos = 6;
-            }
-        }
-        player->readyArtifact = player->inventory[inv_ptr].type;
-    }
 }
 
 void P_PlayerRemoveArtifact(player_t * player, int slot)
 {
-    int i;
-    player->artifactCount--;
-    if (!(--player->inventory[slot].count))
-    {                           // Used last of a type - compact the artifact list
-        player->readyArtifact = arti_none;
-        player->inventory[slot].type = arti_none;
-        for (i = slot + 1; i < player->inventorySlotNum; i++)
-        {
-            player->inventory[i - 1] = player->inventory[i];
-        }
-        player->inventorySlotNum--;
-        if (player == &players[consoleplayer])
-        {                       // Set position markers and get next readyArtifact
-            inv_ptr--;
-            if (inv_ptr < 6)
-            {
-                curpos--;
-                if (curpos < 0)
-                {
-                    curpos = 0;
-                }
-            }
-            if (inv_ptr >= player->inventorySlotNum)
-            {
-                inv_ptr = player->inventorySlotNum - 1;
-            }
-            if (inv_ptr < 0)
-            {
-                inv_ptr = 0;
-            }
-            player->readyArtifact = player->inventory[inv_ptr].type;
-        }
-    }
 }
 
 void P_PlayerUseArtifact(player_t * player, artitype_t arti)
 {
-    int i;
-
-    for (i = 0; i < player->inventorySlotNum; i++)
-    {
-        if (player->inventory[i].type == arti)
-        {                       // Found match - try to use
-            if (P_UseArtifact(player, arti))
-            {                   // Artifact was used - remove it from inventory
-                P_PlayerRemoveArtifact(player, i);
-                if (player == &players[consoleplayer])
-                {
-                    ArtifactFlash = 4;
-                }
-            }
-            else 
-                P_PlayerNextArtifact(player);
-            break;
-        }
-    }
 }
 
 static dboolean Hexen_P_UseArtifact(player_t * player, artitype_t arti);
 
 dboolean P_UseArtifact(player_t * player, artitype_t arti)
 {
-    mobj_t *mo;
-    angle_t angle;
-
-    switch (arti)
-    {
-        case arti_invulnerability:
-            if (!P_GivePower(player, pw_invulnerability))
-            {
-                return (false);
-            }
-            break;
-        case arti_invisibility:
-            if (!P_GivePower(player, pw_invisibility))
-            {
-                return (false);
-            }
-            break;
-        case arti_health:
-            if (!P_GiveBody(player, 25))
-            {
-                return (false);
-            }
-            break;
-        case arti_superhealth:
-            if (!P_GiveBody(player, 100))
-            {
-                return (false);
-            }
-            break;
-        case arti_tomeofpower:
-            if (player->chickenTics)
-            {                   // Attempt to undo chicken
-                if (P_UndoPlayerChicken(player) == false)
-                {               // Failed
-                    P_DamageMobj(player->mo, NULL, NULL, 10000);
-                }
-                else
-                {               // Succeeded
-                    player->chickenTics = 0;
-                }
-            }
-            else
-            {
-                if (!P_GivePower(player, pw_weaponlevel2))
-                {
-                    return (false);
-                }
-                if (player->readyweapon == wp_staff)
-                {
-                    P_SetPsprite(player, ps_weapon, HERETIC_S_STAFFREADY2_1);
-                }
-                else if (player->readyweapon == wp_gauntlets)
-                {
-                    P_SetPsprite(player, ps_weapon, HERETIC_S_GAUNTLETREADY2_1);
-                }
-            }
-            break;
-        case arti_torch:
-            if (!P_GivePower(player, pw_infrared))
-            {
-                return (false);
-            }
-            break;
-        case arti_firebomb:
-            angle = player->mo->angle >> ANGLETOFINESHIFT;
-
-            // Vanilla bug here:
-            // Original code here looks like:
-            //   (player->mo->flags2 & MF2_FEETARECLIPPED != 0),
-            // Which under C's operator precedence is:
-            //   (player->mo->flags2 & (MF2_FEETARECLIPPED != 0)),
-            // Which simplifies to:
-            //   (player->mo->flags2 & 1),
-            mo = P_SpawnMobj(player->mo->x + 24 * finecosine[angle],
-                             player->mo->y + 24 * finesine[angle],
-                             player->mo->z -
-                             15 * FRACUNIT * (player->mo->flags2 & 1),
-                             HERETIC_MT_FIREBOMB);
-            P_SetTarget(&mo->target, player->mo);
-            break;
-        case arti_egg:
-            mo = player->mo;
-            P_SpawnPlayerMissile(mo, HERETIC_MT_EGGFX);
-            P_SPMAngle(mo, HERETIC_MT_EGGFX, mo->angle - (ANG45 / 6));
-            P_SPMAngle(mo, HERETIC_MT_EGGFX, mo->angle + (ANG45 / 6));
-            P_SPMAngle(mo, HERETIC_MT_EGGFX, mo->angle - (ANG45 / 3));
-            P_SPMAngle(mo, HERETIC_MT_EGGFX, mo->angle + (ANG45 / 3));
-            break;
-        case arti_fly:
-            if (!P_GivePower(player, pw_flight))
-            {
-                return (false);
-            }
-            break;
-        case arti_teleport:
-            P_ArtiTele(player);
-            break;
-        default:
-            return (false);
-    }
     return (true);
 }
 

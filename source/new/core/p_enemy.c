@@ -6723,27 +6723,6 @@ void A_FiredSplotch(mobj_t * actor)
 
 void A_FreezeDeath(mobj_t * actor)
 {
-    int r = P_Random(pr_hexen);
-    actor->tics = 75 + r + P_Random(pr_hexen);
-    actor->flags |= MF_SOLID | MF_SHOOTABLE | MF_NOBLOOD;
-    actor->flags2 |= MF2_PUSHABLE | MF2_TELESTOMP | MF2_PASSMOBJ | MF2_SLIDE;
-    actor->height <<= 2;
-
-    if (actor->player)
-    {
-        actor->player->damagecount = 0;
-        actor->player->poisoncount = 0;
-        actor->player->bonuscount = 0;
-        if (actor->player == &players[consoleplayer])
-        {
-            SB_PaletteFlash(false);
-        }
-    }
-    else if (actor->flags & MF_COUNTKILL && actor->special)
-    {
-        // Initiate monster death actions.
-        map_format.execute_line_special(actor->special, actor->special_args, NULL, 0, actor);
-    }
 }
 
 void A_IceSetTics(mobj_t * actor)

@@ -5279,10 +5279,6 @@ dboolean EV_LineSearchForPuzzleItem(line_t * line, byte * args, mobj_t * mo)
             {
                 // A puzzle item was found for the line
                 P_PlayerRemoveArtifact(player, i);
-                if (player == &players[consoleplayer])
-                {
-                    ArtifactFlash = 4;
-                }
                 return true;
             }
         }

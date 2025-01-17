@@ -2766,18 +2766,6 @@ void A_MStaffAttack(player_t * player, pspdef_t * psp)
 
 void A_MStaffPalette(player_t * player, pspdef_t * psp)
 {
-    int pal;
-
-    if (player == &players[consoleplayer])
-    {
-        pal = STARTSCOURGEPAL + psp->state - (&states[HEXEN_S_MSTAFFATK_2]);
-        if (pal == STARTSCOURGEPAL + 3)
-        {                       // reset back to original playpal
-            pal = 0;
-        }
-        V_SetPalette(pal);
-        SB_Start();
-    }
 }
 
 void A_MStaffWeave(mobj_t * actor)
@@ -3134,18 +3122,6 @@ void A_CHolyAttack(player_t * player, pspdef_t * psp)
 
 void A_CHolyPalette(player_t * player, pspdef_t * psp)
 {
-    int pal;
-
-    if (player == &players[consoleplayer])
-    {
-        pal = STARTHOLYPAL + psp->state - (&states[HEXEN_S_CHOLYATK_6]);
-        if (pal == STARTHOLYPAL + 3)
-        {                       // reset back to original playpal
-            pal = 0;
-        }
-        V_SetPalette(pal);
-        SB_Start();
-    }
 }
 
 static void CHolyFindTarget(mobj_t * actor)

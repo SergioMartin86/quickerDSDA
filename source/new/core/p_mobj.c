@@ -1756,11 +1756,7 @@ void P_SpawnPlayer (int n, const mapthing_t* mthing)
   {
     for (i = 0 ; i < NUMCARDS ; i++)
       p->cards[i] = true;
-    if (p == &players[consoleplayer])
-      playerkeys = 7;
   }
-  else if (p == &players[consoleplayer])
-    playerkeys = 0;
 
   R_SmoothPlaying_Reset(p); // e6y
 }

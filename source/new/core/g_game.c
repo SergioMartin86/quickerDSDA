@@ -265,7 +265,6 @@ char         savedescription[SAVEDESCLEN];  // Description to save in savegame i
 #include "p_user.h"
 #include "heretic/def.h"
 
-int inventoryTics;
 int lookheld;
 
 static dboolean InventoryMoveLeft(void);
@@ -1347,14 +1346,6 @@ void G_Ticker (void)
       }
     }
 
-    // turn inventory off after a certain amount of time
-    if (inventory && !(--inventoryTics))
-    {
-        players[consoleplayer].readyArtifact =
-            players[consoleplayer].inventory[inv_ptr].type;
-        inventory = false;
-    }
-
     dsda_DisplayNotifications();
   }
 
@@ -1474,7 +1465,6 @@ static void G_PlayerFinishLevel(int player)
   p->lookdir = 0;
   p->rain1 = NULL;
   p->rain2 = NULL;
-  playerkeys = 0;
 
   memset(p->powers, 0, sizeof p->powers);
   if (flb.flight_carryover)
@@ -1491,11 +1481,6 @@ static void G_PlayerFinishLevel(int player)
   p->damagecount = 0;     // no palette changes
   p->bonuscount = 0;
   p->poisoncount = 0;
-
-  if (p == &players[consoleplayer])
-  {
-    SB_Start();          // refresh the status bar
-  }
 }
 
 // CPhipps - G_SetPlayerColour
@@ -1569,12 +1554,6 @@ void G_PlayerReborn (int player)
   G_SetInitialInventory(p);
 
   p->lookdir = 0;
-  if (p == &players[consoleplayer])
-  {
-    SB_Start();             // refresh the status bar
-    inv_ptr = 0;            // reset the inventory pointer
-    curpos = 0;
-  }
 
   levels_completed = 0;
 }
@@ -3613,77 +3592,11 @@ void G_ContinueDemo(const char *playback_name)
 
 static dboolean InventoryMoveLeft(void)
 {
-    if (R_FullView())
-    {
-        inv_ptr--;
-        if (inv_ptr < 0)
-        {
-            inv_ptr = 0;
-        }
-        return true;
-    }
-
-    inventoryTics = 5 * 35;
-    if (!inventory)
-    {
-        inventory = true;
-        return false;
-    }
-    inv_ptr--;
-    if (inv_ptr < 0)
-    {
-        inv_ptr = 0;
-    }
-    else
-    {
-        curpos--;
-        if (curpos < 0)
-        {
-            curpos = 0;
-        }
-    }
     return true;
 }
 
 static dboolean InventoryMoveRight(void)
 {
-    player_t *plr;
-
-    plr = &players[consoleplayer];
-
-    if (R_FullView())
-    {
-        inv_ptr++;
-        if (inv_ptr >= plr->inventorySlotNum)
-        {
-            inv_ptr--;
-            if (inv_ptr < 0)
-                inv_ptr = 0;
-        }
-        return true;
-    }
-
-    inventoryTics = 5 * 35;
-    if (!inventory)
-    {
-        inventory = true;
-        return false;
-    }
-    inv_ptr++;
-    if (inv_ptr >= plr->inventorySlotNum)
-    {
-        inv_ptr--;
-        if (inv_ptr < 0)
-            inv_ptr = 0;
-    }
-    else
-    {
-        curpos++;
-        if (curpos > 6)
-        {
-            curpos = 6;
-        }
-    }
     return true;
 }
 
