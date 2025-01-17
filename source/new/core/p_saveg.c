@@ -597,65 +597,6 @@ static dboolean P_IsPolyObjThinker(thinker_t *th)
   return 0;
 }
 
-void P_ArchivePolyObjSpecialData(void)
-{
-  thinker_t *th;
-
-  if (!map_format.polyobjs) return;
-
-  for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-  {
-    if (P_IsPolyObjThinker(th))
-    {
-      int i;
-      int count = 0;
-
-      for (i = 0; i < po_NumPolyobjs; ++i)
-      {
-        if (polyobjs[i].specialdata == th)
-          ++count;
-      }
-
-      P_SAVE_X(count);
-
-      for (i = 0; i < po_NumPolyobjs; ++i)
-      {
-        if (polyobjs[i].specialdata == th)
-        {
-          P_SAVE_X(i);
-        }
-      }
-    }
-  }
-}
-
-void P_UnArchivePolyObjSpecialData(void)
-{
-  thinker_t *th;
-
-  if (!map_format.polyobjs) return;
-
-  for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
-  {
-    if (P_IsPolyObjThinker(th))
-    {
-      int i;
-      int count;
-
-      P_LOAD_X(count);
-
-      for (i = 0; i < count; ++i)
-      {
-        int j;
-
-        P_LOAD_X(j);
-
-        polyobjs[j].specialdata = th;
-      }
-    }
-  }
-}
-
 // dsda - fix save / load synchronization
 // merges thinkerclass_t and specials_e
 typedef enum {
@@ -995,8 +936,6 @@ void P_ArchiveThinkers(void) {
 
   // add a terminating marker
   P_SAVE_BYTE(tc_end);
-
-  P_ArchivePolyObjSpecialData();
 
   // killough 9/14/98: save soundtargets
   {
@@ -1471,8 +1410,6 @@ void P_UnArchiveThinkers(void) {
       }
     }
   }
-
-  P_UnArchivePolyObjSpecialData();
 
   {  // killough 9/14/98: restore soundtargets
     int i;

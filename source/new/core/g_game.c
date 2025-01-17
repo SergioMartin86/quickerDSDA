@@ -1398,14 +1398,6 @@ static void G_PlayerFinishLevel(int player)
     p->artifactCount = p->inventorySlotNum;
   }
 
-  if (flb.use_flight_artifact)
-  {
-    for (i = 0; i < flb.use_flight_count; i++)
-    {
-      P_PlayerUseArtifact(p, flb.use_flight_artifact);
-    }
-  }
-
   if (p->chickenTics || p->morphTics)
   {
     p->readyweapon = p->mo->special1.i;       // Restore weapon
