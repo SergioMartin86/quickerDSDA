@@ -71,8 +71,6 @@
 #include "dsda/udmf.h"
 #include "dsda/utility.h"
 
-#include "hexen/p_anim.h"
-
 #include "config.h"
 
 //

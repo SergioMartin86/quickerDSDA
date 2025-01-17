@@ -44,9 +44,6 @@
 #include "lprintf.h"
 #include "e6y.h"//e6y
 
-#include "hexen/a_action.h"
-#include "hexen/p_anim.h"
-
 #include "dsda/map_format.h"
 #include "dsda/msecnode.h"
 #include "dsda/scroll.h"

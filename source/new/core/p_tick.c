@@ -39,8 +39,6 @@
 #include "r_fps.h"
 #include "e6y.h"
 
-#include "hexen/p_anim.h"
-
 #include "dsda.h"
 #include "dsda/pause.h"
 

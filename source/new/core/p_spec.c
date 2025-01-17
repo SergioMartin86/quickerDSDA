@@ -5589,9 +5589,7 @@ void P_PlayerInHexenSector(player_t * player, sector_t * sector)
     }
 }
 
-#include "hexen/a_action.h"
-#include "hexen/p_anim.h"
-#include "hexen/p_things.h"
+// hexen?
 
 static dboolean P_ArgToCrushType(int arg)
 {
@@ -7557,7 +7555,4 @@ static void Hexen_P_SpawnSpecials(void)
     P_RemoveAllActivePlats();
     for (i = 0; i < MAXBUTTONS; i++)
         memset(&buttonlist[i], 0, sizeof(button_t));
-
-    // Initialize flat and texture animations
-    P_InitFTAnims();
 }

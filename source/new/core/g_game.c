@@ -274,7 +274,6 @@ static dboolean InventoryMoveRight(void);
 
 // hexen
 #include "heretic/sb_bar.h"
-#include "hexen/a_action.h"
 
 // Position indicator for cooperative net-play reborn
 int RebornPosition;

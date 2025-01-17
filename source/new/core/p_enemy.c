@@ -4791,8 +4791,6 @@ dboolean Raven_P_LookForPlayers(mobj_t * actor, dboolean allaround)
 
 // hexen
 
-#include "hexen/a_action.h"
-
 extern fixed_t FloatBobOffsets[64];
 
 // Corpse queue for monsters - this should be saved out
