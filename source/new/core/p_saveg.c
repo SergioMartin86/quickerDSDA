@@ -1010,15 +1010,6 @@ void P_ArchiveThinkers(void) {
       continue;
     }
 
-    if (th->function == dsda_UpdateQuake)
-    {
-      quake_t *quake;
-      P_SAVE_BYTE(tc_quake);
-      P_SAVE_TYPE_REF(th, quake, quake_t);
-      P_ReplaceMobjWithIndex(&quake->location);
-      continue;
-    }
-
     if (P_IsMobjThinker(th))
     {
       mobj_t *mobj;
@@ -1525,15 +1516,6 @@ void P_UnArchiveThinkers(void) {
           break;
         }
 
-      case tc_quake:
-        {
-          quake_t *quake = Z_MallocLevel(sizeof(*quake));
-          P_LOAD_P(quake);
-          quake->thinker.function = dsda_UpdateQuake;
-          P_AddThinker(&quake->thinker);
-          break;
-        }
-
       case tc_mobj:
         {
           mobj_t *mobj = Z_MallocLevel(sizeof(mobj_t));
@@ -1599,11 +1581,6 @@ void P_UnArchiveThinkers(void) {
     {
       P_ReplaceIndexWithMobj(&((acs_t *) th)->activator, mobj_p, mobj_count);
     }
-    else if (th->function == dsda_UpdateQuake)
-    {
-      P_ReplaceIndexWithMobj(&((quake_t *) th)->location, mobj_p, mobj_count);
-    }
-    
     else if (P_IsMobjThinker(th))
     {
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->target, mobj_p, mobj_count);

@@ -291,7 +291,6 @@ dboolean EV_ThingRemove(int tid)
     {
         if (mobj->type == HEXEN_MT_BRIDGE)
         {
-            A_BridgeRemove(mobj);
             return true;
         }
         P_RemoveMobj(mobj);

@@ -6385,7 +6385,6 @@ void A_WraithRaise(mobj_t * actor)
         P_SetMobjState(actor, HEXEN_S_WRAITH_CHASE1);
     }
 
-    P_SpawnDirt(actor, actor->radius);
 }
 
 void A_WraithMelee(mobj_t * actor)

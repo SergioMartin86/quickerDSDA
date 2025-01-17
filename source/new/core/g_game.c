@@ -1575,7 +1575,6 @@ void G_PlayerReborn (int player)
   G_SetInitialInventory(p);
 
   p->lookdir = 0;
-  localQuakeHappening[player] = false;
   if (p == &players[consoleplayer])
   {
     SB_Start();             // refresh the status bar
@@ -3705,7 +3704,6 @@ void G_Completed(int map, int position, int flags, angle_t angle)
 
 void G_DoTeleportNewMap(void)
 {
-    SV_MapTeleport(leave_data.map, leave_data.position);
     gamestate = GS_LEVEL;
     gameaction = ga_nothing;
     RebornPosition = leave_data.position;

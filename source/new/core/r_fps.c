@@ -182,29 +182,6 @@ void R_InterpolateView(player_t *player, fixed_t frac)
     }
   }
 
-  if (localQuakeHappening[displayplayer] && !dsda_Paused())
-  {
-    static int x_displacement;
-    static int y_displacement;
-    static int last_leveltime = -1;
-
-    if (leveltime != last_leveltime)
-    {
-      int intensity = localQuakeHappening[displayplayer];
-
-      x_displacement = ((M_Random() % (intensity << 2)) - (intensity << 1)) << FRACBITS;
-      y_displacement = ((M_Random() % (intensity << 2)) - (intensity << 1)) << FRACBITS;
-
-      x_displacement = x_displacement * quake_intensity / 100;
-      y_displacement = y_displacement * quake_intensity / 100;
-
-      last_leveltime = leveltime;
-    }
-
-    viewx += x_displacement;
-    viewy += y_displacement;
-  }
-
   if (R_ViewInterpolation())
   {
     int i;
