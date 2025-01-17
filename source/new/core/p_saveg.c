@@ -179,11 +179,6 @@ void P_ArchiveWorld (void)
     P_SAVE_X(li->tag);
     P_SAVE_BYTE(li->player_activations);
     P_SAVE_ARRAY(li->special_args);
-
-    // zdoom
-    P_SAVE_X(li->automap_style);
-    P_SAVE_X(li->health);
-    P_SAVE_X(li->alpha);
   }
 }
 
@@ -226,14 +221,6 @@ void P_UnArchiveWorld (void)
     P_LOAD_X(li->tag);
     P_LOAD_BYTE(li->player_activations);
     P_LOAD_ARRAY(li->special_args);
-
-    // zdoom
-    P_LOAD_X(li->automap_style);
-    P_LOAD_X(li->health);
-    P_LOAD_X(li->alpha);
-
-    if (li->alpha < 1.f)
-      li->tranmap = dsda_TranMap(dsda_FloatToPercent(li->alpha));
   }
 }
 

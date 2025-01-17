@@ -135,6 +135,9 @@ static void dsda_UnArchiveContext(void) {
 }
 
 void dsda_ArchiveAll(void) {
+  // size_t saveSize;
+  // saveSize = headlessGetEffectiveSaveSize(); printf("Save Size: %lu bytes\n");
+
   dsda_ArchiveContext();
 
   P_ArchiveACS();
@@ -157,6 +160,8 @@ void dsda_ArchiveAll(void) {
   P_SAVE_BYTE(reachedGameEnd);
   P_SAVE_X(gametic);
 }
+
+extern size_t headlessGetEffectiveSaveSize();
 
 void dsda_UnArchiveAll(void) {
   dsda_UnArchiveContext();
