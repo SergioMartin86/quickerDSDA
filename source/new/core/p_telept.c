@@ -374,7 +374,7 @@ int EV_TeleportInSector(int tag, short source_tid, short dest_tid,
         fixed_t dx, dy;
         mobj_t target_dest;
 
-        if (group_tid && target->tid != group_tid)
+        if (group_tid)
           continue;
 
         memset(&target_dest, 0, sizeof(target_dest));

@@ -1566,7 +1566,6 @@ dboolean P_ThingHeightClip (mobj_t* thing)
   thing->floorz = tmfloorz;
   thing->ceilingz = tmceilingz;
   thing->dropoffz = tmdropoffz;    /* killough 11/98: remember dropoffs */
-  thing->floorpic = tmfloorpic;
 
   if (onfloor)
   {
@@ -3357,7 +3356,6 @@ dboolean PIT_ThrustStompThing(mobj_t * thing)
         return true;            // don't clip against self
 
     P_DamageMobj(thing, tsthing, tsthing, 10001);
-    tsthing->special_args[1] = 1;       // Mark thrust thing as bloody
 
     return true;
 }
@@ -3491,24 +3489,10 @@ static dboolean Hexen_P_TryMove(mobj_t* thing, fixed_t x, fixed_t y)
     oldy = thing->y;
     thing->floorz = tmfloorz;
     thing->ceilingz = tmceilingz;
-    thing->floorpic = tmfloorpic;
     thing->x = x;
     thing->y = y;
 
     P_SetThingPosition(thing, 1);
-
-    if (thing->flags2 & MF2_FOOTCLIP)
-    {
-        if (thing->z == thing->subsector->sector->floorheight
-            && P_GetThingFloorType(thing) >= FLOOR_LIQUID)
-        {
-            thing->floorclip = 10 * FRACUNIT;
-        }
-        else
-        {
-            thing->floorclip = 0;
-        }
-    }
 
     //
     // if any special lines were hit, do the effect
@@ -3619,20 +3603,7 @@ dboolean PTR_PuzzleItemTraverse(intercept_t * in)
     }
     // Check thing
     mobj = in->d.thing;
-    if (mobj->special != USE_PUZZLE_ITEM_SPECIAL)
-    {                           // Wrong special
-        return true;
-    }
-    if (PuzzleItemType != mobj->special_args[0])
-    {                           // Item type doesn't match
-        return true;
-    }
 
-    args[0] = mobj->special_args[2];
-    args[1] = mobj->special_args[3];
-    args[2] = mobj->special_args[4];
-
-    mobj->special = 0;
     PuzzleActivated = true;
     return false;               // Stop searching
 }

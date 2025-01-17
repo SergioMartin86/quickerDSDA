@@ -345,10 +345,6 @@ static void P_XYMovement (mobj_t* mo)
           angle >>= ANGLETOFINESHIFT;
           mo->momx = FixedMul(mo->info->speed >> 1, finecosine[angle]);
           mo->momy = FixedMul(mo->info->speed >> 1, finesine[angle]);
-          if (mo->flags2 & MF2_SEEKERMISSILE)
-          {
-            P_SetTarget(&mo->special1.m, mo->target);
-          }
           P_SetTarget(&mo->target, BlockingMobj);
           return;
         }
@@ -1454,7 +1450,6 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
   //e6y
   mobj->friction = ORIG_FRICTION;                        // phares 3/17/98
   mobj->gravity = map_info.gravity;
-  mobj->alpha = 1.f;
   mobj->index = -1;
 
   mobj->target = mobj->tracer = mobj->lastenemy = NULL;
@@ -1493,11 +1488,6 @@ void P_RemoveMobj (mobj_t* mobj)
     if (iquehead == iquetail)
       iquetail = (iquetail+1)&(ITEMQUESIZE-1);
     }
-
-  if (map_format.thing_id && mobj->tid)
-  {
-    map_format.remove_mobj_thing_id(mobj);
-  }
 
   // unlink from sector and block lists
 
@@ -2009,12 +1999,6 @@ spawnit:
       mobj->gravity = FixedMul(map_info.gravity, mthing->gravity);
   }
 
-  mobj->alpha = mthing->alpha;
-  if (mobj->alpha < 1.f)
-    mobj->tranmap = dsda_TranMap(dsda_FloatToPercent(mobj->alpha));
-  else
-    mobj->tranmap = NULL;
-
   mobj->spawnpoint = *mthing; 
   mobj->index = index;//e6y
   mobj->iden_nums = iden_num;
@@ -2332,7 +2316,6 @@ mobj_t *P_SpawnMissileAngle(mobj_t * source, mobjtype_t type, angle_t angle, fix
             z = source->z + 40 * FRACUNIT;
             break;
         case HEXEN_MT_MNTRFX2:       // Minotaur floor fire missile
-            z = ONFLOORZ + source->floorclip;
             break;
         case HERETIC_MT_MNTRFX2:       // Minotaur floor fire missile
             z = ONFLOORZ;

@@ -1398,13 +1398,6 @@ static void G_PlayerFinishLevel(int player)
     p->artifactCount = p->inventorySlotNum;
   }
 
-  if (p->chickenTics || p->morphTics)
-  {
-    p->readyweapon = p->mo->special1.i;       // Restore weapon
-    p->chickenTics = 0;
-    p->morphTics = 0;
-  }
-
   p->lookdir = 0;
   p->rain1 = NULL;
   p->rain2 = NULL;

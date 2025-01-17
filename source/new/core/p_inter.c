@@ -696,11 +696,6 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
       I_Error ("P_SpecialThing: Unknown gettable thing");
     }
 
-  if (special->special)
-  {
-    map_format.execute_line_special(special->special, special->special_args, NULL, 0, player->mo);
-    special->special = 0;
-  }
 
   if (special->flags & MF_COUNTITEM)
     player->itemcount++;
@@ -750,14 +745,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 
   if (!((target->flags ^ MF_COUNTKILL) & (MF_FRIEND | MF_COUNTKILL)))
     totallive--;
-
-  if (map_format.hexen && target->special)
-  {
-    map_format.execute_line_special(
-      target->special, target->special_args, NULL, 0,
-      map_info.flags & MI_ACTIVATE_OWN_DEATH_SPECIALS ? target : source
-    );
-  }
 
   if (source && source->player)
   {

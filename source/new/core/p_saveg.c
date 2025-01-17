@@ -1251,12 +1251,6 @@ void P_UnArchiveThinkers(void) {
             break;
           }
 
-          if (mobj->alpha < 1.f)
-            mobj->tranmap = dsda_TranMap(dsda_FloatToPercent(mobj->alpha));
-          else
-            mobj->tranmap = NULL;
-
-          
           P_SetThingPosition (mobj, 0);
 
           // killough 2/28/98:

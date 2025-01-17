@@ -3497,10 +3497,6 @@ void A_ImpExplode(mobj_t * actor)
     mo->momx = P_SubRandom() << 10;
     mo->momy = P_SubRandom() << 10;
     mo->momz = 9 * FRACUNIT;
-    if (actor->special1.i == 666)
-    {                           // Extreme death crash
-        P_SetMobjState(actor, HERETIC_S_IMP_XCRASH1);
-    }
 }
 
 void A_BeastPuff(mobj_t * actor)
@@ -3584,7 +3580,6 @@ void A_ImpXDeath1(mobj_t * actor)
     actor->flags &= ~MF_SOLID;
     actor->flags |= MF_NOGRAVITY;
     actor->flags2 |= MF2_FOOTCLIP;
-    actor->special1.i = 666;      // Flag the crash routine
 }
 
 void A_ImpXDeath2(mobj_t * actor)
