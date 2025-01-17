@@ -160,39 +160,6 @@ void P_ApplyCompatibleSectorMovementSpecial(mobj_t *mo, int special)
   // nothing in doom
 }
 
-// heretic, hexen, and zdoom all use the same values
-void P_ApplyHereticSectorMovementSpecial(mobj_t *mo, int special)
-{
-  static int windTab[3] = { 2048 * 5, 2048 * 10, 2048 * 25 };
-
-  if (mo->flags2 & MF2_WINDTHRUST)
-  {
-    switch (special)
-    {
-      case zs_wind_east_weak:
-      case zs_wind_east_medium:
-      case zs_wind_east_strong:
-        P_ThrustMobj(mo, 0, windTab[special - 40]);
-        break;
-      case zs_wind_north_weak:
-      case zs_wind_north_medium:
-      case zs_wind_north_strong:
-        P_ThrustMobj(mo, ANG90, windTab[special - 43]);
-        break;
-      case zs_wind_south_weak:
-      case zs_wind_south_medium:
-      case zs_wind_south_strong:
-        P_ThrustMobj(mo, ANG270, windTab[special - 46]);
-        break;
-      case zs_wind_west_weak:
-      case zs_wind_west_medium:
-      case zs_wind_west_strong:
-        P_ThrustMobj(mo, ANG180, windTab[special - 49]);
-        break;
-    }
-  }
-}
-
 static void P_XYMovement (mobj_t* mo)
 {
   player_t *player;
