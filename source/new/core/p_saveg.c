@@ -1614,24 +1614,12 @@ void P_UnArchiveAmbientSound(void)
 
 void P_ArchiveMisc(void)
 {
-  size_t size;
-
-  if (map_format.animdefs)
-  {
-    P_SAVE_ARRAY(AnimDefs);
-  }
 
 
 }
 
 void P_UnArchiveMisc(void)
 {
-  size_t size;
-
-  if (map_format.animdefs)
-  {
-    P_LOAD_ARRAY(AnimDefs);
-  }
 
 }
 

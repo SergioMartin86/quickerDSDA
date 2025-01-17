@@ -3881,8 +3881,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   R_SmoothPlaying_Reset(NULL);
 
-  P_InitLightning();
-
 }
 
 //
@@ -3891,7 +3889,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 void P_Init (void)
 {
   P_InitSwitchList();
-  P_InitFTAnims();
   P_InitPicAnims();
   P_InitTerrainTypes();
   P_InitLava();

@@ -351,7 +351,6 @@ void P_Ticker (void)
 
     P_RunThinkers();
     P_UpdateSpecials();
-    P_AnimateSurfaces();
     P_RespawnSpecials();
     P_AmbientSound();
 
