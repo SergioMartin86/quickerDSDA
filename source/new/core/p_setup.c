@@ -3794,12 +3794,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   // should be after P_RemoveSlimeTrails, because it changes vertexes
   R_CalcSegsLength();
 
-  {
-    void A_ResetPlayerCorpseQueue(void);
-
-    A_ResetPlayerCorpseQueue();
-  }
-
   /* cph - reset all multiplayer starts */
   memset(playerstarts,0,sizeof(playerstarts));
   deathmatch_p = deathmatchstarts;

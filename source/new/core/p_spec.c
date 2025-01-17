@@ -5270,16 +5270,6 @@ dboolean EV_LineSearchForPuzzleItem(line_t * line, byte * args, mobj_t * mo)
         type = arti - hexen_arti_firstpuzzitem;
         if (type < 0)
             continue;
-        if (type == line->special_args[0])
-        {
-            // A puzzle item was found for the line
-            if (P_UseArtifact(player, arti))
-            {
-                // A puzzle item was found for the line
-                P_PlayerRemoveArtifact(player, i);
-                return true;
-            }
-        }
     }
     return false;
 }

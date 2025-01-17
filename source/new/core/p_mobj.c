@@ -1024,10 +1024,6 @@ void P_MobjThinker (mobj_t* mobj)
     if (mobj->thinker.function != P_MobjThinker) // cph - Must've been removed
       return;       // killough - mobj was removed
   }
-  else if (mobj->flags2 & MF2_BLASTED)
-  {                           // Reset to not blasted when momentums are gone
-    ResetBlasted(mobj);
-  }
 
   if (mobj->flags2 & MF2_FLOATBOB)
   {                           // Floating item bobbing motion
@@ -2625,7 +2621,6 @@ void P_FloorBounceMissile(mobj_t * mo)
       P_SetMobjState(mo, mobjinfo[mo->type].deathstate);
 }
 
-extern mobj_t *PuffSpawned;
 
 void Raven_P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
 {
@@ -2647,7 +2642,6 @@ void Raven_P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
         default:
             break;
     }
-    PuffSpawned = puff;
 }
 
 void P_BloodSplatter(fixed_t x, fixed_t y, fixed_t z, mobj_t * originator)

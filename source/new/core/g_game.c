@@ -1594,12 +1594,6 @@ static dboolean G_CheckSpot(int playernum, mapthing_t *mthing)
   if (!i)
     return false;
 
-  {
-    void A_AddPlayerCorpse(mobj_t * actor);
-
-    A_AddPlayerCorpse(players[playernum].mo);
-  }
-
   // spawn a teleport fog
   sec = R_PointInSector (x,y);
   { // Teleport fog at respawn point
