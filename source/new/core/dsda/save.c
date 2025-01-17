@@ -119,7 +119,7 @@ static void dsda_UnArchiveContext(void) {
 
   P_LOAD_X(leave_data);
 
-  G_InitNew(gameskill, gameepisode, gamemap, false);
+  // G_InitNew(gameskill, gameepisode, gamemap, false);
 
   P_LOAD_X(map_info.default_colormap);
 
