@@ -896,15 +896,15 @@ static dboolean PIT_CheckThing(mobj_t *thing) // killough 3/26/98: make static
   // RjY
   // comperr_hangsolid, an attempt to handle blocking hanging bodies
   // A solid hanging body will allow sufficiently small things underneath it.
-  if (comperr(comperr_hangsolid) &&
-      !((~thing->flags) & (MF_SOLID | MF_SPAWNCEILING)) // solid and hanging
-      // invert everything, then both bits should be clear
-      && tmthing->z + tmthing->height <= thing->z) // head height <= base
-      // top of thing trying to move under the body <= bottom of body
-  {
-    tmceilingz = thing->z; // pretend ceiling height is at body's base
-    return true;
-  }
+  // if (comperr(comperr_hangsolid) &&
+  //     !((~thing->flags) & (MF_SOLID | MF_SPAWNCEILING)) // solid and hanging
+  //     // invert everything, then both bits should be clear
+  //     && tmthing->z + tmthing->height <= thing->z) // head height <= base
+  //     // top of thing trying to move under the body <= bottom of body
+  // {
+  //   tmceilingz = thing->z; // pretend ceiling height is at body's base
+  //   return true;
+  // }
 
   // killough 3/16/98: Allow non-solid moving objects to move through solid
   // ones, by allowing the moving thing (tmthing) to move if it's non-solid,
@@ -2299,7 +2299,7 @@ dboolean PTR_UseTraverse (intercept_t* in)
   //WAS can't use for than one special line in a row
   //jff 3/21/98 NOW multiple use allowed with enabling line flag
 
-  return (!demo_compatibility && ((in->d.line->flags&ML_PASSUSE) || comperr(comperr_passuse)))?//e6y
+  return (!demo_compatibility && ((in->d.line->flags&ML_PASSUSE)))?//e6y
           true : false;
 }
 

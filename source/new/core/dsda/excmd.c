@@ -37,7 +37,7 @@ void dsda_DisableExCmd(void) {
 }
 
 dboolean dsda_AllowExCmd(void) {
-  return allow_incompatibility || excmd_enabled;
+  return excmd_enabled;
 }
 
 // If we are reading a demo header, it might not be in playback mode yet
@@ -58,13 +58,13 @@ dboolean dsda_AllowCasualExCmdFeatures(void) {
 }
 
 dboolean dsda_AllowJumping(void) {
-  return (allow_incompatibility && dsda_IntConfig(dsda_config_allow_jumping))
+  return (dsda_IntConfig(dsda_config_allow_jumping))
          || map_info.flags & MI_ALLOW_JUMP
          || dsda_AllowCasualExCmdFeatures();
 }
 
 dboolean dsda_FreeAim(void) {
-  return (allow_incompatibility && dsda_IntConfig(dsda_config_freelook))
+  return (dsda_IntConfig(dsda_config_freelook))
          || map_info.flags & MI_ALLOW_FREE_LOOK;
 }
 

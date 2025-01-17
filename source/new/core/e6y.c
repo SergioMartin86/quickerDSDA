@@ -69,7 +69,6 @@
 #include "dsda/args.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
-#include "dsda/playback.h"
 #include "dsda/skip.h"
 #include "dsda/stretch.h"
 #include <math.h>
@@ -193,16 +192,9 @@ int G_ReloadLevel(void)
 {
   int result = false;
 
-  if ((gamestate == GS_LEVEL || gamestate == GS_INTERMISSION) &&
-      allow_incompatibility)
+  if ((gamestate == GS_LEVEL || gamestate == GS_INTERMISSION))
   {
     G_DeferedInitNew(gameskill, gameepisode, gamemap);
-    result = true;
-  }
-
-  if (demoplayback)
-  {
-    dsda_RestartPlayback();
     result = true;
   }
 
@@ -218,8 +210,7 @@ int G_GotoNextLevel(void)
 
   dsda_NextMap(&epsd, &map);
 
-  if ((gamestate == GS_LEVEL) &&
-    allow_incompatibility )
+  if ((gamestate == GS_LEVEL) )
   {
     G_DeferedInitNew(gameskill, epsd, map);
     changed = true;
@@ -235,8 +226,7 @@ int G_GotoPrevLevel(void)
 
   dsda_PrevMap(&epsd, &map);
 
-  if ((gamestate == GS_LEVEL) &&
-    allow_incompatibility )
+  if ((gamestate == GS_LEVEL)  )
   {
     G_DeferedInitNew(gameskill, epsd, map);
     changed = true;
@@ -604,42 +594,6 @@ int mlooky = 0;
 
 void e6y_G_Compatibility(void)
 {
-  if (dsda_PlaybackName())
-  {
-    int i;
-    dsda_arg_t* arg;
-
-    //"2.4.8.2" -> 0x02040802
-    arg = dsda_Arg(dsda_arg_emulate);
-    if (arg->found)
-    {
-      unsigned int emulated_version = 0;
-      int b[4], k = 1;
-      memset(b, 0, sizeof(b));
-      sscanf(arg->value.v_string, "%d.%d.%d.%d", &b[0], &b[1], &b[2], &b[3]);
-      for (i = 3; i >= 0; i--, k *= 256)
-      {
-#ifdef RANGECHECK
-        if (b[i] >= 256)
-          I_Error("Wrong version number of package: %s", PACKAGE_VERSION);
-#endif
-        emulated_version += b[i] * k;
-      }
-
-      for (i = 0; i < PC_MAX; i++)
-      {
-        prboom_comp[i].state =
-          (emulated_version >= prboom_comp[i].minver &&
-           emulated_version <  prboom_comp[i].maxver);
-      }
-    }
-
-    for (i = 0; i < PC_MAX; i++)
-    {
-      if (dsda_Flag(prboom_comp[i].arg_id))
-        prboom_comp[i].state = true;
-    }
-  }
 
   P_CrossSubsector = P_CrossSubsector_PrBoom;
   if (!prboom_comp[PC_FORCE_LXDOOM_DEMO_COMPATIBILITY].state)
@@ -683,40 +637,6 @@ int force_singletics_to = 0;
 
 int HU_DrawDemoProgress(int force)
 {
-  static unsigned int last_update = 0;
-  static int prev_len = -1;
-
-  int len, tics_count, diff;
-  unsigned int tick, max_period;
-
-  if (gamestate == GS_DEMOSCREEN ||
-      !demoplayback )
-    return false;
-
-  tics_count = demo_tics_count * demo_playerscount;
-  len = MIN(SCREENWIDTH, (int)((int64_t)SCREENWIDTH * dsda_PlaybackTics() / tics_count));
-
-  if (!force)
-  {
-    max_period = ((tics_count - dsda_PlaybackTics() > 35 * demo_playerscount) ? 500 : 15);
-
-    // Unnecessary updates of progress bar
-    // can slow down demo skipping and playback
-    if (tick - last_update < max_period)
-      return false;
-    last_update = tick;
-
-    // Do not update progress bar if difference is small
-    diff = len - prev_len;
-    if (diff == 0 || diff == 1) // because of static prev_len
-      return false;
-  }
-
-  prev_len = len;
-
-  V_FillRect(0, 0, SCREENHEIGHT - 4, len - 0, 4, playpal_white);
-  if (len > 4)
-    V_FillRect(0, 2, SCREENHEIGHT - 3, len - 4, 2, playpal_black);
 
   return true;
 }

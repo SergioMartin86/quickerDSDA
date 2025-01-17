@@ -119,9 +119,6 @@ dboolean P_SetMobjState(mobj_t* mobj,statenum_t state)
     state = st->nextstate;
     } while (!mobj->tics && !seenstate[state]);   // killough 4/9/98
 
-  if (ret && !mobj->tics)  // killough 4/9/98: detect state cycles
-    doom_printf("Warning: State Cycle Detected");
-
   if (!--recursion)
     for (;(state=seenstate[i]);i=state-1)
       seenstate[i] = 0;  // killough 4/9/98: erase memory of states
@@ -598,7 +595,7 @@ fixed_t P_MobjGravity(mobj_t* mo)
 
 void P_AutoCorrectLookDir(player_t* player)
 {
-  if (allow_incompatibility && dsda_MouseLook())
+  if (dsda_MouseLook())
   {
     return;
   }
@@ -1564,7 +1561,7 @@ void P_RemoveMobj (mobj_t* mobj)
   // CPhipps - only leave dead references in old demos; I hope lxdoom_1 level
   // demos are rare and don't rely on this. I hope.
 
-  if (compatibility_level >= lxdoom_1_compatibility || allow_incompatibility) {
+  if (compatibility_level >= lxdoom_1_compatibility) {
     P_SetTarget(&mobj->target,    NULL);
     P_SetTarget(&mobj->tracer,    NULL);
     P_SetTarget(&mobj->lastenemy, NULL);

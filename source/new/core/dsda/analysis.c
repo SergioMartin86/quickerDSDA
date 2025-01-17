@@ -19,7 +19,6 @@
 #include "m_file.h"
 
 #include "dsda/excmd.h"
-#include "dsda/exdemo.h"
 #include "dsda/settings.h"
 
 #include "analysis.h"
@@ -89,7 +88,6 @@ void dsda_WriteAnalysis(void) {
   }
 
   category = dsda_DetectCategory();
-  is_signed = dsda_IsExDemoSigned();
 
   fprintf(fstream, "skill %d\n", gameskill + 1);
   fprintf(fstream, "nomonsters %d\n", dsda_nomo);

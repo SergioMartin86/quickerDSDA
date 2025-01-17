@@ -987,7 +987,7 @@ static void WI_drawTimeStats(int cnt_time, int cnt_total_time, int cnt_par)
 
   if (
     !(modifiedgame && !wbs->modified_partime)
-    || (gamemission == pack_nerve && allow_incompatibility)
+    || (gamemission == pack_nerve)
   )
   {
     if (wbs->epsd < 4 || wbs->modified_partime)
@@ -1145,7 +1145,7 @@ void WI_drawShowNextLoc(void)
       WI_drawOnLnode(wbs->next, yah);
   }
 
-  if (gamemission == pack_nerve && allow_incompatibility && wbs->last == 7)
+  if (gamemission == pack_nerve  && wbs->last == 7)
     return; // MAP08 end game
 
   // draws which level you are entering..

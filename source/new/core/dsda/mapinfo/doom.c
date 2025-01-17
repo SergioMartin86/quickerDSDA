@@ -257,7 +257,6 @@ int dsda_DoomResolveCLEV(int* clev, int* episode, int* map) {
   if (!entry || !W_LumpNameExists(entry->lump_name)) {
     *clev = false;
 
-    doom_printf("IDCLEV target not found: %d", level_num);
   }
   else {
     *clev = true;

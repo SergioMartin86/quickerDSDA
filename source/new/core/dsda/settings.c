@@ -27,7 +27,6 @@
 #include "dsda/args.h"
 #include "dsda/configuration.h"
 #include "dsda/features.h"
-#include "dsda/key_frame.h"
 #include "dsda/map_format.h"
 
 #include "settings.h"
@@ -107,12 +106,10 @@ int dsda_CompatibilityLevel(void) {
   if (complevel_arg->count)
     return complevel_arg->value.v_int;
 
-  if (!demoplayback) {
     level = dsda_WadCompatibilityLevel();
 
     if (level >= 0)
       return level;
-  }
 
   return UNSPECIFIED_COMPLEVEL;
 }
@@ -146,7 +143,7 @@ dboolean dsda_VertMouse(void) {
 }
 
 dboolean dsda_StrictMode(void) {
-  return dsda_IntConfig(dsda_config_strict_mode) && demorecording && !dsda_tas;
+  return dsda_IntConfig(dsda_config_strict_mode) &&  !dsda_tas;
 }
 
 dboolean dsda_MuteSfx(void) {
@@ -186,7 +183,7 @@ dboolean dsda_SkipQuitPrompt(void) {
 }
 
 dboolean dsda_TrackSplits(void) {
-  return demorecording || (demoplayback && dsda_Flag(dsda_arg_track_playback));
+  return 0;
 }
 
 dboolean dsda_ShowSplitData(void) {
@@ -214,7 +211,7 @@ dboolean dsda_ShowLevelSplits(void) {
 }
 
 dboolean dsda_ShowDemoAttempts(void) {
-  return dsda_IntConfig(dsda_config_show_demo_attempts) && demorecording;
+  return dsda_IntConfig(dsda_config_show_demo_attempts);
 }
 
 dboolean dsda_MapCoordinates(void) {

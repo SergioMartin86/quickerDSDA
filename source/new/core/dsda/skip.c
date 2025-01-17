@@ -26,7 +26,6 @@
 #include "dsda/args.h"
 #include "dsda/features.h"
 #include "dsda/pause.h"
-#include "dsda/playback.h"
 
 #include "skip.h"
 
@@ -52,14 +51,12 @@ static void dsda_CacheSkipSetting(dboolean* old, dboolean* current) {
 static dboolean old_fastdemo, old_nodrawers, old_nosfxparm, old_nomusicparm;
 
 static void dsda_ApplySkipSettings(void) {
-  dsda_CacheSkipSetting(&old_fastdemo, &fastdemo);
   dsda_CacheSkipSetting(&old_nodrawers, &nodrawers);
   dsda_CacheSkipSetting(&old_nosfxparm, &nosfxparm);
   dsda_CacheSkipSetting(&old_nomusicparm, &nomusicparm);
 }
 
 static void dsda_ResetSkipSettings(void) {
-  fastdemo = old_fastdemo;
   nodrawers = old_nodrawers;
   nosfxparm = old_nosfxparm;
   nomusicparm = old_nomusicparm;
@@ -126,23 +123,6 @@ void dsda_EvaluateSkipModeInitNew(void) {
 }
 
 void dsda_EvaluateSkipModeBuildTiccmd(void) {
-  if (dsda_SkipMode() && gametic > 0)
-    if (
-      (
-        !skip_until_logictic &&
-        skip_until_map == -1 &&
-        demo_skiptics &&
-        (
-          demo_skiptics > 0 ?
-            gametic > demo_skiptics :
-            dsda_PlaybackTics() - demo_skiptics >= demo_tics_count
-        )
-      ) ||
-      (
-        demo_warp_reached && gametic - levelstarttic > demo_skiptics
-      )
-    )
-      dsda_ExitSkipMode();
 }
 
 void dsda_EvaluateSkipModeDoCompleted(void) {
@@ -211,10 +191,4 @@ void dsda_HandleSkip(void) {
   if (arg->found)
     demo_skiptics = arg->value.v_int;
 
-  if (dsda_PlaybackName() && (warpmap != -1 || demo_skiptics)) {
-    skip_until_map = warpmap;
-    skip_until_episode = warpepisode;
-
-    dsda_EnterSkipMode();
-  }
 }

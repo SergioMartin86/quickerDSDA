@@ -927,7 +927,6 @@ void M_ScreenShot(void)
     if (success) return;
   }
 
-  doom_printf ("M_ScreenShot: Couldn't create screenshot");
   return;
 }
 

@@ -211,8 +211,6 @@ void dsda_ResetDemoSaveSlots(void) {
 static void dsda_MarkSaveSlotUsed(int slot) {
   int i;
 
-  if (!demorecording) return;
-
   for (i = 0; i < demo_save_slot_count; ++i)
     if (demo_save_slots[i] == slot)
       return;
@@ -230,7 +228,6 @@ static void dsda_MarkSaveSlotUsed(int slot) {
 int dsda_AllowMenuLoad(int slot) {
   int i;
 
-  if (!demorecording) return true;
   if (!dsda_AllowCasualExCmdFeatures()) return false;
 
   for (i = 0; i < demo_save_slot_count; ++i)
@@ -241,7 +238,7 @@ int dsda_AllowMenuLoad(int slot) {
 }
 
 int dsda_AllowAnyMenuLoad(void) {
-  return !demorecording || dsda_AllowCasualExCmdFeatures();
+  return dsda_AllowCasualExCmdFeatures();
 }
 
 static int last_save_file_slot = -1;
@@ -271,9 +268,7 @@ void dsda_UpdateAutoSaves(void) {
 
   if (!dsda_IntConfig(dsda_config_auto_save) ||
       gamestate != GS_LEVEL ||
-      gameaction != ga_nothing ||
-      demoplayback ||
-      demorecording)
+      gameaction != ga_nothing)
     return;
 
   if (automap != gamemap || autoepisode != gameepisode) {

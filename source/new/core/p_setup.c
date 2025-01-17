@@ -283,7 +283,7 @@ static void P_GetNodesVersion(void)
         CheckForIdentifier(level_components.ssectors, "XGL", 3))
       level_components.znodes = level_components.ssectors;
 
-    if (dsda_Flag(dsda_arg_force_old_zdoom_nodes) && demoplayback)
+    if (dsda_Flag(dsda_arg_force_old_zdoom_nodes))
       level_components.znodes = LUMP_NOT_FOUND;
 
     if (CheckForIdentifier(level_components.znodes, "XGLN", 4))
@@ -536,11 +536,6 @@ static void P_LoadSegs (int lump)
         char str[200] =
           "P_LoadSegs: compatibility loss - seg %d references a non-existent vertex %d\n";
 
-        if (demorecording)
-        {
-          I_Error(strcat(str, "Demo recording on levels with invalid nodes is not allowed"),
-            i, (v1 >= numvertexes ? v1 : v2));
-        }
 
         if (v1 >= numvertexes)
           lprintf(LO_WARN, str, i, v1);
@@ -653,12 +648,6 @@ static void P_LoadSegs_V4(int lump)
     {
       char str[200] =
         "P_LoadSegs_V4: compatibility loss - seg %d references a non-existent vertex %d\n";
-
-      if (demorecording)
-      {
-        I_Error(strcat(str, "Demo recording on levels with invalid nodes is not allowed"),
-          i, (v1 >= numvertexes ? v1 : v2));
-      }
 
       if (v1 >= numvertexes)
         lprintf(LO_WARN, str, i, v1);
@@ -1598,7 +1587,7 @@ static void P_PostProcessMapThing(mapthing_t *mt, int i, int *mobjcount, mobj_t 
   // Although all resources of the Wolf SS have been removed
   // off the BFG Edition, there is still one left in MAP33.
   // Replace with a Former Human instead.
-  if (bfgedition && allow_incompatibility && mt->type == 84)
+  if (bfgedition &&  mt->type == 84)
     mt->type = 3004;
 
   // Do spawn all other stuff.

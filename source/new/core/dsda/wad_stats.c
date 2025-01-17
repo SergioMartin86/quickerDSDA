@@ -269,7 +269,7 @@ void dsda_WadStatsExitMap(int missed_monsters) {
 
   // TODO: remap 5 -> num_skills and 4 -> num_skills - 1
 
-  if (!current_map_stats || demoplayback)
+  if (!current_map_stats )
     return;
 
   if (!nomonsters) {
@@ -318,7 +318,7 @@ void dsda_WadStatsExitMap(int missed_monsters) {
 }
 
 void dsda_WadStatsKill(void) {
-  if (!current_map_stats || demoplayback)
+  if (!current_map_stats )
     return;
 
   ++current_map_stats->total_kills;

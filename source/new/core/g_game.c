@@ -81,11 +81,8 @@
 #include "dsda/aim.h"
 #include "dsda/args.h"
 #include "dsda/configuration.h"
-#include "dsda/demo.h"
 #include "dsda/excmd.h"
-#include "dsda/exdemo.h"
 #include "dsda/features.h"
-#include "dsda/key_frame.h"
 #include "dsda/mapinfo.h"
 #include "dsda/messenger.h"
 #include "dsda/save.h"
@@ -96,7 +93,6 @@
 #include "dsda/mouse.h"
 #include "dsda/options.h"
 #include "dsda/pause.h"
-#include "dsda/playback.h"
 #include "dsda/skill_info.h"
 #include "dsda/skip.h"
 #include "dsda/time.h"
@@ -493,7 +489,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
   memset(cmd, 0, sizeof(*cmd));
 
-  if (demoplayback && demorecording)
+  if (demorecording)
   {
     G_ResetMotion();
     return;
@@ -520,8 +516,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   if (dsda_InputTickActivated(dsda_input_reverse))
   {
     if (!strafe) {
-      if (strict_input)
-        doom_printf("180 key disabled by strict mode");
+      if (strict_input) {}
       else
         cmd->angleturn += QUICKREVERSE;
     }
@@ -873,8 +868,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
         cmd->forwardmove = (signed char) arg->value.v_int_array[0];
         cmd->sidemove = (signed char) arg->value.v_int_array[1];
         cmd->angleturn = (signed short) (arg->value.v_int_array[2] << 8);
-
-        dsda_JoinDemoCmd(cmd);
       }
     }
   }
@@ -970,7 +963,6 @@ static void G_DoLoadLevel (void)
 
   // automatic pistol start when advancing from one level to the next
   if (dsda_Flag(dsda_arg_pistolstart) || dsda_IntConfig(dsda_config_pistol_start))
-    if (allow_incompatibility)
       G_PlayerReborn(0);
 
   // initialize the msecnode_t freelist.                     phares 3/25/98
@@ -981,7 +973,6 @@ static void G_DoLoadLevel (void)
 
 
   P_SetupLevel (gameepisode, gamemap, 0, gameskill);
-  if (!demoplayback) // Don't switch views if playing a demo
     displayplayer = consoleplayer;    // view the guy you are playing
   gameaction = ga_nothing;
 
@@ -1043,7 +1034,7 @@ dboolean G_Responder (event_t* ev)
   //
   // killough 11/98: don't autorepeat spy mode switch
   if (dsda_InputActivated(dsda_input_spy) &&
-      netgame && (demoplayback || !deathmatch) &&
+      netgame && ( !deathmatch) &&
       gamestate == GS_LEVEL)
   {
     do                                          // spy mode
@@ -1064,7 +1055,7 @@ dboolean G_Responder (event_t* ev)
   // killough 9/29/98: make any key pop up menu regardless of
   // which kind of demo, and allow other events during playback
 
-  if (gameaction == ga_nothing && (demoplayback || gamestate == GS_DEMOSCREEN))
+  if (gameaction == ga_nothing && (gamestate == GS_DEMOSCREEN))
   {
     // killough 9/29/98: allow user to pause demos during playback
     if (dsda_InputActivated(dsda_input_pause))
@@ -1228,10 +1219,6 @@ void G_Ticker (void)
       case ga_loadgame:
         G_DoLoadGame();
         break;
-      case ga_playdemo:
-      printf("PlayDemo\n");
-        G_DoPlayDemo();
-        break;
       case ga_completed:
         G_DoCompleted();
         break;
@@ -1274,7 +1261,6 @@ void G_Ticker (void)
   else {
     int buf = gametic % BACKUPTICS;
 
-    dsda_UpdateAutoKeyFrames();
     dsda_UpdateAutoSaves();
 
     for (i = 0; i < g_maxplayers; i++)
@@ -1284,15 +1270,6 @@ void G_Ticker (void)
         ticcmd_t *cmd = &players[i].cmd;
 
         memcpy(cmd, &local_cmds[i], sizeof *cmd);
-
-        if (dsda_PendingJoin())
-          dsda_JoinDemoCmd(cmd);
-
-        if (demoplayback)
-          dsda_TryPlaybackOneTick(cmd);
-
-        if (demorecording)
-          G_WriteDemoTiccmd(cmd);
       }
     }
 
@@ -1369,7 +1346,6 @@ void G_Ticker (void)
   {
     case GS_LEVEL:
       P_Ticker();
-      P_WalkTicker();
       mlooky = 0;
       ST_Ticker();
       HU_Ticker();
@@ -1807,7 +1783,7 @@ void G_DoCompleted (void)
 
   // lmpwatch.pl engine-side demo testing support
   // print "FINISHED: <mapname>" when the player exits the current map
-  if (nodrawers && (demoplayback || timingdemo))
+  if (nodrawers && (timingdemo))
     lprintf(LO_INFO, "FINISHED: %s\n", dsda_MapLumpName(gameepisode, gamemap));
 
   if (!(map_info.flags & MI_INTERMISSION))
@@ -1946,18 +1922,10 @@ void G_LoadGame(int slot)
     return;
   }
 
-  if (!demoplayback)
-  {
-    forced_loadgame = netgame; // CPhipps - always force load netgames
-  }
-  else
-  {
-    dsda_ClearPlaybackStream();
     forced_loadgame = false;
     // Don't stay in netgame state if loading single player save
     // while watching multiplayer demo
     netgame = false;
-  }
 
   gameaction = ga_loadgame;
   savegameslot = slot;
@@ -2207,8 +2175,6 @@ void G_ReloadDefaults(void)
     l = dsda_CompatibilityLevel();
     if (l != UNSPECIFIED_COMPLEVEL)
       compatibility_level = l;
-    else
-      dsda_MarkCompatibilityLevelUnspecified();
   }
   if (compatibility_level == -1)
     compatibility_level = best_compatibility;
@@ -2255,8 +2221,6 @@ void G_ReloadDefaults(void)
   respawnparm = clrespawnparm;
   fastparm = clfastparm;
   nomonsters = clnomonsters;
-
-  dsda_ClearPlaybackStream();
 
   // killough 2/21/98:
   memset(playeringame + 1, 0, sizeof(*playeringame) * (MAX_MAXPLAYERS - 1));
@@ -2580,8 +2544,6 @@ void G_WriteDemoTiccmd (ticcmd_t* cmd)
 
   dsda_WriteExCmd(&p, cmd);
 
-  dsda_WriteTicToDemo(buf, p - buf);
-
   p = buf; // make SURE it is exactly the same
   G_ReadOneTick(cmd, (const byte **) &p);
 }
@@ -2768,148 +2730,6 @@ const byte *G_ReadOptions(const byte *demo_p)
 
 void G_BeginRecording (void)
 {
-  int i;
-  byte *demostart, *demo_p;
-  demostart = demo_p = Z_Malloc(1000);
-  longtics = 0;
-
-  dsda_ResetDemoSaveSlots();
-  dsda_ApplyDSDADemoFormat(&demo_p);
-
-  /* cph - 3 demo record formats supported: MBF+, BOOM, and Doom v1.9 */
-  if (mbf_features) {
-    { /* Write version code into demo */
-      unsigned char v = 0;
-      switch(compatibility_level) {
-        case mbf_compatibility: v = 203; break; // e6y: Bug in MBF compatibility mode fixed
-        case prboom_2_compatibility: v = 210; break;
-        case prboom_3_compatibility: v = 211; break;
-        case prboom_4_compatibility: v = 212; break;
-        case prboom_5_compatibility: v = 213; break;
-        case prboom_6_compatibility:
-             v = 214;
-             longtics = 1;
-             break;
-        case mbf21_compatibility:
-             v = 221;
-             longtics = 1;
-             shorttics = !dsda_Flag(dsda_arg_longtics);
-             break;
-        default: I_Error("G_BeginRecording: PrBoom compatibility level unrecognised?");
-      }
-      *demo_p++ = v;
-    }
-
-    // signature
-    *demo_p++ = 0x1d;
-    *demo_p++ = 'M';
-    *demo_p++ = 'B';
-    *demo_p++ = 'F';
-    *demo_p++ = 0xe6;
-    *demo_p++ = '\0';
-
-    if (!mbf21)
-    {
-      // boom compatibility mode flag, which has no meaning in mbf+
-      *demo_p++ = 0;
-    }
-
-    *demo_p++ = gameskill;
-    *demo_p++ = gameepisode;
-    *demo_p++ = gamemap;
-    *demo_p++ = deathmatch;
-    *demo_p++ = consoleplayer;
-
-    demo_p = G_WriteOptions(demo_p); // killough 3/1/98: Save game options
-
-    for (i = 0; i < g_maxplayers; i++)
-      *demo_p++ = playeringame[i];
-
-    // killough 2/28/98:
-    // We always store at least FUTURE_MAXPLAYERS bytes in demo, to
-    // support enhancements later w/o losing demo compatibility
-
-    for (; i < FUTURE_MAXPLAYERS; i++)
-      *demo_p++ = 0;
-
-  // FIXME } else if (compatibility_level >= boom_compatibility_compatibility) { //e6y
-  } else if (compatibility_level > boom_compatibility_compatibility) {
-    byte v = 0, c = 0; /* Nominally, version and compatibility bits */
-    switch (compatibility_level) {
-    case boom_compatibility_compatibility: v = 202, c = 1; break;
-    case boom_201_compatibility: v = 201; c = 0; break;
-    case boom_202_compatibility: v = 202, c = 0; break;
-    default: I_Error("G_BeginRecording: Boom compatibility level unrecognised?");
-    }
-    *demo_p++ = v;
-
-    // signature
-    *demo_p++ = 0x1d;
-    *demo_p++ = 'B';
-    *demo_p++ = 'o';
-    *demo_p++ = 'o';
-    *demo_p++ = 'm';
-    *demo_p++ = 0xe6;
-
-    /* CPhipps - save compatibility level in demos */
-    *demo_p++ = c;
-
-    *demo_p++ = gameskill;
-    *demo_p++ = gameepisode;
-    *demo_p++ = gamemap;
-    *demo_p++ = deathmatch;
-    *demo_p++ = consoleplayer;
-
-    demo_p = G_WriteOptions(demo_p); // killough 3/1/98: Save game options
-
-    for (i = 0; i < g_maxplayers; i++)
-      *demo_p++ = playeringame[i];
-
-    // killough 2/28/98:
-    // We always store at least FUTURE_MAXPLAYERS bytes in demo, to
-    // support enhancements later w/o losing demo compatibility
-
-    for (; i < FUTURE_MAXPLAYERS; i++)
-      *demo_p++ = 0;
-  } else{ // cph - write old v1.9 demos (might even sync)
-    unsigned char v = 109;
-    longtics = dsda_Flag(dsda_arg_longtics);
-    if (longtics)
-    {
-      v = 111;
-    }
-    else
-    {
-      switch (compatibility_level)
-      {
-      case doom_1666_compatibility:
-        v = 106;
-        break;
-      case tasdoom_compatibility:
-        v = 110;
-        break;
-      }
-    }
-    *demo_p++ = v;
-    *demo_p++ = gameskill;
-    *demo_p++ = gameepisode;
-    *demo_p++ = gamemap;
-    *demo_p++ = deathmatch;
-    *demo_p++ = respawnparm;
-    *demo_p++ = fastparm;
-    *demo_p++ = nomonsters;
-    *demo_p++ = consoleplayer;
-    for (i=0; i<4; i++)  // intentionally hard-coded 4 -- killough
-      *demo_p++ = playeringame[i];
-  } 
-
-  dsda_EvaluateBytesPerTic();
-
-  dsda_WriteToDemo(demostart, demo_p - demostart);
-  dsda_ContinueKeyFrame();
-  dsda_ResetSplits();
-
-  Z_Free(demostart);
 }
 
 //
@@ -2954,582 +2774,16 @@ static dboolean CheckForOverrun(const byte *start_p, const byte *current_p, size
 
 const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int params)
 {
-  int skill;
-  int i, episode = 1, map = 0;
-
-  // e6y
-  // The local variable should be used instead of demobuffer,
-  // because demobuffer can be uninitialized
-  const byte *header_p = demo_p;
-
-  dboolean failonerror = (params&RDH_SAFE);
-
-  boom_basetic = gametic;  // killough 9/29/98
-  true_basetic = gametic;
-
-  // killough 2/22/98, 2/28/98: autodetect old demos and act accordingly.
-  // Old demos turn on demo_compatibility => compatibility; new demos load
-  // compatibility flag, and other flags as well, as a part of the demo.
-
-  //e6y: check for overrun
-  if (CheckForOverrun(header_p, demo_p, size, 1, failonerror))
-    return NULL;
-
-  dsda_DisableExCmd();
-
-  demover = *demo_p++;
-  longtics = 0;
-
-  // defunct extended header or unknown (e.g., eternity)
-  if (demover == 255)
-  {
-    demo_p = dsda_StripDemoVersion255(demo_p, header_p, size);
-
-    if (!demo_p)
-    {
-      if (failonerror)
-      {
-        I_Error("G_ReadDemoHeader: wrong demo header\n");
-      }
-      else
-      {
-        return NULL;
-      }
-    }
-
-    // update the start of the demo header
-    size -= demo_p - header_p;
-    header_p = demo_p;
-
-    if (CheckForOverrun(header_p, demo_p, size, 1, failonerror))
-      return NULL;
-
-    demover = *demo_p++;
-  }
-
-  // e6y
-  // Handling of unrecognized demo formats
-  // Versions up to 1.2 use a 7-byte header - first byte is a skill level.
-  // Versions after 1.2 use a 13-byte header - first byte is a demoversion.
-  // BOOM's demoversion starts from 200
-  if (!((demover >=   0  && demover <=   4) ||
-        (demover >= 104  && demover <= 111) ||
-        (demover >= 200  && demover <= 214) ||
-        (demover == 221)))
-  {
-    I_Error("G_ReadDemoHeader: Unknown demo format %d.", demover);
-  }
-
-  if (demover < 200)     // Autodetect old demos
-  {
-    if (demover >= 111) longtics = 1;
-
-    // killough 3/2/98: force these variables to be 0 in demo_compatibility
-
-    variable_friction = 0;
-
-    weapon_recoil = 0;
-
-    allow_pushers = 0;
-
-    monster_infighting = 1;           // killough 7/19/98
-
-    dogs = 0;                         // killough 7/19/98
-    dog_jumping = 0;                  // killough 10/98
-
-    monster_backing = 0;              // killough 9/8/98
-
-    monster_avoid_hazards = 0;        // killough 9/9/98
-
-    monster_friction = 0;             // killough 10/98
-    help_friends = 0;                 // killough 9/9/98
-    monkeys = 0;
-
-    // killough 3/6/98: rearrange to fix savegame bugs (moved fastparm,
-    // respawnparm, nomonsters flags to G_LoadOptions()/G_SaveOptions())
-
-    if ((skill = demover) >= 100)         // For demos from versions >= 1.4
-    {
-      //e6y: check for overrun
-      if (CheckForOverrun(header_p, demo_p, size, 8, failonerror))
-        return NULL;
-
-      compatibility_level = G_GetOriginalDoomCompatLevel(demover);
-      skill = *demo_p++;
-      episode = *demo_p++;
-      map = *demo_p++;
-      deathmatch = *demo_p++;
-      respawnparm = *demo_p++;
-      fastparm = *demo_p++;
-      nomonsters = *demo_p++;
-      consoleplayer = *demo_p++;
-    }
-    else
-    {
-      //e6y: check for overrun
-      if (CheckForOverrun(header_p, demo_p, size, 2, failonerror))
-        return NULL;
-
-      compatibility_level = doom_12_compatibility;
-      episode = *demo_p++;
-      map = *demo_p++;
-      deathmatch = respawnparm = fastparm =
-        nomonsters = consoleplayer = 0;
-
-      // e6y
-      // Ability to force -nomonsters and -respawn for playback of 1.2 demos.
-      // Demos recorded with Doom.exe 1.2 did not contain any information
-      // about whether these parameters had been used. In order to play them
-      // back, you should add them to the command-line for playback.
-      // There is no more desynch on mesh.lmp @ mesh.wad
-      // prboom -iwad doom.wad -file mesh.wad -playdemo mesh.lmp -nomonsters
-      // http://www.doomworld.com/idgames/index.php?id=13976
-      respawnparm = dsda_Flag(dsda_arg_respawn);
-      fastparm = dsda_Flag(dsda_arg_fast);
-      nomonsters = dsda_Flag(dsda_arg_nomonsters);
-
-      // Read special parameter bits from player one byte.
-      // This aligns with vvHeretic demo usage:
-      //   0x20 = -respawn
-      //   0x10 = -longtics
-      //   0x02 = -nomonsters
-
-      // e6y: detection of more unsupported demo formats
-      if (*(header_p + size - 1) == DEMOMARKER)
-      {
-        // file size test;
-        // DOOM_old and HERETIC don't use maps>9;
-        // 2 at 4,6 means playerclass=mage -> not DOOM_old or HERETIC;
-        if ((size >= 8 && (size - 8) % 4 != 0) ||
-            (map > 9) ||
-            (size >= 6 && (*(header_p + 4) == 2 || *(header_p + 6) == 2)))
-        {
-          I_Error("Unrecognised demo format.");
-        }
-      }
-
-    }
-    G_Compatibility();
-  }
-  else    // new versions of demos
-  {
-    demo_p += 6;               // skip signature;
-    switch (demover) {
-      case 200: /* BOOM */
-      case 201:
-        //e6y: check for overrun
-        if (CheckForOverrun(header_p, demo_p, size, 1, failonerror))
-          return NULL;
-
-        if (!*demo_p++)
-          compatibility_level = boom_201_compatibility;
-        else
-          compatibility_level = boom_compatibility_compatibility;
-        break;
-      case 202:
-        //e6y: check for overrun
-        if (CheckForOverrun(header_p, demo_p, size, 1, failonerror))
-          return NULL;
-
-        if (!*demo_p++)
-          compatibility_level = boom_202_compatibility;
-        else
-          compatibility_level = boom_compatibility_compatibility;
-        break;
-      case 203:
-        /* LxDoom or MBF - determine from signature
-         * cph - load compatibility level */
-        switch (*(header_p + 2)) {
-        case 'B': /* LxDoom */
-          /* cph - DEMOSYNC - LxDoom demos recorded in compatibility modes support dropped */
-          compatibility_level = lxdoom_1_compatibility;
-          break;
-        case 'M':
-          compatibility_level = mbf_compatibility;
-          demo_p++;
-          break;
-        }
-        break;
-      case 210:
-        compatibility_level = prboom_2_compatibility;
-        demo_p++;
-        break;
-      case 211:
-        compatibility_level = prboom_3_compatibility;
-        demo_p++;
-        break;
-      case 212:
-        compatibility_level = prboom_4_compatibility;
-        demo_p++;
-        break;
-      case 213:
-        compatibility_level = prboom_5_compatibility;
-        demo_p++;
-        break;
-      case 214:
-        compatibility_level = prboom_6_compatibility;
-              longtics = 1;
-        demo_p++;
-        break;
-      case 221:
-        compatibility_level = mbf21_compatibility;
-        longtics = 1;
-        break;
-    }
-    //e6y: check for overrun
-    if (CheckForOverrun(header_p, demo_p, size, 5, failonerror))
-      return NULL;
-
-    skill = *demo_p++;
-    episode = *demo_p++;
-    map = *demo_p++;
-    deathmatch = *demo_p++;
-    consoleplayer = *demo_p++;
-
-    //e6y: check for overrun
-    if (CheckForOverrun(header_p, demo_p, size, dsda_GameOptionSize(), failonerror))
-      return NULL;
-
-    demo_p = G_ReadOptions(demo_p);  // killough 3/1/98: Read game options
-
-    if (demover == 200)              // killough 6/3/98: partially fix v2.00 demos
-      demo_p += 256 - dsda_GameOptionSize();
-  }
-
-  if (sizeof(comp_lev_str)/sizeof(comp_lev_str[0]) != MAX_COMPATIBILITY_LEVEL)
-    I_Error("G_ReadDemoHeader: compatibility level strings incomplete");
-
-  for (i = 0; i < g_maxplayers; i++)
-    playeringame[i] = 0;
-
-  if (demo_compatibility || demover < 200) //e6y  // only 4 players can exist in old demos
-  {
-      //e6y: check for overrun
-      if (CheckForOverrun(header_p, demo_p, size, g_maxplayers, failonerror))
-        return NULL;
-
-      for (i = 0; i < g_maxplayers; i++)
-        playeringame[i] = *demo_p++;
-  }
-  else
-  {
-    //e6y: check for overrun
-    if (CheckForOverrun(header_p, demo_p, size, g_maxplayers, failonerror))
-      return NULL;
-
-    for (i=0 ; i < g_maxplayers; i++)
-      playeringame[i] = *demo_p++;
-    demo_p += FUTURE_MAXPLAYERS - g_maxplayers;
-  }
-
-  {
-    dsda_arg_t* arg;
-
-    arg = dsda_Arg(dsda_arg_consoleplayer);
-    if (arg->found) {
-      consoleplayer = arg->value.v_int;
-
-      if (consoleplayer >= g_maxplayers || !playeringame[consoleplayer])
-        consoleplayer = 0;
-    }
-  }
-
-  displayplayer = consoleplayer;
-
-  if (playeringame[1])
-  {
-    netgame = true;
-  }
-
-  if (!(params & RDH_SKIP_HEADER))
-  {
-    G_InitNew(skill, episode, map, true);
-    demo_p = dsda_EvaluateDemoStartPoint(demo_p);
-  }
-
-  for (i = 0; i < g_maxplayers; i++)         // killough 4/24/98
-    players[i].cheats = 0;
-
-  // e6y
-  // additional params
-  {
-    const byte *p = demo_p;
-
-    dsda_EvaluateBytesPerTic();
-
-    demo_playerscount = 0;
-    demo_tics_count = 0;
-    strcpy(demo_len_st, "-");
-
-    for (i = 0; i < g_maxplayers; i++)
-    {
-      if (playeringame[i])
-      {
-        demo_playerscount++;
-      }
-    }
-
-    if (demo_playerscount > 0 && demolength > 0)
-    {
-      demo_tics_count = dsda_DemoTicsCount(p, demobuffer, demolength);
-
-      sprintf(demo_len_st, "\x1b\x35/%d:%02d",
-        demo_tics_count / TICRATE / 60,
-        (demo_tics_count % (60 * TICRATE)) / TICRATE);
-    }
-  }
-
   return demo_p;
 }
 
 void G_StartDemoPlayback(const byte *buffer, int length, int behaviour)
 {
-  const byte *demo_p;
-
-  dsda_InitDemoPlayback();
-  demo_p = G_ReadDemoHeaderEx(demobuffer, demolength, RDH_SAFE);
-  dsda_AttachPlaybackStream(demo_p, demolength, behaviour);
-
-  R_SmoothPlaying_Reset(NULL); // e6y
 }
 
 static int LoadDemo(const char *name, const byte **buffer, int *length)
 {
-  char basename[9];
-  int num;
-  int len;
-  const byte *buf = NULL;
-
-  if (dsda_CopyExDemo(buffer, length))
-    return true;
-
-  ExtractFileBase(name, basename);
-  basename[8] = 0;
-
-  // check ns_demos namespace first, then ns_global
-  num = W_CheckNumForName2(basename, ns_demos);
-
-  if (num == LUMP_NOT_FOUND)
-    num = W_CheckNumForName(basename);
-
-  if (num == LUMP_NOT_FOUND)
-    return false;
-
-  buf = W_LumpByNum(num);
-  len = W_LumpLength(num);
-
-  if (len > 0)
-  {
-    if (buffer)
-      *buffer = buf;
-    if (length)
-      *length = len;
-  }
-
-  return (len > 0);
-}
-
-
-void G_DoPlayDemo(void)
-{
-  if (LoadDemo(defdemoname, &demobuffer, &demolength))
-  {
-    G_StartDemoPlayback(demobuffer, demolength, PLAYBACK_NORMAL);
-
-    if (dsda_Flag(dsda_arg_track_playback))
-      dsda_ResetSplits();
-
-    // Ignore this mesage
-    //lprintf(LO_INFO, "Playing demo:\n  Name: %s\n  Compatibility: %s\n", defdemoname, comp_lev_str[compatibility_level]);
-
-    gameaction = ga_nothing;
-  }
-  else
-  {
-    // e6y
-    // Do not exit if corresponding demo lump is not found.
-    // It makes sense for Plutonia and TNT IWADs, which have no DEMO4 lump,
-    // but DEMO4 should be in a demo cycle as real Plutonia and TNT have.
-    //
-    // Plutonia/Tnt executables exit with "W_GetNumForName: DEMO4 not found"
-    // message after playing of DEMO3, because DEMO4 is not present
-    // in the corresponding IWADs.
-    D_StartTitle();                // Start the title screen
-    gamestate = GS_DEMOSCREEN;     // And set the game state accordingly
-  }
-}
-
-/* G_CheckDemoStatus
- *
- * Called after a death or level completion to allow demos to be cleaned up
- * Returns true if a new demo loop action will take place
- */
-dboolean G_CheckDemoStatus (void)
-{
-  dsda_EvaluateSkipModeCheckDemoStatus();
-
-  if (demorecording)
-  {
-    dsda_EndDemoRecording();
-
-    return false;  // killough
-  }
-
-  if (timingdemo)
-  {
-    int endtime = dsda_GetTickRealTime();
-    // killough -- added fps information and made it work for longer demos:
-    unsigned realtics = endtime-starttime;
-
-    M_SaveDefaults();
-
-    lprintf(LO_INFO, "Timed %u gametics in %u realtics = %-.1f frames per second\n",
-             (unsigned) gametic,realtics,
-             (unsigned) gametic * (double) TICRATE / realtics);
-  }
-
-  if (demoplayback)
-  {
-    G_ReloadDefaults();    // killough 3/1/98
-    netgame = false;       // killough 3/29/98
-    deathmatch = false;
-    D_AdvanceDemo ();
-    return true;
-  }
-  return false;
-}
-
-// killough 1/22/98: this is a "Doom printf" for messages. I've gotten
-// tired of using players->message=... and so I've added this dprintf.
-//
-// killough 3/6/98: Made limit static to allow z_zone functions to call
-// this function, without calling realloc(), which seems to cause problems.
-
-#define MAX_MESSAGE_SIZE 1024
-
-// CPhipps - renamed to doom_printf to avoid name collision with glibc
-void doom_printf(const char *s, ...)
-{
-  static char msg[MAX_MESSAGE_SIZE];
-  va_list v;
-  va_start(v,s);
-  vsnprintf(msg,sizeof(msg),s,v);   /* print message in buffer */
-  va_end(v);
-
-  dsda_AddMessage(msg);
-}
-
-//e6y
-void P_WalkTicker()
-{
-  int strafe;
-  int speed;
-  int tspeed;
-  int turnheld;
-  int forward;
-  int side;
-  int angturn;
-
-  if (!walkcamera.type)
-    return;
-
-  G_SetSpeed(false);
-
-  strafe = dsda_InputActive(dsda_input_strafe);
-  speed = dsda_AutoRun() || dsda_InputActive(dsda_input_speed); // phares
-
-  forward = side = 0;
-  angturn = 0;
-  turnheld = 0;
-
-  // use two stage accelerative turning on the keyboard
-  if (dsda_InputActive(dsda_input_turnright) || dsda_InputActive(dsda_input_turnleft))
-    ++turnheld;
-  else
-    turnheld = 0;
-
-  if (turnheld < SLOWTURNTICS)
-    tspeed = 0;             // slow turn
-  else
-    tspeed = speed;                                                             // phares
-
-  // let movement keys cancel each other out
-
-  if (strafe)
-    {
-      if (dsda_InputActive(dsda_input_turnright))
-        side += sidemove[speed];
-      if (dsda_InputActive(dsda_input_turnleft))
-        side -= sidemove[speed];
-    }
-  else
-    {
-      if (dsda_InputActive(dsda_input_turnright))
-        angturn -= angleturn[tspeed];
-      if (dsda_InputActive(dsda_input_turnleft))
-        angturn += angleturn[tspeed];
-    }
-
-  if (dsda_InputActive(dsda_input_forward))
-    forward += forwardmove[speed];
-  if (dsda_InputActive(dsda_input_backward))
-    forward -= forwardmove[speed];
-  if (dsda_InputActive(dsda_input_straferight))
-    side += sidemove[speed];
-  if (dsda_InputActive(dsda_input_strafeleft))
-    side -= sidemove[speed];
-
-  forward += mousey;
-  if (strafe)
-    side += mousex / 4;       /* mead  Don't want to strafe as fast as turns.*/
-  else
-    angturn -= mousex; /* mead now have enough dynamic range 2-10-00 */
-
-  G_ConvertAnalogMotion(speed, &forward, &side);
-
-  walkcamera.angle += ((angturn / 8) << ANGLETOFINESHIFT);
-  if (dsda_MouseLook())
-  {
-    walkcamera.pitch += ((mlooky / 8) << ANGLETOFINESHIFT);
-    CheckPitch((signed int *) &walkcamera.pitch);
-  }
-
-  if (dsda_InputActive(dsda_input_fire))
-  {
-    walkcamera.x = players[0].mo->x;
-    walkcamera.y = players[0].mo->y;
-    walkcamera.angle = players[0].mo->angle;
-    walkcamera.pitch = dsda_PlayerPitch(&players[0]);
-  }
-
-  if (forward > MAXPLMOVE)
-    forward = MAXPLMOVE;
-  else if (forward < -MAXPLMOVE)
-    forward = -MAXPLMOVE;
-  if (side > MAXPLMOVE)
-    side = MAXPLMOVE;
-  else if (side < -MAXPLMOVE)
-    side = -MAXPLMOVE;
-
-  // moving forward
-  walkcamera.x += FixedMul ((ORIG_FRICTION / 4) * forward,
-          finecosine[walkcamera.angle >> ANGLETOFINESHIFT]);
-  walkcamera.y += FixedMul ((ORIG_FRICTION / 4) * forward,
-          finesine[walkcamera.angle >> ANGLETOFINESHIFT]);
-
-  // strafing
-  walkcamera.x += FixedMul ((ORIG_FRICTION / 6) * side,
-          finecosine[(walkcamera.angle -
-          ANG90) >> ANGLETOFINESHIFT]);
-  walkcamera.y += FixedMul ((ORIG_FRICTION / 6) * side,
-        finesine[(walkcamera.angle - ANG90) >> ANGLETOFINESHIFT]);
-
-  {
-    sector_t *sec = R_PointInSector (walkcamera.x, walkcamera.y);
-    walkcamera.z = sec->floorheight + 41 * FRACUNIT;
-  }
-
-  G_ResetMotion();
+  return 0;
 }
 
 void P_ResetWalkcam(void)
@@ -3570,9 +2824,6 @@ void G_ContinueDemo(const char *playback_name)
 {
   if (LoadDemo(playback_name, &demobuffer, &demolength))
   {
-    G_StartDemoPlayback(demobuffer, demolength, PLAYBACK_JOIN_ON_END);
-
-    dsda_InitDemoRecording();
     G_BeginRecording();
   }
 }

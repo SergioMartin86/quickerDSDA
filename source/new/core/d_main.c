@@ -76,8 +76,6 @@
 
 #include "dsda/args.h"
 #include "dsda/configuration.h"
-#include "dsda/demo.h"
-#include "dsda/exdemo.h"
 #include "dsda/features.h"
 #include "dsda/global.h"
 #include "dsda/save.h"
@@ -87,7 +85,6 @@
 #include "dsda/mobjinfo.h"
 #include "dsda/options.h"
 #include "dsda/pause.h"
-#include "dsda/playback.h"
 #include "dsda/preferences.h"
 #include "dsda/render_stats.h"
 #include "dsda/settings.h"
@@ -465,7 +462,7 @@ void D_DoAdvanceDemo(void)
   pagetic = TICRATE * 11;         /* killough 11/98: default behavior */
   gamestate = GS_DEMOSCREEN;
 
-  if (netgame && !demoplayback)
+  if (netgame )
     demosequence = 0;
   else if (!demostates[++demosequence][gamemode].func)
     demosequence = 0;
@@ -1028,18 +1025,6 @@ static void HandleClass(void)
   return;
 }
 
-static void HandlePlayback(void)
-{
-  const char* file;
-
-  file = dsda_ParsePlaybackOptions();
-
-  if (!file)
-    return;
-
-  dsda_LoadExDemo(file);
-}
-
 const char* doomverstr = "Unknown";
 
 static void EvaluateDoomVerStr(void)
@@ -1224,8 +1209,6 @@ void D_DoomMainSetup(void)
 
   D_AddFile(port_wad_file, source_auto_load);
 
-  HandlePlayback(); // must come before autoload: may detect iwad in footer
-
   EvaluateDoomVerStr(); // must come after HandlePlayback (may change iwad)
 
   // add any files specified on the command line with -file wadfile
@@ -1342,27 +1325,7 @@ void D_DoomMainSetup(void)
 
   // start the appropriate game based on parms
 
-  arg = dsda_Arg(dsda_arg_record);
-  if (arg->found)
-  {
-    autostart = true;
-    dsda_SetDemoBaseName(arg->value.v_string);
-    dsda_InitDemoRecording();
-  }
-
-  dsda_ExecutePlaybackOptions();
-
-  if (!userdemo)
-  {
-    if (autostart || netgame)
-    {
       G_InitNew(startskill, startepisode, startmap, true);
-      if (demorecording)
-        G_BeginRecording();
-    }
-    else
-      D_StartTitle();                 // start up intro loop
-  }
 
   lprintf(LO_DEBUG, "\n"); // Separator after setup
 }

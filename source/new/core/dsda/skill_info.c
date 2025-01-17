@@ -222,20 +222,17 @@ void dsda_InitSkills(void) {
 static void dsda_ResetGameFlags(void)
 {
   respawnparm = dsda_Flag(dsda_arg_respawn) ||
-                (allow_incompatibility && dsda_IntConfig(dsda_config_respawn_monsters));
+                ( dsda_IntConfig(dsda_config_respawn_monsters));
   fastparm = dsda_Flag(dsda_arg_fast) ||
-             (allow_incompatibility && dsda_IntConfig(dsda_config_fast_monsters));
+             ( dsda_IntConfig(dsda_config_fast_monsters));
   nomonsters = dsda_Flag(dsda_arg_nomonsters) ||
-             (allow_incompatibility && dsda_IntConfig(dsda_config_no_monsters));
+             ( dsda_IntConfig(dsda_config_no_monsters));
   coop_spawns = dsda_Flag(dsda_arg_coop_spawns) ||
-                (allow_incompatibility && dsda_IntConfig(dsda_config_coop_spawns));
+                ( dsda_IntConfig(dsda_config_coop_spawns));
 }
 
 void dsda_RefreshGameSkill(void) {
   void G_RefreshFastMonsters(void);
-
-  if (allow_incompatibility)
-    dsda_ResetGameFlags();
 
   skill_info = skill_infos[gameskill];
 
@@ -261,8 +258,4 @@ void dsda_UpdateGameSkill(int skill) {
 
 void dsda_AlterGameFlags(void)
 {
-  if (!allow_incompatibility || !in_game)
-    return;
-
-  dsda_RefreshGameSkill();
 }

@@ -740,30 +740,6 @@ dboolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
   trace.dx = x2 - x1;
   trace.dy = y2 - y1;
 
-  if (comperr(comperr_blockmap))
-  {
-    int64_t _x1, _x2, _y1, _y2;
-
-    _x1 = (int64_t)x1 - bmaporgx;
-    _y1 = (int64_t)y1 - bmaporgy;
-    xt1 = (int)(_x1>>MAPBLOCKSHIFT);
-    yt1 = (int)(_y1>>MAPBLOCKSHIFT);
-
-    mapx1 = (int)(_x1>>MAPBTOFRAC);
-    mapy1 = (int)(_y1>>MAPBTOFRAC);
-
-    _x2 = (int64_t)x2 - bmaporgx;
-    _y2 = (int64_t)y2 - bmaporgy;
-    xt2 = (int)(_x2>>MAPBLOCKSHIFT);
-    yt2 = (int)(_y2>>MAPBLOCKSHIFT);
-
-    x1 -= bmaporgx;
-    y1 -= bmaporgy;
-    x2 -= bmaporgx;
-    y2 -= bmaporgy;
-  }
-  else
-  {
     x1 -= bmaporgx;
     y1 -= bmaporgy;
     xt1 = x1>>MAPBLOCKSHIFT;
@@ -776,7 +752,6 @@ dboolean P_PathTraverse(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2,
     y2 -= bmaporgy;
     xt2 = x2>>MAPBLOCKSHIFT;
     yt2 = y2>>MAPBLOCKSHIFT;
-  }
 
   if (xt2 > xt1)
     {
@@ -1042,10 +1017,6 @@ int P_GetSafeBlockX(int coord)
 {
   coord >>= MAPBLOCKSHIFT;
 
-  // If x is LE than those special values, interpret as positive.
-  // Otherwise, leave it as it is.
-  if (comperr(comperr_blockmap) && coord <= blockmapxneg)
-    return coord & 0x1FF; // Broke width boundary
 
   return coord;
 }
@@ -1055,10 +1026,6 @@ int P_GetSafeBlockY(int coord)
 {
   coord >>= MAPBLOCKSHIFT;
 
-  // If y is LE than those special values, interpret as positive.
-  // Otherwise, leave it as it is.
-  if (comperr(comperr_blockmap) && coord <= blockmapyneg)
-    return coord & 0x1FF; // Broke width boundary
 
   return coord;
 }

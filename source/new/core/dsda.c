@@ -27,10 +27,8 @@
 
 #include "dsda/analysis.h"
 #include "dsda/args.h"
-#include "dsda/demo.h"
 #include "dsda/features.h"
 #include "dsda/ghost.h"
-#include "dsda/key_frame.h"
 #include "dsda/mouse.h"
 #include "dsda/settings.h"
 #include "dsda/split_tracker.h"
@@ -127,9 +125,6 @@ dboolean dsda_FrozenMode(void) {
 }
 
 void dsda_ToggleFrozenMode(void) {
-  if (demorecording || demoplayback)
-    return;
-
   frozen_mode = !frozen_mode;
 }
 
@@ -175,8 +170,6 @@ void dsda_ReadCommandLine(void) {
     dsda_InitGhostImport(arg->value.v_string_array, arg->count);
 
   if (dsda_Flag(dsda_arg_tas) || dsda_Flag(dsda_arg_build)) dsda_SetTas();
-
-  dsda_InitKeyFrame();
 }
 
 static int dsda_shown_attempt = 0;
@@ -187,7 +180,6 @@ int dsda_SessionAttempts(void) {
 
 void dsda_DisplayNotifications(void) {
   if (dsda_ShowDemoAttempts() && dsda_session_attempts > dsda_shown_attempt) {
-    doom_printf("Attempt %d / %d", dsda_session_attempts, dsda_DemoAttempts());
 
     dsda_shown_attempt = dsda_session_attempts;
   }
@@ -231,7 +223,6 @@ void dsda_DecomposeMovieTime(dsda_movie_time_t* total_time) {
 }
 
 void dsda_DisplayNotification(const char* msg) {
-  doom_printf("%s", msg);
 }
 
 void dsda_WatchReborn(int playernum) {
@@ -409,12 +400,6 @@ void dsda_WatchLedgeImpact(mobj_t* thing, int target_z) {
     target_z - thing->z < 32 * FRACUNIT
   ) {
     old_gametic = gametic;
-
-    if (dsda_CoordinateDisplay())
-      doom_printf(
-        "Missed ledge by %d\n",
-        ((target_z - thing->z) >> FRACBITS) - 24
-      );
   }
 }
 
@@ -435,7 +420,6 @@ void dsda_WatchAfterLevelSetup(void) {
 }
 
 void dsda_WatchNewLevel(void) {
-  dsda_ResetAutoKeyFrameTimeout();
 }
 
 void dsda_WatchLevelCompletion(void) {
@@ -523,38 +507,10 @@ static void dsda_ResetTracking(void) {
 }
 
 void dsda_WatchDeferredInitNew(int skill, int episode, int map) {
-  dsda_ResetTracking();
-  
-  if (!demorecording) return;
-
-  ++dsda_session_attempts;
-
-  dsda_QueueQuickstart();
-
-  dsda_ResetRevealMap();
-  G_CheckDemoStatus();
-
-  dsda_last_gamemap = 0;
-  dsda_last_leveltime = 0;
-  dsda_any_map_completed = false;
-
-  dsda_InitDemoRecording();
-
-  boom_basetic = gametic;
-  true_basetic = gametic;
 }
 
 void dsda_WatchNewGame(void) {
-  if (!demorecording) return;
-
-  G_BeginRecording();
 }
 
 void dsda_WatchLevelReload(int* reloaded) {
-  extern int startmap;
-
-  if (!demorecording || *reloaded) return;
-
-  G_DeferedInitNew(gameskill, gameepisode, startmap);
-  *reloaded = 1;
 }

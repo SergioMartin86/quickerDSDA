@@ -25,7 +25,6 @@
 #include "dsda/args.h"
 #include "dsda/configuration.h"
 #include "dsda/mapinfo.h"
-#include "dsda/playback.h"
 
 #include "text_file.h"
 
@@ -37,7 +36,6 @@ static char* dsda_TextFileName(void) {
   char* playdemo;
   const char* playback_name;
 
-  playback_name = dsda_PlaybackName();
 
   if (!playback_name)
     return NULL;

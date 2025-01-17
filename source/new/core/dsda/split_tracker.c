@@ -24,7 +24,6 @@
 #include "e6y.h"
 
 #include "dsda/args.h"
-#include "dsda/demo.h"
 #include "dsda/settings.h"
 #include "dsda/data_organizer.h"
 
@@ -56,7 +55,7 @@ const char* dsda_SplitFileBase(void) {
   if (arg->found)
     return arg->value.v_string;
 
-  return dsda_DemoNameBase();
+  return "";
 }
 
 static char* dsda_SplitTrackerPath(void) {

@@ -218,25 +218,6 @@ extern  int leveltime;       // level time in tics
 extern  int totalleveltimes; // sum of intermission times in tics at second resolution
 extern  int levels_completed;
 
-// --------------------------------------
-// DEMO playback/recording related stuff.
-
-extern  dboolean demoplayback;
-extern  dboolean demorecording;
-extern  int demover;
-
-#define allow_incompatibility (!demorecording && !demoplayback)
-#define comperr(i) (default_comperr[i] && allow_incompatibility)
-
-extern  dboolean userdemo;
-#define userplayback (demoplayback && userdemo)
-#define reelplayback (demoplayback && !userdemo)
-
-// Print timing information after quitting.  killough
-extern  dboolean   timingdemo;
-// Run tick clock at fastest speed possible while playing demo.  killough
-extern  dboolean   fastdemo;
-
 extern  gamestate_t  gamestate;
 extern  dboolean     in_game;
 

@@ -120,65 +120,6 @@ void dsda_ResetAirControl(void);
 void dsda_AlterGameFlags(void);
 
 void dsda_TrackConfigFeatures(void) {
-  if (!demorecording)
-    return;
-
-  if (R_PartialView() && dsda_IntConfig(dsda_config_exhud))
-    dsda_TrackFeature(uf_exhud);
-
-  if (R_FullView() && dsda_IntConfig(dsda_config_hud_displayed))
-    dsda_TrackFeature(uf_advhud);
-
-  if (dsda_IntConfig(dsda_config_game_speed) > 100)
-    dsda_TrackFeature(uf_speedup);
-
-  if (dsda_IntConfig(dsda_config_game_speed) < 100)
-    dsda_TrackFeature(uf_slowdown);
-
-  if (dsda_IntConfig(dsda_config_coordinate_display) || dsda_IntConfig(dsda_config_map_coordinates))
-    dsda_TrackFeature(uf_coordinates);
-
-  if (dsda_IntConfig(dsda_config_weapon_attack_alignment))
-    dsda_TrackFeature(uf_weaponalignment);
-
-  if (dsda_IntConfig(dsda_config_command_display))
-    dsda_TrackFeature(uf_commanddisplay);
-
-  if (dsda_IntConfig(dsda_config_hudadd_crosshair))
-    dsda_TrackFeature(uf_crosshair);
-
-  if (dsda_IntConfig(dsda_config_hudadd_crosshair_target))
-    dsda_TrackFeature(uf_crosshaircolor);
-
-  if (dsda_IntConfig(dsda_config_hudadd_crosshair_lock_target))
-    dsda_TrackFeature(uf_crosshairlock);
-
-  if (!dsda_IntConfig(dsda_config_palette_ondamage))
-    dsda_TrackFeature(uf_painpalette);
-
-  if (!dsda_IntConfig(dsda_config_palette_onbonus))
-    dsda_TrackFeature(uf_bonuspalette);
-
-  if (!dsda_IntConfig(dsda_config_palette_onpowers))
-    dsda_TrackFeature(uf_powerpalette);
-
-  if (dsda_IntConfig(dsda_config_gl_health_bar))
-    dsda_TrackFeature(uf_healthbar);
-
-  if (dsda_IntConfig(dsda_config_movement_strafe50))
-    dsda_TrackFeature(uf_alwayssr50);
-
-  if (dsda_IntConfig(dsda_config_max_player_corpse) != 32)
-    dsda_TrackFeature(uf_maxplayercorpse);
-
-  if (dsda_IntConfig(dsda_config_hide_weapon))
-    dsda_TrackFeature(uf_hideweapon);
-
-  if (dsda_IntConfig(dsda_config_show_alive_monsters))
-    dsda_TrackFeature(uf_showalive);
-
-  if (dsda_IntConfig(dsda_config_map_textured) || dsda_IntConfig(dsda_config_show_minimap))
-    dsda_TrackFeature(uf_advanced_map);
 }
 
 // TODO: migrate all kinds of stuff from M_Init
@@ -186,7 +127,6 @@ void dsda_TrackConfigFeatures(void) {
 // TODO: automatically go through strict list
 void dsda_UpdateStrictMode(void) {
   M_ChangeSpeed(); // side effect of always sr50
-  dsda_InitKeyFrame();
   M_ChangeSkyMode(); // affected by mouselook setting
   HU_InitCrosshair();
   M_ChangeApplyPalette();
@@ -867,15 +807,15 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_auto_key_frame_interval] = {
     "dsda_auto_key_frame_interval", dsda_config_auto_key_frame_interval,
-    dsda_config_int, 1, 600, { 1 }, NULL, NOT_STRICT, dsda_InitKeyFrame
+    dsda_config_int, 1, 600, { 1 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_auto_key_frame_depth] = {
     "dsda_auto_key_frame_depth", dsda_config_auto_key_frame_depth,
-    dsda_config_int, 0, 600, { 60 }, NULL, STRICT_INT(0), dsda_InitKeyFrame
+    dsda_config_int, 0, 600, { 60 }, NULL, STRICT_INT(0), NULL
   },
   [dsda_config_auto_key_frame_timeout] = {
     "dsda_auto_key_frame_timeout", dsda_config_auto_key_frame_timeout,
-    dsda_config_int, 0, 25, { 10 }, NULL, NOT_STRICT, dsda_InitKeyFrame
+    dsda_config_int, 0, 25, { 10 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_auto_save] = {
     "dsda_config_auto_save", dsda_config_auto_save,

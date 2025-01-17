@@ -155,7 +155,7 @@ int dsda_LegacyNextMap(int* episode, int* map) {
     // secret level
     doom2_next[14] = (haswolflevels ? 31 : 16);
 
-    if (bfgedition && allow_incompatibility) {
+    if (bfgedition) {
       if (gamemission == pack_nerve) {
         doom2_next[3] = 9;
         doom2_next[7] = 1;
@@ -215,7 +215,7 @@ if (gamemode == commercial) {
     // secret level
     doom2_prev[15] = (haswolflevels ? 32 : 15);
 
-    if (bfgedition && allow_incompatibility) {
+    if (bfgedition ) {
       if (gamemission == pack_nerve) {
         doom2_prev[4] = 9;
         doom2_prev[8] = 4;
@@ -289,7 +289,6 @@ static int dsda_CannotCLEV(int episode, int map) {
   // Catch invalid maps
   next = VANILLA_MAP_LUMP_NAME(episode, map);
   if (!W_LumpNameExists(next)) {
-    doom_printf("IDCLEV target not found: %s", next);
     return true;
   }
 
@@ -465,11 +464,11 @@ int dsda_LegacyPrepareIntermission(int* result) {
           wminfo.next = 31;
           break;
         case 2:
-          if (bfgedition && allow_incompatibility)
+          if (bfgedition)
             wminfo.next = 32;
           break;
         case 4:
-          if (gamemission == pack_nerve && allow_incompatibility)
+          if (gamemission == pack_nerve)
             wminfo.next = 8;
           break;
       }
@@ -480,7 +479,7 @@ int dsda_LegacyPrepareIntermission(int* result) {
           wminfo.next = 15;
           break;
         case 33:
-          if (bfgedition && allow_incompatibility)
+          if (bfgedition)
           {
             wminfo.next = 2;
             break;
@@ -490,7 +489,7 @@ int dsda_LegacyPrepareIntermission(int* result) {
           wminfo.next = gamemap;
       }
 
-    if (gamemission == pack_nerve && allow_incompatibility && gamemap == 9)
+    if (gamemission == pack_nerve && gamemap == 9)
       wminfo.next = 4;
   }
   else {
@@ -545,7 +544,7 @@ int dsda_LegacyPrepareFinale(int* result) {
         break;
     }
   }
-  else if (gamemission == pack_nerve && allow_incompatibility && gamemap == 8)
+  else if (gamemission == pack_nerve && gamemap == 8)
     *result = WD_START_FINALE;
   else if (gamemap == 8)
     *result = WD_VICTORY;

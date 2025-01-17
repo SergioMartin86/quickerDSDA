@@ -369,8 +369,6 @@ void dsda_ApplyLevelCompatibility(int lump) {
   dsda_cksum_t cksum;
   const dsda_compatibility_t** level_compatibility;
 
-  if (demorecording || demoplayback || !mbf21) return;
-
   dsda_GetLevelCheckSum(lump, &cksum);
 
   lprintf(LO_DEBUG, "Level checksum: %s\n", cksum.string);
