@@ -44,13 +44,6 @@
 #include "lprintf.h"
 #include "e6y.h"//e6y
 
-#include "hexen/a_action.h"
-#include "hexen/p_acs.h"
-#include "hexen/p_anim.h"
-#include "hexen/po_man.h"
-#include "hexen/sn_sonix.h"
-#include "hexen/sv_save.h"
-
 #include "dsda/map_format.h"
 #include "dsda/msecnode.h"
 #include "dsda/scroll.h"
@@ -601,7 +594,7 @@ void P_UnArchiveBlockLinks(mobj_t** mobj_p, int mobj_count)
 
 static dboolean P_IsPolyObjThinker(thinker_t *th)
 {
-  return th->function == T_RotatePoly || th->function == T_MovePoly || th->function == T_PolyDoor;
+  return 0;
 }
 
 void P_ArchivePolyObjSpecialData(void)
@@ -951,26 +944,6 @@ void P_ArchiveThinkers(void) {
       continue;
     }
 
-    if (th->function == T_InterpretACS)
-    {
-      acs_t *acs;
-      P_SAVE_BYTE(tc_acs);
-      P_SAVE_TYPE_REF(th, acs, acs_t);
-      P_ReplaceMobjWithIndex(&acs->activator);
-      acs->line = (line_t *) (acs->line ? acs->line - lines : -1);
-
-      continue;
-    }
-
-    if (th->function == T_BuildPillar)
-    {
-      pillar_t *pillar;
-      P_SAVE_BYTE(tc_pillar);
-      P_SAVE_TYPE_REF(th, pillar, pillar_t);
-      pillar->sector = (sector_t *)(intptr_t)(pillar->sector->iSectorID);
-      continue;
-    }
-
     if (th->function == T_FloorWaggle)
     {
       planeWaggle_t *floor_waggle;
@@ -986,27 +959,6 @@ void P_ArchiveThinkers(void) {
       P_SAVE_BYTE(tc_ceiling_waggle);
       P_SAVE_TYPE_REF(th, ceiling_waggle, planeWaggle_t);
       ceiling_waggle->sector = (sector_t *)(intptr_t)(ceiling_waggle->sector->iSectorID);
-      continue;
-    }
-
-    if (th->function == T_RotatePoly)
-    {
-      P_SAVE_BYTE(tc_poly_rotate);
-      P_SAVE_TYPE(th, polyevent_t);
-      continue;
-    }
-
-    if (th->function == T_MovePoly)
-    {
-      P_SAVE_BYTE(tc_poly_move);
-      P_SAVE_TYPE(th, polyevent_t);
-      continue;
-    }
-
-    if (th->function == T_PolyDoor)
-    {
-      P_SAVE_BYTE(tc_poly_door);
-      P_SAVE_TYPE(th, polydoor_t);
       continue;
     }
 
@@ -1143,13 +1095,9 @@ void P_UnArchiveThinkers(void) {
         tc == tc_friction       ? sizeof(friction_t)       :
         tc == tc_light          ? sizeof(light_t)          :
         tc == tc_phase          ? sizeof(phase_t)          :
-        tc == tc_acs            ? sizeof(acs_t)            :
         tc == tc_pillar         ? sizeof(pillar_t)         :
         tc == tc_floor_waggle   ? sizeof(planeWaggle_t)    :
         tc == tc_ceiling_waggle ? sizeof(planeWaggle_t)    :
-        tc == tc_poly_rotate    ? sizeof(polyevent_t)      :
-        tc == tc_poly_move      ? sizeof(polyevent_t)      :
-        tc == tc_poly_door      ? sizeof(polydoor_t)       :
         tc == tc_quake          ? sizeof(quake_t)          :
         tc == tc_mobj           ? sizeof(mobj_t)           :
       0;
@@ -1446,16 +1394,6 @@ void P_UnArchiveThinkers(void) {
           break;
         }
 
-      case tc_acs:
-        {
-          acs_t *acs = Z_MallocLevel(sizeof(*acs));
-          P_LOAD_P(acs);
-          acs->line = (intptr_t) acs->line != -1 ? &lines[(size_t) acs->line] : NULL;
-          acs->thinker.function = T_InterpretACS;
-          P_AddThinker(&acs->thinker);
-          break;
-        }
-
       case tc_pillar:
         {
           pillar_t *pillar = Z_MallocLevel(sizeof(*pillar));
@@ -1486,33 +1424,6 @@ void P_UnArchiveThinkers(void) {
           waggle->sector->floordata = waggle;
           waggle->thinker.function = T_CeilingWaggle;
           P_AddThinker(&waggle->thinker);
-          break;
-        }
-
-      case tc_poly_rotate:
-        {
-          polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
-          poly->thinker.function = T_RotatePoly;
-          P_AddThinker(&poly->thinker);
-          break;
-        }
-
-      case tc_poly_move:
-        {
-          polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
-          poly->thinker.function = T_MovePoly;
-          P_AddThinker(&poly->thinker);
-          break;
-        }
-
-      case tc_poly_door:
-        {
-          polydoor_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
-          poly->thinker.function = T_PolyDoor;
-          P_AddThinker(&poly->thinker);
           break;
         }
 
@@ -1577,11 +1488,7 @@ void P_UnArchiveThinkers(void) {
 
   for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
   {
-    if (th->function == T_InterpretACS)
-    {
-      P_ReplaceIndexWithMobj(&((acs_t *) th)->activator, mobj_p, mobj_count);
-    }
-    else if (P_IsMobjThinker(th))
+   if (P_IsMobjThinker(th))
     {
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->target, mobj_p, mobj_count);
       P_ReplaceIndexWithMobj(&((mobj_t *) th)->tracer, mobj_p, mobj_count);
@@ -1644,12 +1551,6 @@ void P_ArchiveACS(void)
   size_t size;
 
   if (!map_format.acs) return;
-
-  size = sizeof(*WorldVars) * MAX_ACS_WORLD_VARS;
-  P_SAVE_SIZE(WorldVars, size);
-
-  size = sizeof(*ACSStore) * (MAX_ACS_STORE + 1);
-  P_SAVE_SIZE(ACSStore, size);
 }
 
 void P_UnArchiveACS(void)
@@ -1657,12 +1558,6 @@ void P_UnArchiveACS(void)
   size_t size;
 
   if (!map_format.acs) return;
-
-  size = sizeof(*WorldVars) * MAX_ACS_WORLD_VARS;
-  P_LOAD_SIZE(WorldVars, size);
-
-  size = sizeof(*ACSStore) * (MAX_ACS_STORE + 1);
-  P_LOAD_SIZE(ACSStore, size);
 }
 
 static void P_ArchiveVertex(vertex_t *v)
@@ -1771,12 +1666,6 @@ void P_ArchiveScripts(void)
   size_t size;
 
   if (!map_format.acs) return;
-
-  size = sizeof(*ACSInfo) * ACScriptCount;
-  P_SAVE_SIZE(ACSInfo, size);
-
-  size = sizeof(*MapVars) * MAX_ACS_MAP_VARS;
-  P_SAVE_SIZE(MapVars, size);
 }
 
 void P_UnArchiveScripts(void)
@@ -1785,98 +1674,14 @@ void P_UnArchiveScripts(void)
 
   if (!map_format.acs) return;
 
-  size = sizeof(*ACSInfo) * ACScriptCount;
-  P_LOAD_SIZE(ACSInfo, size);
-
-  size = sizeof(*MapVars) * MAX_ACS_MAP_VARS;
-  P_LOAD_SIZE(MapVars, size);
 }
 
 void P_ArchiveSounds(void)
 {
-  seqnode_t *node;
-  sector_t *sec;
-  int difference;
-  int i;
-
-  if (!map_format.sndseq) return;
-
-  P_SAVE_X(ActiveSequences);
-
-  for (node = SequenceListHead; node; node = node->next)
-  {
-    P_SAVE_X(node->sequence);
-    P_SAVE_X(node->delayTics);
-    P_SAVE_X(node->volume);
-
-    difference = SN_GetSequenceOffset(node->sequence, node->sequencePtr);
-    P_SAVE_X(difference);
-    P_SAVE_X(node->currentSoundID);
-
-    for (i = 0; i < po_NumPolyobjs; i++)
-    {
-      if (node->mobj == (mobj_t *) &polyobjs[i].startSpot)
-      {
-        break;
-      }
-    }
-
-    if (i == po_NumPolyobjs)
-    {                       // Sound is attached to a sector, not a polyobj
-      sec = R_PointInSector(node->mobj->x, node->mobj->y);
-      difference = (int) (sec - sectors);
-      P_SAVE_BYTE(0);   // 0 -- sector sound origin
-    }
-    else
-    {
-      difference = i;
-      P_SAVE_BYTE(1);   // 1 -- polyobj sound origin
-    }
-
-    P_SAVE_X(difference);
-  }
 }
 
 void P_UnArchiveSounds(void)
 {
-  int i;
-  int numSequences;
-  int sequence;
-  int delayTics;
-  int volume;
-  int seqOffset;
-  int soundID;
-  byte polySnd;
-  int secNum;
-  mobj_t *sndMobj;
-
-  if (!map_format.sndseq) return;
-
-  P_LOAD_X(numSequences);
-
-  i = 0;
-  while (i < numSequences)
-  {
-    P_LOAD_X(sequence);
-    P_LOAD_X(delayTics);
-    P_LOAD_X(volume);
-    P_LOAD_X(seqOffset);
-    P_LOAD_X(soundID);
-    P_LOAD_BYTE(polySnd);
-    P_LOAD_X(secNum);
-
-    if (!polySnd)
-    {
-      sndMobj = (mobj_t *) &sectors[secNum].soundorg;
-    }
-    else
-    {
-      sndMobj = (mobj_t *) &polyobjs[secNum].startSpot;
-    }
-    SN_StartSequence(sndMobj, sequence);
-    SN_ChangeNodeData(i, seqOffset, delayTics, volume, soundID);
-    i++;
-  }
 }
 
 void P_ArchiveAmbientSound(void)
@@ -1891,22 +1696,11 @@ void P_ArchiveMisc(void)
 {
   size_t size;
 
-  if (map_format.animdefs)
-  {
-    P_SAVE_ARRAY(AnimDefs);
-  }
-
-
 }
 
 void P_UnArchiveMisc(void)
 {
   size_t size;
-
-  if (map_format.animdefs)
-  {
-    P_LOAD_ARRAY(AnimDefs);
-  }
 
 }
 

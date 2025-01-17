@@ -41,7 +41,6 @@
 #include "sounds.h"
 
 #include "heretic/f_finale.h"
-#include "hexen/f_finale.h"
 
 #include "dsda/font.h"
 #include "dsda/mapinfo.h"

@@ -274,10 +274,6 @@ static dboolean InventoryMoveRight(void);
 
 // hexen
 #include "heretic/sb_bar.h"
-#include "hexen/a_action.h"
-#include "hexen/p_acs.h"
-#include "hexen/sn_sonix.h"
-#include "hexen/sv_save.h"
 
 // Position indicator for cooperative net-play reborn
 int RebornPosition;
@@ -986,9 +982,6 @@ static void G_DoLoadLevel (void)
   // by Z_FreeTag() when the previous level ended or player
   // died.
   P_FreeSecNodeList();
-
-  if (map_format.sndseq)
-    SN_StopAllSequences();
 
   P_SetupLevel (gameepisode, gamemap, 0, gameskill);
   if (!demoplayback) // Don't switch views if playing a demo

@@ -43,9 +43,6 @@
 #include "dsda/map_format.h"
 #include "dsda/messenger.h"
 
-#include "hexen/p_acs.h"
-#include "hexen/sn_sonix.h"
-
 ///////////////////////////////////////////////////////////////
 //
 // Door action routines, called once per tick
@@ -313,100 +310,6 @@ void T_VerticalCompatibleDoor(vldoor_t *door)
 
 void T_VerticalHexenDoor(vldoor_t *door)
 {
-  result_e res;
-
-  switch (door->direction)
-  {
-    case 0:                // WAITING
-      if (!--door->topcountdown)
-        switch (door->type)
-        {
-          case DREV_NORMAL:
-            door->direction = -1;   // time to go back down
-            SN_StartSequence((mobj_t *) & door->sector->soundorg,
-                             SEQ_DOOR_STONE +
-                             door->sector->seqType);
-            break;
-          case DREV_CLOSE30THENOPEN:
-            door->direction = 1;
-            break;
-          default:
-            break;
-        }
-      break;
-    case 2:                // INITIAL WAIT
-      if (!--door->topcountdown)
-      {
-        switch (door->type)
-        {
-          case DREV_RAISEIN5MINS:
-            door->direction = 1;
-            door->type = DREV_NORMAL;
-            break;
-          default:
-            break;
-        }
-      }
-      break;
-    case -1:               // DOWN
-      res = T_MoveCeilingPlane(door->sector, door->speed,
-                               door->sector->floorheight, NO_CRUSH,
-                               door->direction, true);
-      if (res == pastdest)
-      {
-        SN_StopSequence((mobj_t *) & door->sector->soundorg);
-        switch (door->type)
-        {
-          case DREV_NORMAL:
-          case DREV_CLOSE:
-            door->sector->ceilingdata = NULL;
-            P_TagFinished(door->sector->tag);
-            P_RemoveThinker(&door->thinker);        // unlink and free
-            break;
-          case DREV_CLOSE30THENOPEN:
-            door->direction = 0;
-            door->topcountdown = 35 * 30;
-            break;
-          default:
-            break;
-        }
-      }
-      else if (res == crushed)
-      {
-        switch (door->type)
-        {
-          case DREV_CLOSE:   // DON'T GO BACK UP!
-            break;
-          default:
-            door->direction = 1;
-            break;
-        }
-      }
-      break;
-    case 1:                // UP
-      res = T_MoveCeilingPlane(door->sector, door->speed,
-                               door->topheight, NO_CRUSH, door->direction, true);
-      if (res == pastdest)
-      {
-        SN_StopSequence((mobj_t *) & door->sector->soundorg);
-        switch (door->type)
-        {
-          case DREV_NORMAL:
-            door->direction = 0;    // wait at top
-            door->topcountdown = door->topwait;
-            break;
-          case DREV_CLOSE30THENOPEN:
-          case DREV_OPEN:
-            door->sector->ceilingdata = NULL;
-            P_TagFinished(door->sector->tag);
-            P_RemoveThinker(&door->thinker);        // unlink and free
-            break;
-          default:
-            break;
-        }
-      }
-      break;
-  }
 }
 
 
@@ -1149,8 +1052,6 @@ int Hexen_EV_DoDoor(line_t * line, byte * args, vldoor_e type)
         door->type = type;
         door->speed = speed;
         door->topwait = args[2];
-        SN_StartSequence((mobj_t *) & door->sector->soundorg,
-                         SEQ_DOOR_STONE + door->sector->seqType);
     }
     return (retcode);
 }
@@ -1197,12 +1098,5 @@ dboolean Hexen_EV_VerticalDoor(line_t * line, mobj_t * thing)
     door->speed = line->special_args[1] * (FRACUNIT / 8);
     door->topwait = line->special_args[2];
 
-    //
-    // find the top and bottom of the movement range
-    //
-    door->topheight = P_FindLowestCeilingSurrounding(sec);
-    door->topheight -= 4 * FRACUNIT;
-    SN_StartSequence((mobj_t *) & door->sector->soundorg,
-                     SEQ_DOOR_STONE + door->sector->seqType);
     return true;
 }

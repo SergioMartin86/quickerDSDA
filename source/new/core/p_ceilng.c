@@ -39,9 +39,6 @@
 #include "sounds.h"
 #include "e6y.h"//e6y
 
-#include "hexen/p_acs.h"
-#include "hexen/sn_sonix.h"
-
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
 
@@ -336,65 +333,6 @@ void T_MoveCompatibleCeiling(ceiling_t * ceiling)
 
 void T_MoveHexenCeiling(ceiling_t * ceiling)
 {
-    result_e res;
-
-    switch (ceiling->direction)
-    {
-    //              case 0:         // IN STASIS
-    //                      break;
-        case 1:                // UP
-            res = T_MoveCeilingPlane(ceiling->sector, ceiling->speed,
-                                     ceiling->topheight, NO_CRUSH,
-                                     ceiling->direction, true);
-            if (res == pastdest)
-            {
-                SN_StopSequence((mobj_t *) & ceiling->sector->soundorg);
-                switch (ceiling->type)
-                {
-                    case CLEV_CRUSHANDRAISE:
-                        ceiling->direction = -1;
-                        ceiling->speed = ceiling->speed * 2;
-                        break;
-                    default:
-                        P_RemoveActiveCeiling(ceiling);
-                        break;
-                }
-            }
-            break;
-        case -1:               // DOWN
-            res = T_MoveCeilingPlane(ceiling->sector, ceiling->speed,
-                                     ceiling->bottomheight, ceiling->crush,
-                                     ceiling->direction, true);
-            if (res == pastdest)
-            {
-                SN_StopSequence((mobj_t *) & ceiling->sector->soundorg);
-                switch (ceiling->type)
-                {
-                    case CLEV_CRUSHANDRAISE:
-                    case CLEV_CRUSHRAISEANDSTAY:
-                        ceiling->direction = 1;
-                        ceiling->speed = ceiling->speed / 2;
-                        break;
-                    default:
-                        P_RemoveActiveCeiling(ceiling);
-                        break;
-                }
-            }
-            else if (res == crushed)
-            {
-                switch (ceiling->type)
-                {
-                    case CLEV_CRUSHANDRAISE:
-                    case CLEV_LOWERANDCRUSH:
-                    case CLEV_CRUSHRAISEANDSTAY:
-                        //ceiling->speed = ceiling->speed/4;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            break;
-    }
 }
 
 void T_MoveCeiling (ceiling_t * ceiling)
@@ -666,13 +604,6 @@ void P_AddActiveCeiling(ceiling_t* ceiling)
 //
 void P_RemoveActiveCeiling(ceiling_t* ceiling)
 {
-  ceilinglist_t *list = ceiling->list;
-  ceiling->sector->ceilingdata = NULL;  //jff 2/22/98
-  P_RemoveThinker(&ceiling->thinker);
-  P_TagFinished(ceiling->sector->tag);
-  if ((*list->prev = list->next))
-    list->next->prev = list->prev;
-  Z_Free(list);
 }
 
 //
@@ -696,18 +627,6 @@ void P_RemoveAllActiveCeilings(void)
 
 int Hexen_EV_CeilingCrushStop(line_t * line, byte * args)
 {
-    ceilinglist_t *cl;
-    for (cl=activeceilings; cl; cl=cl->next)
-    {
-        ceiling_t *ceiling = cl->ceiling;
-        if (ceiling->tag == args[0])
-        {
-            SN_StopSequence((mobj_t *) & ceiling->sector->soundorg);
-            P_RemoveActiveCeiling(ceiling);
-
-            return 1;
-        }
-    }
     return 0;
 }
 
@@ -1065,11 +984,6 @@ int Hexen_EV_DoCeiling(line_t * line, byte * arg, ceiling_e type)
         ceiling->tag = sec->tag;
         ceiling->type = type;
         P_AddActiveCeiling(ceiling);
-        if (rtn)
-        {
-            SN_StartSequence((mobj_t *) & ceiling->sector->soundorg,
-                             SEQ_PLATFORM + ceiling->sector->seqType);
-        }
     }
     return rtn;
 }
