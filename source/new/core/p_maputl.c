@@ -462,40 +462,6 @@ dboolean P_BlockLinesIterator(int x, int y, dboolean func(line_t*))
     return true;
   offset = y*bmapwidth+x;
 
-  if (map_format.polyobjs)
-  {
-    int i;
-    seg_t **tempSeg;
-    polyblock_t *polyLink;
-    extern polyblock_t **PolyBlockMap;
-
-    polyLink = PolyBlockMap[offset];
-    while (polyLink)
-    {
-      if (polyLink->polyobj)
-      {
-        if (polyLink->polyobj->validcount != validcount)
-        {
-          polyLink->polyobj->validcount = validcount;
-          tempSeg = polyLink->polyobj->segs;
-          for (i = 0; i < polyLink->polyobj->numsegs; i++, tempSeg++)
-          {
-            if ((*tempSeg)->linedef->validcount == validcount)
-            {
-              continue;
-            }
-            (*tempSeg)->linedef->validcount = validcount;
-            if (!func((*tempSeg)->linedef))
-            {
-              return false;
-            }
-          }
-        }
-      }
-      polyLink = polyLink->next;
-    }
-  }
-
   offset = *(blockmap+offset);
   list = blockmaplump+offset;     // original was reading         // phares
                                   // delmiting 0 as linedef 0     // phares
@@ -537,40 +503,6 @@ dboolean P_BlockLinesIterator2(int x, int y, dboolean func(line_t*))
   if (x<0 || y<0 || x>=bmapwidth || y>=bmapheight)
     return true;
   offset = y*bmapwidth+x;
-
-  if (map_format.polyobjs)
-  {
-    int i;
-    seg_t **tempSeg;
-    polyblock_t *polyLink;
-    extern polyblock_t **PolyBlockMap;
-
-    polyLink = PolyBlockMap[offset];
-    while (polyLink)
-    {
-      if (polyLink->polyobj)
-      {
-        if (polyLink->polyobj->validcount2 != validcount2)
-        {
-          polyLink->polyobj->validcount2 = validcount2;
-          tempSeg = polyLink->polyobj->segs;
-          for (i = 0; i < polyLink->polyobj->numsegs; i++, tempSeg++)
-          {
-            if ((*tempSeg)->linedef->validcount2 == validcount2)
-            {
-              continue;
-            }
-            (*tempSeg)->linedef->validcount2 = validcount2;
-            if (!func((*tempSeg)->linedef))
-            {
-              return false;
-            }
-          }
-        }
-      }
-      polyLink = polyLink->next;
-    }
-  }
 
   offset = *(blockmap+offset);
   list = blockmaplump+offset;     // original was reading         // phares

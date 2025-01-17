@@ -915,12 +915,4 @@ void R_RenderBSPNode(int bspnum)
 void R_ForceRenderPolyObjs(void)
 {
   int i;
-
-  ignore_gl_range_clipping = true;
-
-  for (i = 0; i < po_NumPolyobjs; i++)
-    if (polyobjs[i].subsector)
-      R_AddPolyLines(&polyobjs[i]);
-
-  ignore_gl_range_clipping = false;
 }

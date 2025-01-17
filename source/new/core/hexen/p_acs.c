@@ -27,7 +27,6 @@
 #include "p_inter.h"
 
 #include "hexen/p_things.h"
-#include "hexen/po_man.h"
 
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
@@ -707,20 +706,6 @@ void P_TagFinished(int tag)
 
 void P_PolyobjFinished(int po)
 {
-    int i;
-
-    if (PO_Busy(po) == true)
-    {
-        return;
-    }
-    for (i = 0; i < ACScriptCount; i++)
-    {
-        if (ACSInfo[i].state == ASTE_WAITINGFORPOLY
-            && ACSInfo[i].waitValue == po)
-        {
-            ACSInfo[i].state = ASTE_RUNNING;
-        }
-    }
 }
 
 static void ScriptFinished(int number)

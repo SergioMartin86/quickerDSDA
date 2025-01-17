@@ -47,7 +47,6 @@
 #include "hexen/a_action.h"
 #include "hexen/p_acs.h"
 #include "hexen/p_anim.h"
-#include "hexen/po_man.h"
 
 #include "dsda/map_format.h"
 #include "dsda/msecnode.h"
@@ -599,7 +598,7 @@ void P_UnArchiveBlockLinks(mobj_t** mobj_p, int mobj_count)
 
 static dboolean P_IsPolyObjThinker(thinker_t *th)
 {
-  return th->function == T_RotatePoly || th->function == T_MovePoly || th->function == T_PolyDoor;
+  return 0;
 }
 
 void P_ArchivePolyObjSpecialData(void)
@@ -987,27 +986,6 @@ void P_ArchiveThinkers(void) {
       continue;
     }
 
-    if (th->function == T_RotatePoly)
-    {
-      P_SAVE_BYTE(tc_poly_rotate);
-      P_SAVE_TYPE(th, polyevent_t);
-      continue;
-    }
-
-    if (th->function == T_MovePoly)
-    {
-      P_SAVE_BYTE(tc_poly_move);
-      P_SAVE_TYPE(th, polyevent_t);
-      continue;
-    }
-
-    if (th->function == T_PolyDoor)
-    {
-      P_SAVE_BYTE(tc_poly_door);
-      P_SAVE_TYPE(th, polydoor_t);
-      continue;
-    }
-
     if (P_IsMobjThinker(th))
     {
       mobj_t *mobj;
@@ -1145,9 +1123,6 @@ void P_UnArchiveThinkers(void) {
         tc == tc_pillar         ? sizeof(pillar_t)         :
         tc == tc_floor_waggle   ? sizeof(planeWaggle_t)    :
         tc == tc_ceiling_waggle ? sizeof(planeWaggle_t)    :
-        tc == tc_poly_rotate    ? sizeof(polyevent_t)      :
-        tc == tc_poly_move      ? sizeof(polyevent_t)      :
-        tc == tc_poly_door      ? sizeof(polydoor_t)       :
         tc == tc_quake          ? sizeof(quake_t)          :
         tc == tc_mobj           ? sizeof(mobj_t)           :
       0;
@@ -1487,33 +1462,6 @@ void P_UnArchiveThinkers(void) {
           break;
         }
 
-      case tc_poly_rotate:
-        {
-          polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
-          poly->thinker.function = T_RotatePoly;
-          P_AddThinker(&poly->thinker);
-          break;
-        }
-
-      case tc_poly_move:
-        {
-          polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
-          poly->thinker.function = T_MovePoly;
-          P_AddThinker(&poly->thinker);
-          break;
-        }
-
-      case tc_poly_door:
-        {
-          polydoor_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
-          poly->thinker.function = T_PolyDoor;
-          P_AddThinker(&poly->thinker);
-          break;
-        }
-
       case tc_mobj:
         {
           mobj_t *mobj = Z_MallocLevel(sizeof(mobj_t));
@@ -1679,89 +1627,10 @@ static void P_UnArchiveVertex(vertex_t *v)
 
 void P_ArchivePolyobjs(void)
 {
-  int i;
-
-  if (!map_format.polyobjs) return;
-
-  for (i = 0; i < po_NumPolyobjs; i++)
-  {
-    int seg_i;
-    polyobj_t *po;
-
-    po = &polyobjs[i];
-
-    for (seg_i = 0; seg_i < po->numsegs; ++seg_i) {
-      seg_t *seg;
-      line_t *line;
-
-      seg = po->segs[seg_i];
-      line = seg->linedef;
-
-      P_ArchiveVertex(seg->v1);
-      P_ArchiveVertex(seg->v2);
-
-      P_SAVE_X(seg->angle);
-      P_SAVE_X(line->slopetype);
-      P_SAVE_ARRAY(line->bbox);
-      P_SAVE_X(line->dx);
-      P_SAVE_X(line->dy);
-
-      P_ArchiveVertex(&po->originalPts[seg_i]);
-      P_ArchiveVertex(&po->prevPts[seg_i]);
-    }
-
-    P_SAVE_X(po->angle);
-    P_SAVE_X(po->startSpot.x);
-    P_SAVE_X(po->startSpot.y);
-  }
 }
 
 void P_UnArchivePolyobjs(void)
 {
-  void UnLinkPolyobj(polyobj_t * po);
-  void LinkPolyobj(polyobj_t * po);
-  void ResetPolySubSector(polyobj_t *po);
-
-  int i;
-
-  if (!map_format.polyobjs) return;
-
-  for (i = 0; i < po_NumPolyobjs; i++)
-  {
-    int seg_i;
-    polyobj_t *po;
-
-    po = &polyobjs[i];
-
-    UnLinkPolyobj(po);
-
-    for (seg_i = 0; seg_i < po->numsegs; ++seg_i) {
-      seg_t *seg;
-      line_t *line;
-
-      seg = po->segs[seg_i];
-      line = seg->linedef;
-
-      P_UnArchiveVertex(seg->v1);
-      P_UnArchiveVertex(seg->v2);
-
-      P_LOAD_X(seg->angle);
-      P_LOAD_X(line->slopetype);
-      P_LOAD_ARRAY(line->bbox);
-      P_LOAD_X(line->dx);
-      P_LOAD_X(line->dy);
-
-      P_UnArchiveVertex(&po->originalPts[seg_i]);
-      P_UnArchiveVertex(&po->prevPts[seg_i]);
-    }
-
-    P_LOAD_X(po->angle);
-    P_LOAD_X(po->startSpot.x);
-    P_LOAD_X(po->startSpot.y);
-
-    LinkPolyobj(po);
-    ResetPolySubSector(po);
-  }
 }
 
 void P_ArchiveScripts(void)
