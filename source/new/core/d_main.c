@@ -1298,10 +1298,6 @@ void D_DoomMainSetup(void)
   // Must be after P_Init
   HandleWarp();
 
-  //jff 9/3/98 use logical output routine
-  lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");
-  dsda_InitFont();
-
   // NSM
   arg = dsda_Arg(dsda_arg_viddump);
   if (arg->found)

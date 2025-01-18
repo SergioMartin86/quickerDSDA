@@ -15,7 +15,6 @@ quickerDSDASrc =  [
  'core/dsda/episode.c',
  'core/dsda/excmd.c',
  'core/dsda/features.c',
- 'core/dsda/font.c',
  'core/dsda/game_controller.c',
  'core/dsda/global.c',
  'core/dsda/id_list.c',
