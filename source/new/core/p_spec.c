@@ -56,7 +56,6 @@
 #include "sounds.h"
 #include "i_sound.h"
 #include "m_bbox.h"                                         // phares 3/20/98
-#include "r_plane.h"
 #include "lprintf.h"
 #include "e6y.h"//e6y
 
@@ -3026,74 +3025,10 @@ static void P_SpawnZDoomGeneralizedSpecials(sector_t *sector)
 
 static void P_SpawnVanillaExtras(void)
 {
-  int i;
-
-  // allow MBF sky transfers in all complevels
-    for (i = 0; i < numlines; ++i)
-      switch (lines[i].special)
-      {
-        const int *id_p;
-
-        case 271:   // Regular sky
-        case 272:   // Same, only flipped
-          FIND_SECTORS(id_p, lines[i].tag)
-          {
-            sectors[*id_p].floorsky = i | PL_SKYFLAT_LINE;
-            sectors[*id_p].ceilingsky = i | PL_SKYFLAT_LINE;
-          }
-        break;
-      }
 }
 
 void P_SpawnCompatibleExtra(line_t *l, int i)
 {
-  const int *id_p;
-  int sec;
-
-  switch (l->special)
-  {
-    // killough 3/7/98:
-    // support for drawn heights coming from different sector
-    case 242:
-      sec = sides[*l->sidenum].sector->iSectorID;
-      FIND_SECTORS(id_p, lines[i].tag)
-        sectors[*id_p].heightsec = sec;
-      break;
-
-    // killough 3/16/98: Add support for setting
-    // floor lighting independently (e.g. lava)
-    case 213:
-      sec = sides[*l->sidenum].sector->iSectorID;
-      FIND_SECTORS(id_p, lines[i].tag)
-        sectors[*id_p].floorlightsec = sec;
-      break;
-
-    // killough 4/11/98: Add support for setting
-    // ceiling lighting independently
-    case 261:
-      sec = sides[*l->sidenum].sector->iSectorID;
-      FIND_SECTORS(id_p, lines[i].tag)
-        sectors[*id_p].ceilinglightsec = sec;
-      break;
-
-      // killough 10/98:
-      //
-      // Support for sky textures being transferred from sidedefs.
-      // Allows scrolling and other effects (but if scrolling is
-      // used, then the same sector tag needs to be used for the
-      // sky sector, the sky-transfer linedef, and the scroll-effect
-      // linedef). Still requires user to use F_SKY1 for the floor
-      // or ceiling texture, to distinguish floor and ceiling sky.
-
-    case 271:   // Regular sky
-    case 272:   // Same, only flipped
-      FIND_SECTORS(id_p, lines[i].tag)
-      {
-        sectors[*id_p].floorsky = i | PL_SKYFLAT_LINE;
-        sectors[*id_p].ceilingsky = i | PL_SKYFLAT_LINE;
-      }
-      break;
-  }
 }
 
 static void P_SpawnExtras(void)

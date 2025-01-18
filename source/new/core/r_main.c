@@ -41,7 +41,6 @@
 #include "d_net.h"
 #include "w_wad.h"
 #include "r_main.h"
-#include "r_plane.h"
 #include "m_bbox.h"
 #include "v_video.h"
 #include "lprintf.h"
@@ -521,10 +520,6 @@ void R_Init (void)
   lprintf(LO_DEBUG, "\nR_InitData: ");
   R_InitData();
   R_SetViewSize();
-  lprintf(LO_DEBUG, "\nR_Init: R_InitPlanes ");
-  R_InitPlanes();
-  lprintf(LO_DEBUG, "R_InitLightTables ");
-  R_InitLightTables();
 }
 
 //

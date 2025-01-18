@@ -48,7 +48,6 @@
 #include "p_enemy.h"
 #include "lprintf.h" //jff 10/6/98 for debug outputs
 #include "v_video.h"
-#include "r_plane.h"
 #include "g_overflow.h"
 #include "e6y.h"//e6y
 

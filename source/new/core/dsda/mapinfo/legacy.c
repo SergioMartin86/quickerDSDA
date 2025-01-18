@@ -393,9 +393,7 @@ int dsda_LegacyHUTitle(dsda_string_t* str) {
 }
 
 int dsda_LegacySkyTexture(int* sky) {
-  if (map_format.doublesky)
-    *sky = Sky1Texture;
-  else if (gamemode == commercial) {
+ if (gamemode == commercial) {
     *sky = R_TextureNumForName ("SKY3");
     if (gamemap < 12)
       *sky = R_TextureNumForName ("SKY1");
