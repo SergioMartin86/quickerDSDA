@@ -97,7 +97,6 @@ quickerDSDASrc =  [
  'core/r_plane.c',
  'core/r_segs.c',
  'core/r_sky.c',
- 'core/r_things.c',
  'core/scanner.cpp',
  'core/sc_man.c',
  'core/sounds.c',

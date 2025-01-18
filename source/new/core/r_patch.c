@@ -64,7 +64,6 @@
 #include "r_main.h"
 #include "r_sky.h"
 #include "r_bsp.h"
-#include "r_things.h"
 #include "p_tick.h"
 #include "i_system.h"
 #include "r_draw.h"

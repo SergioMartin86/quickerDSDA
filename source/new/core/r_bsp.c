@@ -37,12 +37,11 @@
 #include "r_main.h"
 #include "r_segs.h"
 #include "r_plane.h"
-#include "r_things.h"
 #include "r_bsp.h" // cph - sanity checking
 #include "v_video.h"
 #include "lprintf.h"
 
-// Turned off because it causes regressions on some maps (issue #256).  Fixing
+// Turned off because it causes regrfessions on some maps (issue #256).  Fixing
 // this requires doing bleed with subsector granularity.
 #define EXPERIMENTAL_BLEED 0
 // Threshold below player view of sector floor at which it becomes
@@ -828,58 +827,6 @@ static void R_AddPolyLines(polyobj_t *poly)
 
 static void R_Subsector(int num)
 {
-  int         count;
-  seg_t       *line;
-  subsector_t *sub;
-  int         floorlightlevel;      // killough 3/16/98: set floor lightlevel
-  int         ceilinglightlevel;    // killough 4/11/98
-
-#ifdef RANGECHECK
-  if (num>=numsubsectors)
-    I_Error ("R_Subsector: ss %i with numss = %i", num, numsubsectors);
-#endif
-
-  sub = &subsectors[num];
-  currentsubsectornum = num;
-
-  if (V_IsSoftwareMode() || sub->sector->gl_validcount != validcount)
-  {
-    R_UpdateGlobalPlanes(sub->sector, &floorlightlevel, &ceilinglightlevel);
-
-    // killough 9/18/98: Fix underwater slowdown, by passing real sector
-    // instead of fake one. Improve sprite lighting by basing sprite
-    // lightlevels on floor & ceiling lightlevels in the surrounding area.
-    //
-    // 10/98 killough:
-    //
-    // NOTE: TeamTNT fixed this bug incorrectly, messing up sprite lighting!!!
-    // That is part of the 242 effect!!!  If you simply pass sub->sector to
-    // the old code you will not get correct lighting for underwater sprites!!!
-    // Either you must pass the fake sector and handle validcount here, on the
-    // real sector, or you must account for the lighting in some other way,
-    // like passing it as an argument.
-
-    if (sub->sector->validcount != validcount)
-    {
-      sub->sector->validcount = validcount;
-
-      R_AddSprites(sub, (floorlightlevel+ceilinglightlevel)/2);
-    }
-  }
-
-  // hexen
-  if (sub->poly) // Render the polyobj in the subsector first
-    R_AddPolyLines(sub->poly);
-
-  count = sub->numlines;
-  line = &segs[sub->firstline];
-  while (count--)
-  {
-    if (line->linedef)
-      R_AddLine (line);
-    line++;
-    curline = NULL; /* cph 2001/11/18 - must clear curline now we're done with it, so R_ColourMap doesn't try using it for other things */
-  }
 }
 
 //
@@ -892,24 +839,6 @@ static void R_Subsector(int num)
 
 void R_RenderBSPNode(int bspnum)
 {
-  while (!(bspnum & NF_SUBSECTOR))  // Found a subsector?
-    {
-      const node_t *bsp = &nodes[bspnum];
-
-      // Decide which side the view point is on.
-      int side = R_PointOnSide(viewx, viewy, bsp);
-      // Recursively divide front space.
-      R_RenderBSPNode(bsp->children[side]);
-
-      // Possibly divide back space.
-
-      if (!R_CheckBBox(bsp->bbox[side^1]))
-        return;
-
-      bspnum = bsp->children[side^1];
-    }
-  // e6y: support for extended nodes
-  R_Subsector(bspnum == -1 ? 0 : bspnum & ~NF_SUBSECTOR);
 }
 
 void R_ForceRenderPolyObjs(void)

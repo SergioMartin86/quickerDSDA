@@ -40,7 +40,6 @@
 #include "g_game.h"
 #include "w_wad.h"
 #include "r_main.h"
-#include "r_things.h"
 #include "p_maputl.h"
 #include "p_map.h"
 #include "p_setup.h"
@@ -3257,5 +3256,4 @@ void P_Init (void)
   P_InitPicAnims();
   P_InitTerrainTypes();
   P_InitLava();
-  R_InitSprites(sprnames);
 }

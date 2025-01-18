@@ -17,7 +17,6 @@
 
 #include "doomstat.h"
 #include "e6y.h"
-#include "r_things.h"
 #include "w_wad.h"
 #include "g_game.h"
 #include "lprintf.h"

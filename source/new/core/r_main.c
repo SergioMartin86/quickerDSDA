@@ -41,7 +41,6 @@
 #include "d_net.h"
 #include "w_wad.h"
 #include "r_main.h"
-#include "r_things.h"
 #include "r_plane.h"
 #include "r_bsp.h"
 #include "r_draw.h"

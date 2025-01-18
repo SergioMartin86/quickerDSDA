@@ -39,7 +39,6 @@
 #include "r_sky.h"
 #include "i_system.h"
 #include "r_bsp.h"
-#include "r_things.h"
 #include "p_tick.h"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 #include "p_tick.h"
@@ -547,23 +546,12 @@ void R_SetSpriteByNum(patchnum_t *patchnum, int lump)
 int R_SetSpriteByIndex(patchnum_t *patchnum, spritenum_t item)
 {
   int result = false;
-  if (item < num_sprites)
-  {
-    int lump = firstspritelump + sprites[item].spriteframes->lump[0];
-    R_SetSpriteByNum(patchnum, lump);
-    result = true;
-  }
   return result;
 }
 
 int R_NumPatchForSpriteIndex(spritenum_t item)
 {
-  if (item < 0 || item >= num_sprites)
-  {
-    return -1;
-  }
-
-  return firstspritelump + sprites[item].spriteframes->lump[0];
+  return 0;
 }
 
 int R_SetSpriteByName(patchnum_t *patchnum, const char *name)
