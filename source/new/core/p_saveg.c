@@ -45,7 +45,6 @@
 #include "e6y.h"//e6y
 
 #include "dsda/map_format.h"
-#include "dsda/msecnode.h"
 #include "dsda/scroll.h"
 #include "dsda/utility.h"
 
@@ -839,8 +838,6 @@ void P_ArchiveThinkers(void) {
 
   P_ArchiveBlockLinks();
   P_ArchiveThinkerSubclasses();
-
-  dsda_ArchiveMSecNodes();
 }
 
 // dsda - fix save / load synchronization
@@ -1305,8 +1302,6 @@ void P_UnArchiveThinkers(void) {
 
   P_UnArchiveBlockLinks(mobj_p, mobj_count);
   P_UnArchiveThinkerSubclasses(mobj_p, mobj_count);
-
-  dsda_UnArchiveMSecNodes(mobj_p, mobj_count);
 
   Z_Free(mobj_p);    // free translation table
 

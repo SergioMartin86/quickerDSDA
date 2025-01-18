@@ -25,7 +25,6 @@ quickerDSDASrc =  [
  'core/dsda/mapinfo/legacy.c',
  'core/dsda/mobjinfo.c',
  'core/dsda/mouse.c',
- 'core/dsda/msecnode.c',
  'core/dsda/name.c',
  'core/dsda/options.c',
  'core/dsda/pause.c',
