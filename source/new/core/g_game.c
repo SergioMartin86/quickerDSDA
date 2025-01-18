@@ -88,7 +88,6 @@
 #include "dsda/pause.h"
 #include "dsda/skill_info.h"
 #include "dsda/time.h"
-#include "dsda/split_tracker.h"
 #include "dsda/utility.h"
 
 // Allows use of HELP2 screen for PWADs under DOOM 1

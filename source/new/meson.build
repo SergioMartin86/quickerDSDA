@@ -41,7 +41,6 @@ quickerDSDASrc =  [
  'core/dsda/skill_info.c',
  'core/dsda/sndinfo.c',
  'core/dsda/spawn_number.c',
- 'core/dsda/split_tracker.c',
  'core/dsda/sprite.c',
  'core/dsda/state.c',
  'core/dsda/stretch.c',
