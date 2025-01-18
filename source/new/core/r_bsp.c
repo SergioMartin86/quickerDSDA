@@ -35,7 +35,6 @@
 #include "m_bbox.h"
 #include "p_spec.h"
 #include "r_main.h"
-#include "r_segs.h"
 #include "r_plane.h"
 #include "r_bsp.h" // cph - sanity checking
 #include "v_video.h"

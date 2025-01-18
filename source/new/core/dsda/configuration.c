@@ -22,7 +22,6 @@
 #include "g_overflow.h"
 #include "lprintf.h"
 #include "r_main.h"
-#include "r_segs.h"
 #include "v_video.h"
 #include "z_zone.h"
 
@@ -1093,8 +1092,8 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_fake_contrast_mode] = {
     "fake_contrast_mode", dsda_config_fake_contrast_mode,
-    dsda_config_int, FAKE_CONTRAST_MODE_OFF, FAKE_CONTRAST_MODE_SMOOTH,
-    { FAKE_CONTRAST_MODE_ON }, (int*) &fake_contrast_mode
+    dsda_config_int, 0, 0,
+    { 0 }, (int*) 0
   },
   [dsda_config_render_stretch_hud] = {
     "render_stretch_hud", dsda_config_render_stretch_hud,
