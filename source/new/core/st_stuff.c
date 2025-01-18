@@ -39,7 +39,6 @@
 #include "i_video.h"
 #include "w_wad.h"
 #include "st_stuff.h"
-#include "hu_stuff.h"
 #include "st_lib.h"
 #include "r_main.h"
 #include "sounds.h"
@@ -789,169 +788,11 @@ void M_ChangeApplyPalette(void)
 
 int ST_HealthColor(int health)
 {
-  if (health < hud_health_red)
-    return cr_health_bad;
-  else if (health < hud_health_yellow)
-    return cr_health_warning;
-  else if (health <= hud_health_green)
-    return cr_health_ok;
-  else
-    return cr_health_super;
+  return 0;
 }
 
 static void ST_drawWidgets(dboolean refresh)
 {
-  int i;
-
-  // used by w_arms[] widgets
-  st_armson = st_statusbaron && !deathmatch;
-
-  // used by w_frags widget
-  st_fragson = deathmatch && st_statusbaron;
-
-  //jff 2/16/98 make color of ammo depend on amount
-  if (*w_ready.num == plyr->maxammo[weaponinfo[w_ready.data].ammo])
-    STlib_updateNum(&w_ready, cr_ammo_full, refresh);
-  else {
-    int ammopct = P_AmmoPercent(plyr, w_ready.data);
-
-    if (ammopct < hud_ammo_red)
-      STlib_updateNum(&w_ready, cr_ammo_bad, refresh);
-    else if (ammopct < hud_ammo_yellow)
-      STlib_updateNum(&w_ready, cr_ammo_warning, refresh);
-    else
-      STlib_updateNum(&w_ready, cr_ammo_ok, refresh);
-  }
-
-  for (i = 0; i < 4; i++)
-  {
-    STlib_updateNum(&w_ammo[i], CR_DEFAULT, refresh);   //jff 2/16/98 no xlation
-    STlib_updateNum(&w_maxammo[i], CR_DEFAULT, refresh);
-  }
-
-  //jff 2/16/98 make color of health depend on amount
-  STlib_updatePercent(&w_health, ST_HealthColor(*w_health.n.num), refresh);
-
-  // armor color dictated by type (Status Bar)
-  if (plyr->armortype >= 2)
-    STlib_updatePercent(&w_armor, cr_armor_two, refresh);
-  else if (plyr->armortype == 1)
-    STlib_updatePercent(&w_armor, cr_armor_one, refresh);
-  else if (plyr->armortype == 0)
-    STlib_updatePercent(&w_armor, cr_armor_zero, refresh);
-
-  for (i=0;i<6;i++)
-    STlib_updateMultIcon(&w_arms[i], refresh);
-
-  STlib_updateMultIcon(&w_faces, refresh);
-
-  for (i=0;i<3;i++)
-    STlib_updateMultIcon(&w_keyboxes[i], refresh);
-
-  STlib_updateNum(&w_frags, CR_DEFAULT, refresh);
-
-}
-
-void ST_SetResolution(void)
-{
-  st_firsttime = true;
-  R_FillBackScreen();
-}
-
-void ST_Refresh(void)
-{
-  st_firsttime = true;
-}
-
-void ST_Drawer(dboolean refresh)
-{
-}
-
-
-
-//
-// ST_loadGraphics
-//
-// CPhipps - Loads graphics needed for status bar
-//
-static void ST_loadGraphics(void)
-{
-  int  i, facenum;
-  char namebuf[9];
-  // cph - macro that either acquires a pointer and lock for a lump, or
-  // unlocks it. var is referenced exactly once in either case, so ++ in arg works
-
-  // Load the numbers, tall and short
-  for (i=0;i<10;i++)
-    {
-      sprintf(namebuf, "STTNUM%d", i);
-      R_SetPatchNum(&tallnum[i],namebuf);
-      snprintf(namebuf, sizeof(namebuf), "STYSNUM%d", i);
-      R_SetPatchNum(&shortnum[i],namebuf);
-    }
-
-  // Load percent key.
-  R_SetPatchNum(&tallpercent,"STTPRCNT");
-
-  // key cards
-  for (i=0;i<DOOM_NUMCARDS+3;i++)  //jff 2/23/98 show both keys too
-    {
-      sprintf(namebuf, "STKEYS%d", i);
-      R_SetPatchNum(&keys[i], namebuf);
-    }
-
-  //e6y: status bar background
-  R_SetPatchNum(&stbarbg, "STBAR");
-  R_SetPatchNum(&brdr_b, "brdr_b");
-
-  // arms background
-  R_SetPatchNum(&armsbg, "STARMS");
-
-  // arms ownership widgets
-  for (i=0;i<6;i++)
-    {
-      sprintf(namebuf, "STGNUM%d", i+2);
-
-      // gray #
-      R_SetPatchNum(&arms[i][0], namebuf);
-
-      // yellow #
-      arms[i][1] = shortnum[i+2];
-    }
-
-  // face backgrounds for different color players
-  // killough 3/7/98: add better support for spy mode by loading all
-  // player face backgrounds and using displayplayer to choose them:
-  R_SetPatchNum(&faceback, "STFB0");
-
-  // face states
-  facenum = 0;
-  for (i=0;i<ST_NUMPAINFACES;i++)
-    {
-      int j;
-      for (j=0;j<ST_NUMSTRAIGHTFACES;j++)
-        {
-          sprintf(namebuf, "STFST%d%d", i, j);
-          R_SetPatchNum(&faces[facenum++], namebuf);
-        }
-      sprintf(namebuf, "STFTR%d0", i);        // turn right
-      R_SetPatchNum(&faces[facenum++], namebuf);
-      sprintf(namebuf, "STFTL%d0", i);        // turn left
-      R_SetPatchNum(&faces[facenum++], namebuf);
-      sprintf(namebuf, "STFOUCH%d", i);       // ouch!
-      R_SetPatchNum(&faces[facenum++], namebuf);
-      sprintf(namebuf, "STFEVL%d", i);        // evil grin ;)
-      R_SetPatchNum(&faces[facenum++], namebuf);
-      sprintf(namebuf, "STFKILL%d", i);       // pissed off
-      R_SetPatchNum(&faces[facenum++], namebuf);
-    }
-  R_SetPatchNum(&faces[facenum++], "STFGOD0");
-  R_SetPatchNum(&faces[facenum++], "STFDEAD0");
-
-  // [FG] support widescreen status bar backgrounds
-  ST_SetScaledWidth();
-
-  ST_LoadTextColors();
 }
 
 static void ST_initData(void)
@@ -1150,5 +991,4 @@ static void ST_Stop(void)
 void ST_Init(void)
 {
   veryfirsttime = 0;
-  ST_loadGraphics();
 }

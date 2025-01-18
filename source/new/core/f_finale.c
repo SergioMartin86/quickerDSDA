@@ -203,8 +203,6 @@ void F_Ticker(void)
 // written.                                                         // phares
 // CPhipps - reformatted
 
-#include "hu_stuff.h"
-
 void F_TextWrite (void)
 {
   if (finalepatch)

@@ -40,7 +40,6 @@
 #include "p_tick.h"
 #include "sounds.h"
 #include "st_stuff.h"
-#include "hu_stuff.h"
 #include "info.h"
 #include "g_game.h"
 #include "p_inter.h"

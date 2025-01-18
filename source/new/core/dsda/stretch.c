@@ -17,7 +17,6 @@
 
 #include "doomdef.h"
 #include "doomtype.h"
-#include "hu_stuff.h"
 #include "r_main.h"
 #include "st_stuff.h"
 #include "v_video.h"

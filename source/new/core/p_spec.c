@@ -57,7 +57,6 @@
 #include "i_sound.h"
 #include "m_bbox.h"                                         // phares 3/20/98
 #include "r_plane.h"
-#include "hu_stuff.h"
 #include "lprintf.h"
 #include "e6y.h"//e6y
 

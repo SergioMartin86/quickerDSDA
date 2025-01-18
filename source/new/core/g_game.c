@@ -60,7 +60,6 @@
 #include "p_map.h"
 #include "d_main.h"
 #include "wi_stuff.h"
-#include "hu_stuff.h"
 #include "st_stuff.h"
 #include "w_wad.h"
 #include "r_main.h"
@@ -980,7 +979,6 @@ static void G_DoLoadLevel (void)
 
   // killough 5/13/98: in case netdemo has consoleplayer other than green
   ST_Start();
-  HU_Start();
 
   // The border texture can change between maps, which must queue a backscreen fill
   {
@@ -1018,7 +1016,6 @@ dboolean G_Responder (event_t* ev)
 {
   if (
     gamestate == GS_LEVEL && (
-      HU_Responder(ev) ||
       ST_Responder(ev) 
     )
   ) return true;
@@ -1037,7 +1034,6 @@ dboolean G_Responder (event_t* ev)
     while (!playeringame[displayplayer] && displayplayer!=consoleplayer);
 
     ST_Start();    // killough 3/7/98: switch status bar views too
-    HU_Start();
     return true;
   }
 
@@ -1327,7 +1323,6 @@ void G_Ticker (void)
       P_Ticker();
       mlooky = 0;
       ST_Ticker();
-      HU_Ticker();
       break;
 
     case GS_INTERMISSION:

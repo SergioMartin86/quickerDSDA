@@ -19,7 +19,6 @@
 
 #include "doomdef.h"
 #include "doomstat.h"
-#include "hu_stuff.h"
 #include "g_overflow.h"
 #include "lprintf.h"
 #include "r_main.h"
@@ -96,8 +95,6 @@ void dsda_InitGameController(void);
 void M_ChangeSpeed(void);
 void M_ChangeShorttics(void);
 void S_Init(void);
-void HU_InitCrosshair(void);
-void HU_InitThresholds(void);
 void dsda_InitKeyFrame(void);
 void dsda_SetupStretchParams(void);
 void dsda_InitQuickstartCache(void);
@@ -124,7 +121,6 @@ void dsda_TrackConfigFeatures(void) {
 void dsda_UpdateStrictMode(void) {
   M_ChangeSpeed(); // side effect of always sr50
   M_ChangeSkyMode(); // affected by mouselook setting
-  HU_InitCrosshair();
   M_ChangeApplyPalette();
   dsda_TrackConfigFeatures();
 }
@@ -759,43 +755,43 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_hudadd_crosshair_scale] = {
     "hudadd_crosshair_scale", dsda_config_hudadd_crosshair_scale,
-    CONF_BOOL(0), NULL, NOT_STRICT, HU_InitCrosshair
+    CONF_BOOL(0), NULL, NOT_STRICT, 0
   },
   [dsda_config_hudadd_crosshair_health] = {
     "hudadd_crosshair_health", dsda_config_hudadd_crosshair_health,
-    CONF_BOOL(0), NULL, NOT_STRICT, HU_InitCrosshair
+    CONF_BOOL(0), NULL, NOT_STRICT, 0
   },
   [dsda_config_hudadd_crosshair_target] = {
     "hudadd_crosshair_target", dsda_config_hudadd_crosshair_target,
-    CONF_BOOL(0), NULL, STRICT_INT(0), HU_InitCrosshair
+    CONF_BOOL(0), NULL, STRICT_INT(0), 0
   },
   [dsda_config_hudadd_crosshair_lock_target] = {
     "hudadd_crosshair_lock_target", dsda_config_hudadd_crosshair_lock_target,
-    CONF_BOOL(0), NULL, STRICT_INT(0), HU_InitCrosshair
+    CONF_BOOL(0), NULL, STRICT_INT(0), 0
   },
   [dsda_config_hudadd_crosshair] = {
     "hudadd_crosshair", dsda_config_hudadd_crosshair,
-    dsda_config_int, 0, HU_CROSSHAIRS - 1, { 0 }, NULL, CONF_FEATURE | NOT_STRICT, HU_InitCrosshair
+    dsda_config_int, 0, 0, { 0 }, NULL, CONF_FEATURE | NOT_STRICT, 0
   },
   [dsda_config_hud_health_red] = {
     "hud_health_red", dsda_config_hud_health_red,
-    dsda_config_int, 0, 200, { 25 }, NULL, NOT_STRICT, HU_InitThresholds
+    dsda_config_int, 0, 200, { 25 }, NULL, NOT_STRICT, 0
   },
   [dsda_config_hud_health_yellow] = {
     "hud_health_yellow", dsda_config_hud_health_yellow,
-    dsda_config_int, 0, 200, { 50 }, NULL, NOT_STRICT, HU_InitThresholds
+    dsda_config_int, 0, 200, { 50 }, NULL, NOT_STRICT, 0
   },
   [dsda_config_hud_health_green] = {
     "hud_health_green", dsda_config_hud_health_green,
-    dsda_config_int, 0, 200, { 100 }, NULL, NOT_STRICT, HU_InitThresholds
+    dsda_config_int, 0, 200, { 100 }, NULL, NOT_STRICT, 0
   },
   [dsda_config_hud_ammo_red] = {
     "hud_ammo_red", dsda_config_hud_ammo_red,
-    dsda_config_int, 0, 100, { 25 }, NULL, NOT_STRICT, HU_InitThresholds
+    dsda_config_int, 0, 100, { 25 }, NULL, NOT_STRICT, 0
   },
   [dsda_config_hud_ammo_yellow] = {
     "hud_ammo_yellow", dsda_config_hud_ammo_yellow,
-    dsda_config_int, 0, 100, { 50 }, NULL, NOT_STRICT, HU_InitThresholds
+    dsda_config_int, 0, 100, { 50 }, NULL, NOT_STRICT, 0
   },
   [dsda_config_cycle_ghost_colors] = {
     "dsda_cycle_ghost_colors", dsda_config_cycle_ghost_colors,

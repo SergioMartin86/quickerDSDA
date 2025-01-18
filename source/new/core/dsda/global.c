@@ -26,7 +26,6 @@
 #include "sounds.h"
 #include "d_main.h"
 #include "v_video.h"
-#include "hu_stuff.h"
 
 #include "global.h"
 
