@@ -86,7 +86,6 @@ quickerDSDASrc =  [
  'core/r_data.c',
  'core/r_main.c',
  'core/scanner.cpp',
- 'core/sc_man.c',
  'core/sounds.c',
  'core/st_lib.c',
  'core/tables.c',

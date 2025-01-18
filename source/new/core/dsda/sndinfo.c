@@ -18,7 +18,6 @@
 #include <stddef.h>
 
 #include "m_misc.h"
-#include "sc_man.h"
 #include "sounds.h"
 
 #include "dsda/map_format.h"
