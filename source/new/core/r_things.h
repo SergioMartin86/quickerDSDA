@@ -61,12 +61,12 @@ extern fixed_t pspriteiyscale;
 extern float pspritexscale_f;
 extern float pspriteyscale_f;
 
-void R_DrawMaskedColumn(const rpatch_t *patch,
+void R_DrawMaskedColumn(const int *patch,
                         R_DrawColumn_f colfunc,
                         draw_column_vars_t *dcvars,
-                        const rcolumn_t *column,
-                        const rcolumn_t *prevcolumn,
-                        const rcolumn_t *nextcolumn);
+                        const int *column,
+                        const int *prevcolumn,
+                        const int *nextcolumn);
 void R_SortVisSprites(void);
 void R_AddSprites(subsector_t* subsec, int lightlevel);
 void R_AddAllAliveMonstersSprites(void);

@@ -60,7 +60,6 @@ quickerDSDASrc =  [
  'core/f_wipe.c',
  'core/g_game.c',
  'core/g_overflow.c',
- 'core/hu_lib.c',
  'core/info.c',
  'core/i_capture.c',
  'core/i_glob.c',

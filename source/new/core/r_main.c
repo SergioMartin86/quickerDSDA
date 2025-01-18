@@ -565,60 +565,6 @@ void R_SetupPerspective(float fovy, float aspect, float znear)
 
 void R_BuildModelViewMatrix(void)
 {
-  float x, y, z;
-  float yaw, pitch;
-  float A, B, C, D;
-  float *m = modelMatrix;
-
-  yaw = 270.0f - (float)(viewangle>>ANGLETOFINESHIFT) * 360.0f / FINEANGLES;
-  yaw *= (float)M_PI / 180.0f;
-  pitch = 0;
-  if (V_IsOpenGLMode())
-  {
-    pitch = (float)(viewpitch>>ANGLETOFINESHIFT) * 360.0f / FINEANGLES;
-    pitch *= (float)M_PI / 180.0f;
-  }
-
-  x =  (float)viewx / MAP_SCALE;
-  z = -(float)viewy / MAP_SCALE;
-  y = -(float)viewz / MAP_SCALE;
-
-/*
-  R_LoadIdentity(modelMatrix);
-  R_Rotate(modelMatrix, pitch, 0);
-  R_Rotate(modelMatrix, yaw, 1);
-  R_Translate(modelMatrix, x, y, z);
-*/
-
-  A = (float)cos(pitch);
-  B = (float)sin(pitch);
-  C = (float)cos(yaw);
-  D = (float)sin(yaw);
-
-  m[0] = C;
-  m[1] = D*B;
-  m[2] = -D*A;
-  m[3] = 0;
-
-  m[4] = 0;
-  m[5] = A;
-  m[6] = B;
-  m[7] = 0;
-
-  m[8] = D;
-  m[9] = -C*B;
-  m[10] = A*C;
-  m[11] = 0;
-
-  m[12] = 0;
-  m[13] = 0;
-  m[14] = 0;
-  m[15] = 1;
-
-  m[12] = m[0] * x + m[4] * y + m[8]  * z + m[12];
-  m[13] = m[1] * x + m[5] * y + m[9]  * z + m[13];
-  m[14] = m[2] * x + m[6] * y + m[10] * z + m[14];
-  m[15] = m[3] * x + m[7] * y + m[11] * z + m[15];
 }
 
 //
@@ -723,30 +669,6 @@ void R_LineCenter(fixed_t *x, fixed_t *y, line_t *line)
 
 void R_SetupFreelook(void)
 {
-  if (V_IsSoftwareMode())
-  {
-    fixed_t InvZtoScale;
-    fixed_t dy;
-    int i;
-
-    centery = viewheight / 2;
-    if (dsda_MouseLook())
-    {
-      dy = FixedMul(focallengthy, finetangent[(ANG90-viewpitch)>>ANGLETOFINESHIFT]);
-      centery += dy >> FRACBITS;
-    }
-    centeryfrac = centery<<FRACBITS;
-
-    InvZtoScale = yaspectmul * centerx;
-    globaluclip = FixedDiv (-centeryfrac, InvZtoScale);
-    globaldclip = FixedDiv ((viewheight<<FRACBITS)-centeryfrac, InvZtoScale);
-
-    for (i=0; i<viewheight; i++)
-    {
-      dy = D_abs(((i-centery)<<FRACBITS)+FRACUNIT/2);
-      yslope[i] = FixedDiv(projectiony, dy);
-    }
-  }
 }
 
 //

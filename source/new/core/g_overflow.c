@@ -230,110 +230,6 @@ unsigned int spechit_baseaddr = 0;
 // doomworld.com/vb/doom-speed-demos/35214-spechits-reject-and-intercepts-overflow-lists
 void SpechitOverrun(spechit_overrun_param_t *params)
 {
-  int numspechit = *(params->numspechit);
-
-  if (demo_compatibility && numspechit > 8)
-  {
-    line_t **spechit = *(params->spechit);
-
-    ShowOverflowWarning(OVERFLOW_SPECHIT,
-      numspechit >
-        (compatibility_level == dosdoom_compatibility ||
-        compatibility_level == tasdoom_compatibility ? 10 : 14),
-      "\n\nThe list of LineID leading to overrun:\n%d, %d, %d, %d, %d, %d, %d, %d, %d.",
-      spechit[0]->iLineID, spechit[1]->iLineID, spechit[2]->iLineID,
-      spechit[3]->iLineID, spechit[4]->iLineID, spechit[5]->iLineID,
-      spechit[6]->iLineID, spechit[7]->iLineID, spechit[8]->iLineID);
-
-    if (EMULATE(OVERFLOW_SPECHIT))
-    {
-      unsigned int addr;
-
-      if (spechit_baseaddr == 0)
-      {
-        dsda_arg_t *arg;
-
-        // This is the first time we have had an overrun.  Work out
-        // what base address we are going to use.
-        // Allow a spechit value to be specified on the command line.
-
-        //
-        // Use the specified magic value when emulating spechit overruns.
-        //
-
-        arg = dsda_Arg(dsda_arg_spechit);
-        if (arg->found)
-        {
-          spechit_baseaddr = (unsigned int) arg->value.v_int;
-        }
-        else
-        {
-          spechit_baseaddr = DEFAULT_SPECHIT_MAGIC;
-        }
-      }
-
-      // Calculate address used in doom2.exe
-
-      addr = spechit_baseaddr + (params->line - lines) * 0x3E;
-
-      if (compatibility_level == dosdoom_compatibility || compatibility_level == tasdoom_compatibility)
-      {
-        // There are no more desyncs in the following dosdoom demos:
-        // flsofdth.wad\fod3uv.lmp - http://www.doomworld.com/sda/flsofdth.htm
-        // hr.wad\hf181430.lmp - http://www.doomworld.com/tas/hf181430.zip
-        // hr.wad\hr181329.lmp - http://www.doomworld.com/tas/hr181329.zip
-        // icarus.wad\ic09uv.lmp - http://competn.doom2.net/pub/sda/i-o/icuvlmps.zip
-
-        switch(numspechit)
-        {
-        case 9:
-          *(params->tmfloorz) = addr;
-          break;
-        case 10:
-          *(params->tmceilingz) = addr;
-          break;
-
-        default:
-          fprintf(stderr, "SpechitOverrun: Warning: unable to emulate"
-                          "an overrun where numspechit=%i\n",
-                           numspechit);
-          break;
-        }
-      }
-      else
-      {
-        switch(numspechit)
-        {
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-          params->tmbbox[numspechit-9] = addr;
-          break;
-        case 13:
-          *(params->nofit) = addr;
-          break;
-        case 14:
-          *(params->crushchange) = addr;
-
-          // In vanilla doom, this field is interpreted as a boolean,
-          //   but it now stores the crushing damage itself.
-          // Since any nonzero value should yield doom's damage,
-          //   we can set this explicitly.
-          if (*params->crushchange)
-            *params->crushchange = 10;
-
-          break;
-
-        default:
-          lprintf(LO_ERROR, "SpechitOverrun: Warning: unable to emulate"
-                            " an overrun where numspechit=%i\n",
-                            numspechit);
-          break;
-        }
-      }
-    }
-  }
 }
 
 //
@@ -352,59 +248,6 @@ void SpechitOverrun(spechit_overrun_param_t *params)
 
 void RejectOverrun(unsigned int length, const byte **rejectmatrix, int totallines)
 {
-  unsigned int required;
-  byte *newreject;
-  unsigned char pad;
-
-  required = (numsectors * numsectors + 7) / 8;
-
-  if (length < required)
-  {
-    // allocate a new block and copy the reject table into it; zero the rest
-    newreject = Z_MallocLevel(required);
-    *rejectmatrix = length ? memmove(newreject, *rejectmatrix, length) : newreject;
-
-    // e6y
-    // PrBoom 2.2.5 and 2.2.6 padded a short REJECT with 0xff
-    // This command line switch is needed for all potential demos
-    // recorded with these versions of PrBoom on maps with too short REJECT
-    // I don't think there are any demos that will need it but yes that seems sensible
-    pad = prboom_comp[PC_REJECT_PAD_WITH_FF].state ? 0xff : 0;
-
-    memset(newreject + length, pad, required - length);
-
-    if ( demo_compatibility && PROCESS(OVERFLOW_REJECT))
-    {
-      ShowOverflowWarning(OVERFLOW_REJECT, (required - length > 16) || (length%4 != 0), "");
-
-      if (EMULATE(OVERFLOW_REJECT))
-      {
-        // merged in RejectOverrunAddInt(), and the 4 calls to it, here
-        unsigned int rejectpad[4] = {
-          0,        // size, will be filled in using totallines
-          0,        // part of the header of a doom.exe z_zone block
-          50,       // DOOM_CONST_PU_LEVEL
-          0x1d4a11  // DOOM_CONST_ZONEID
-        };
-        unsigned int i, pad = 0, *src = rejectpad;
-        byte *dest = newreject + length;
-
-        rejectpad[0] = ((totallines*4+3)&~3)+24; // doom.exe zone header size
-
-        // copy at most 16 bytes from rejectpad
-        // emulating a 32-bit, little-endian architecture (can't memmove)
-        for (i = 0; i < (unsigned int)(required - length) && i < 16; i++) { // 16 hard-coded
-          if (!(i&3)) // get the next 4 bytes to copy when i=0,4,8,12
-            pad = *src++;
-          *dest++ = pad & 0xff; // store lowest-significant byte
-          pad >>= 8; // rotate the next byte down
-        }
-      }
-    }
-
-    if (length)
-      lprintf(LO_WARN, "P_LoadReject: REJECT too short (%u<%u) - padded\n", length, required);
-  }
 }
 
 //
@@ -492,48 +335,12 @@ static int GetMemoryValue(unsigned int offset, void *value, int size)
 #define DONUT_FLOORPIC_DEFAULT 0x16
 int DonutOverrun(fixed_t *pfloorheight, short *pfloorpic)
 {
-  if (demo_compatibility && PROCESS(OVERFLOW_DONUT))
-  {
-    ShowOverflowWarning(OVERFLOW_DONUT, 0, "");
-
-    if (EMULATE(OVERFLOW_DONUT))
-    {
-      if (pfloorheight && pfloorpic)
-      {
-        GetMemoryValue(0, pfloorheight, 4);
-        GetMemoryValue(8, pfloorpic, 2);
-
-        // bounds-check floorpic
-        if ((*pfloorpic) <= 0 || (*pfloorpic) >= numflats)
-        {
-          *pfloorpic = MIN(numflats - 1, DONUT_FLOORPIC_DEFAULT);
-        }
-
-        return true;
-      }
-    }
-  }
-
   return false;
 }
 
 
 int MissedBackSideOverrun(line_t *line)
 {
-  if (demo_compatibility)
-  {
-    if (line)
-    {
-      ShowOverflowWarning(OVERFLOW_MISSEDBACKSIDE, 0,
-        "\n\nLinedef %d has two-sided flag set, but no second sidedef",
-        line->iLineID);
-    }
-    else
-    {
-      ShowOverflowWarning(OVERFLOW_MISSEDBACKSIDE, 0, "");
-    }
-  }
-
   return false;
 }
 

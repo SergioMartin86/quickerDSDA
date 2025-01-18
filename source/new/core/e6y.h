@@ -35,9 +35,7 @@
 #define __E6Y__
 
 #include <stdarg.h>
-
-#include "hu_lib.h"
-
+#include <doomdata.h>
 #define GL_COMBINE_ARB                    0x8570
 #define GL_RGB_SCALE_ARB                  0x8573
 
@@ -52,10 +50,6 @@ typedef struct camera_s
   fixed_t PrevX;
   fixed_t PrevY;
   fixed_t PrevZ;
-  angle_t angle;
-  angle_t pitch;
-  angle_t PrevAngle;
-  angle_t PrevPitch;
   int type;
 } camera_t;
 
@@ -79,7 +73,6 @@ void M_ChangeStretch(void);
 extern camera_t walkcamera;
 
 extern int PitchSign;
-extern angle_t viewpitch;
 extern float skyscale;
 extern float screen_skybox_zplane;
 extern float maxNoPitch[];
@@ -181,9 +174,6 @@ typedef struct timetable_s
 {
   char map[16];
 
-  int kill[MAX_MAXPLAYERS];
-  int item[MAX_MAXPLAYERS];
-  int secret[MAX_MAXPLAYERS];
 
   int stat[TT_MAX];
 } timetable_t;

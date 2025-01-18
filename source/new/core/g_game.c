@@ -2711,35 +2711,10 @@ static int LoadDemo(const char *name, const byte **buffer, int *length)
 
 void P_ResetWalkcam(void)
 {
-  if (walkcamera.type)
-  {
-    walkcamera.PrevX = walkcamera.x;
-    walkcamera.PrevY = walkcamera.y;
-    walkcamera.PrevZ = walkcamera.z;
-    walkcamera.PrevAngle = walkcamera.angle;
-    walkcamera.PrevPitch = walkcamera.pitch;
-  }
 }
 
 void P_SyncWalkcam(dboolean sync_coords, dboolean sync_sight)
 {
-  if (!walkcamera.type)
-    return;
-
-  if (players[displayplayer].mo)
-  {
-    if (sync_sight)
-    {
-      walkcamera.angle = players[displayplayer].mo->angle;
-      walkcamera.pitch = dsda_PlayerPitch(&players[displayplayer]);
-    }
-
-    if(sync_coords)
-    {
-      walkcamera.x = players[displayplayer].mo->x;
-      walkcamera.y = players[displayplayer].mo->y;
-    }
-  }
 }
 
 //e6y

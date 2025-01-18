@@ -41,8 +41,6 @@
 #include <winreg.h>
 #endif
 
-#include "hu_lib.h"
-
 #include "doomtype.h"
 #include "doomstat.h"
 #include "d_main.h"
@@ -413,51 +411,6 @@ timetable_t *stats = NULL;
 
 void e6y_G_DoCompleted(void)
 {
-  int i;
-
-  if(!stats_level)
-    return;
-
-  if (numlevels >= levels_max)
-  {
-    levels_max = levels_max ? levels_max*2 : 32;
-    stats = Z_Realloc(stats,sizeof(*stats)*levels_max);
-  }
-
-  memset(&stats[numlevels], 0, sizeof(timetable_t));
-
-  snprintf(stats[numlevels].map, sizeof(stats[numlevels].map), "%s", dsda_MapLumpName(gameepisode, gamemap));
-
-  if (secretexit)
-  {
-    size_t end_of_string = strlen(stats[numlevels].map);
-    if (end_of_string < 15)
-      stats[numlevels].map[end_of_string] = 's';
-  }
-
-  stats[numlevels].stat[TT_TIME]        = leveltime;
-  stats[numlevels].stat[TT_TOTALTIME]   = totalleveltimes;
-  stats[numlevels].stat[TT_TOTALKILL]   = totalkills;
-  stats[numlevels].stat[TT_TOTALITEM]   = totalitems;
-  stats[numlevels].stat[TT_TOTALSECRET] = totalsecret;
-
-  for (i = 0; i < g_maxplayers; i++)
-  {
-    if (playeringame[i])
-    {
-      stats[numlevels].kill[i]   = players[i].killcount - players[i].maxkilldiscount;
-      stats[numlevels].item[i]   = players[i].itemcount;
-      stats[numlevels].secret[i] = players[i].secretcount;
-
-      stats[numlevels].stat[TT_ALLKILL]   += stats[numlevels].kill[i];
-      stats[numlevels].stat[TT_ALLITEM]   += stats[numlevels].item[i];
-      stats[numlevels].stat[TT_ALLSECRET] += stats[numlevels].secret[i];
-    }
-  }
-
-  numlevels++;
-
-  e6y_WriteStats();
 }
 
 typedef struct tmpdata_s
@@ -469,101 +422,6 @@ typedef struct tmpdata_s
 
 void e6y_WriteStats(void)
 {
-  FILE *f;
-  char str[200];
-  int i, level, playerscount;
-  timetable_t max;
-  tmpdata_t tmp;
-  tmpdata_t *all;
-  size_t allkills_len=0, allitems_len=0, allsecrets_len=0;
-
-  f = M_OpenFile("levelstat.txt", "wb");
-
-  if (f == NULL)
-  {
-    lprintf(LO_ERROR, "Unable to open levelstat.txt for writing\n");
-    return;
-  }
-
-  all = Z_Malloc(sizeof(*all) * numlevels);
-  memset(&max, 0, sizeof(timetable_t));
-
-  playerscount = 0;
-  for (i = 0; i < g_maxplayers; i++)
-    if (playeringame[i])
-      playerscount++;
-
-  for (level=0;level<numlevels;level++)
-  {
-    memset(&tmp, 0, sizeof(tmpdata_t));
-    for (i = 0; i < g_maxplayers; i++)
-    {
-      if (playeringame[i])
-      {
-        char strtmp[200];
-        strcpy(str, tmp.kill[0] == '\0' ? "%s%d" : "%s+%d");
-
-        snprintf(strtmp, sizeof(strtmp), str, tmp.kill, stats[level].kill[i]);
-        strcpy(tmp.kill, strtmp);
-
-        snprintf(strtmp, sizeof(strtmp), str, tmp.item, stats[level].item[i]);
-        strcpy(tmp.item, strtmp);
-
-        snprintf(strtmp, sizeof(strtmp), str, tmp.secret, stats[level].secret[i]);
-        strcpy(tmp.secret, strtmp);
-      }
-    }
-    if (playerscount<2)
-      memset(&all[level], 0, sizeof(tmpdata_t));
-    else
-    {
-      snprintf(all[level].kill, sizeof(all[level].kill),  " (%s)", tmp.kill  );
-      snprintf(all[level].item, sizeof(all[level].item),   " (%s)", tmp.item  );
-      snprintf(all[level].secret, sizeof(all[level].secret), " (%s)", tmp.secret);
-    }
-
-    if (strlen(all[level].kill) > allkills_len)
-      allkills_len = strlen(all[level].kill);
-    if (strlen(all[level].item) > allitems_len)
-      allitems_len = strlen(all[level].item);
-    if (strlen(all[level].secret) > allsecrets_len)
-      allsecrets_len = strlen(all[level].secret);
-
-    for(i=0; i<TT_MAX; i++)
-      if (stats[level].stat[i] > max.stat[i])
-        max.stat[i] = stats[level].stat[i];
-  }
-  max.stat[TT_TIME] = max.stat[TT_TIME]/TICRATE/60;
-  max.stat[TT_TOTALTIME] = max.stat[TT_TOTALTIME]/TICRATE/60;
-
-  for(i=0; i<TT_MAX; i++) {
-    snprintf(str, sizeof(str), "%d", max.stat[i]);
-    max.stat[i] = strlen(str);
-  }
-
-  for (level=0;level<numlevels;level++)
-  {
-    sprintf(str,
-      "%%s - %%%dd:%%05.2f (%%%dd:%%02d)  K: %%%dd/%%-%dd%%%lds  I: %%%dd/%%-%dd%%%lds  S: %%%dd/%%-%dd %%%lds\r\n",
-      max.stat[TT_TIME],      max.stat[TT_TOTALTIME],
-      max.stat[TT_ALLKILL],   max.stat[TT_TOTALKILL],   (long)allkills_len,
-      max.stat[TT_ALLITEM],   max.stat[TT_TOTALITEM],   (long)allitems_len,
-      max.stat[TT_ALLSECRET], max.stat[TT_TOTALSECRET], (long)allsecrets_len);
-
-    fprintf(f, str, stats[level].map,
-      stats[level].stat[TT_TIME]/TICRATE/60,
-      (float)(stats[level].stat[TT_TIME]%(60*TICRATE))/TICRATE,
-      (stats[level].stat[TT_TOTALTIME])/TICRATE/60,
-      (stats[level].stat[TT_TOTALTIME]%(60*TICRATE))/TICRATE,
-      stats[level].stat[TT_ALLKILL],  stats[level].stat[TT_TOTALKILL],   all[level].kill,
-      stats[level].stat[TT_ALLITEM],  stats[level].stat[TT_TOTALITEM],   all[level].item,
-      stats[level].stat[TT_ALLSECRET],stats[level].stat[TT_TOTALSECRET], all[level].secret
-      );
-
-  }
-
-  Z_Free(all);
-  fclose(f);
 }
 
 //--------------------------------------------------
