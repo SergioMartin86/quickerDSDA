@@ -83,7 +83,6 @@
 #include "dsda/pause.h"
 #include "dsda/preferences.h"
 #include "dsda/settings.h"
-#include "dsda/signal_context.h"
 #include "dsda/skill_info.h"
 #include "dsda/utility.h"
 #include "dsda/wad_stats.h"
