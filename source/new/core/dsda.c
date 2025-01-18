@@ -27,7 +27,6 @@
 
 #include "dsda/args.h"
 #include "dsda/features.h"
-#include "dsda/ghost.h"
 #include "dsda/mouse.h"
 #include "dsda/settings.h"
 #include "dsda/split_tracker.h"
@@ -156,16 +155,8 @@ void dsda_ReadCommandLine(void) {
     dsda_time_secrets = dsda_time_all;
   }
 
-  arg = dsda_Arg(dsda_arg_export_ghost);
-  if (arg->found)
-    dsda_InitGhostExport(arg->value.v_string);
-
   dsda_HandleTurbo();
   dsda_HandleBuild();
-
-  arg = dsda_Arg(dsda_arg_import_ghost);
-  if (arg->found)
-    dsda_InitGhostImport(arg->value.v_string_array, arg->count);
 
   if (dsda_Flag(dsda_arg_tas) || dsda_Flag(dsda_arg_build)) dsda_SetTas();
 }

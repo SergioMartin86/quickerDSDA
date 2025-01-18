@@ -295,9 +295,6 @@ static void P_FrozenTicker (void)
         if (mo->player && mo->player == &players[displayplayer])
           continue;
 
-        mo->PrevX = mo->x;
-        mo->PrevY = mo->y;
-        mo->PrevZ = mo->z;
       }
   }
 

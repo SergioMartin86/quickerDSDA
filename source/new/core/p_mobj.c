@@ -970,10 +970,6 @@ void P_MobjThinker (mobj_t* mobj)
     return;
   }
 
-  mobj->PrevX = mobj->x;
-  mobj->PrevY = mobj->y;
-  mobj->PrevZ = mobj->z;
-
   // momentum movement
   BlockingMobj = NULL;
   if (mobj->momx | mobj->momy || mobj->flags & MF_SKULLFLY)
@@ -1440,10 +1436,6 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
     {
         mobj->flags2 &= ~MF2_FEETARECLIPPED;
     }
-
-  mobj->PrevX = mobj->x;
-  mobj->PrevY = mobj->y;
-  mobj->PrevZ = mobj->z;
 
   mobj->thinker.function = P_MobjThinker;
 
@@ -2235,10 +2227,6 @@ void P_BlasterMobjThinker(mobj_t * mobj)
     fixed_t zfrac;
     fixed_t z;
     dboolean changexy;
-
-    mobj->PrevX = mobj->x;
-    mobj->PrevY = mobj->y;
-    mobj->PrevZ = mobj->z;
 
     // Handle movement
     if (mobj->momx || mobj->momy || (mobj->z != mobj->floorz) || mobj->momz)

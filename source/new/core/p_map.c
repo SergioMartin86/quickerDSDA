@@ -346,10 +346,6 @@ dboolean P_MoveThing(mobj_t *thing, fixed_t x, fixed_t y, fixed_t z, dboolean fo
                             g_mt_tfog);
     }
 
-    thing->PrevX = x;
-    thing->PrevY = y;
-    thing->PrevZ = z;
-
     return true;
   }
   else
@@ -449,10 +445,6 @@ dboolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y, dboolean boss)
   thing->y = y;
 
   P_SetThingPosition (thing, 1);
-
-  thing->PrevX = x;
-  thing->PrevY = y;
-  thing->PrevZ = thing->floorz;
 
   return true;
 }

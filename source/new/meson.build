@@ -18,7 +18,6 @@ quickerDSDASrc =  [
  'core/dsda/features.c',
  'core/dsda/font.c',
  'core/dsda/game_controller.c',
- 'core/dsda/ghost.c',
  'core/dsda/global.c',
  'core/dsda/id_list.c',
  'core/dsda/input.c',

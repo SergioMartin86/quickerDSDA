@@ -215,7 +215,6 @@ static int P_TeleportToDestination(mobj_t *destination, line_t *line, mobj_t *th
     thing->z = thing->floorz + z;
   else if (compatibility_level != finaldoom_compatibility)
     thing->z = thing->floorz;
-  thing->PrevZ = thing->z;
 
   if (flags & TELF_SOURCEFOG)
   {
@@ -510,7 +509,6 @@ int EV_SilentLineTeleport(line_t *line, int side, mobj_t *thing,
         // Ground level at the exit is measured as the higher of the
         // two floor heights at the exit linedef.
         thing->z = z + sides[l->sidenum[stepdown]].sector->floorheight;
-        thing->PrevZ = thing->z;
 
         // Rotate thing's orientation according to difference in linedef angles
         thing->angle += angle;
