@@ -315,15 +315,6 @@ int dsda_LegacyResolveINIT(int* init) {
 }
 
 int dsda_LegacyMusicIndexToLumpNum(int* lump, int music_index) {
-  char name[9];
-  const char* format;
-
-  format =  "d_%s";
-
-  sprintf(name, format, S_music[music_index].name);
-
-  *lump = W_GetNumForName(name);
-
   return true;
 }
 

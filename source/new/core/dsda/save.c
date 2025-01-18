@@ -30,7 +30,6 @@
 #include "dsda/excmd.h"
 #include "dsda/features.h"
 #include "dsda/mapinfo.h"
-#include "dsda/music.h"
 #include "dsda/options.h"
 
 #include "save.h"
@@ -76,8 +75,6 @@ static void dsda_ArchiveContext(void) {
   for (; i < FUTURE_MAXPLAYERS; ++i)
     P_SAVE_BYTE(0);
 
-  dsda_ArchiveMusic();
-
   CheckSaveGame(dsda_GameOptionSize());
   save_p = G_WriteOptions(save_p);
 
@@ -112,8 +109,6 @@ static void dsda_UnArchiveContext(void) {
   for (i = 0; i < g_maxplayers; ++i)
     P_LOAD_BYTE(playeringame[i]);
   save_p += FUTURE_MAXPLAYERS - g_maxplayers;
-
-  dsda_UnArchiveMusic();
 
   save_p += (G_ReadOptions(save_p) - save_p);
 

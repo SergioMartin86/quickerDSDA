@@ -414,18 +414,5 @@ dboolean HU_Responder(event_t *ev)
 
 int SetCustomMessage(int plr, const char *msg, int ticks, int sfx)
 {
-  custom_message_t item;
-
-  if (plr < 0 || plr >= g_maxplayers || !msg || ticks < 0 || sfx < 0 || sfx >= num_sfx)
-  {
-    return false;
-  }
-
-  item.msg = msg;
-  item.ticks = ticks;
-  item.sfx = sfx;
-
-  custom_message[plr] = item;
-
   return true;
 }

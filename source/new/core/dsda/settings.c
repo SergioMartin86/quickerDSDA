@@ -37,20 +37,9 @@ int dsda_skip_next_wipe;
 void dsda_InitSettings(void) {
   void G_UpdateMouseSensitivity(void);
   void dsda_InitQuickstartCache(void);
-  void dsda_InitParallelSFXFilter(void);
-
-  #ifdef __ENABLE_OPENGL_
-  void gld_ResetAutomapTransparency(void);
-  #endif
-
   dsda_UpdateStrictMode();
   G_UpdateMouseSensitivity();
   dsda_InitQuickstartCache();
-  dsda_InitParallelSFXFilter();
-
-  #ifdef __ENABLE_OPENGL_
-  gld_ResetAutomapTransparency();
-  #endif
 }
 
 static int dsda_WadCompatibilityLevel(void) {

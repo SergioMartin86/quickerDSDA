@@ -101,7 +101,6 @@ void HU_InitThresholds(void);
 void dsda_InitKeyFrame(void);
 void dsda_SetupStretchParams(void);
 void dsda_InitQuickstartCache(void);
-void dsda_InitParallelSFXFilter(void);
 void M_ChangeMapMultisamling(void);
 #ifdef __ENABLE_OPENGL_
 void gld_ResetAutomapTransparency(void);
@@ -900,11 +899,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_parallel_sfx_limit] = {
     "dsda_parallel_sfx_limit", dsda_config_parallel_sfx_limit,
-    dsda_config_int, 0, 32, { 0 }, NULL, NOT_STRICT, dsda_InitParallelSFXFilter
+    dsda_config_int, 0, 32, { 0 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_parallel_sfx_window] = {
     "dsda_parallel_sfx_window", dsda_config_parallel_sfx_window,
-    dsda_config_int, 1, 32, { 1 }, NULL, NOT_STRICT, dsda_InitParallelSFXFilter
+    dsda_config_int, 1, 32, { 1 }, NULL, NOT_STRICT, NULL
   },
   [dsda_config_movement_toggle_sfx] = {
     "dsda_movement_toggle_sfx", dsda_config_movement_toggle_sfx,

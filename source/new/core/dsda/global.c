@@ -33,8 +33,6 @@
 #include "dsda/args.h"
 #include "dsda/map_format.h"
 #include "dsda/mobjinfo.h"
-#include "dsda/music.h"
-#include "dsda/sfx.h"
 #include "dsda/sprite.h"
 #include "dsda/state.h"
 
@@ -143,8 +141,6 @@ static void dsda_InitDoom(void) {
   dsda_InitializeMobjInfo(DOOM_MT_ZERO, DOOM_NUMMOBJTYPES, DOOM_NUMMOBJTYPES);
   dsda_InitializeStates(doom_states, DOOM_NUMSTATES);
   dsda_InitializeSprites(doom_sprnames, DOOM_NUMSPRITES);
-  dsda_InitializeSFX(doom_S_sfx, DOOM_NUMSFX);
-  dsda_InitializeMusic(doom_S_music, DOOM_NUMMUSIC);
 
   demostates = doom_demostates;
 
