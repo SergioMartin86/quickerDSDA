@@ -85,7 +85,6 @@
 #include "dsda/settings.h"
 #include "dsda/signal_context.h"
 #include "dsda/skill_info.h"
-#include "dsda/sndinfo.h"
 #include "dsda/utility.h"
 #include "dsda/wad_stats.h"
 
@@ -1280,8 +1279,6 @@ void D_DoomMainSetup(void)
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "M_Init: Init miscellaneous info.\n");
-
-  dsda_LoadSndInfo();
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "R_Init: Init DOOM refresh daemon - ");
