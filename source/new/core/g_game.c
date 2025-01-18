@@ -65,7 +65,6 @@
 #include "p_map.h"
 #include "sounds.h"
 #include "r_data.h"
-#include "r_sky.h"
 #include "p_inter.h"
 #include "g_game.h"
 #include "lprintf.h"
@@ -906,6 +905,7 @@ static void G_ResetInventory(player_t *p)
 //
 // G_DoLoadLevel
 //
+int skyflatnum;
 
 static void G_DoLoadLevel (void)
 {
@@ -918,10 +918,6 @@ static void G_DoLoadLevel (void)
   //  setting one.
 
   skyflatnum = R_FlatNumForName(g_skyflatname);
-  skytexture = dsda_SkyTexture();
-
-  // [RH] Set up details about sky rendering
-  R_InitSkyMap ();
 
   levelstarttic = gametic;        // for time calculation
 

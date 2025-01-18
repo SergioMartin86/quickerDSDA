@@ -53,7 +53,6 @@
 #include "doomstat.h"
 #include "w_wad.h"
 #include "r_main.h"
-#include "r_sky.h"
 #include "r_plane.h"
 #include "r_main.h"
 #include "v_video.h"

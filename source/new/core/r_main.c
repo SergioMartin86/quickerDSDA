@@ -43,7 +43,6 @@
 #include "r_main.h"
 #include "r_plane.h"
 #include "m_bbox.h"
-#include "r_sky.h"
 #include "v_video.h"
 #include "lprintf.h"
 #include "i_main.h"
@@ -526,9 +525,6 @@ void R_Init (void)
   R_InitPlanes();
   lprintf(LO_DEBUG, "R_InitLightTables ");
   R_InitLightTables();
-  lprintf(LO_DEBUG, "R_InitSkyMap ");
-  R_InitSkyMap();
-  lprintf(LO_DEBUG, "R_InitTranslationsTables ");
 }
 
 //

@@ -56,7 +56,6 @@
 #include "i_video.h"
 #include "info.h"
 #include "r_main.h"
-#include "r_sky.h"
 #include "dsda.h"
 #include "dsda/settings.h"
 #include "g_game.h"
