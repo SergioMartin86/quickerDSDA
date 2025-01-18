@@ -77,7 +77,6 @@ extern int dsda_input_profile;
 extern int weapon_preferences[2][NUMWEAPONS + 1];
 extern int sts_always_red;
 extern int sts_pct_always_gray;
-extern int sts_traditional_keys;
 
 void M_ChangeSkyMode(void);
 void M_ChangeAllowFog(void);
@@ -105,7 +104,6 @@ void gld_ResetAutomapTransparency(void);
 void gld_ResetAutomapTransparency(void){}
 #endif
 void R_SetViewSize(void);
-void M_ChangeApplyPalette(void);
 void M_ChangeStretch(void);
 void M_ChangeAspectRatio(void);
 void dsda_InitGameControllerParameters(void);
@@ -121,7 +119,6 @@ void dsda_TrackConfigFeatures(void) {
 void dsda_UpdateStrictMode(void) {
   M_ChangeSpeed(); // side effect of always sr50
   M_ChangeSkyMode(); // affected by mouselook setting
-  M_ChangeApplyPalette();
   dsda_TrackConfigFeatures();
 }
 
@@ -222,7 +219,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_sts_traditional_keys] = {
     "sts_traditional_keys", dsda_config_sts_traditional_keys,
-    CONF_BOOL(0), &sts_traditional_keys
+    CONF_BOOL(0), NULL
   },
   [dsda_config_strict_mode] = {
     "dsda_strict_mode", dsda_config_strict_mode,
@@ -1052,7 +1049,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_usegamma] = {
     "usegamma", dsda_config_usegamma,
-    dsda_config_int, 0, 4, { 0 }, &usegamma, NOT_STRICT, M_ChangeApplyPalette
+    dsda_config_int, 0, 4, { 0 }, &usegamma, NOT_STRICT, NULL
   },
   [dsda_config_screenblocks] = {
     "screenblocks", dsda_config_screenblocks,
@@ -1064,15 +1061,15 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_palette_ondamage] = {
     "palette_ondamage", dsda_config_palette_ondamage,
-    CONF_BOOL(1), NULL, STRICT_INT(1), M_ChangeApplyPalette
+    CONF_BOOL(1), NULL, STRICT_INT(1), NULL
   },
   [dsda_config_palette_onbonus] = {
     "palette_onbonus", dsda_config_palette_onbonus,
-    CONF_BOOL(1), NULL, STRICT_INT(1), M_ChangeApplyPalette
+    CONF_BOOL(1), NULL, STRICT_INT(1), NULL
   },
   [dsda_config_palette_onpowers] = {
     "palette_onpowers", dsda_config_palette_onpowers,
-    CONF_BOOL(1), NULL, STRICT_INT(1), M_ChangeApplyPalette
+    CONF_BOOL(1), NULL, STRICT_INT(1), NULL
   },
   [dsda_config_render_wipescreen] = {
     "render_wipescreen", dsda_config_render_wipescreen,

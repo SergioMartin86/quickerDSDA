@@ -40,7 +40,6 @@
 #include "r_main.h"
 #include "r_draw.h"
 #include "v_video.h"
-#include "st_stuff.h"
 #include "g_game.h"
 #include "lprintf.h"
 
@@ -505,23 +504,6 @@ static void R_CopyScreenBufferSection(int x, int y, int count)
 
 void R_DrawViewBorder(void)
 {
-  int i;
-
-  if (V_IsOpenGLMode()) {
-    // proff 11/99: we don't have a backscreen in OpenGL from where we can copy this
-    R_FillBackScreen();
-    return;
-  }
-
-  // e6y: wide-res
-  if ((ratio_multiplier != ratio_scale || wide_offsety) && R_StatusBarVisible())
-  {
-    for (i = SCREENHEIGHT - ST_SCALED_HEIGHT; i < SCREENHEIGHT; i++)
-    {
-      R_CopyScreenBufferSection(0, i, ST_SCALED_OFFSETX);
-      R_CopyScreenBufferSection(SCREENWIDTH - ST_SCALED_OFFSETX, i, ST_SCALED_OFFSETX);
-    }
-  }
 }
 
 void R_SetFuzzPos(int fp)

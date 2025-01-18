@@ -18,7 +18,6 @@
 #include "doomdef.h"
 #include "doomtype.h"
 #include "r_main.h"
-#include "st_stuff.h"
 #include "v_video.h"
 
 #include "dsda/configuration.h"
@@ -117,34 +116,9 @@ stretch_param_t* dsda_StretchParams(int flags) {
 }
 
 static void InitExTextParam(stretch_param_t* offsets, enum patch_translation_e flags) {
-  int offset2x, offset2y;
-
-  offset2x = SCREENWIDTH - ex_text_screenwidth;
-  offset2y = (SCREENHEIGHT - ex_text_screenheight) -
-             R_PartialView() * (ST_SCALED_HEIGHT - ex_text_st_scaled_height);
-
-  memset(offsets, 0, sizeof(*offsets));
-
-  offsets->video = &video_ex_text;
-
-  if (flags == VPT_ALIGN_LEFT || flags == VPT_ALIGN_LEFT_BOTTOM || flags == VPT_ALIGN_LEFT_TOP) {
-    offsets->deltax1 = 0;
-    offsets->deltax2 = 0;
-  }
-
-  if (flags == VPT_ALIGN_RIGHT || flags == VPT_ALIGN_RIGHT_BOTTOM || flags == VPT_ALIGN_RIGHT_TOP) {
-    offsets->deltax1 = offset2x;
-    offsets->deltax2 = offset2x;
-  }
-
-  if (flags == VPT_ALIGN_BOTTOM || flags == VPT_ALIGN_LEFT_BOTTOM || flags == VPT_ALIGN_RIGHT_BOTTOM)
-    offsets->deltay1 = offset2y;
 }
 
 void dsda_UpdateExTextOffset(enum patch_translation_e flags, int offset) {
-  stretch_params_table[patch_stretch_ex_text][flags].deltay1 +=
-    (ST_SCALED_HEIGHT - ex_text_st_scaled_height) * offset * hud_font.line_height / g_st_height +
-    (hud_font.line_height - exhud_font.line_height) * ex_text_scale_y * (offset > 0 ? 1 : -1);
 }
 
 void dsda_ResetExTextOffsets(void) {
@@ -248,47 +222,4 @@ void dsda_SetupStretchParams(void) {
 }
 
 void dsda_EvaluatePatchScale(void) {
-  int render_patches_scalex;
-  int render_patches_scaley;
-
-  render_patches_scalex = dsda_IntConfig(dsda_config_render_patches_scalex);
-  render_patches_scaley = dsda_IntConfig(dsda_config_render_patches_scaley);
-
-  patches_scalex = MIN(SCREENWIDTH / 320, SCREENHEIGHT / 200);
-  patches_scalex = MAX(1, patches_scalex);
-  patches_scaley = patches_scalex;
-
-  if (render_patches_scalex > 0)
-    patches_scalex = MIN(render_patches_scalex, patches_scalex);
-
-  if (render_patches_scaley > 0)
-    patches_scaley = MIN(render_patches_scaley, patches_scaley);
-
-  ST_SCALED_HEIGHT = g_st_height * patches_scaley;
-
-  if (SCREENWIDTH < 320 || WIDE_SCREENWIDTH < 320 ||
-      SCREENHEIGHT < 200 || WIDE_SCREENHEIGHT < 200)
-    render_stretch_hud = patch_stretch_fit_to_width;
-
-  switch (render_stretch_hud) {
-    case patch_stretch_not_adjusted:
-      wide_offset2x = SCREENWIDTH - patches_scalex * 320;
-      wide_offset2y = SCREENHEIGHT - patches_scaley * 200;
-      break;
-    case patch_stretch_doom_format:
-      ST_SCALED_HEIGHT = g_st_height * WIDE_SCREENHEIGHT / 200;
-
-      wide_offset2x = SCREENWIDTH - WIDE_SCREENWIDTH;
-      wide_offset2y = SCREENHEIGHT - WIDE_SCREENHEIGHT;
-      break;
-    case patch_stretch_fit_to_width:
-      ST_SCALED_HEIGHT = g_st_height * SCREENHEIGHT / 200;
-
-      wide_offset2x = 0;
-      wide_offset2y = 0;
-      break;
-  }
-
-  wide_offsetx = wide_offset2x / 2;
-  wide_offsety = wide_offset2y / 2;
 }

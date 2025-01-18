@@ -65,7 +65,6 @@
 #include "i_video.h"
 #include "g_game.h"
 #include "wi_stuff.h"
-#include "st_stuff.h"
 #include "p_setup.h"
 #include "r_draw.h"
 #include "r_main.h"
@@ -1313,10 +1312,6 @@ void D_DoomMainSetup(void)
   {
     I_CapturePrep(arg->value.v_string);
   }
-
-  //jff 9/3/98 use logical output routine
-  lprintf(LO_DEBUG, "ST_Init: Init status bar.\n");
-  ST_Init();
 
   // start the appropriate game based on parms
 

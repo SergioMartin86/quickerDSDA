@@ -60,7 +60,6 @@
 #include "p_map.h"
 #include "d_main.h"
 #include "wi_stuff.h"
-#include "st_stuff.h"
 #include "w_wad.h"
 #include "r_main.h"
 #include "r_draw.h"
@@ -921,7 +920,6 @@ static void G_DoLoadLevel (void)
 
   skyflatnum = R_FlatNumForName(g_skyflatname);
   skytexture = dsda_SkyTexture();
-  R_SetFloorNum(&grnrock, dsda_BorderTexture());
 
   // [RH] Set up details about sky rendering
   R_InitSkyMap ();
@@ -977,22 +975,6 @@ static void G_DoLoadLevel (void)
   dsda_ResetPauseMode();
   dsda_ResetExCmdQueue();
 
-  // killough 5/13/98: in case netdemo has consoleplayer other than green
-  ST_Start();
-
-  // The border texture can change between maps, which must queue a backscreen fill
-  {
-    void D_MustFillBackScreen();
-
-    static int old_grnrock = -1;
-
-    if (old_grnrock != grnrock.lumpnum)
-    {
-      old_grnrock = grnrock.lumpnum;
-      D_MustFillBackScreen();
-    }
-  }
-
   // killough: make -timedemo work on multilevel demos
   // Move to end of function to minimize noise -- killough 2/22/98:
 
@@ -1015,9 +997,7 @@ static void G_DoLoadLevel (void)
 dboolean G_Responder (event_t* ev)
 {
   if (
-    gamestate == GS_LEVEL && (
-      ST_Responder(ev) 
-    )
+    gamestate == GS_LEVEL 
   ) return true;
 
   // allow spy mode changes even during the demo
@@ -1033,7 +1013,6 @@ dboolean G_Responder (event_t* ev)
         displayplayer = 0;
     while (!playeringame[displayplayer] && displayplayer!=consoleplayer);
 
-    ST_Start();    // killough 3/7/98: switch status bar views too
     return true;
   }
 
@@ -1322,7 +1301,6 @@ void G_Ticker (void)
     case GS_LEVEL:
       P_Ticker();
       mlooky = 0;
-      ST_Ticker();
       break;
 
     case GS_INTERMISSION:
@@ -1944,7 +1922,6 @@ void G_AfterLoad(void)
 
   R_FillBackScreen ();
 
-  ST_Start();
 }
 
 void G_DoLoadGame(void)
@@ -2240,7 +2217,6 @@ void G_DoNewGame (void)
   gameaction = ga_nothing;
 
   //jff 4/26/98 wake up the status bar in case were coming out of a DM demo
-  ST_Start();
   walkcamera.type=0; //e6y
 }
 

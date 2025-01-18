@@ -49,7 +49,6 @@
 #include "r_sky.h"
 #include "v_video.h"
 #include "lprintf.h"
-#include "st_stuff.h"
 #include "i_main.h"
 #include "i_system.h"
 #include "i_video.h"
@@ -628,126 +627,6 @@ void R_BuildModelViewMatrix(void)
 
 void R_ExecuteSetViewSize (void)
 {
-  int i;
-  int cheight;
-
-  setsizeneeded = false;
-
-  SetRatio(SCREENWIDTH, SCREENHEIGHT);
-
-  if (setblocks == 11)
-  {
-    viewheight = SCREENHEIGHT;
-    freelookviewheight = viewheight;
-  }
-  // proff 09/24/98: Added for high-res
-  else
-  {
-    viewheight = SCREENHEIGHT - ST_SCALED_HEIGHT;
-    freelookviewheight = SCREENHEIGHT;
-  }
-
-  viewwidth = SCREENWIDTH;
-
-  viewheightfrac = viewheight<<FRACBITS;//e6y
-
-  centery = viewheight/2;
-  centerx = viewwidth/2;
-  centerxfrac = centerx<<FRACBITS;
-  centeryfrac = centery<<FRACBITS;
-
-  if (tallscreen)
-  {
-    wide_centerx = centerx;
-    cheight = SCREENHEIGHT * ratio_multiplier / ratio_scale;
-  }
-  else
-  {
-    wide_centerx = centerx * ratio_multiplier / ratio_scale;
-    cheight = SCREENHEIGHT;
-  }
-
-  // e6y: wide-res
-  projection = wide_centerx<<FRACBITS;
-
-// proff 11/06/98: Added for high-res
-  // calculate projectiony using int64_t math to avoid overflow when SCREENWIDTH>4228
-  projectiony = (fixed_t)((((int64_t)cheight * centerx * 320) / 200) / SCREENWIDTH * FRACUNIT);
-  // e6y: this is a precalculated value for more precise flats drawing (see R_MapPlane)
-  viewfocratio = projectiony / wide_centerx;
-
-  dsda_SetupStretchParams();
-
-  R_InitBuffer (SCREENWIDTH, viewheight);
-
-  R_InitTextureMapping();
-
-  // psprite scales
-  // proff 08/17/98: Changed for high-res
-  // proff 11/06/98: Added for high-res
-  // e6y: wide-res
-  pspritexscale = (wide_centerx << FRACBITS) / 160;
-  pspriteyscale = (cheight << FRACBITS) / 200;
-  pspriteiscale = FixedDiv (FRACUNIT, pspritexscale);
-  // [FG] make sure that the product of the weapon sprite scale factor
-  //      and its reciprocal is always at least FRACUNIT to
-  //      fix garbage lines at the top of weapon sprites
-  pspriteiyscale = FixedDiv (FRACUNIT, pspriteyscale);
-  while (FixedMul(pspriteiyscale, pspriteyscale) < FRACUNIT)
-    pspriteiyscale++;
-
-  //e6y: added for GL
-  pspritexscale_f = (float)wide_centerx/160.0f;
-  pspriteyscale_f = (float)cheight / 200.0f;
-
-  skyiscale = (200 << FRACBITS) / SCREENHEIGHT;
-
-	// [RH] Sky height fix for screens not 200 (or 240) pixels tall
-	R_InitSkyMap();
-
-  // thing clipping
-  for (i=0 ; i<viewwidth ; i++)
-    screenheightarray[i] = viewheight;
-
-  for (i=0 ; i<viewwidth ; i++)
-    {
-      fixed_t cosadj = D_abs(finecosine[xtoviewangle[i]>>ANGLETOFINESHIFT]);
-      distscale[i] = FixedDiv(FRACUNIT,cosadj);
-    }
-
-  // e6y
-  // Calculate the light levels to use
-  //  for each level / scale combination.
-  // Calculate the light levels to use
-  //  for each level / scale combination.
-  for (i=0; i<LIGHTLEVELS; i++)
-  {
-    int j, startmap = ((LIGHTLEVELS-LIGHTBRIGHT-i)*2)*NUMCOLORMAPS/LIGHTLEVELS;
-    for (j=0 ; j<MAXLIGHTSCALE ; j++)
-    {
-      int t, level = startmap - j/DISTMAP;
-
-      if (level < 0)
-        level = 0;
-
-      if (level >= NUMCOLORMAPS)
-        level = NUMCOLORMAPS-1;
-
-      // killough 3/20/98: initialize multiple colormaps
-      level *= 256;
-
-      for (t=0; t<numcolormaps; t++)     // killough 4/4/98
-        c_scalelight[t][i][j] = colormaps[t] + level;
-    }
-  }
-
-#ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode())
-    dsda_GLSetRenderViewportParams();
-#endif
-
-
-  dsda_BeginRenderStats();
 }
 
 //
