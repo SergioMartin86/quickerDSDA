@@ -529,8 +529,6 @@ void R_Init (void)
   lprintf(LO_DEBUG, "R_InitSkyMap ");
   R_InitSkyMap();
   lprintf(LO_DEBUG, "R_InitTranslationsTables ");
-  lprintf(LO_DEBUG, "R_InitPatches ");
-  R_InitPatches();
 }
 
 //

@@ -99,18 +99,6 @@ int       *flattranslation;             // for global animation
 int       *texturetranslation;
 
 //
-// R_GetTextureColumn
-//
-
-const byte *R_GetTextureColumn(const rpatch_t *texpatch, int col) {
-  while (col < 0)
-    col += texpatch->width;
-  col &= texpatch->widthmask;
-
-  return texpatch->columns[col].pixels;
-}
-
-//
 // R_InitTextures
 // Initializes the texture list
 //  with the textures from the world map.
@@ -523,22 +511,10 @@ void R_PrecacheLevel(void)
 // Proff - Added for OpenGL
 void R_SetPatchNum(patchnum_t *patchnum, const char *name)
 {
-  const rpatch_t *patch = R_PatchByName(name);
-  patchnum->width = patch->width;
-  patchnum->height = patch->height;
-  patchnum->leftoffset = patch->leftoffset;
-  patchnum->topoffset = patch->topoffset;
-  patchnum->lumpnum = W_GetNumForName(name);
 }
 
 void R_SetSpriteByNum(patchnum_t *patchnum, int lump)
 {
-  const rpatch_t *patch = R_PatchByNum(lump);
-  patchnum->width = patch->width;
-  patchnum->height = patch->height;
-  patchnum->leftoffset = patch->leftoffset;
-  patchnum->topoffset = patch->topoffset;
-  patchnum->lumpnum = lump;
 }
 
 int R_SetSpriteByIndex(patchnum_t *patchnum, spritenum_t item)

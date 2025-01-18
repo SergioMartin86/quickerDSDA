@@ -44,7 +44,6 @@
 #include "doomdef.h"
 #include "doomstat.h"
 #include "r_main.h"
-#include "r_patch.h"
 #include "m_bbox.h"
 #include "w_wad.h"   /* needed for color translation lump lookup */
 #include "v_video.h"
@@ -285,18 +284,6 @@ static void FUNC_V_FillFlat(int lump, int scrn, int x, int y, int width, int hei
 
 static void FUNC_V_FillPatch(int lump, int scrn, int x, int y, int width, int height, enum patch_translation_e flags)
 {
-  int sx, sy, w, h;
-
-  w = R_NumPatchWidth(lump);
-  h = R_NumPatchHeight(lump);
-
-  for (sy = y; sy < y + height; sy += h)
-  {
-    for (sx = x; sx < x + width; sx += w)
-    {
-      V_DrawNumPatch(sx, sy, scrn, lump, CR_DEFAULT, flags);
-    }
-  }
 }
 
 /*
@@ -330,24 +317,6 @@ void V_Init (void)
     screens[i].pitch = 0;
   }
 }
-
-//
-// V_DrawMemPatch
-//
-// CPhipps - unifying patch drawing routine, handles all cases and combinations
-//  of stretching, flipping and translating
-//
-// This function is big, hopefully not too big that gcc can't optimise it well.
-// In fact it packs pretty well, there is no big performance lose for all this merging;
-// the inner loops themselves are just the same as they always were
-// (indeed, laziness of the people who wrote the 'clones' of the original V_DrawPatch
-//  means that their inner loops weren't so well optimised, so merging code may even speed them).
-//
-static void V_DrawMemPatch(int x, int y, int scrn, const rpatch_t *patch,
-        int cm, enum patch_translation_e flags)
-{
-}
-
 
 //
 // FUNC_V_DrawShaded
@@ -385,13 +354,11 @@ static void FUNC_V_DrawShaded(int scrn, int x, int y, int width, int height, int
 static void FUNC_V_DrawNumPatch(int x, int y, int scrn, int lump,
          int cm, enum patch_translation_e flags)
 {
-  V_DrawMemPatch(x, y, scrn, R_PatchByNum(lump), cm, flags);
 }
 
 static void FUNC_V_DrawNumPatchPrecise(float x, float y, int scrn, int lump,
          int cm, enum patch_translation_e flags)
 {
-  V_DrawMemPatch((int)x, (int)y, scrn, R_PatchByNum(lump), cm, flags);
 }
 
 static int currentPaletteIndex = 0;

@@ -518,48 +518,6 @@ const char *lf_author;
 
 void WI_drawLF(void)
 {
-  int y = WI_TITLEY;
-  char lname[9];
-
-  dsda_PrepareFinished();
-
-  if (lf_levelname)
-  {
-    // The level defines a new name but no texture for the name.
-    WI_DrawString(160, y, lf_levelname);
-
-    y += (5 * hud_font.height / 4);
-  }
-  else
-  {
-    // draw <LevelName>
-    /* cph - get the graphic lump name and use it */
-    if (lf_levelpic)
-      strcpy(lname, lf_levelpic);
-    else
-      WI_levelNameLump(wbs->epsd, wbs->last, lname);
-
-    if (!W_LumpNameExists(lname))
-      return;
-
-    // CPhipps - patch drawing updated
-    V_DrawNamePatch((320 - V_NamePatchWidth(lname)) / 2, y,
-      FB, lname, CR_DEFAULT, VPT_STRETCH);
-
-    y += (5 * V_NamePatchHeight(lname)) / 4;
-  }
-
-  if (lf_author)
-  {
-    WI_DrawString(160, y, lf_author);
-
-    y += (5 * hud_font.height / 4);
-  }
-
-  // CPhipps - patch drawing updated
-  // draw "Finished!"
-  V_DrawNamePatch((320 - V_NamePatchWidth(finished))/2, y,
-     FB, finished, CR_DEFAULT, VPT_STRETCH);
 }
 
 
@@ -575,54 +533,6 @@ const char *el_author;
 
 void WI_drawEL(void)
 {
-  int y = WI_TITLEY;
-  char lname[9];
-
-  // draw "Entering"
-  // CPhipps - patch drawing updated
-  V_DrawNamePatch((320 - V_NamePatchWidth(entering)) / 2,
-    y, FB, entering, CR_DEFAULT, VPT_STRETCH);
-
-  y += (5 * V_NamePatchHeight(entering)) / 4;
-
-  dsda_PrepareEntering();
-
-  if (el_levelname)
-  {
-    // The level defines a new name but no texture for the name.
-    WI_DrawString(160, y, el_levelname);
-
-    y += (5 * hud_font.height / 4);
-  }
-  else
-  {
-    /* cph - get the graphic lump name */
-    if (el_levelpic)
-      strcpy(lname, el_levelpic);
-    else
-      WI_levelNameLump(wbs->nextep, wbs->next, lname);
-
-    if (!W_LumpNameExists(lname))
-      return;
-
-    // fullscreen cwilv graphic
-    if (V_NamePatchHeight(lname) == 200)
-      y = WI_TITLEY;
-
-    // CPhipps - patch drawing updated
-    // draw level
-    V_DrawNamePatch((320 - V_NamePatchWidth(lname)) / 2, y, FB,
-      lname, CR_DEFAULT, VPT_STRETCH);
-
-    y += (5 * V_NamePatchHeight(lname)) / 4;
-  }
-
-  if (el_author)
-  {
-    WI_DrawString(160, y, el_author);
-
-    y += (5 * hud_font.height / 4);
-  }
 }
 
 /* ====================================================================
@@ -637,48 +547,6 @@ WI_drawOnLnode  // draw stuff at a location by episode/map#
 ( int   n,
   const char* const c[] )
 {
-  int   i;
-  dboolean fits = false;
-
-  i = 0;
-  do
-  {
-    int            left;
-    int            top;
-    int            right;
-    int            bottom;
-    const rpatch_t* patch = R_PatchByName(c[i]);
-
-    left = lnodes[wbs->epsd][n].x - patch->leftoffset;
-    top = lnodes[wbs->epsd][n].y - patch->topoffset;
-    right = left + patch->width;
-    bottom = top + patch->height;
-
-    if (left >= 0
-       && right < 320
-       && top >= 0
-       && bottom < 200)
-    {
-      fits = true;
-    }
-    else
-    {
-      i++;
-    }
-  } while (!fits && i!=2 && c[i]);
-
-  if (fits && i<2)
-  {
-    // CPhipps - patch drawing updated
-    V_DrawNamePatch(lnodes[wbs->epsd][n].x, lnodes[wbs->epsd][n].y,
-       FB, c[i], CR_DEFAULT, VPT_STRETCH);
-  }
-  else
-  {
-    // DEBUG
-    //jff 8/3/98 use logical output routine
-    lprintf(LO_DEBUG,"Could not place patch on level %d\n", n+1);
-  }
 }
 
 
@@ -908,26 +776,6 @@ static void WI_drawPercent(int x, int y, int p)
 
 static void WI_drawTime(int x, int y, int t)
 {
-  int   n;
-
-  if (t<0)
-    return;
-
-  if (t < 100*60*60)
-    for(;;) {
-      n = t % 60;
-      t /= 60;
-      x = WI_drawNum(x, y, n, (t || n>9) ? 2 : 1) - V_NamePatchWidth(colon);
-
-      // draw
-      if (t)
-  // CPhipps - patch drawing updated
-        V_DrawNamePatch(x, y, FB, colon, CR_DEFAULT, VPT_STRETCH);
-      else break;
-    }
-  else // "sucks" (maybe should be "addicted", even I've never had a 100 hour game ;)
-    V_DrawNamePatch(x - V_NamePatchWidth(sucks),
-        y, FB, sucks, CR_DEFAULT, VPT_STRETCH);
 }
 
 
@@ -1359,75 +1207,6 @@ void WI_updateDeathmatchStats(void)
 // CPhipps - patch drawing updated
 void WI_drawDeathmatchStats(void)
 {
-  int   i;
-  int   j;
-  int   x;
-  int   y;
-  int   w;
-
-  int   halfface = V_NamePatchWidth(facebackp)/2;
-
-  WI_slamBackground();
-
-  // draw animated background
-  WI_drawAnimatedBack();
-  WI_drawLF();
-
-  // draw stat titles (top line)
-  V_DrawNamePatch(DM_TOTALSX-V_NamePatchWidth(total)/2,
-     DM_MATRIXY-WI_SPACINGY+10, FB, total, CR_DEFAULT, VPT_STRETCH);
-
-  V_DrawNamePatch(DM_KILLERSX, DM_KILLERSY, FB, killers, CR_DEFAULT, VPT_STRETCH);
-  V_DrawNamePatch(DM_VICTIMSX, DM_VICTIMSY, FB, victims, CR_DEFAULT, VPT_STRETCH);
-
-  // draw P?
-  x = DM_MATRIXX + DM_SPACINGX;
-  y = DM_MATRIXY;
-
-  for (i = 0; i < g_maxplayers; i++)
-  {
-    if (playeringame[i]) {
-      //int trans = playernumtotrans[i];
-      V_DrawNamePatch(x-halfface, DM_MATRIXY - WI_SPACINGY,
-         FB, facebackp, i ? CR_LIMIT+i : CR_DEFAULT,
-         VPT_STRETCH | (i ? VPT_TRANS : 0));
-      V_DrawNamePatch(DM_MATRIXX-halfface, y,
-         FB, facebackp, i ? CR_LIMIT+i : CR_DEFAULT,
-         VPT_STRETCH | (i ? VPT_TRANS : 0));
-
-      if (i == me)
-      {
-        V_DrawNamePatch(x-halfface, DM_MATRIXY - WI_SPACINGY,
-           FB, bstar, CR_DEFAULT, VPT_STRETCH);
-        V_DrawNamePatch(DM_MATRIXX-halfface, y,
-           FB, star, CR_DEFAULT, VPT_STRETCH);
-      }
-    }
-    x += DM_SPACINGX;
-    y += WI_SPACINGY;
-  }
-
-  // draw stats
-  y = DM_MATRIXY+10;
-  w = num[0].width;
-
-  for (i = 0; i < g_maxplayers; i++)
-  {
-    x = DM_MATRIXX + DM_SPACINGX;
-
-    if (playeringame[i])
-    {
-      for (j = 0; j < g_maxplayers; j++)
-      {
-        if (playeringame[j])
-          WI_drawNum(x+w, y, dm_frags[i][j], 2);
-
-        x += DM_SPACINGX;
-      }
-      WI_drawNum(DM_TOTALSX+w, y, dm_totals[i], 2);
-    }
-    y += WI_SPACINGY;
-  }
 }
 
 
@@ -1641,70 +1420,6 @@ void WI_updateNetgameStats(void)
 // CPhipps - patch drawing updated
 void WI_drawNetgameStats(void)
 {
-  int   i;
-  int   x;
-  int   y;
-  int   pwidth = V_NamePatchWidth(percent);
-  int   fwidth = V_NamePatchWidth(facebackp);
-
-  WI_slamBackground();
-
-  // draw animated background
-  WI_drawAnimatedBack();
-
-  WI_drawLF();
-
-  // draw stat titles (top line)
-  V_DrawNamePatch(NG_STATSX+NG_SPACINGX-V_NamePatchWidth(kills),
-     NG_STATSY, FB, kills, CR_DEFAULT, VPT_STRETCH);
-
-  V_DrawNamePatch(NG_STATSX+2*NG_SPACINGX-V_NamePatchWidth(items),
-     NG_STATSY, FB, items, CR_DEFAULT, VPT_STRETCH);
-
-  V_DrawNamePatch(NG_STATSX+3*NG_SPACINGX-V_NamePatchWidth(secret),
-     NG_STATSY, FB, secret, CR_DEFAULT, VPT_STRETCH);
-
-  if (dofrags)
-    V_DrawNamePatch(NG_STATSX+4*NG_SPACINGX-V_NamePatchWidth(frags),
-       NG_STATSY, FB, frags, CR_DEFAULT, VPT_STRETCH);
-
-  // draw stats
-  y = NG_STATSY + V_NamePatchHeight(kills);
-
-  for (i = 0; i < g_maxplayers; i++)
-  {
-    //int trans = playernumtotrans[i];
-    if (!playeringame[i])
-      continue;
-
-    x = NG_STATSX;
-    V_DrawNamePatch(x-fwidth, y, FB, facebackp,
-       i ? CR_LIMIT+i : CR_DEFAULT,
-       VPT_STRETCH | (i ? VPT_TRANS : 0));
-
-    if (i == me)
-      V_DrawNamePatch(x-fwidth, y, FB, star, CR_DEFAULT, VPT_STRETCH);
-
-    x += NG_SPACINGX;
-    if (cnt_kills)
-      WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);
-    x += NG_SPACINGX;
-    if (cnt_items)
-      WI_drawPercent(x-pwidth, y+10, cnt_items[i]);
-    x += NG_SPACINGX;
-    if (cnt_secret)
-      WI_drawPercent(x-pwidth, y+10, cnt_secret[i]);
-    x += NG_SPACINGX;
-
-    if (dofrags && cnt_frags)
-      WI_drawNum(x, y+10, cnt_frags[i], -1);
-
-    y += WI_SPACINGY;
-  }
-
-  if (y <= SP_TIMEY)
-    // cph - show times in coop on the entering screen
-    WI_drawTimeStats(plrs[me].stime / TICRATE, wbs->totaltimes / TICRATE, wbs->partime / TICRATE);
 }
 
 static int  sp_state;

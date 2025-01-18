@@ -199,14 +199,6 @@ extern V_DrawNumPatchPrecise_f V_DrawNumPatchPrecise;
 #define V_DrawNamePatch(x,y,s,n,t,f) V_DrawNumPatch(x,y,s,W_GetNumForName(n),t,f)
 #define V_DrawNamePatchPrecise(x,y,s,n,t,f) V_DrawNumPatchPrecise(x,y,s,W_GetNumForName(n),t,f)
 
-/* cph -
- * Functions to return width & height of a patch.
- * Doesn't really belong here, but is often used in conjunction with
- * this code.
- */
-#define V_NamePatchWidth(name) R_NumPatchWidth(W_GetNumForName(name))
-#define V_NamePatchHeight(name) R_NumPatchHeight(W_GetNumForName(name))
-
 // e6y
 typedef void (*V_FillFlat_f)(int lump, int scrn, int x, int y, int width, int height, enum patch_translation_e flags);
 extern V_FillFlat_f V_FillFlat;

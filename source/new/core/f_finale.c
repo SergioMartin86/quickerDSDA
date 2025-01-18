@@ -403,69 +403,6 @@ void F_StartScroll (const char* right, const char* left, const char* music, dboo
 
 void F_BunnyScroll (void)
 {
-  char        name[10];
-  int         stage;
-  static int  laststage;
-  static int  p1offset, p2width;
-
-  if (finalecount == 0)
-  {
-    const rpatch_t *p1, *p2;
-    p1 = R_PatchByName(scrollpic1);
-    p2 = R_PatchByName(scrollpic2);
-
-    p2width = p2->width;
-    if (p1->width == 320)
-    {
-      // Unity or original PFUBs.
-      p1offset = (p2width - 320) / 2;
-    }
-    else
-    {
-      // Widescreen mod PFUBs.
-      p1offset = 0;
-    }
-  }
-
-  {
-    int scrolled = 320 - (finalecount-230)/2;
-    if (scrolled <= 0) {
-      V_DrawNamePatch(0, 0, 0, scrollpic2, CR_DEFAULT, VPT_STRETCH);
-    } else if (scrolled >= 320) {
-      V_DrawNamePatch(p1offset, 0, 0, scrollpic1, CR_DEFAULT, VPT_STRETCH);
-      if (p1offset > 0)
-        V_DrawNamePatch(-320, 0, 0, scrollpic2, CR_DEFAULT, VPT_STRETCH);
-    } else {
-      V_DrawNamePatch(p1offset + 320 - scrolled, 0, 0, scrollpic1, CR_DEFAULT, VPT_STRETCH);
-      V_DrawNamePatch(-scrolled, 0, 0, scrollpic2, CR_DEFAULT, VPT_STRETCH);
-    }
-    if (p2width == 320)
-      V_ClearBorder();
-  }
-
-  if (!end_patches_exist)
-    return;
-
-  if (finalecount < 1130)
-    return;
-  if (finalecount < 1180)
-  {
-    // CPhipps - patch drawing updated
-    V_DrawNamePatch((320-13*8)/2, (200-8*8)/2,0, "END0", CR_DEFAULT, VPT_STRETCH);
-    laststage = 0;
-    return;
-  }
-
-  stage = (finalecount-1180) / 5;
-  if (stage > 6)
-    stage = 6;
-  if (stage > laststage)
-  {
-    laststage = stage;
-  }
-
-  // CPhipps - patch drawing updated
-  V_DrawNamePatch((320-13*8)/2, (200-8*8)/2, 0, name, CR_DEFAULT, VPT_STRETCH);
 }
 
 void F_StartPostFinale (void)

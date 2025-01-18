@@ -38,7 +38,6 @@
 
 #include "r_defs.h"
 #include "r_state.h"
-#include "r_patch.h"
 
 // A single patch from a texture definition, basically
 // a rectangular area within the texture rectangle.
@@ -68,9 +67,6 @@ typedef struct
 
 extern int numtextures;
 extern texture_t **textures;
-
-
-const byte *R_GetTextureColumn(const rpatch_t *texpatch, int col);
 
 
 // I/O, setting up the stuff.
