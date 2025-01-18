@@ -88,7 +88,6 @@
 #include "dsda/pause.h"
 #include "dsda/skill_info.h"
 #include "dsda/time.h"
-#include "dsda/tracker.h"
 #include "dsda/split_tracker.h"
 #include "dsda/utility.h"
 
@@ -1891,8 +1890,6 @@ void RecalculateDrawnSubsectors(void)
 
 void G_AfterLoad(void)
 {
-  dsda_ResetTrackers();
-
   RecalculateDrawnSubsectors();
 
 
