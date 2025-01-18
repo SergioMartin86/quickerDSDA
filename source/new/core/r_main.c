@@ -43,7 +43,6 @@
 #include "r_main.h"
 #include "r_plane.h"
 #include "r_bsp.h"
-#include "r_draw.h"
 #include "m_bbox.h"
 #include "r_sky.h"
 #include "v_video.h"
@@ -353,70 +352,6 @@ angle_t R_PointToPseudoAngle (fixed_t x, fixed_t y)
 
 static void R_InitTextureMapping (void)
 {
-  int i,x;
-  FieldOfView = FIELDOFVIEW;
-
-  // For widescreen displays, increase the FOV so that the middle part of the
-  // screen that would be visible on a 4:3 display has the requested FOV.
-  if (wide_centerx != centerx)
-  { // wide_centerx is what centerx would be if the display was not widescreen
-    FieldOfView = (int)(atan((double)centerx * tan((double)FieldOfView * M_PI / FINEANGLES) / (double)wide_centerx) * FINEANGLES / M_PI);
-    if (FieldOfView > 160 * FINEANGLES / 360)
-      FieldOfView = 160 * FINEANGLES / 360;
-  }
-
-  // Use tangent table to generate viewangletox:
-  //  viewangletox will give the next greatest x
-  //  after the view angle.
-  //
-  // Calc focallength
-  //  so FIELDOFVIEW angles covers SCREENWIDTH.
-
-  focallength = FixedDiv(centerxfrac, finetangent[FINEANGLES/4 + FieldOfView/2]);
-  focallengthy = Scale(centerxfrac, yaspectmul, finetangent[FINEANGLES/4 + FieldOfView/2]);
-
-  for (i=0 ; i<FINEANGLES/2 ; i++)
-    {
-      int t;
-      int limit = finetangent[FINEANGLES/4 + FieldOfView/2];
-      if (finetangent[i] > limit)
-        t = -1;
-      else
-        if (finetangent[i] < -limit)
-          t = viewwidth+1;
-      else
-        {
-          t = FixedMul(finetangent[i], focallength);
-          t = (centerxfrac - t + FRACUNIT-1) >> FRACBITS;
-          if (t < -1)
-            t = -1;
-          else
-            if (t > viewwidth+1)
-              t = viewwidth+1;
-        }
-      viewangletox[i] = t;
-    }
-
-  // Scan viewangletox[] to generate xtoviewangle[]:
-  //  xtoviewangle will give the smallest view angle
-  //  that maps to x.
-
-  for (x=0; x<=viewwidth; x++)
-    {
-      for (i=0; viewangletox[i] > x; i++)
-        ;
-      xtoviewangle[x] = (i<<ANGLETOFINESHIFT)-ANG90;
-    }
-
-  // Take out the fencepost cases from viewangletox.
-  for (i=0; i<FINEANGLES/2; i++)
-    if (viewangletox[i] == -1)
-      viewangletox[i] = 0;
-    else
-      if (viewangletox[i] == viewwidth+1)
-        viewangletox[i] = viewwidth;
-
-  clipangle = xtoviewangle[0];
 }
 
 //
@@ -541,8 +476,8 @@ int R_Project(float objx, float objy, float objz, float *winx, float *winy, floa
 void R_SetupViewport(void)
 {
   viewport[0] = 0;
-  viewport[1] = (SCREENHEIGHT - viewheight) / 2;
-  viewport[2] = viewwidth;
+  viewport[1] = (SCREENHEIGHT) / 2;
+  viewport[2] = 0;
   viewport[3] = SCREENHEIGHT;
 }
 
@@ -595,7 +530,6 @@ void R_Init (void)
   lprintf(LO_DEBUG, "R_InitSkyMap ");
   R_InitSkyMap();
   lprintf(LO_DEBUG, "R_InitTranslationsTables ");
-  R_InitTranslationTables();
   lprintf(LO_DEBUG, "R_InitPatches ");
   R_InitPatches();
 }
@@ -775,42 +709,6 @@ static void R_SetupFrame (player_t *player)
 
 static void R_InitDrawScene(void)
 {
-  // Framerate-independent fuzz progression
-  static int fuzzgametic = 0;
-  static int savedfuzzpos = 0;
-
-#ifdef __ENABLE_OPENGL_
-  if (V_IsOpenGLMode())
-  {
-    // proff 11/99: clear buffers
-    gld_InitDrawScene();
-
-    if (!automap_on)
-    {
-      // proff 11/99: switch to perspective mode
-      gld_StartDrawScene();
-    }
-  } else 
-  #endif
-  {
-    if (dsda_IntConfig(dsda_config_flashing_hom))
-    { // killough 2/10/98: add flashing red HOM indicators
-      unsigned char color=(gametic % 20) < 9 ? 0xb0 : 0;
-      V_FillRect(0, 0, 0, viewwidth, viewheight, color);
-      R_DrawViewBorder();
-    }
-
-    // Only progress software fuzz offset if the gametic has progressed
-    if (fuzzgametic != gametic)
-    {
-      fuzzgametic = gametic;
-      savedfuzzpos = R_GetFuzzPos();
-    }
-    else
-    {
-      R_SetFuzzPos(savedfuzzpos);
-    }
-  }
 }
 
 static void R_RenderBSPNodes(void)

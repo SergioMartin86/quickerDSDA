@@ -1803,35 +1803,6 @@ static void P_LoadLineDefs (int lump)
 
 void P_PostProcessCompatibleLineSpecial(line_t *ld)
 {
-  switch (ld->special)
-  {                         // killough 4/11/98: handle special types
-    case 260:               // killough 4/11/98: translucent 2s textures
-    {
-      const byte* tranmap;
-      int lump, j;
-
-      lump = sides[*ld->sidenum].special; // translucency from sidedef
-
-      if (!lump)
-        tranmap = main_tranmap;
-      else
-        tranmap = W_LumpByNum(lump - 1);
-
-      if (!ld->tag)             // if tag==0,
-      {
-        ld->tranmap = tranmap;  // affect this linedef only
-        ld->alpha = 0.66f;
-      }
-      else
-        for (j=0;j<numlines;j++)          // if tag!=0,
-          if (lines[j].tag == ld->tag)    // affect all matching linedefs
-          {
-            lines[j].tranmap = tranmap;
-            lines[j].alpha = 0.66f;
-          }
-      break;
-    }
-  }
 }
 
 void P_PostProcessHereticLineSpecial(line_t *ld)
@@ -3014,8 +2985,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
 
   //e6y
   totallive = 0;
-
-  main_tranmap = dsda_DefaultTranMap();
 
   totallive = totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
   wminfo.partime = 180;

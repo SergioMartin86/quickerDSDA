@@ -62,7 +62,6 @@
 #include "wi_stuff.h"
 #include "w_wad.h"
 #include "r_main.h"
-#include "r_draw.h"
 #include "p_map.h"
 #include "sounds.h"
 #include "r_data.h"
@@ -1397,23 +1396,8 @@ static void G_PlayerFinishLevel(int player)
 //
 // G_SetPlayerColour
 
-#include "r_draw.h"
-
 void G_ChangedPlayerColour(int pn, int cl)
 {
-  int i;
-
-  if (!netgame) return;
-
-  // Rebuild colour translation tables accordingly
-  R_InitTranslationTables();
-  // Change translations on existing player mobj's
-  for (i = 0; i < g_maxplayers; i++) {
-    if ((gamestate == GS_LEVEL) && playeringame[i] && (players[i].mo != NULL)) {
-      players[i].mo->flags &= ~MF_TRANSLATION;
-      players[i].mo->flags |= ((uint64_t)playernumtotrans[i]) << MF_TRANSSHIFT;
-    }
-  }
 }
 
 //
@@ -1920,7 +1904,6 @@ void G_AfterLoad(void)
   if (setsizeneeded)
     R_ExecuteSetViewSize ();
 
-  R_FillBackScreen ();
 
 }
 

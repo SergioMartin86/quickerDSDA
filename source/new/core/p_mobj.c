@@ -1605,8 +1605,6 @@ void P_RespawnSpecials (void)
 //  between levels.
 //
 
-extern byte playernumtotrans[MAX_MAXPLAYERS];
-
 void P_SpawnPlayer (int n, const mapthing_t* mthing)
 {
   player_t* p;
@@ -1651,7 +1649,6 @@ void P_SpawnPlayer (int n, const mapthing_t* mthing)
   if (map_format.zdoom)
     P_AdjustZLimits(mobj);
 
-    mobj->flags |= playernumtotrans[n]<<MF_TRANSSHIFT;
 
   if (leave_data.flags & LF_SET_ANGLE)
     mobj->angle = leave_data.angle;

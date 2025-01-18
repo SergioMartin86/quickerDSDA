@@ -66,7 +66,6 @@
 #include "g_game.h"
 #include "wi_stuff.h"
 #include "p_setup.h"
-#include "r_draw.h"
 #include "r_main.h"
 #include "d_main.h"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf

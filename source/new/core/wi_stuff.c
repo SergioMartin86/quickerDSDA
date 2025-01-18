@@ -41,7 +41,6 @@
 #include "wi_stuff.h"
 #include "sounds.h"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
-#include "r_draw.h"
 
 #include "dsda/font.h"
 #include "dsda/mapinfo.h"
