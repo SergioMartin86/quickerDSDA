@@ -46,7 +46,6 @@
 
 #include "doomtype.h"
 #include "doomstat.h"
-#include "d_net.h"
 #include "z_zone.h"
 
 #include "d_main.h"

@@ -50,7 +50,6 @@
 #include "doomdef.h"
 #include "doomtype.h"
 #include "doomstat.h"
-#include "d_net.h"
 #include "sounds.h"
 #include "z_zone.h"
 #include "w_wad.h"
