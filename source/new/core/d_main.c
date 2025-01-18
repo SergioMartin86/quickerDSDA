@@ -82,12 +82,10 @@
 #include "dsda/options.h"
 #include "dsda/pause.h"
 #include "dsda/preferences.h"
-#include "dsda/render_stats.h"
 #include "dsda/settings.h"
 #include "dsda/signal_context.h"
 #include "dsda/skill_info.h"
 #include "dsda/sndinfo.h"
-#include "dsda/time.h"
 #include "dsda/utility.h"
 #include "dsda/wad_stats.h"
 

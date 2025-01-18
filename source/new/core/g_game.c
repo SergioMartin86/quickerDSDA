@@ -87,7 +87,6 @@
 #include "dsda/options.h"
 #include "dsda/pause.h"
 #include "dsda/skill_info.h"
-#include "dsda/time.h"
 #include "dsda/utility.h"
 
 // Allows use of HELP2 screen for PWADs under DOOM 1
@@ -967,18 +966,6 @@ static void G_DoLoadLevel (void)
   dsda_ResetPauseMode();
   dsda_ResetExCmdQueue();
 
-  // killough: make -timedemo work on multilevel demos
-  // Move to end of function to minimize noise -- killough 2/22/98:
-
-  if (timingdemo)
-  {
-    static int first=1;
-    if (first)
-      {
-        starttime = dsda_GetTickRealTime();
-        first=0;
-      }
-  }
 }
 
 //
