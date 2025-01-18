@@ -47,7 +47,6 @@
 #include "dsda/map_format.h"
 #include "dsda/msecnode.h"
 #include "dsda/scroll.h"
-#include "dsda/tranmap.h"
 #include "dsda/utility.h"
 
 #define MARKED_FOR_DELETION -2
