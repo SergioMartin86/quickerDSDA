@@ -42,7 +42,6 @@
 #include "w_wad.h"
 #include "r_main.h"
 #include "r_plane.h"
-#include "r_bsp.h"
 #include "m_bbox.h"
 #include "r_sky.h"
 #include "v_video.h"

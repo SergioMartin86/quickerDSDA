@@ -63,7 +63,6 @@
 #include "w_wad.h"
 #include "r_main.h"
 #include "r_sky.h"
-#include "r_bsp.h"
 #include "p_tick.h"
 #include "i_system.h"
 #include "lprintf.h"

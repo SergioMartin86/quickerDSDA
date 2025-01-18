@@ -37,7 +37,6 @@
 #include "r_main.h"
 #include "r_sky.h"
 #include "i_system.h"
-#include "r_bsp.h"
 #include "p_tick.h"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 #include "p_tick.h"

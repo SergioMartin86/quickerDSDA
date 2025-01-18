@@ -89,7 +89,6 @@ quickerDSDASrc =  [
  'core/p_telept.c',
  'core/p_tick.c',
  'core/p_user.c',
- 'core/r_bsp.c',
  'core/r_data.c',
  'core/r_main.c',
  'core/r_patch.c',
