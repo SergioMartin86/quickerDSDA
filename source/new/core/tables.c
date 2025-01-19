@@ -75,13 +75,13 @@ int SlopeDivEx(unsigned int num, unsigned int den)
   return ans <= SLOPERANGE ? (int)ans : SLOPERANGE;
 }
 
-fixed_t finetangent[4096];
+fixed_t __thread finetangent[4096];
 
 //const fixed_t *const finecosine = &finesine[FINEANGLES/4];
 
 fixed_t finesine[10240];
 
-angle_t tantoangle[2049];
+angle_t __thread tantoangle[2049];
 
 #include "m_swap.h"
 #include "lprintf.h"

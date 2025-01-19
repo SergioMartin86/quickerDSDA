@@ -97,12 +97,12 @@ extern fixed_t finesine[5*FINEANGLES/4];
 static fixed_t *const finecosine = finesine + (FINEANGLES/4);
 
 // Effective size is 4096.
-extern fixed_t finetangent[FINEANGLES/2];
+extern __thread fixed_t finetangent[FINEANGLES/2];
 
 // Effective size is 2049;
 // The +1 size is to handle the case when x==y without additional checking.
 
-extern angle_t tantoangle[SLOPERANGE+1];
+extern __thread angle_t tantoangle[SLOPERANGE+1];
 
 // Utility function, called by R_PointToAngle.
 typedef int (*slope_div_fn)(unsigned int num, unsigned int den);

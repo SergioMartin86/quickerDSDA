@@ -2170,7 +2170,7 @@ if (t1->flags2 & MF2_FEETARECLIPPED)
 // USE LINES
 //
 
-mobj_t*   usething;
+__thread mobj_t*   usething;
 
 dboolean PTR_UseTraverse (intercept_t* in)
 {
