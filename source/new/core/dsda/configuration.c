@@ -119,7 +119,7 @@ void dsda_UpdateStrictMode(void) {
   dsda_TrackConfigFeatures();
 }
 
-dsda_config_t dsda_config[dsda_config_count] = {
+__thread dsda_config_t dsda_config[dsda_config_count] = {
   [dsda_config_game_speed] = {
     "game_speed", dsda_config_game_speed,
     dsda_config_int, 3, 10000, { 100 }, NULL, STRICT_INT(100), NULL
