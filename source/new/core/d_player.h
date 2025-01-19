@@ -73,69 +73,6 @@ typedef enum
 #define CF_NOTARGET      0x08 // monsters don't target
 #define CF_FLY           0x10 // flying player
 
-// heretic
-typedef struct
-{
-    int type;
-    int count;
-} inventory_t;
-
-// heretic
-typedef enum
-{
-    arti_none,
-    arti_invulnerability,
-    arti_invisibility,
-    arti_health,
-    arti_superhealth,
-    arti_tomeofpower,
-    arti_torch,
-    arti_firebomb,
-    arti_egg,
-    arti_fly,
-    arti_teleport,
-    NUMARTIFACTS,
-
-    // hexen
-    hexen_arti_none = arti_none,
-    hexen_arti_invulnerability,
-    hexen_arti_health,
-    hexen_arti_superhealth,
-    hexen_arti_healingradius,
-    hexen_arti_summon,
-    hexen_arti_torch,
-    hexen_arti_egg,
-    hexen_arti_fly,
-    hexen_arti_blastradius,
-    hexen_arti_poisonbag,
-    hexen_arti_teleportother,
-    hexen_arti_speed,
-    hexen_arti_boostmana,
-    hexen_arti_boostarmor,
-    hexen_arti_teleport,
-    // Puzzle artifacts
-    hexen_arti_firstpuzzitem,
-    hexen_arti_puzzskull = hexen_arti_firstpuzzitem,
-    hexen_arti_puzzgembig,
-    hexen_arti_puzzgemred,
-    hexen_arti_puzzgemgreen1,
-    hexen_arti_puzzgemgreen2,
-    hexen_arti_puzzgemblue1,
-    hexen_arti_puzzgemblue2,
-    hexen_arti_puzzbook1,
-    hexen_arti_puzzbook2,
-    hexen_arti_puzzskull2,
-    hexen_arti_puzzfweapon,
-    hexen_arti_puzzcweapon,
-    hexen_arti_puzzmweapon,
-    hexen_arti_puzzgear1,
-    hexen_arti_puzzgear2,
-    hexen_arti_puzzgear3,
-    hexen_arti_puzzgear4,
-    HEXEN_NUMARTIFACTS
-} artitype_t;
-
-#define NUMINVENTORYSLOTS	HEXEN_NUMARTIFACTS
 
 //
 // Extended player object info: player_t
@@ -241,8 +178,6 @@ typedef struct player_s
   int flyheight;
   int lookdir;
   dboolean centering;
-  inventory_t inventory[NUMINVENTORYSLOTS];
-  artitype_t readyArtifact;
   int artifactCount;
   int inventorySlotNum;
   int flamecount;             // for flame thrower duration

@@ -1248,7 +1248,6 @@ static void G_FinishLevelBehaviour(finish_level_behaviour_t *flb, player_t *p)
 
   flb->set_one_artifact = 0;
 
-    flb->use_flight_artifact = arti_none;
     flb->use_flight_count = 0;
 
   flb->remove_cards = 1;
@@ -1261,15 +1260,6 @@ static void G_PlayerFinishLevel(int player)
   finish_level_behaviour_t flb;
 
   G_FinishLevelBehaviour(&flb, p);
-
-  if (flb.set_one_artifact)
-  {
-    for (i = 0; i < p->inventorySlotNum; i++)
-    {
-      p->inventory[i].count = 1;
-    }
-    p->artifactCount = p->inventorySlotNum;
-  }
 
   p->lookdir = 0;
   p->rain1 = NULL;
