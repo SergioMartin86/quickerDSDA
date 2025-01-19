@@ -523,8 +523,6 @@ static void CheckForDamageSpecial(line_t *line, mobj_t *mo)
   damage = ((P_Random(pr_damage) % 8) + 1) * mo->info->damage;
 }
 
-static void CheckForPushSpecial(line_t * line, int side, mobj_t * mobj);
-
 static // killough 3/26/98: make static
 dboolean PIT_CheckLine (line_t* ld)
 {
@@ -576,15 +574,6 @@ dboolean PIT_CheckLine (line_t* ld)
         tmthing->flags & (MF_MISSILE | MF_BOUNCES)
       )
       {
-        if (map_format.hexen)
-        {
-          if (tmthing->flags2 & MF2_BLASTED)
-          {
-            P_DamageMobj(tmthing, NULL, NULL, tmthing->info->mass >> 5);
-          }
-          CheckForPushSpecial(ld, 0, tmthing);
-          CheckForDamageSpecial(ld, tmthing);
-        }
         return tmunstuck && !untouched(ld);  // killough 8/1/98: allow escape
       }
 
@@ -1155,43 +1144,6 @@ void P_CheckCompatibleImpact(mobj_t *thing)
   // nothing in doom
 }
 
-void P_CheckHereticImpact(mobj_t *thing)
-{
-  int i;
-
-  if (!numspechit || !(thing->flags & MF_MISSILE) || !thing->target || !thing->target->player)
-  {
-    return;
-  }
-
-  for (i = numspechit - 1; i >= 0; i--)
-  {
-    map_format.shoot_special_line(thing->target, spechit[i]);
-  }
-}
-
-void P_CheckZDoomImpact(mobj_t *thing)
-{
-  if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP)))
-  {
-    int i, side;
-    line_t *ld;
-
-    if (tmthing->flags2 & MF2_BLASTED)
-    {
-      P_DamageMobj(tmthing, NULL, NULL, tmthing->info->mass >> 5);
-    }
-
-    for (i = numspechit - 1; i >= 0; i--)
-    {
-      // see if the line was crossed
-      ld = spechit[i];
-      side = P_PointOnLineSide(thing->x, thing->y, ld);
-      CheckForPushSpecial(ld, side, thing);
-      CheckForDamageSpecial(ld, tmthing);
-    }
-  }
-}
 
 void P_IterateCompatibleSpecHit(mobj_t *thing, fixed_t oldx, fixed_t oldy)
 {
@@ -1201,22 +1153,6 @@ void P_IterateCompatibleSpecHit(mobj_t *thing, fixed_t oldx, fixed_t oldy)
       int oldside = P_PointOnLineSide(oldx, oldy, spechit[numspechit]);
       if (oldside != P_PointOnLineSide(thing->x, thing->y, spechit[numspechit]))
         map_format.cross_special_line(spechit[numspechit], oldside, thing, false);
-    }
-}
-
-void P_IterateZDoomSpecHit(mobj_t *thing, fixed_t oldx, fixed_t oldy)
-{
-  // In hexen format, crossing a special line can trigger a missile spawn,
-  //   which will trigger a check that resets numspechit.
-  // We must store the index separately in order to check everything
-  int tempnumspechit = numspechit;
-
-  while (tempnumspechit--)
-    if (spechit[tempnumspechit]->special)  // see if the line was crossed
-    {
-      int oldside = P_PointOnLineSide(oldx, oldy, spechit[tempnumspechit]);
-      if (oldside != P_PointOnLineSide(thing->x, thing->y, spechit[tempnumspechit]))
-        map_format.cross_special_line(spechit[tempnumspechit], oldside, thing, false);
     }
 }
 
@@ -3225,162 +3161,3 @@ void P_AppendSpecHit(line_t * ld)
     SpechitOverrun(&spechit_overrun_param);
   }
 }
-
-// hexen
-
-dboolean PTR_BounceTraverse(intercept_t * in)
-{
-    line_t *li;
-
-    if (!in->isaline)
-        I_Error("PTR_BounceTraverse: not a line?");
-
-    li = in->d.line;
-
-    if (li->flags & ML_BLOCKEVERYTHING)
-        goto bounceblocking;
-
-    if (!(li->flags & ML_TWOSIDED))
-    {
-        if (P_PointOnLineSide(slidemo->x, slidemo->y, li))
-            return true;        // don't hit the back side
-        goto bounceblocking;
-    }
-
-    P_LineOpening(li, slidemo);          // set open
-    if (line_opening.range < slidemo->height)
-        goto bounceblocking;    // doesn't fit
-
-    if (line_opening.top - slidemo->z < slidemo->height)
-        goto bounceblocking;    // mobj is too high
-    return true;                // this line doesn't block movement
-
-// the line does block movement, see if it is closer than best so far
-  bounceblocking:
-    if (in->frac < bestslidefrac)
-    {
-        bestslidefrac = in->frac;
-        bestslideline = li;
-    }
-    return false;               // stop
-}
-
-void P_BounceWall(mobj_t * mo)
-{
-    fixed_t leadx, leady;
-    int side;
-    angle_t lineangle, moveangle, deltaangle;
-    fixed_t movelen;
-
-    slidemo = mo;
-
-    //
-    // trace along the three leading corners
-    //
-    if (mo->momx > 0)
-    {
-        leadx = mo->x + mo->radius;
-    }
-    else
-    {
-        leadx = mo->x - mo->radius;
-    }
-    if (mo->momy > 0)
-    {
-        leady = mo->y + mo->radius;
-    }
-    else
-    {
-        leady = mo->y - mo->radius;
-    }
-    bestslidefrac = FRACUNIT + 1;
-    P_PathTraverse(leadx, leady, leadx + mo->momx, leady + mo->momy,
-                   PT_ADDLINES, PTR_BounceTraverse);
-
-    side = P_PointOnLineSide(mo->x, mo->y, bestslideline);
-    lineangle = R_PointToAngle2(0, 0, bestslideline->dx, bestslideline->dy);
-    if (side == 1)
-        lineangle += ANG180;
-    moveangle = R_PointToAngle2(0, 0, mo->momx, mo->momy);
-    deltaangle = (2 * lineangle) - moveangle;
-
-    lineangle >>= ANGLETOFINESHIFT;
-    deltaangle >>= ANGLETOFINESHIFT;
-
-    movelen = P_AproxDistance(mo->momx, mo->momy);
-    movelen = FixedMul(movelen, 0.75 * FRACUNIT);       // friction
-    if (movelen < FRACUNIT)
-        movelen = 2 * FRACUNIT;
-    mo->momx = FixedMul(movelen, finecosine[deltaangle]);
-    mo->momy = FixedMul(movelen, finesine[deltaangle]);
-}
-
-dboolean PIT_ThrustStompThing(mobj_t * thing)
-{
-    fixed_t blockdist;
-
-    if (!(thing->flags & MF_SHOOTABLE))
-        return true;
-
-    blockdist = thing->radius + tsthing->radius;
-    if (abs(thing->x - tsthing->x) >= blockdist ||
-        abs(thing->y - tsthing->y) >= blockdist ||
-        (thing->z > tsthing->z + tsthing->height))
-        return true;            // didn't hit it
-
-    if (thing == tsthing)
-        return true;            // don't clip against self
-
-    P_DamageMobj(thing, tsthing, tsthing, 10001);
-
-    return true;
-}
-
-void PIT_ThrustSpike(mobj_t * actor)
-{
-    int xl, xh, yl, yh, bx, by;
-    int x0, x2, y0, y2;
-
-    tsthing = actor;
-
-    x0 = actor->x - actor->info->radius;
-    x2 = actor->x + actor->info->radius;
-    y0 = actor->y - actor->info->radius;
-    y2 = actor->y + actor->info->radius;
-
-    xl = (x0 - bmaporgx - MAXRADIUS) >> MAPBLOCKSHIFT;
-    xh = (x2 - bmaporgx + MAXRADIUS) >> MAPBLOCKSHIFT;
-    yl = (y0 - bmaporgy - MAXRADIUS) >> MAPBLOCKSHIFT;
-    yh = (y2 - bmaporgy + MAXRADIUS) >> MAPBLOCKSHIFT;
-
-    // stomp on any things contacted
-    for (bx = xl; bx <= xh; bx++)
-        for (by = yl; by <= yh; by++)
-            P_BlockThingsIterator(bx, by, PIT_ThrustStompThing);
-}
-
-static void CheckForPushSpecial(line_t * line, int side, mobj_t * mobj)
-{
-    if (line->special)
-    {
-        if (mobj->flags2 & MF2_PUSHWALL)
-        {
-            P_ActivateLine(line, mobj, side, SPAC_PUSH);
-        }
-        else if (mobj->flags2 & MF2_IMPACT)
-        {
-            if (map_info.flags & MI_MISSILES_ACTIVATE_IMPACT_LINES ||
-                !(mobj->flags & MF_MISSILE) ||
-                !mobj->target)
-            {
-              P_ActivateLine(line, mobj, side, SPAC_IMPACT);
-            }
-            else
-            {
-              P_ActivateLine(line, mobj->target, side, SPAC_IMPACT);
-            }
-        }
-    }
-}
-
-
