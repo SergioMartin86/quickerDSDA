@@ -441,14 +441,6 @@ static void P_XYMovement (mobj_t* mo)
 
     if (player)
     {
-      if (player->chickenTics)
-      {
-        if ((unsigned)(player->mo->state - states - HERETIC_S_CHICPLAY_RUN1) < 4)
-        {
-          P_SetMobjState(player->mo, HERETIC_S_CHICPLAY);
-        }
-      }
-      else
       {
         if ((unsigned)(player->mo->state - states - pclass.run_state) < 4)
         {

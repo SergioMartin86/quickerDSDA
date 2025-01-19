@@ -3566,12 +3566,6 @@ void A_ImpMsAttack2(mobj_t * actor)
 
 void A_ImpDeath(mobj_t * actor)
 {
-    actor->flags &= ~MF_SOLID;
-    actor->flags2 |= MF2_FOOTCLIP;
-    if (actor->z <= actor->floorz)
-    {
-        P_SetMobjState(actor, HERETIC_S_IMP_CRASH1);
-    }
 }
 
 void A_ImpXDeath1(mobj_t * actor)
@@ -3583,9 +3577,4 @@ void A_ImpXDeath1(mobj_t * actor)
 
 void A_ImpXDeath2(mobj_t * actor)
 {
-    actor->flags &= ~MF_NOGRAVITY;
-    if (actor->z <= actor->floorz)
-    {
-        P_SetMobjState(actor, HERETIC_S_IMP_CRASH1);
-    }
 }
