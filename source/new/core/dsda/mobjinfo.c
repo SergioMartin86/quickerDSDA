@@ -25,10 +25,10 @@
 
 #include "mobjinfo.h"
 
-mobjinfo_t* mobjinfo;
-int num_mobj_types;
-int mobj_types_zero;
-byte* edited_mobjinfo_bits;
+__thread mobjinfo_t* mobjinfo;
+__thread int num_mobj_types;
+__thread int mobj_types_zero;
+__thread byte* edited_mobjinfo_bits;
 
 static void dsda_ResetMobjInfo(int from, int to) {
   int i;
@@ -63,7 +63,7 @@ static void dsda_EnsureCapacity(int limit) {
   }
 }
 
-static deh_index_hash_t deh_mobj_index_hash;
+static __thread deh_index_hash_t deh_mobj_index_hash;
 
 int dsda_FindDehMobjIndex(int index) {
   return 0;
@@ -310,7 +310,7 @@ static append_mobjinfo_t append_mobjinfo[] = {
   { &ZMT_AMBIENTSOUND, &zmt_ambient_sound },
 };
 
-static int append_mobjinfo_count = sizeof(append_mobjinfo) / sizeof(append_mobjinfo[0]);
+static __thread int append_mobjinfo_count = sizeof(append_mobjinfo) / sizeof(append_mobjinfo[0]);
 
 void dsda_AppendZDoomMobjInfo(void) {
   int i;

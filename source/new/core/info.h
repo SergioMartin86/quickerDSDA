@@ -6664,10 +6664,10 @@ extern state_t* states;
 extern int num_states;
 extern const char** sprnames;
 extern int num_sprites;
-extern mobjinfo_t* mobjinfo;
-extern int num_mobj_types;
-extern int mobj_types_zero;
-extern int mobj_types_max;
+extern __thread  mobjinfo_t* mobjinfo;
+extern __thread int num_mobj_types;
+extern __thread int mobj_types_zero;
+extern __thread int mobj_types_max;
 
 // zdoom
 
