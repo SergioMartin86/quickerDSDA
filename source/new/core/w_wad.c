@@ -45,6 +45,7 @@
 #endif
 
 #include "doomstat.h"
+#include "d_net.h"
 #include "doomtype.h"
 #include "i_system.h"
 #include "m_file.h"

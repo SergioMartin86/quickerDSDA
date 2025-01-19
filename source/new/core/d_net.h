@@ -27,65 +27,22 @@
  *  02111-1307, USA.
  *
  * DESCRIPTION:
- *    Contains the main wait loop, waiting for the next tic.
- *    Rewritten for LxDoom, but based around bits of the old code.
+ *   Fake networking stuff.
  *
- *-----------------------------------------------------------------------------
- */
+ *-----------------------------------------------------------------------------*/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifndef __D_NET__
+#define __D_NET__
+
+#include "d_player.h"
+
+// Create any new ticcmds
+void FakeNetUpdate (void);
+
+//? how many ticks to run?
+void TryRunTics (void);
+
+// CPhipps - move to header file
+void D_InitFakeNetGame (void); // This does the setup
+
 #endif
-#include <sys/types.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-#ifdef HAVE_SYS_WAIT_H
-#include <sys/wait.h>
-#endif
-
-#include "doomtype.h"
-#include "doomstat.h"
-#include "d_net.h"
-#include "z_zone.h"
-
-#include "d_main.h"
-#include "g_game.h"
-
-#include "i_system.h"
-#include "i_main.h"
-#include "i_video.h"
-#include "lprintf.h"
-#include "e6y.h"
-
-#include "dsda/args.h"
-#include "dsda/settings.h"
-
-ticcmd_t local_cmds[MAX_MAXPLAYERS];
-int maketic;
-int solo_net = 0;
-
-void D_InitFakeNetGame (void)
-{
-  int i;
-
-  consoleplayer = displayplayer = 0;
-  solo_net = dsda_Flag(dsda_arg_solo_net);
-  coop_spawns = dsda_Flag(dsda_arg_coop_spawns);
-  netgame = solo_net;
-
-  playeringame[0] = true;
-  for (i = 1; i < g_maxplayers; i++)
-    playeringame[i] = false;
-}
-
-void FakeNetUpdate(void)
-{
-}
-
-// Implicitly tracked whenever we check the current tick
-int ms_to_next_tick;
-
-void TryRunTics (void)
-{
-}
