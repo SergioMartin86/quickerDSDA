@@ -35,6 +35,15 @@ if get_option('buildPlayer') == true
 
 endif
 
+# Building parallel tester tool
+
+pTester = executable('pTester',
+  'source/parallel.cpp',
+  cpp_args            : [ commonCompileArgs ], 
+  dependencies        : [ newDependency, jaffarCommonDependency, dependency('sdl2',  required : true) ],
+)
+
+
 # Building tester tool
 
 newTester = executable('newTester',
