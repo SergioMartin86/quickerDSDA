@@ -427,12 +427,12 @@ fixed_t P_FindNextHighestFloor(sector_t *sec, int currentheight)
   {
     int h;
     int min;
-    static int MAX_ADJOINING_SECTORS = 0;
-    static fixed_t *heightlist = NULL;
-    static int heightlist_size = 0;
+    int MAX_ADJOINING_SECTORS = 0;
+    fixed_t *heightlist = NULL;
+    int heightlist_size = 0;
     line_t* check;
     fixed_t height = currentheight;
-    static fixed_t last_height_0 = 0;
+    fixed_t last_height_0 = 0;
 
     // 20 adjoining sectors max!
     if (!MAX_ADJOINING_SECTORS)
@@ -2799,10 +2799,10 @@ dboolean P_MobjInZDoomSector(mobj_t *mobj)
 //  levelFragLimit, levelFragLimitCount
 //
 
-static dboolean  levelTimer;
-static int      levelTimeCount;
-dboolean         levelFragLimit;      // Ty 03/18/98 Added -frags support
-int             levelFragLimitCount; // Ty 03/18/98 Added -frags support
+static __thread dboolean  levelTimer;
+static __thread int      levelTimeCount;
+__thread dboolean         levelFragLimit;      // Ty 03/18/98 Added -frags support
+__thread int             levelFragLimitCount; // Ty 03/18/98 Added -frags support
 
 void P_UpdateSpecials (void)
 {
@@ -3239,9 +3239,9 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
   }
 }
 
-static int copyscroller_count = 0;
-static int copyscroller_max = 0;
-static line_t **copyscrollers;
+static __thread int copyscroller_count = 0;
+static __thread int copyscroller_max = 0;
+static __thread line_t **copyscrollers;
 
 static void P_AddCopyScroller(line_t *l)
 {

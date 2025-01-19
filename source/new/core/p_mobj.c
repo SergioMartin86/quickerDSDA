@@ -76,7 +76,7 @@ dboolean P_SetMobjState(mobj_t* mobj,statenum_t state)
 
   extern __thread statenum_t* seenstate_tab;           // fast transition table
   statenum_t *seenstate;                      // pointer to table
-  static int recursion;                       // detects recursion
+  int recursion;                       // detects recursion
   statenum_t i;                               // initial state
   dboolean ret;                               // return value
   statenum_t* tempstate = NULL;               // for use with recursion
@@ -1081,7 +1081,7 @@ mobj_t *P_SubstNullMobj(mobj_t *mobj)
 {
     if (mobj == NULL)
     {
-        static mobj_t dummy_mobj;
+        mobj_t dummy_mobj;
 
         dummy_mobj.x = 0;
         dummy_mobj.y = 0;
@@ -1110,7 +1110,7 @@ static dboolean P_IsTypeMatch(unsigned doomednum, int type)
 
 static PUREFUNC int P_FindDoomedNum(unsigned type)
 {
-  static struct { int first, next; } *hash;
+  struct { int first, next; } *hash;
   register int i;
 
   if (!hash)

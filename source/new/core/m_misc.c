@@ -565,12 +565,12 @@ cfg_input_def_t input_defs[] = {
   INPUT_SETTING("input_script_9", dsda_input_script_9, 0, -1, -1),
 };
 
-static int input_def_count = sizeof(input_defs) / sizeof(input_defs[0]);
-static int def_count = sizeof(cfg_defs) / sizeof(cfg_defs[0]);
+static __thread int input_def_count = sizeof(input_defs) / sizeof(input_defs[0]);
+static __thread int def_count = sizeof(cfg_defs) / sizeof(cfg_defs[0]);
 
-static char* defaultfile; // CPhipps - static, const
+static __thread char* defaultfile; // CPhipps - static, const
 
-static dboolean forget_config_file;
+static __thread dboolean forget_config_file;
 
 void M_ForgetCurrentConfig(void)
 {
@@ -852,8 +852,8 @@ void M_DoScreenShot (const char* fname)
 
 const char* M_CheckWritableDir(const char *dir)
 {
-  static char *base = NULL;
-  static int base_len = 0;
+  static __thread char *base = NULL;
+  static __thread int base_len = 0;
 
   const char *result = NULL;
   int len;
@@ -888,7 +888,7 @@ const char* M_CheckWritableDir(const char *dir)
 
 void M_ScreenShot(void)
 {
-  static int shot;
+  static __thread int shot;
   char       *lbmname = NULL;
   int        startshot;
   const char *shot_dir = NULL;

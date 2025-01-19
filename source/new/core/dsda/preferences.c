@@ -30,8 +30,8 @@ typedef struct {
   dboolean mapinfo;
 } preferences_t;
 
-static preferences_t map_preferences;
-static preferences_t wad_preferences;
+static __thread preferences_t map_preferences;
+static __thread preferences_t wad_preferences;
 
 void dsda_LoadWadPreferences(void) {
   char* lump;

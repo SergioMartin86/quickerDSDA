@@ -57,7 +57,7 @@
 #include "dsda/mapinfo.h"
 #include "dsda/skill_info.h"
 
-static mobj_t *current_actor;
+static __thread mobj_t *current_actor;
 
 typedef enum {
   DI_EAST,
@@ -1510,8 +1510,8 @@ void A_HeadAttack(mobj_t * actor)
   mobj_t *mo;
   mobj_t *target;
   int randAttack;
-  static int atkResolve1[] = { 50, 150 };
-  static int atkResolve2[] = { 150, 200 };
+  int atkResolve1[] = { 50, 150 };
+  int atkResolve2[] = { 150, 200 };
   int dist;
 
   // Ice ball     (close 20% : far 60%)
@@ -2862,7 +2862,7 @@ void A_RandomJump(mobj_t *mo)
 
 void A_LineEffect(mobj_t *mo)
 {
-  static line_t junk;
+  line_t junk;
   player_t player;
   player_t *oldplayer;
 

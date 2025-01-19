@@ -1004,10 +1004,10 @@ int WI_fragSum(int playernum)
   return frags;
 }
 
-static int          dm_state;
+static __thread int          dm_state;
 // CPhipps - short, dynamically allocated
-static short int  **dm_frags;  // frags matrix
-static short int   *dm_totals;  // totals by player
+static __thread short int  **dm_frags;  // frags matrix
+static __thread short int   *dm_totals;  // totals by player
 
 // ====================================================================
 // WI_initDeathmatchStats
@@ -1386,7 +1386,7 @@ void WI_drawNetgameStats(void)
 {
 }
 
-static int  sp_state;
+static __thread int  sp_state;
 
 // ====================================================================
 // WI_initStats
@@ -1421,7 +1421,7 @@ void WI_initStats(void)
 void WI_updateStats(void)
 {
   //e6y
-  static __thread  dboolean play_early_explosion = true;
+  dboolean play_early_explosion = true;
 
   WI_updateAnimatedBack();
 

@@ -654,7 +654,7 @@ static void R_SetupFrame (player_t *player)
   if (player->fixedcolormap)
     {
       // killough 3/20/98: localize scalelightfixed (readability/optimization)
-      static const lighttable_t *scalelightfixed[MAXLIGHTSCALE];
+      const lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 
       fixedcolormap = fullcolormap   // killough 3/20/98: use fullcolormap
         + player->fixedcolormap*256*sizeof(lighttable_t);

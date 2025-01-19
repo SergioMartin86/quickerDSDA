@@ -403,7 +403,7 @@ typedef struct {
   fixed_t maxz,minz;               // cph - z optimisations for 2sided lines
 } los_t;
 
-static los_t los; // cph - made static
+static __thread los_t los; // cph - made static
 
 //
 // P_DivlineSide

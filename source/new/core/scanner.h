@@ -104,8 +104,8 @@ class Scanner
 		static const char* const	TokenNames[TK_NumSpecialTokens];
 
 		char			*string;
-		int	number;
-		double			decimal;
+		int	   number;
+		double	decimal;
 		bool			boolean;
 		char			token;
 

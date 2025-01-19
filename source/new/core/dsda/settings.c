@@ -284,8 +284,8 @@ dboolean dsda_SkipWipe(void) {
   return !dsda_RenderWipeScreen();
 }
 
-static dboolean game_controller_used;
-static dboolean mouse_used;
+static __thread dboolean game_controller_used;
+static __thread dboolean mouse_used;
 
 dboolean dsda_AllowGameController(void) {
   return !dsda_StrictMode() || !mouse_used;

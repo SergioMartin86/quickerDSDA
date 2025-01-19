@@ -25,14 +25,14 @@
 
 #include "game_controller.h"
 
-static int use_game_controller;
+static __thread int use_game_controller;
 
 typedef struct {
   int deadzone;
   int sensitivity;
 } axis_t;
 
-static int swap_analogs;
+static __thread int swap_analogs;
 
 static const char* button_names[] = {
   [DSDA_CONTROLLER_BUTTON_A] = "pad a",

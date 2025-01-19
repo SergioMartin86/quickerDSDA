@@ -1515,11 +1515,11 @@ dboolean P_ThingHeightClip (mobj_t* thing)
 //
 
 /* killough 8/2/98: make variables static */
-static fixed_t   bestslidefrac;
-static line_t*   bestslideline;
-static mobj_t*   slidemo;
-static fixed_t   tmxmove;
-static fixed_t   tmymove;
+static __thread fixed_t   bestslidefrac;
+static __thread line_t*   bestslideline;
+static __thread mobj_t*   slidemo;
+static __thread fixed_t   tmxmove;
+static __thread fixed_t   tmymove;
 
 //
 // P_HitSlideLine
