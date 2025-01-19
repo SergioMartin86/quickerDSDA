@@ -39,7 +39,6 @@
 #include "e6y.h"
 
 #include "dsda.h"
-#include "dsda/pause.h"
 
 int leveltime;
 
@@ -309,20 +308,6 @@ void P_Ticker (void)
 {
   int i;
 
-  /* pause if in menu and at least one tic has been run
-   *
-   * killough 9/29/98: note that this ties in with basetic,
-   * since G_Ticker does the pausing during recording or
-   * playback, and compenates by incrementing basetic.
-   *
-   * All of this complicated mess is used to preserve demo sync.
-   */
-
-  if (dsda_Paused() || (dsda_PausedViaMenu() && players[consoleplayer].viewz != 1))
-  {
-    P_ResetWalkcam();
-    return;
-  }
 
   if (dsda_FrozenMode())
   {

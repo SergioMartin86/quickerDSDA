@@ -81,7 +81,6 @@
 #include "dsda/mapinfo.h"
 #include "dsda/mobjinfo.h"
 #include "dsda/options.h"
-#include "dsda/pause.h"
 #include "dsda/preferences.h"
 #include "dsda/settings.h"
 #include "dsda/skill_info.h"
@@ -196,8 +195,6 @@ extern dboolean setsizeneeded;
 
 static void D_DrawPause(void)
 {
-  if (dsda_PauseMode(PAUSE_BUILDMODE))
-    return;
 }
 
 static dboolean must_fill_back_screen;
@@ -373,7 +370,6 @@ void D_DoAdvanceDemo(void)
 {
   players[consoleplayer].playerstate = PST_LIVE;  /* not reborn */
   advancedemo = false;
-  dsda_ResetPauseMode();
   gameaction = ga_nothing;
 
   pagetic = TICRATE * 11;         /* killough 11/98: default behavior */

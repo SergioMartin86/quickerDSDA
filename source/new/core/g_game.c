@@ -86,7 +86,6 @@
 #include "dsda/mapinfo.h"
 #include "dsda/mouse.h"
 #include "dsda/options.h"
-#include "dsda/pause.h"
 #include "dsda/skill_info.h"
 #include "dsda/utility.h"
 
@@ -940,7 +939,6 @@ static void G_DoLoadLevel (void)
   G_ResetMotion();
   mlooky = 0;//e6y
   special_event = 0;
-  dsda_ResetPauseMode();
   dsda_ResetExCmdQueue();
 
 }
@@ -972,22 +970,6 @@ dboolean G_Responder (event_t* ev)
     return true;
   }
 
-  // any other key pops up menu if in demos
-  //
-  // killough 8/2/98: enable automap in -timedemo demos
-  //
-  // killough 9/29/98: make any key pop up menu regardless of
-  // which kind of demo, and allow other events during playback
-
-  if (gameaction == ga_nothing && (gamestate == GS_DEMOSCREEN))
-  {
-    // killough 9/29/98: allow user to pause demos during playback
-    if (dsda_InputActivated(dsda_input_pause))
-    {
-      dsda_TogglePauseMode(PAUSE_PLAYBACK);
-      return true;
-    }
-  }
 
   if (gamestate == GS_FINALE && F_Responder(ev))
     return true;  // finale ate the event
@@ -1163,15 +1145,9 @@ void G_Ticker (void)
   if (dsda_AdvanceFrame())
   {
     advance_frame = true;
-    pause_mask = dsda_MaskPause();
   }
 
-  if (dsda_PausedOutsideDemo())
-  {
-    boom_basetic++;  // For revenant tracers and RNG -- we must maintain sync
-    true_basetic++;
-  }
-  else {
+ {
     int buf = gametic % BACKUPTICS;
 
     dsda_UpdateAutoSaves();
@@ -1195,12 +1171,6 @@ void G_Ticker (void)
       {
         if (players[i].cmd.buttons & BT_SPECIAL)
         {
-          switch (players[i].cmd.buttons & BT_SPECIALMASK)
-          {
-            case BT_PAUSE:
-              dsda_TogglePauseMode(PAUSE_COMMAND);
-              break;
-          }
           players[i].cmd.buttons = 0;
         }
 
@@ -1245,12 +1215,6 @@ void G_Ticker (void)
     prevgamestate = gamestate;
   }
 
-  // e6y
-  // do nothing if a pause has been pressed during playback
-  // pausing during intermission can cause desynchs without that
-  if (dsda_PausedOutsideDemo() && gamestate != GS_LEVEL)
-    return;
-
   // do main actions
   switch (gamestate)
   {
@@ -1272,8 +1236,6 @@ void G_Ticker (void)
       break;
   }
 
-  if (advance_frame)
-    dsda_UnmaskPause(pause_mask);
 }
 
 //
@@ -2246,10 +2208,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   if (prepare)
     dsda_PrepareInitNew();
 
-  if (dsda_Paused())
-  {
-    dsda_ResetPauseMode();
-  }
 
   if (episode < 1)
     episode = 1;
@@ -2322,7 +2280,6 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
     players[i].worldTimer = 0;
   }
 
-  dsda_ResetPauseMode();
   dsda_UpdateGameSkill(skill);
   dsda_UpdateGameMap(episode, map);
 

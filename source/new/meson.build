@@ -27,7 +27,6 @@ quickerDSDASrc =  [
  'core/dsda/mouse.c',
  'core/dsda/name.c',
  'core/dsda/options.c',
- 'core/dsda/pause.c',
  'core/dsda/pclass.c',
  'core/dsda/preferences.c',
  'core/dsda/save.c',
