@@ -100,12 +100,12 @@ typedef struct
 
 #define MAXANIMS 32                   // no longer a strict limit -- killough
 
-static anim_t*  lastanim;
-static anim_t*  anims;                // new structure w/o limits -- killough
-static size_t maxanims;
+static __thread anim_t*  lastanim;
+static __thread anim_t*  anims;                // new structure w/o limits -- killough
+static __thread size_t maxanims;
 
-TAnimItemParam *anim_flats = NULL;
-TAnimItemParam *anim_textures = NULL;
+__thread TAnimItemParam *anim_flats = NULL;
+__thread TAnimItemParam *anim_textures = NULL;
 
 // killough 3/7/98: Initialize generalized scrolling
 static void P_SpawnScrollers(void);
@@ -129,8 +129,8 @@ static const animdef_t heretic_animdefs[] = {
 
 // heretic
 #define MAXLINEANIMS 64*256
-short numlinespecials;
-line_t *linespeciallist[MAXLINEANIMS];
+__thread short numlinespecials;
+__thread line_t *linespeciallist[MAXLINEANIMS];
 
 //e6y
 void MarkAnimatedTextures(void)
@@ -3597,7 +3597,7 @@ static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affec
 //
 // killough 10/98: allow to affect things besides players
 
-pusher_t* tmpusher; // pusher structure for blockmap searches
+__thread pusher_t* tmpusher; // pusher structure for blockmap searches
 
 static dboolean PIT_PushThing(mobj_t* thing)
 {
@@ -3861,7 +3861,7 @@ static void P_SpawnPushers(void)
       map_format.spawn_pusher(l);
 }
 
-mobj_t LavaInflictor;
+__thread mobj_t LavaInflictor;
 
 
 void P_InitLava(void)

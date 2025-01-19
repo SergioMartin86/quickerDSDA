@@ -30,8 +30,8 @@
 
 #include "settings.h"
 
-int dsda_tas;
-int dsda_skip_next_wipe;
+__thread int dsda_tas;
+__thread int dsda_skip_next_wipe;
 
 void dsda_InitSettings(void) {
   void G_UpdateMouseSensitivity(void);
@@ -42,8 +42,8 @@ void dsda_InitSettings(void) {
 }
 
 static int dsda_WadCompatibilityLevel(void) {
-  static int complvl = -1;
-  static int last_numwadfiles = -1;
+  static __thread int complvl = -1;
+  static __thread int last_numwadfiles = -1;
 
   // This might be called before all wads are loaded
   if (numwadfiles != last_numwadfiles) {

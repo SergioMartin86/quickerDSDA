@@ -402,8 +402,8 @@ static void R_InitLightTables (void)
 // The change will take effect next refresh.
 //
 
-dboolean setsizeneeded;
-static int setblocks;
+__thread dboolean setsizeneeded;
+static __thread int setblocks;
 
 void R_SetViewSize(void)
 {

@@ -22,7 +22,7 @@
 
 #define THING_ID_HASH_MAX 128
 
-static thing_id_list_t* thing_id_list_hash[THING_ID_HASH_MAX];
+static __thread thing_id_list_t* thing_id_list_hash[THING_ID_HASH_MAX];
 
 static thing_id_list_t* dsda_NewThingIDList(short thing_id) {
   thing_id_list_t* result;

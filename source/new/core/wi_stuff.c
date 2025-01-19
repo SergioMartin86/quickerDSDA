@@ -45,7 +45,7 @@
 #include "dsda/mapinfo.h"
 
 // Ty 03/17/98: flag that new par times have been loaded in d_deh
-extern dboolean deh_pars;
+extern __thread dboolean deh_pars;
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -302,29 +302,29 @@ static wi_anim_t *anims[NUMEPISODES] =
 __thread int   acceleratestage;           // killough 3/28/98: made global
 
 // wbs->pnum
-static int    me;
+static __thread int    me;
 
  // specifies current state
-static stateenum_t  state;
+static __thread stateenum_t  state;
 
 // contains information passed into intermission
-static wbstartstruct_t* wbs;
+static __thread wbstartstruct_t* wbs;
 
-static wbplayerstruct_t* plrs;  // wbs->plyr[]
+static __thread wbplayerstruct_t* plrs;  // wbs->plyr[]
 
 // used for general timing
-static int    cnt;
+static __thread int    cnt;
 
 // used for timing of background animation
-static int    bcnt;
+static __thread int    bcnt;
 
 // signals to refresh everything for one frame
-static int    firstrefresh;
+static __thread int    firstrefresh;
 
-static int    cnt_time;
-static int    cnt_total_time;
-static int    cnt_par;
-static int    cnt_pause;
+static __thread int    cnt_time;
+static __thread int    cnt_total_time;
+static __thread int    cnt_par;
+static __thread int    cnt_pause;
 
 //
 //  GRAPHICS

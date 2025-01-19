@@ -43,7 +43,7 @@ typedef struct {
   int map_count;
 } wad_stats_t;
 
-extern wad_stats_t wad_stats;
+extern __thread wad_stats_t wad_stats;
 
 void dsda_WadStatsEnterMap(void);
 void dsda_WadStatsExitMap(int missed_monsters);

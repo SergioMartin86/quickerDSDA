@@ -909,8 +909,8 @@ static const char *D_AutoLoadGameBase()
 
 #define ALL_AUTOLOAD "all-all"
 
-int warpepisode = -1;
-int warpmap = -1;
+__thread int warpepisode = -1;
+__thread int warpmap = -1;
 
 static void HandleWarp(void)
 {

@@ -74,9 +74,9 @@ typedef struct memblock {
   unsigned char tag;
 } memblock_t;
 
-static const size_t HEADER_SIZE = sizeof(memblock_t);
+static __thread const size_t HEADER_SIZE = sizeof(memblock_t);
 
-static memblock_t *blockbytag[ZONE_MAX];
+static __thread memblock_t *blockbytag[ZONE_MAX];
 
 /* Z_Malloc
  * cph - the algorithm here was a very simple first-fit round-robin

@@ -1559,7 +1559,7 @@ void P_HitSlideLine (line_t* ld)
   }
   else
   {
-    extern dboolean onground;
+    extern __thread dboolean onground;
     icyfloor = !compatibility &&
                variable_friction &&
                slidemo->player &&

@@ -55,7 +55,7 @@
 
 #include "e6y.h"//e6y
 
-static void **lump_data;
+static __thread void **lump_data;
 
 #ifdef _WIN32
 typedef struct {
@@ -175,7 +175,7 @@ const void* W_LumpByNum(int lump)
 
 #else
 
-void ** mapped_wad;
+__thread void ** mapped_wad;
 
 void W_InitCache(void)
 {

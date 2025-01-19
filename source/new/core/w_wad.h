@@ -88,9 +88,9 @@ typedef struct {
   int handle;
 } wadfile_info_t;
 
-extern wadfile_info_t *wadfiles;
+extern __thread wadfile_info_t *wadfiles;
 
-extern size_t numwadfiles; // CPhipps - size of the wadfiles array
+extern __thread size_t numwadfiles; // CPhipps - size of the wadfiles array
 
 void W_Init(void); // CPhipps - uses the above array
 void W_InitCache(void);
@@ -131,8 +131,8 @@ typedef struct
 #define LUMP_STATIC 0x00000001 /* assigned gltexture should be static */
 #define LUMP_PRBOOM 0x00000002 /* from internal resource */
 
-extern lumpinfo_t *lumpinfo;
-extern int        numlumps;
+extern __thread lumpinfo_t *lumpinfo;
+extern __thread int        numlumps;
 
 int     W_FindNumFromName2(const char *name, int ns, int lump);
 

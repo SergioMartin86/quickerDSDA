@@ -51,15 +51,13 @@ typedef enum
   patch_stretch_max
 } patch_stretch_t;
 
-extern int wide_offsetx;
-extern int wide_offset2x;
-extern int wide_offsety;
-extern int wide_offset2y;
-
-extern int render_stretch_hud;
-
-extern int patches_scalex;
-extern int patches_scaley;
+extern __thread int wide_offsetx;
+extern __thread int wide_offset2x;
+extern __thread int wide_offsety;
+extern __thread int wide_offset2y;
+extern __thread int render_stretch_hud;
+extern __thread int patches_scalex;
+extern __thread int patches_scaley;
 
 stretch_param_t* dsda_StretchParams(int flags);
 void dsda_SetupStretchParams(void);

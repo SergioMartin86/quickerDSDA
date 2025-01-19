@@ -24,7 +24,7 @@
 
 #include "skill_info.h"
 
-skill_info_t skill_info;
+__thread skill_info_t skill_info;
 
 const skill_info_t doom_skill_infos[5] = {
   {
@@ -125,8 +125,8 @@ const skill_info_t hexen_skill_infos[5] = {
   },
 };
 
-int num_skills;
-skill_info_t* skill_infos;
+__thread int num_skills;
+__thread skill_info_t* skill_infos;
 
 static void dsda_CopyFactor(fixed_t* dest, const char* source) {
   // We will compute integers with these,

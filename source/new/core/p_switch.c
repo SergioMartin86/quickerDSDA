@@ -71,13 +71,13 @@ const switchlist_t hexen_alphSwitchList[] = {
 
 // killough 2/8/98: Remove switch limit
 
-static int *switchlist;                           // killough
-static int max_numswitches;                       // killough
-static int numswitches;                           // killough
+static __thread int *switchlist;                           // killough
+static __thread int max_numswitches;                       // killough
+static __thread int numswitches;                           // killough
 
-button_t  buttonlist[MAXBUTTONS];
+__thread button_t  buttonlist[MAXBUTTONS];
 
-const switchlist_t *alphSwitchList;         //jff 3/23/98 pointer to switch table
+const __thread switchlist_t *alphSwitchList;         //jff 3/23/98 pointer to switch table
 
 //
 // P_InitSwitchList()

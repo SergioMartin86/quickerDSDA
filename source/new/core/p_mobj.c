@@ -1396,10 +1396,10 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
 }
 
 
-static mapthing_t itemrespawnque[ITEMQUESIZE];
-static int        itemrespawntime[ITEMQUESIZE];
-int        iquehead;
-int        iquetail;
+static __thread mapthing_t itemrespawnque[ITEMQUESIZE];
+static __thread int        itemrespawntime[ITEMQUESIZE];
+__thread int        iquehead;
+__thread int        iquetail;
 
 
 //
@@ -2155,8 +2155,8 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
 
 #include "p_spec.h"
 
-mobjtype_t PuffType;
-mobj_t *MissileMobj;
+__thread mobjtype_t PuffType;
+__thread mobj_t *MissileMobj;
 
 void P_BlasterMobjThinker(mobj_t * mobj)
 {

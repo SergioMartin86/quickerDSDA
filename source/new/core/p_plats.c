@@ -43,7 +43,7 @@
 #include "dsda/id_list.h"
 #include "dsda/map_format.h"
 
-platlist_t *activeplats;       // killough 2/14/98: made global again
+__thread platlist_t *activeplats;       // killough 2/14/98: made global again
 
 //
 // T_PlatRaise()

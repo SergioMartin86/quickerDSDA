@@ -1634,7 +1634,7 @@ void G_DoWorldDone (void)
   gameaction = ga_nothing;
 }
 
-extern dboolean setsizeneeded;
+extern __thread dboolean setsizeneeded;
 
 //CPhipps - savename variable redundant
 

@@ -49,10 +49,10 @@
 
 #include "dsda/args.h"
 
-int overflows_enabled = true;
+__thread int overflows_enabled = true;
 
-overrun_param_t overflows[OVERFLOW_MAX];
-const char *overflow_cfgname[OVERFLOW_MAX] =
+__thread overrun_param_t overflows[OVERFLOW_MAX];
+__thread const char *overflow_cfgname[OVERFLOW_MAX] =
 {
   "overrun_spechit_emulate",
   "overrun_reject_emulate",
@@ -219,7 +219,7 @@ int PlayeringameOverrun(const mapthing_t* mthing)
 // spechit overrun emulation
 //
 
-unsigned int spechit_baseaddr = 0;
+__thread unsigned int spechit_baseaddr = 0;
 
 // e6y
 // Code to emulate the behavior of Vanilla Doom when encountering an overrun

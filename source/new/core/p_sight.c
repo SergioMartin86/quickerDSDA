@@ -53,11 +53,11 @@ This uses specialized forms of the maputils routines for optimized performance
 ==============================================================================
 */
 
-fixed_t sightzstart;            // eye z of looker
-fixed_t topslope, bottomslope;  // slopes to top and bottom of target
-int sightcounts[3];
+__thread fixed_t sightzstart;            // eye z of looker
+__thread fixed_t topslope, bottomslope;  // slopes to top and bottom of target
+__thread int sightcounts[3];
 
-CrossSubsectorFunc P_CrossSubsector;
+__thread CrossSubsectorFunc P_CrossSubsector;
 
 /*
 ==============

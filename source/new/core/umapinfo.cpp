@@ -34,7 +34,7 @@ extern "C"
 #include "dsda/episode.h"
 #include "dsda/name.h"
 
-MapList Maps;
+__thread MapList Maps;
 }
 
 // -----------------------------------------------

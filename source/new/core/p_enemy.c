@@ -797,7 +797,7 @@ static dboolean P_IsVisible(mobj_t *actor, mobj_t *mo, dboolean allaround)
 // Finds monster targets for other monsters
 //
 
-static int current_allaround;
+static __thread int current_allaround;
 
 static dboolean PIT_FindTarget(mobj_t *mo)
 {
@@ -1578,7 +1578,7 @@ void A_SkelMissile(mobj_t *actor)
   P_SetTarget(&mo->tracer, actor->target);
 }
 
-int     TRACEANGLE = 0xc000000;
+__thread int     TRACEANGLE = 0xc000000;
 
 void A_Tracer(mobj_t *actor)
 {
@@ -1686,11 +1686,11 @@ void A_SkelFist(mobj_t *actor)
 // Detect a corpse that could be raised.
 //
 
-mobj_t* corpsehit;
-mobj_t* vileobj;
-fixed_t viletryx;
-fixed_t viletryy;
-int viletryradius;
+__thread mobj_t* corpsehit;
+__thread mobj_t* vileobj;
+__thread fixed_t viletryx;
+__thread fixed_t viletryy;
+__thread int viletryradius;
 
 static dboolean PIT_VileCheck(mobj_t *thing)
 {
@@ -2517,11 +2517,10 @@ void A_CloseShotgun2(player_t *player, pspdef_t *psp)
 }
 
 // killough 2/7/98: Remove limit on icon landings:
-mobj_t **braintargets;
-int    numbraintargets_alloc;
-int    numbraintargets;
-
-struct brain_s brain;   // killough 3/26/98: global state of boss brain
+__thread mobj_t **braintargets;
+__thread int    numbraintargets_alloc;
+__thread int    numbraintargets;
+__thread struct brain_s brain;   // killough 3/26/98: global state of boss brain
 
 // killough 3/26/98: initialize icon landings at level startup,
 // rather than at boss wakeup, to prevent savegame-related crashes

@@ -76,7 +76,7 @@ dboolean P_CheckFov(mobj_t *t1, mobj_t *t2, angle_t fov);
 void    P_UseLines(player_t *player);
 
 typedef dboolean (*CrossSubsectorFunc)(int num);
-extern CrossSubsectorFunc P_CrossSubsector;
+extern __thread CrossSubsectorFunc P_CrossSubsector;
 dboolean P_CrossSubsector_Doom(int num);
 dboolean P_CrossSubsector_Boom(int num);
 dboolean P_CrossSubsector_PrBoom(int num);

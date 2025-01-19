@@ -60,9 +60,9 @@ typedef enum overrun_list_s
   OVERFLOW_MAX //last
 } overrun_list_t;
 
-extern int overflows_enabled;
-extern overrun_param_t overflows[];
-extern const char *overflow_cfgname[OVERFLOW_MAX];
+extern __thread int overflows_enabled;
+extern __thread overrun_param_t overflows[];
+extern __thread const char *overflow_cfgname[OVERFLOW_MAX];
 
 #define EMULATE(overflow) (overflows_enabled && (overflows[overflow].footer ? overflows[overflow].footer_emulate : overflows[overflow].emulate))
 #define PROCESS(overflow) (overflows_enabled && (overflows[overflow].warn || EMULATE(overflow)))
@@ -117,7 +117,7 @@ typedef struct spechit_overrun_param_s
   dboolean *nofit;
 } spechit_overrun_param_t;
 
-extern unsigned int spechit_baseaddr;
+extern __thread unsigned int spechit_baseaddr;
 
 void SpechitOverrun(spechit_overrun_param_t *params);
 

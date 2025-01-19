@@ -51,9 +51,9 @@ typedef struct {
   skill_info_flags_t flags;
 } skill_info_t;
 
-extern skill_info_t skill_info;
+extern __thread skill_info_t skill_info;
 
-extern int num_skills;
+extern __thread int num_skills;
 
 void dsda_InitSkills(void);
 void dsda_RefreshGameSkill(void);

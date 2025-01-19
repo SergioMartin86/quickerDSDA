@@ -416,8 +416,8 @@ typedef struct mobj_s
 // Whether an object is "sentient" or not. Used for environmental influences.
 #define sentient(mobj) ((mobj)->health > 0 && (mobj)->info->seestate)
 
-extern int iquehead;
-extern int iquetail;
+extern __thread int iquehead;
+extern __thread int iquetail;
 
 int P_MobjSpawnHealth(const mobj_t* mobj);
 mobj_t* P_SubstNullMobj (mobj_t* th);
@@ -513,7 +513,7 @@ void P_RemoveMonsters(void);
 #define AMMO_MACE_WIMPY 20
 #define AMMO_MACE_HEFTY 100
 
-extern mobj_t* MissileMobj;
+extern __thread mobj_t* MissileMobj;
 
 void P_BlasterMobjThinker(mobj_t * mobj);
 mobj_t *P_SpawnMissileAngle(mobj_t * source, mobjtype_t type, angle_t angle, fixed_t momz);

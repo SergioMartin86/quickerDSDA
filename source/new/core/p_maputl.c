@@ -554,7 +554,8 @@ dboolean P_BlockThingsIterator(int x, int y, dboolean func(mobj_t*))
 //
 
 // 1/11/98 killough: Intercept limit removed
-__thread intercept_t *intercepts, *intercept_p;
+__thread intercept_t *intercepts;
+__thread intercept_t *intercept_p;
 
 // Check for limit and double size if necessary -- killough
 void check_intercept(void)

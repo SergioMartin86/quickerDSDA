@@ -67,11 +67,11 @@
 
 #define MAXBOB  0x100000
 
-dboolean onground; // whether player is on ground or in air
+__thread dboolean onground; // whether player is on ground or in air
 
 // heretic
-int newtorch;      // used in the torch flicker effect.
-int newtorchdelta;
+__thread int newtorch;      // used in the torch flicker effect.
+__thread int newtorchdelta;
 
 fixed_t P_PlayerSpeed(player_t* player)
 {

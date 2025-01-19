@@ -118,7 +118,7 @@ void I_StopSong(int handle);
 void I_UnRegisterSong(int handle);
 
 // CPhipps - put these in config file
-extern int snd_samplerate;
+extern __thread int snd_samplerate;
 
 // prefered MIDI player
 typedef enum
@@ -130,7 +130,7 @@ typedef enum
   midi_player_last
 } midi_player_name_t;
 
-extern const char *midiplayers[];
+extern __thread const char *midiplayers[];
 
 void M_ChangeMIDIPlayer(void);
 

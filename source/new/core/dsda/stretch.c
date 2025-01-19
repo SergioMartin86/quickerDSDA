@@ -24,29 +24,25 @@
 
 #include "stretch.h"
 
-int wide_offsetx;
-int wide_offset2x;
-int wide_offsety;
-int wide_offset2y;
+__thread int wide_offsetx;
+__thread int wide_offset2x;
+__thread int wide_offsety;
+__thread int wide_offset2y;
+__thread int render_stretch_hud;
+__thread int patches_scalex;
+__thread int patches_scaley;
 
-int render_stretch_hud;
-
-int patches_scalex;
-int patches_scaley;
-
-static cb_video_t video;
-static cb_video_t video_stretch;
-static cb_video_t video_full;
-static cb_video_t video_ex_text;
-
-static stretch_param_t* stretch_params;
-static stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];
-
-static int ex_text_screenwidth;
-static int ex_text_screenheight;
-static int ex_text_st_scaled_height;
-static double ex_text_scale_x;
-static double ex_text_scale_y;
+static __thread cb_video_t video;
+static __thread cb_video_t video_stretch;
+static __thread cb_video_t video_full;
+static __thread cb_video_t video_ex_text;
+static __thread stretch_param_t* stretch_params;
+static __thread stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];
+static __thread int ex_text_screenwidth;
+static __thread int ex_text_screenheight;
+static __thread int ex_text_st_scaled_height;
+static __thread double ex_text_scale_x;
+static __thread double ex_text_scale_y;
 
 
 static void GenLookup(short* lookup1, short* lookup2, int size, int max, int step) {

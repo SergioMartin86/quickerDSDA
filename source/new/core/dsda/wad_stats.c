@@ -29,11 +29,11 @@
 
 #include "wad_stats.h"
 
-static const char* filename = "stats.txt";
-static const int current_version = 1;
-static map_stats_t* current_map_stats;
+static __thread const char* filename = "stats.txt";
+static __thread const int current_version = 1;
+static __thread map_stats_t* current_map_stats;
 
-wad_stats_t wad_stats;
+__thread wad_stats_t wad_stats;
 
 static void dsda_EnsureMapCount(int count) {
   wad_stats.map_count = count;

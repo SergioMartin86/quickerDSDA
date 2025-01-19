@@ -39,8 +39,8 @@
 
 #include "dsda/configuration.h"
 
-int capturing_video = 0;
-static const char *vid_fname;
+int __thread capturing_video = 0;
+static __thread const char *vid_fname;
 
 typedef struct
 { // information on a running pipe
@@ -53,13 +53,13 @@ typedef struct
   void *user;
 } pipeinfo_t;
 
-static pipeinfo_t soundpipe;
-static pipeinfo_t videopipe;
-static pipeinfo_t muxpipe;
+static __thread pipeinfo_t soundpipe;
+static __thread pipeinfo_t videopipe;
+static __thread pipeinfo_t muxpipe;
 
-int cap_fps;
-int cap_frac;
-int cap_wipescreen;
+int __thread cap_fps;
+int __thread cap_frac;
+int __thread cap_wipescreen;
 
 // parses a command with simple printf-style replacements.
 

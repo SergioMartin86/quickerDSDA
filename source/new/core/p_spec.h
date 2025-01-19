@@ -220,8 +220,8 @@ typedef struct
   int index;
   anim_t *anim;
 } TAnimItemParam;
-extern TAnimItemParam *anim_flats;
-extern TAnimItemParam *anim_textures;
+extern __thread TAnimItemParam *anim_flats;
+extern __thread TAnimItemParam *anim_textures;
 
 // define names for the TriggerType field of the general linedefs
 
@@ -942,11 +942,11 @@ typedef struct {
 //////////////////////////////////////////////////////////////////
 
 // list of retriggerable buttons active
-extern button_t buttonlist[MAXBUTTONS];
+extern __thread button_t buttonlist[MAXBUTTONS];
 
-extern platlist_t *activeplats;        // killough 2/14/98
+extern __thread platlist_t *activeplats;        // killough 2/14/98
 
-extern ceilinglist_t *activeceilings;  // jff 2/22/98
+extern __thread ceilinglist_t *activeceilings;  // jff 2/22/98
 
 ////////////////////////////////////////////////////////////////
 //
@@ -1322,12 +1322,12 @@ void P_SpawnLineSpecials(void);
 
 #define MAX_AMBIENT_SFX 8
 
-extern int AmbSfxTics;
-extern int AmbSfxVolume;
-extern int AmbSfxPtrIndex;
-extern int *AmbSfxPtr;
-extern int *LevelAmbientSfx[MAX_AMBIENT_SFX];
-extern int *TerrainTypes;
+extern __thread int AmbSfxTics;
+extern __thread int AmbSfxVolume;
+extern __thread int AmbSfxPtrIndex;
+extern __thread int *AmbSfxPtr;
+extern __thread int *LevelAmbientSfx[MAX_AMBIENT_SFX];
+extern __thread int *TerrainTypes;
 
 void P_InitAmbientSound(void);
 void P_AmbientSound(void);
