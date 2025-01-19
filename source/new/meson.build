@@ -42,7 +42,6 @@ quickerDSDASrc =  [
  'core/dsda/stretch.c',
  'core/dsda/thing_id.c',
  'core/dsda/utility.c',
- 'core/dsda/utility/string_view.c',
  'core/dsda/wad_stats.c',
  'core/d_items.c',
  'core/d_main.c',
