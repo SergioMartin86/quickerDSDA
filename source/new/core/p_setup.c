@@ -54,7 +54,6 @@
 #include "dsda.h"
 #include "dsda/args.h"
 #include "dsda/compatibility.h"
-#include "dsda/destructible.h"
 #include "dsda/id_list.h"
 #include "dsda/line_special.h"
 #include "dsda/map_format.h"
@@ -62,6 +61,7 @@
 #include "dsda/preferences.h"
 #include "dsda/scroll.h"
 #include "dsda/settings.h"
+#include "dsda/tranmap.h"
 #include "dsda/utility.h"
 
 #include "config.h"
@@ -1803,6 +1803,47 @@ void P_PostProcessCompatibleLineSpecial(line_t *ld)
 {
 }
 
+void P_PostProcessHereticLineSpecial(line_t *ld)
+{
+}
+
+void P_PostProcessHexenLineSpecial(line_t *ld)
+{
+  // nothing in hexen
+}
+
+void P_PostProcessZDoomLineSpecial(line_t *ld)
+{
+  switch (ld->special)
+  {
+    case zl_translucent_line:
+    {
+      float alpha;
+      const int *id_p;
+
+      alpha = (float) ld->special_args[1] / 256.f;
+      alpha = BETWEEN(0.f, 1.f, alpha);
+
+      if (!ld->special_args[0])
+      {
+        ld->tranmap = dsda_TranMap(dsda_FloatToPercent(alpha));
+        ld->alpha = alpha;
+      }
+      else
+      {
+        FIND_LINES(id_p, ld->special_args[0])
+        {
+          lines[*id_p].tranmap = dsda_TranMap(dsda_FloatToPercent(alpha));
+          lines[*id_p].alpha = alpha;
+        }
+      }
+
+      ld->special = 0;
+    }
+    break;
+  }
+}
+
 // killough 4/4/98: delay using sidedefs until they are loaded
 // killough 5/3/98: reformatted, cleaned up
 
@@ -1866,6 +1907,27 @@ void P_PostProcessCompatibleSidedefSpecial(side_t *sd, const mapsidedef_t *msd, 
       sd->bottomtexture = R_SafeTextureNumForName(msd->bottomtexture, i);
       break;
   }
+}
+
+void P_PostProcessHereticSidedefSpecial(side_t *sd, const mapsidedef_t *msd, sector_t *sec, int i)
+{
+  sd->midtexture = R_SafeTextureNumForName(msd->midtexture, i);
+  sd->toptexture = R_SafeTextureNumForName(msd->toptexture, i);
+  sd->bottomtexture = R_SafeTextureNumForName(msd->bottomtexture, i);
+}
+
+void P_PostProcessHexenSidedefSpecial(side_t *sd, const mapsidedef_t *msd, sector_t *sec, int i)
+{
+  sd->midtexture = R_SafeTextureNumForName(msd->midtexture, i);
+  sd->toptexture = R_SafeTextureNumForName(msd->toptexture, i);
+  sd->bottomtexture = R_SafeTextureNumForName(msd->bottomtexture, i);
+}
+
+void P_PostProcessZDoomSidedefSpecial(side_t *sd, const mapsidedef_t *msd, sector_t *sec, int i)
+{
+  sd->midtexture = R_SafeTextureNumForName(msd->midtexture, i);
+  sd->toptexture = R_SafeTextureNumForName(msd->toptexture, i);
+  sd->bottomtexture = R_SafeTextureNumForName(msd->bottomtexture, i);
 }
 
 // killough 4/4/98: delay using texture names until
@@ -2990,8 +3052,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
     Z_Free(vertexes);
   }
 
-  dsda_ResetHealthGroups();
-
   map_loader.load_vertexes(level_components.vertexes);
   map_loader.load_sectors(level_components.sectors);
   map_loader.allocate_sidedefs(level_components.sidedefs);
@@ -3099,6 +3159,14 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
     for (i = 0; i < g_maxplayers; i++)
       if (playeringame[i] && !players[i].mo)
         I_Error("P_SetupLevel: missing player %d start\n", i+1);
+  }
+
+  players[consoleplayer].viewz = players[consoleplayer].mo->z +
+                                 players[consoleplayer].viewheight;
+
+  if (players[consoleplayer].cheats & CF_FLY)
+  {
+    players[consoleplayer].mo->flags |= (MF_NOGRAVITY | MF_FLY);
   }
 
   // killough 3/26/98: Spawn icon landings:

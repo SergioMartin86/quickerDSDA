@@ -55,7 +55,9 @@
 #include "dsda/configuration.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
+#include "dsda/render_stats.h"
 #include "dsda/settings.h"
+#include "dsda/signal_context.h"
 #include "dsda/stretch.h"
 
 // e6y
@@ -684,6 +686,11 @@ static void R_SetupFrame (player_t *player)
     }
   else
     fixedcolormap = 0;
+
+  R_SetClipPlanes();
+
+  if (V_IsOpenGLMode() || HU_CrosshairEnabled())
+    R_SetupMatrix();
 
   validcount++;
 }

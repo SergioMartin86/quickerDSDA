@@ -42,6 +42,7 @@
 #include "sounds.h"
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 
+#include "dsda/font.h"
 #include "dsda/mapinfo.h"
 
 // Ty 03/17/98: flag that new par times have been loaded in d_deh
@@ -468,6 +469,41 @@ static void WI_slamBackground(void)
 
 static void WI_DrawString(int cx, int cy, const char* ch)
 {
+  int   w;
+  int   c;
+  const char *cc = ch;
+  int width = 0;
+
+  // center the text.
+  while (*cc) {
+    c = *cc++;         // get next char
+    c = toupper(c) - HU_FONTSTART;
+    if (c < 0 || c> HU_FONTSIZE)
+    {
+      width += SPACEWIDTH;    // space
+      continue;
+    }
+    width += hud_font.font[c].width;
+  }
+  cx -= width / 2;
+  if (cx < 0) cx = 0;
+
+
+  while (*ch) {
+    c = *ch++;         // get next char
+    c = toupper(c) - HU_FONTSTART;
+    if (c < 0 || c> HU_FONTSIZE)
+    {
+      cx += SPACEWIDTH;    // space
+      continue;
+    }
+    w = hud_font.font[c].width;
+    if (cx + w > 320)
+      break;
+
+    V_DrawNumPatch(cx, cy, 0, hud_font.font[c].lumpnum, CR_GRAY, VPT_STRETCH | VPT_TRANS);
+    cx += w;
+  }
 }
 
 // ====================================================================

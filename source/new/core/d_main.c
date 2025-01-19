@@ -83,8 +83,12 @@
 #include "dsda/options.h"
 #include "dsda/pause.h"
 #include "dsda/preferences.h"
+#include "dsda/render_stats.h"
 #include "dsda/settings.h"
+#include "dsda/signal_context.h"
 #include "dsda/skill_info.h"
+#include "dsda/sndinfo.h"
+#include "dsda/time.h"
 #include "dsda/utility.h"
 #include "dsda/wad_stats.h"
 
@@ -184,6 +188,7 @@ void D_PostEvent(event_t *ev)
 static void D_Wipe(void)
 {
   dboolean done;
+  int wipestart;
   int old_game_speed = 0;
 
   //e6y
@@ -199,6 +204,51 @@ static void D_Wipe(void)
     old_game_speed = dsda_GameSpeed();
     dsda_UpdateGameSpeed(100);
   }
+
+  wipestart = dsda_GetTick() - 1;
+
+  //  This routine prevents re-recording
+  // do
+  // {
+  //   int nowtime, tics;
+  //   do
+  //   {
+  //     I_uSleep(5000); // CPhipps - don't thrash cpu in this loop
+  //     nowtime = dsda_GetTick();
+  //     tics = nowtime - wipestart;
+  //   }
+  //   while (!tics);
+
+  //   // elim - Enable render-to-texture for GL so "melt" is rendered at same resolution as the game scene
+  //   #ifdef __ENABLE_OPENGL_
+  //   if (V_IsOpenGLMode())
+  //   {
+  //     dsda_GLLetterboxClear();
+  //     dsda_GLStartMeltRenderTexture();
+  //   }
+  //   #endif
+
+  //   wipestart = nowtime;
+  //   done = wipe_ScreenWipe(tics);
+
+  //   // elim - Render texture to screen
+  //   #ifdef __ENABLE_OPENGL_
+  //   if (V_IsOpenGLMode())
+  //   {
+  //     dsda_GLEndMeltRenderTexture();
+  //   }
+  //   #endif
+
+  //   M_Drawer();                   // menu is drawn even on top of wipes
+
+  //   if (capturing_video && !dsda_SkipMode() && cap_wipescreen)
+  //   {
+  //     I_QueueFrameCapture();
+  //   }
+
+  //   I_FinishUpdate();             // page flip or blit buffer
+  // }
+  // while (!done);
 
   if (old_game_speed)
   {
@@ -221,6 +271,12 @@ static void D_DrawPause(void)
 {
   if (dsda_PauseMode(PAUSE_BUILDMODE))
     return;
+
+  V_BeginUIDraw();
+
+    V_DrawNamePatch((320 - V_NamePatchWidth("M_PAUSE")) / 2, 4, 0, "M_PAUSE", CR_DEFAULT, VPT_STRETCH);
+
+  V_EndUIDraw();
 }
 
 static dboolean must_fill_back_screen;
@@ -1196,6 +1252,8 @@ void D_DoomMainSetup(void)
     }
   }
 
+  D_InitFakeNetGame();
+
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "W_Init: Init WADfiles.\n");
   W_Init(); // CPhipps - handling of wadfiles init changed
@@ -1226,6 +1284,8 @@ void D_DoomMainSetup(void)
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "M_Init: Init miscellaneous info.\n");
 
+  dsda_LoadSndInfo();
+
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "R_Init: Init DOOM refresh daemon - ");
   R_Init();
@@ -1240,6 +1300,10 @@ void D_DoomMainSetup(void)
 
   // Must be after P_Init
   HandleWarp();
+
+  //jff 9/3/98 use logical output routine
+  lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");
+  dsda_InitFont();
 
   // NSM
   arg = dsda_Arg(dsda_arg_viddump);

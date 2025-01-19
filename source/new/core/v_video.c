@@ -52,7 +52,9 @@
 #include "e6y.h"
 
 #include "dsda/configuration.h"
+#include "dsda/cr_table.h"
 #include "dsda/global.h"
+#include "dsda/palette.h"
 #include "dsda/stretch.h"
 
 // DWF 2012-05-10
@@ -141,6 +143,13 @@ void V_InitFlexTranTable(void)
 
 void V_InitColorTranslation(void)
 {
+  int i;
+  byte* full_table;
+
+  full_table = dsda_GenerateCRTable();
+
+  for (i = 0; i < CR_LIMIT; ++i)
+    colrngs[i] = full_table + 256 * i;
 }
 
 //
@@ -847,16 +856,31 @@ void WRAP_V_DrawLineWu(fline_t *fl, int color)
 
 const unsigned char* V_GetPlaypal(void)
 {
-  return NULL;
+  dsda_playpal_t* playpal_data;
+
+  playpal_data = dsda_PlayPalData();
+
+  if (!playpal_data->lump)
+  {
+    int lump = W_GetNumForName(playpal_data->lump_name);
+    const byte *data = W_LumpByNum(lump);
+    playpal_data->length = W_LumpLength(lump);
+    playpal_data->lump = Z_Malloc(playpal_data->length);
+    memcpy(playpal_data->lump, data, playpal_data->length);
+  }
+
+  return playpal_data->lump;
 }
 
 void V_FreePlaypal(void)
 {
+  dsda_FreePlayPal();
 }
 
 int V_GetPlaypalCount(void)
 {
-  return 0;
+  V_GetPlaypal(); // ensure playpal data is initialized
+  return (dsda_PlayPalData()->length / PALETTE_SIZE);
 }
 
 void V_ClearBorder(void)

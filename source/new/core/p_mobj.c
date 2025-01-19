@@ -58,6 +58,7 @@
 #include "dsda/skill_info.h"
 #include "dsda/spawn_number.h"
 #include "dsda/thing_id.h"
+#include "dsda/tranmap.h"
 #include "dsda/utility.h"
 
 // heretic_note: static NUMSTATES arrays here - probably fine?

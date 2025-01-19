@@ -21,6 +21,7 @@
 #include "v_video.h"
 
 #include "dsda/configuration.h"
+#include "dsda/font.h"
 
 #include "stretch.h"
 

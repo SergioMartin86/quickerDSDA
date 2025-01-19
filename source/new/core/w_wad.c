@@ -515,6 +515,8 @@ void W_Init(void)
   /* cph 2001/07/07 - separated cache setup */
   lprintf(LO_DEBUG, "W_InitCache\n");
   W_InitCache();
+
+  V_FreePlaypal();
 }
 
 //

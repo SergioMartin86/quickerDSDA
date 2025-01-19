@@ -40,6 +40,7 @@
 #include "w_wad.h"
 #include "sounds.h"
 
+#include "dsda/font.h"
 #include "dsda/mapinfo.h"
 
 #include "f_finale.h" // CPhipps - hmm...
@@ -204,6 +205,51 @@ void F_Ticker(void)
 
 void F_TextWrite (void)
 {
+  if (finalepatch)
+  {
+    V_ClearBorder();
+    V_DrawNamePatch(0, 0, 0, finalepatch, CR_DEFAULT, VPT_STRETCH);
+  }
+  else
+    V_DrawBackground(finaleflat, 0);
+
+  { // draw some of the text onto the screen
+    int         cx = 10;
+    int         cy = 10;
+    const char* ch = finaletext; // CPhipps - const
+    int         count = (int)((float)(finalecount - 10)/Get_TextSpeed()); // phares
+    int         w;
+
+    if (count < 0)
+      count = 0;
+
+    for ( ; count ; count-- ) {
+      int       c = *ch++;
+
+      if (!c)
+        break;
+
+      if (c == '\n') {
+        cx = 10;
+        cy += 11;
+        continue;
+      }
+
+      c = toupper(c) - HU_FONTSTART;
+      if (c < 0 || c> HU_FONTSIZE) {
+        cx += 4;
+        continue;
+      }
+
+      w = hud_font.font[c].width;
+      if (cx+w > SCREENWIDTH)
+        break;
+
+      // CPhipps - patch drawing updated
+      V_DrawNumPatch(cx, cy, 0, hud_font.font[c].lumpnum, CR_DEFAULT, VPT_STRETCH);
+      cx+=w;
+    }
+  }
 }
 
 //
@@ -264,6 +310,52 @@ dboolean F_CastResponder (event_t* ev)
 
 static void F_CastPrint (const char* text) // CPhipps - static, const char*
 {
+  const char* ch; // CPhipps - const
+  int         c;
+  int         cx;
+  int         w;
+  int         width;
+
+  // find width
+  ch = text;
+  width = 0;
+
+  while (ch)
+  {
+    c = *ch++;
+    if (!c)
+      break;
+    c = toupper(c) - HU_FONTSTART;
+    if (c < 0 || c> HU_FONTSIZE)
+    {
+      width += 4;
+      continue;
+    }
+
+    w = hud_font.font[c].width;
+    width += w;
+  }
+
+  // draw it
+  cx = 160-width/2;
+  ch = text;
+  while (ch)
+  {
+    c = *ch++;
+    if (!c)
+      break;
+    c = toupper(c) - HU_FONTSTART;
+    if (c < 0 || c> HU_FONTSIZE)
+    {
+      cx += 4;
+      continue;
+    }
+
+    w = hud_font.font[c].width;
+    // CPhipps - patch drawing updated
+    V_DrawNumPatch(cx, 180, 0, hud_font.font[c].lumpnum, CR_DEFAULT, VPT_STRETCH);
+    cx+=w;
+  }
 }
 
 

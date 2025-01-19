@@ -278,4 +278,3 @@ void dsda_InitGlobal(void) {
 
   dsda_ResetNullPClass();
 }
-uint32_t* headlessGetPallette() { return (uint32_t*) NULL; }
