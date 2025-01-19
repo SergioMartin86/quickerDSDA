@@ -271,12 +271,6 @@ static void D_DrawPause(void)
 {
   if (dsda_PauseMode(PAUSE_BUILDMODE))
     return;
-
-  V_BeginUIDraw();
-
-    V_DrawNamePatch((320 - V_NamePatchWidth("M_PAUSE")) / 2, 4, 0, "M_PAUSE", CR_DEFAULT, VPT_STRETCH);
-
-  V_EndUIDraw();
 }
 
 static dboolean must_fill_back_screen;
@@ -1303,7 +1297,6 @@ void D_DoomMainSetup(void)
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");
-  dsda_InitFont();
 
   // NSM
   arg = dsda_Arg(dsda_arg_viddump);
