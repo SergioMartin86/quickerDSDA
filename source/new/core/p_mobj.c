@@ -309,43 +309,6 @@ static void P_XYMovement (mobj_t* mo)
       else if (mo->flags & MF_MISSILE)
       {
 
-        if (BlockingMobj && (BlockingMobj->flags2 & MF2_REFLECTIVE))
-        {
-          angle = R_PointToAngle2(BlockingMobj->x,
-                                  BlockingMobj->y, mo->x, mo->y);
-
-          // Change angle for delflection/reflection
-          switch (BlockingMobj->type)
-          {
-            case HEXEN_MT_CENTAUR:
-            case HEXEN_MT_CENTAURLEADER:
-              if (abs((int) angle - (int) BlockingMobj->angle) >> 24 > 45)
-                goto explode;
-              if (mo->type == HEXEN_MT_HOLY_FX)
-                goto explode;
-              // Drop through to sorcerer full reflection
-            case HEXEN_MT_SORCBOSS:
-              // Deflection
-              if (P_Random(pr_hexen) < 128)
-                angle += ANG45;
-              else
-                angle -= ANG45;
-              break;
-            default:
-              // Reflection
-              angle += ANG1 * ((P_Random(pr_hexen) % 16) - 8);
-              break;
-          }
-
-          // Reflect the missile along angle
-          mo->angle = angle;
-          angle >>= ANGLETOFINESHIFT;
-          mo->momx = FixedMul(mo->info->speed >> 1, finecosine[angle]);
-          mo->momy = FixedMul(mo->info->speed >> 1, finesine[angle]);
-          P_SetTarget(&mo->target, BlockingMobj);
-          return;
-        }
-
       explode:
         // explode a missile
         if (ceilingline &&
@@ -1016,7 +979,7 @@ void P_MobjThinker (mobj_t* mobj)
               mobj->flags2 |= MF2_ONMOBJ;
               mobj->momz = 0;
             }
-            if (onmo->player || onmo->type == HERETIC_MT_POD)
+            if (onmo->player)
             {
               mobj->momx = onmo->momx;
               mobj->momy = onmo->momy;
@@ -2236,18 +2199,6 @@ void P_BlasterMobjThinker(mobj_t * mobj)
                 P_ExplodeMissile(mobj);
                 return;
             }
-            if (changexy)
-            {
-              if (P_Random(pr_heretic) < 64)
-                {
-                    z = mobj->z - 8 * FRACUNIT;
-                    if (z < mobj->floorz)
-                    {
-                        z = mobj->floorz;
-                    }
-                    P_SpawnMobj(mobj->x, mobj->y, z, HERETIC_MT_BLASTERSMOKE);
-                }
-            }
         }
     }
     // Advance the state
@@ -2273,28 +2224,7 @@ mobj_t *P_SpawnMissileAngle(mobj_t * source, mobjtype_t type, angle_t angle, fix
     fixed_t z;
     mobj_t *mo;
 
-    switch (type)
-    {
-        case HERETIC_MT_MNTRFX1:       // Minotaur swing attack missile
-        case HEXEN_MT_MNTRFX1:         // Minotaur swing attack missile
-        case HEXEN_MT_MSTAFF_FX2:
-            z = source->z + 40 * FRACUNIT;
-            break;
-        case HEXEN_MT_MNTRFX2:       // Minotaur floor fire missile
-            break;
-        case HERETIC_MT_MNTRFX2:       // Minotaur floor fire missile
-            z = ONFLOORZ;
-            break;
-        case HERETIC_MT_SRCRFX1:       // Sorcerer Demon fireball
-            z = source->z + 48 * FRACUNIT;
-            break;
-        case HEXEN_MT_ICEGUY_FX2:    // Secondary Projectiles of the Ice Guy
-            z = source->z + 3 * FRACUNIT;
-            break;
-        default:
-            z = source->z + 32 * FRACUNIT;
-            break;
-    }
+      z = source->z + 32 * FRACUNIT;
 
     if (source->flags2 & MF2_FEETARECLIPPED)
     {
@@ -2467,82 +2397,4 @@ int P_FaceMobj(mobj_t * source, mobj_t * target, angle_t * delta)
             return (0);
         }
     }
-}
-
-dboolean Raven_P_SetMobjState(mobj_t * mobj, statenum_t state)
-{
-    state_t *st;
-
-    if (state == g_s_null)
-    {                           // Remove mobj
-        mobj->state = NULL;
-        P_RemoveMobj(mobj);
-        return (false);
-    }
-    st = &states[state];
-    mobj->state = st;
-    mobj->tics = st->tics;
-    mobj->sprite = st->sprite;
-    mobj->frame = st->frame;
-    if (st->action)
-    {                           // Call action function
-        st->action(mobj);
-    }
-    return (true);
-}
-
-void P_FloorBounceMissile(mobj_t * mo)
-{
-      mo->momz = -mo->momz;
-      P_SetMobjState(mo, mobjinfo[mo->type].deathstate);
-}
-
-
-void Raven_P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
-{
-    mobj_t *puff;
-
-    z += (P_SubRandom() << 10);
-    puff = P_SpawnMobj(x, y, z, PuffType);
-    switch (PuffType)
-    {
-        case HERETIC_MT_BEAKPUFF:
-        case HERETIC_MT_STAFFPUFF:
-        case HEXEN_MT_PUNCHPUFF:
-            puff->momz = FRACUNIT;
-            break;
-        case HERETIC_MT_GAUNTLETPUFF1:
-        case HERETIC_MT_GAUNTLETPUFF2:
-        case HEXEN_MT_HAMMERPUFF:
-            puff->momz = (fixed_t)(.8 * FRACUNIT);
-        default:
-            break;
-    }
-}
-
-void P_BloodSplatter(fixed_t x, fixed_t y, fixed_t z, mobj_t * originator)
-{
-    mobj_t *mo;
-
-    mo = P_SpawnMobj(x, y, z, g_mt_bloodsplatter);
-    P_SetTarget(&mo->target, originator);
-    mo->momx = P_SubRandom() << g_bloodsplatter_shift;
-    mo->momy = P_SubRandom() << g_bloodsplatter_shift;
-    mo->momz = FRACUNIT * g_bloodsplatter_weight;
-}
-
-void P_RipperBlood(mobj_t * mo, mobj_t * bleeder)
-{
-    mobj_t *th;
-    fixed_t x, y, z;
-
-    x = mo->x + (P_SubRandom() << 12);
-    y = mo->y + (P_SubRandom() << 12);
-    z = mo->z + (P_SubRandom() << 12);
-    th = P_SpawnMobj(x, y, z, g_mt_blood);
-   th->flags |= MF_NOGRAVITY;
-    th->momx = mo->momx >> 1;
-    th->momy = mo->momy >> 1;
-    th->tics += P_Random(pr_heretic) & 3;
-    th->color = bleeder->info->bloodcolor;
 }

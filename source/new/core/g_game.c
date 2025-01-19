@@ -92,27 +92,6 @@
 // Allows use of HELP2 screen for PWADs under DOOM 1
 __thread int pwad_help2_check;
 
-struct
-{
-    int type;   // mobjtype_t
-    int speed[2];
-} MonsterMissileInfo[] = {
-    { HERETIC_MT_IMPBALL, { 10, 20 } },
-    { HERETIC_MT_MUMMYFX1, { 9, 18 } },
-    { HERETIC_MT_KNIGHTAXE, { 9, 18 } },
-    { HERETIC_MT_REDAXE, { 9, 18 } },
-    { HERETIC_MT_BEASTBALL, { 12, 20 } },
-    { HERETIC_MT_WIZFX1, { 18, 24 } },
-    { HERETIC_MT_SNAKEPRO_A, { 14, 20 } },
-    { HERETIC_MT_SNAKEPRO_B, { 14, 20 } },
-    { HERETIC_MT_HEADFX1, { 13, 20 } },
-    { HERETIC_MT_HEADFX3, { 10, 18 } },
-    { HERETIC_MT_MNTRFX1, { 20, 26 } },
-    { HERETIC_MT_MNTRFX2, { 14, 20 } },
-    { HERETIC_MT_SRCRFX1, { 20, 28 } },
-    { HERETIC_MT_SOR2FX1, { 20, 28 } },
-    { -1, { -1, -1 } }                 // Terminator
-};
 
 // e6y
 // It is signature for new savegame format with continuous numbering.
