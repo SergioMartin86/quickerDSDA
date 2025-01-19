@@ -29,8 +29,6 @@
 #include "dsda/features.h"
 #include "dsda/mouse.h"
 #include "dsda/settings.h"
-#include "dsda/split_tracker.h"
-#include "dsda/tracker.h"
 #include "dsda/wad_stats.h"
 #include "dsda.h"
 

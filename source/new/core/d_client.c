@@ -60,7 +60,6 @@
 
 #include "dsda/args.h"
 #include "dsda/settings.h"
-#include "dsda/time.h"
 
 ticcmd_t local_cmds[MAX_MAXPLAYERS];
 int maketic;
@@ -82,24 +81,6 @@ void D_InitFakeNetGame (void)
 
 void FakeNetUpdate(void)
 {
-  static int lastmadetic;
-
-  { // Build new ticcmds
-    int newtics = dsda_GetTick() - lastmadetic;
-    lastmadetic += newtics;
-
-    while (newtics--) {
-      if (maketic - gametic > BACKUPTICS/2) break;
-
-      // e6y
-      // Eliminating the sudden jump of six frames(BACKUPTICS/2)
-      // after change of game_speed.
-      if (maketic - gametic && gametic <= force_singletics_to && dsda_GameSpeed() < 200) break;
-
-      G_BuildTiccmd(&local_cmds[0]);
-      maketic++;
-    }
-  }
 }
 
 // Implicitly tracked whenever we check the current tick

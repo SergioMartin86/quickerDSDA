@@ -88,9 +88,6 @@
 #include "dsda/options.h"
 #include "dsda/pause.h"
 #include "dsda/skill_info.h"
-#include "dsda/time.h"
-#include "dsda/tracker.h"
-#include "dsda/split_tracker.h"
 #include "dsda/utility.h"
 
 // Allows use of HELP2 screen for PWADs under DOOM 1
@@ -551,29 +548,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   if (players[consoleplayer].mo && players[consoleplayer].mo->pitch && !dsda_MouseLook())
     dsda_QueueExCmdLook(XC_LOOK_RESET);
 
-  if (dsda_AllowFreeLook())
-  {
-    short look;
-
-    look = mlooky;
-
-    if (look)
-    {
-      if (players[consoleplayer].mo && !V_IsOpenGLMode())
-      {
-        int target_look = players[consoleplayer].mo->pitch + (look << 16);
-
-        if (target_look < (int) raven_angle_up_limit)
-          look = (raven_angle_up_limit - players[consoleplayer].mo->pitch) >> 16;
-
-        if (target_look > (int) raven_angle_down_limit)
-          look = (raven_angle_down_limit - players[consoleplayer].mo->pitch) >> 16;
-      }
-
-      dsda_QueueExCmdLook(look);
-    }
-  }
-
   if (dsda_InputActive(dsda_input_fire))
     cmd->buttons |= BT_ATTACK;
 
@@ -970,18 +944,6 @@ static void G_DoLoadLevel (void)
   dsda_ResetPauseMode();
   dsda_ResetExCmdQueue();
 
-  // killough: make -timedemo work on multilevel demos
-  // Move to end of function to minimize noise -- killough 2/22/98:
-
-  if (timingdemo)
-  {
-    static int first=1;
-    if (first)
-      {
-        starttime = dsda_GetTickRealTime();
-        first=0;
-      }
-  }
 }
 
 //
@@ -1892,8 +1854,6 @@ void RecalculateDrawnSubsectors(void)
 
 void G_AfterLoad(void)
 {
-  dsda_ResetTrackers();
-
   RecalculateDrawnSubsectors();
 
 

@@ -74,8 +74,6 @@ typedef struct {
 
 extern int dsda_input_profile;
 extern int weapon_preferences[2][NUMWEAPONS + 1];
-extern int sts_always_red;
-extern int sts_pct_always_gray;
 
 void M_ChangeSkyMode(void);
 void M_ChangeAllowFog(void);
@@ -210,11 +208,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_sts_always_red] = {
     "sts_always_red", dsda_config_sts_always_red,
-    CONF_BOOL(1), &sts_always_red
+    CONF_BOOL(1), 0
   },
   [dsda_config_sts_pct_always_gray] = {
     "sts_pct_always_gray", dsda_config_sts_pct_always_gray,
-    CONF_BOOL(0), &sts_pct_always_gray
+    CONF_BOOL(0),0
   },
   [dsda_config_sts_traditional_keys] = {
     "sts_traditional_keys", dsda_config_sts_traditional_keys,
