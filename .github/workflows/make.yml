@@ -24,7 +24,7 @@ jobs:
     - name: Installing meson and ninja
       run: python3 -m pip install meson ninja
     - name: Run meson configuration
-      run: meson setup build -DonlyOpenSource=true
+      run: meson setup build -DonlyFree=true
     - name: Building project
       run: ninja -C build
     - name: Running tests
