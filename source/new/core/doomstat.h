@@ -242,8 +242,6 @@ extern  int       upmove;
 // Alive? Disconnected?
 extern  dboolean   playeringame[MAX_MAXPLAYERS];
 
-extern pclass_t PlayerClass[MAX_MAXPLAYERS];
-
 extern  mapthing_t *deathmatchstarts;     // killough
 extern  size_t     num_deathmatchstarts; // killough
 

@@ -684,47 +684,9 @@ void P_PlayerThink (player_t* player)
 
   if (player->powers[pw_invulnerability] > 0) // killough
   {
-    if (player->pclass == PCLASS_CLERIC)
-    {
-      if (!(leveltime & 7) && player->mo->flags & MF_SHADOW
-          && !(player->mo->flags2 & MF2_DONTDRAW))
-      {
-        player->mo->flags &= ~MF_SHADOW;
-        if (!(player->mo->flags & MF_ALTSHADOW))
-        {
-          player->mo->flags2 |= MF2_DONTDRAW | MF2_NONSHOOTABLE;
-        }
-      }
-      if (!(leveltime & 31))
-      {
-        if (player->mo->flags2 & MF2_DONTDRAW)
-        {
-          if (!(player->mo->flags & MF_SHADOW))
-          {
-            player->mo->flags |= MF_SHADOW | MF_ALTSHADOW;
-          }
-          else
-          {
-            player->mo->flags2 &=
-                ~(MF2_DONTDRAW | MF2_NONSHOOTABLE);
-          }
-        }
-        else
-        {
-          player->mo->flags |= MF_SHADOW;
-          player->mo->flags &= ~MF_ALTSHADOW;
-        }
-      }
-    }
-
     if (!(--player->powers[pw_invulnerability]))
     {
       player->mo->flags2 &= ~(MF2_INVULNERABLE | MF2_REFLECTIVE);
-      if (player->pclass == PCLASS_CLERIC)
-      {
-        player->mo->flags2 &= ~(MF2_DONTDRAW | MF2_NONSHOOTABLE);
-        player->mo->flags &= ~(MF_SHADOW | MF_ALTSHADOW);
-      }
     }
   }
 

@@ -464,15 +464,6 @@ typedef enum
   NUMARMOR
 } armortype_t;
 
-typedef enum
-{
-  PCLASS_NULL,
-  PCLASS_FIGHTER,
-  PCLASS_CLERIC,
-  PCLASS_MAGE,
-  PCLASS_PIG,
-  NUMCLASSES
-} pclass_t;
 
 
 

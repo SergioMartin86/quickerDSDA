@@ -154,15 +154,7 @@ static void P_BringUpWeapon(player_t *player)
   if (player->pendingweapon >= NUMWEAPONS)
     lprintf(LO_WARN, "P_BringUpWeapon: weaponinfo overrun has occurred.\n");
 
-  if (player->pclass)
-  {
-    if (player->pclass == PCLASS_FIGHTER && player->pendingweapon == wp_second
-        && player->ammo[MANA_1])
-    {
-      newstate = HEXEN_S_FAXEUP_G;
-    }
-  }
-  else if (player->powers[pw_weaponlevel2])
+ if (player->powers[pw_weaponlevel2])
   {
     newstate = wpnlev2info[player->pendingweapon].upstate;
   }
@@ -655,15 +647,7 @@ void A_Raise(player_t *player, pspdef_t *psp)
 
   if (player->powers[pw_weaponlevel2])
     newstate = wpnlev2info[player->readyweapon].readystate;
-  else if (player->pclass)
-  {
-    if (player->pclass == PCLASS_FIGHTER && player->readyweapon == wp_second
-        && player->ammo[MANA_1])
-    {
-      newstate = HEXEN_S_FAXEREADY_G;
-    }
-  }
-  else
+  else 
     newstate = weaponinfo[player->readyweapon].readystate;
 
   P_SetPsprite(player, ps_weapon, newstate);

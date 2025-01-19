@@ -149,7 +149,6 @@ dboolean         deathmatch;    // only if started as net death
 dboolean         netgame;       // only true if packets are broadcast
 dboolean         playeringame[MAX_MAXPLAYERS];
 player_t        players[MAX_MAXPLAYERS];
-pclass_t        PlayerClass[MAX_MAXPLAYERS];
 int             upmove;
 int             consoleplayer; // player taking events and displaying
 int             displayplayer; // view being displayed
@@ -1396,7 +1395,6 @@ void G_PlayerReborn (int player)
   players[player].secretcount = secretcount;
   players[player].maxkilldiscount = maxkilldiscount; //e6y
   players[player].worldTimer = worldTimer;
-  players[player].pclass = PlayerClass[player];
 
   p->usedown = p->attackdown = true;  // don't do anything immediately
   p->playerstate = PST_LIVE;
