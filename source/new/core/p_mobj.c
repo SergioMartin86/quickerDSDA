@@ -1423,16 +1423,7 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
     mobj->z = z;
   }
 
-    if (mobj->flags2 & MF2_FOOTCLIP
-        && P_GetThingFloorType(mobj) != FLOOR_SOLID
-        && mobj->floorz == mobj->subsector->sector->floorheight)
-    {
-        mobj->flags2 |= MF2_FEETARECLIPPED;
-    }
-    else
-    {
         mobj->flags2 &= ~MF2_FEETARECLIPPED;
-    }
 
   mobj->thinker.function = P_MobjThinker;
 
@@ -2437,42 +2428,12 @@ static int Hexen_P_HitFloor(mobj_t * thing);
 int P_HitFloor(mobj_t * thing)
 {
     mobj_t *mo;
-
-    if (thing->floorz != thing->subsector->sector->floorheight)
-    {                           // don't splash if landing on the edge above water/lava/etc....
-        return (FLOOR_SOLID);
-    }
-
-    switch (P_GetThingFloorType(thing))
-    {
-        case FLOOR_WATER:
-            P_SpawnMobj(thing->x, thing->y, ONFLOORZ, HERETIC_MT_SPLASHBASE);
-            mo = P_SpawnMobj(thing->x, thing->y, ONFLOORZ, HERETIC_MT_SPLASH);
-            P_SetTarget(&mo->target, thing);
-            mo->momx = P_SubRandom() << 8;
-            mo->momy = P_SubRandom() << 8;
-            mo->momz = 2 * FRACUNIT + (P_Random(pr_heretic) << 8);
-            return (FLOOR_WATER);
-        case FLOOR_LAVA:
-            P_SpawnMobj(thing->x, thing->y, ONFLOORZ, HERETIC_MT_LAVASPLASH);
-            mo = P_SpawnMobj(thing->x, thing->y, ONFLOORZ, HERETIC_MT_LAVASMOKE);
-            mo->momz = FRACUNIT + (P_Random(pr_heretic) << 7);
-            return (FLOOR_LAVA);
-        case FLOOR_SLUDGE:
-            P_SpawnMobj(thing->x, thing->y, ONFLOORZ, HERETIC_MT_SLUDGESPLASH);
-            mo = P_SpawnMobj(thing->x, thing->y, ONFLOORZ, HERETIC_MT_SLUDGECHUNK);
-            P_SetTarget(&mo->target, thing);
-            mo->momx = P_SubRandom() << 8;
-            mo->momy = P_SubRandom() << 8;
-            mo->momz = FRACUNIT + (P_Random(pr_heretic) << 8);
-            return (FLOOR_SLUDGE);
-    }
-    return (FLOOR_SOLID);
+        return (0);
 }
 
 int P_GetThingFloorType(mobj_t * thing)
 {
-        return (TerrainTypes[thing->subsector->sector->floorpic]);
+        return 0;
 }
 
 // Returns 1 if 'source' needs to turn clockwise, or 0 if 'source' needs

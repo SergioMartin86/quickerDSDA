@@ -154,14 +154,7 @@ static void P_BringUpWeapon(player_t *player)
   if (player->pendingweapon >= NUMWEAPONS)
     lprintf(LO_WARN, "P_BringUpWeapon: weaponinfo overrun has occurred.\n");
 
- if (player->powers[pw_weaponlevel2])
-  {
-    newstate = wpnlev2info[player->pendingweapon].upstate;
-  }
-  else
-  {
     newstate = weaponinfo[player->pendingweapon].upstate;
-  }
 
   player->pendingweapon = wp_nochange;
   // killough 12/98: prevent pistol from starting visibly at bottom of screen:
@@ -464,14 +457,7 @@ static void P_FireWeapon(player_t *player)
 void P_DropWeapon(player_t *player)
 {
   statenum_t newstate;
-  if (player->powers[pw_weaponlevel2])
-  {
-    newstate = wpnlev2info[player->readyweapon].downstate;
-  }
-  else
-  {
     newstate = weaponinfo[player->readyweapon].downstate;
-  }
   P_SetPsprite(player, ps_weapon, newstate);
 }
 
@@ -499,9 +485,6 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
   {
     // change weapon (pending weapon should already be validated)
     statenum_t newstate;
-    if (player->powers[pw_weaponlevel2])
-      newstate = wpnlev2info[player->readyweapon].downstate;
-    else
       newstate = weaponinfo[player->readyweapon].downstate;
     P_SetPsprite(player, ps_weapon, newstate);
     return;
@@ -645,9 +628,6 @@ void A_Raise(player_t *player, pspdef_t *psp)
   // The weapon has been raised all the way,
   //  so change to the ready state.
 
-  if (player->powers[pw_weaponlevel2])
-    newstate = wpnlev2info[player->readyweapon].readystate;
-  else 
     newstate = weaponinfo[player->readyweapon].readystate;
 
   P_SetPsprite(player, ps_weapon, newstate);

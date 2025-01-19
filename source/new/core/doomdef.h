@@ -415,55 +415,7 @@ typedef enum {
 #define FRICTION_LOW 0xf900
 #define TELEFOGHEIGHT (32*FRACUNIT)
 #define ANG1_X          0x01000000
-
 #define FOOTCLIPSIZE 10*FRACUNIT
-
-// Any floor type >= FLOOR_LIQUID will floorclip sprites (hexen)
-typedef enum {
-  FLOOR_SOLID,
-  FLOOR_ICE,
-  FLOOR_LIQUID,
-  FLOOR_WATER,
-  FLOOR_LAVA,
-  FLOOR_SLUDGE
-} floortype_t;
-
-#define USE_GWND_AMMO_1 1
-#define USE_GWND_AMMO_2 1
-#define USE_CBOW_AMMO_1 1
-#define USE_CBOW_AMMO_2 1
-#define USE_BLSR_AMMO_1 1
-#define USE_BLSR_AMMO_2 5
-#define USE_SKRD_AMMO_1 1
-#define USE_SKRD_AMMO_2 5
-#define USE_PHRD_AMMO_1 1
-#define USE_PHRD_AMMO_2 1
-#define USE_MACE_AMMO_1 1
-#define USE_MACE_AMMO_2 5
-
-#define TOCENTER -8
-
-#define BLINKTHRESHOLD (4*32)
-
-// TODO_HEXEN: BLINKTHRESHOLD is (4*35)
-
-//hexen
-
-// The top 3 bits of the artifact field in the ticcmd_t struct are used
-//              as additional flags
-#define AFLAG_MASK    0x3F
-#define AFLAG_SUICIDE 0x40
-#define AFLAG_JUMP    0x80
-
-typedef enum
-{
-  ARMOR_ARMOR,
-  ARMOR_SHIELD,
-  ARMOR_HELMET,
-  ARMOR_AMULET,
-  NUMARMOR
-} armortype_t;
-
 
 
 

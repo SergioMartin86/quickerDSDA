@@ -121,11 +121,6 @@ void P_HexenPlayerThrust(player_t* player, angle_t angle, fixed_t move)
     player->mo->momx += FixedMul(move, finecosine[angle]);
     player->mo->momy += FixedMul(move, finesine[angle]);
   }
-  else if (P_GetThingFloorType(player->mo) == FLOOR_ICE) // Friction_Low
-  {
-    player->mo->momx += FixedMul(move >> 1, finecosine[angle]);
-    player->mo->momy += FixedMul(move >> 1, finesine[angle]);
-  }
   else
   {
     player->mo->momx += FixedMul(move, finecosine[angle]);
@@ -297,14 +292,6 @@ void P_CalcHeight (player_t* player)
     player->viewz = player->mo->z + player->viewheight + bob;
   }
 
-  if (player->playerstate != PST_DEAD && player->mo->z <= player->mo->floorz)
-  {
-   if (player->mo->flags2 & MF2_FEETARECLIPPED)
-      player->viewz -= FOOTCLIPSIZE;
-  }
-
-  if (player->viewz > player->mo->ceilingz - 4 * FRACUNIT)
-    player->viewz = player->mo->ceilingz - 4 * FRACUNIT;
 
 }
 
@@ -711,28 +698,6 @@ void P_PlayerThink (player_t* player)
     if (!--player->powers[pw_flight])
     {
       P_PlayerEndFlight(player);
-    }
-  }
-
-  if (player->powers[pw_weaponlevel2])
-  {
-    if (!--player->powers[pw_weaponlevel2])
-    {
-      if ((player->readyweapon == wp_phoenixrod)
-          && (player->psprites[ps_weapon].state
-              != &states[HERETIC_S_PHOENIXREADY])
-          && (player->psprites[ps_weapon].state
-              != &states[HERETIC_S_PHOENIXUP]))
-      {
-        P_SetPsprite(player, ps_weapon, HERETIC_S_PHOENIXREADY);
-        player->ammo[am_phoenixrod] -= USE_PHRD_AMMO_2;
-        player->refire = 0;
-      }
-      else if ((player->readyweapon == wp_gauntlets)
-               || (player->readyweapon == wp_staff))
-      {
-        player->pendingweapon = player->readyweapon;
-      }
     }
   }
 

@@ -1380,12 +1380,7 @@ dboolean P_TryMove(mobj_t* thing,fixed_t x,fixed_t y,
 
   P_SetThingPosition (thing, 1);
 
-  if (thing->flags2 & MF2_FOOTCLIP
-      && P_GetThingFloorType(thing) != FLOOR_SOLID)
-  {
-    thing->flags2 |= MF2_FEETARECLIPPED;
-  }
-  else if (thing->flags2 & MF2_FEETARECLIPPED)
+ if (thing->flags2 & MF2_FEETARECLIPPED)
   {
     thing->flags2 &= ~MF2_FEETARECLIPPED;
   }

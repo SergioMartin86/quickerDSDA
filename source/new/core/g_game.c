@@ -863,7 +863,7 @@ static void G_ResetHealth(player_t *p)
 
 static void G_ResetInventory(player_t *p)
 {
-  memset(p->armorpoints, 0, sizeof(p->armorpoints));
+  p->armorpoints = 0;
   p->armortype = 0;
   memset(p->powers, 0, sizeof(p->powers));
   memset(p->cards, 0, sizeof(p->cards));

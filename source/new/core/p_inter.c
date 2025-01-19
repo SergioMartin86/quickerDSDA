@@ -288,14 +288,6 @@ dboolean P_GiveBody(player_t * player, int num)
     int max;
 
     max = maxhealth;
-    if (player->chickenTics)
-    {
-        max = MAXCHICKENHEALTH;
-    }
-    if (player->morphTics)
-    {
-        max = MAXMORPHHEALTH;
-    }
     if (player->health >= max)
     {
         return (false);
@@ -340,10 +332,10 @@ void P_HealMobj(mobj_t *mo, int num)
 static dboolean P_GiveArmor(player_t *player, int armortype)
 {
   int hits = P_PlayerArmorIncrease(armortype * 100);
-  if (player->armorpoints[ARMOR_ARMOR] >= hits)
+  if (player->armorpoints >= hits)
     return false;   // don't pick up
   player->armortype = armortype;
-  player->armorpoints[ARMOR_ARMOR] = hits;
+  player->armorpoints = hits;
   return true;
 }
 
@@ -453,7 +445,7 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 
     case SPR_BON2:
       // can go over 100%
-      player->armorpoints[ARMOR_ARMOR] += P_PlayerArmorIncrease(1);
+      player->armorpoints += P_PlayerArmorIncrease(1);
       // e6y
       // Doom 1.2 does not do check of armor points on overflow.
       // If you set the "IDKFA Armor" to MAX_INT (DWORD at 0x00064B5A -> FFFFFF7F)
@@ -461,8 +453,8 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
       // and you will die after reception of any damage since this moment.
       // It happens because the taken health damage depends from armor points
       // if they are present and becomes equal to very large value in this case
-      if (player->armorpoints[ARMOR_ARMOR] > max_armor && compatibility_level != doom_12_compatibility)
-        player->armorpoints[ARMOR_ARMOR] = max_armor;
+      if (player->armorpoints > max_armor && compatibility_level != doom_12_compatibility)
+        player->armorpoints = max_armor;
       // e6y
       // We always give armor type 1 for the armor bonuses;
       // dehacked only affects the GreenArmor.
@@ -1002,13 +994,13 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 
           saved = player->armortype == 1 ? damage / 3 : damage / 2;
 
-        if (player->armorpoints[ARMOR_ARMOR] <= saved)
+        if (player->armorpoints <= saved)
         {
           // armor is used up
-          saved = player->armorpoints[ARMOR_ARMOR];
+          saved = player->armorpoints;
           player->armortype = 0;
         }
-        player->armorpoints[ARMOR_ARMOR] -= saved;
+        player->armorpoints -= saved;
         damage -= saved;
       }
     }
