@@ -389,10 +389,6 @@ typedef struct mobj_s
     // zdoom
     fixed_t gravity;
 
-    // misc
-    byte color;
-    const byte* tranmap;
-
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;
 

@@ -1799,7 +1799,6 @@ dboolean P_RaiseThing(mobj_t *corpse, mobj_t *raiser)
     totallive++;
 
   corpse->health = P_MobjSpawnHealth(corpse);
-  corpse->color = 0;
   P_SetTarget(&corpse->target, NULL);
   P_SetTarget(&corpse->lastenemy, NULL);
 
@@ -1875,7 +1874,6 @@ static dboolean P_HealCorpse(mobj_t* actor, int radius, statenum_t healstate, sf
             totallive++;
 
           corpsehit->health = P_MobjSpawnHealth(corpsehit);
-          corpsehit->color = 0;
           P_SetTarget(&corpsehit->target, NULL);  // killough 11/98
 
           if (mbf_features)

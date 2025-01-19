@@ -2462,7 +2462,6 @@ dboolean PIT_ChangeSector (mobj_t* thing)
       }
       thing->height = 0;
       thing->radius = 0;
-      thing->color = thing->info->bloodcolor;
       return true; // keep checking
   }
 
@@ -2501,7 +2500,6 @@ dboolean PIT_ChangeSector (mobj_t* thing)
       mo = P_SpawnMobj (thing->x,
                         thing->y,
                         thing->z + thing->height / 2, g_mt_blood);
-      mo->color = thing->info->bloodcolor;
 
       /* killough 8/10/98: remove dependence on order of evaluation */
       t = P_Random(pr_crush);
