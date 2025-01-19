@@ -51,6 +51,7 @@
 #include "e6y.h"//e6y
 
 #include "dsda.h"
+#include "dsda/destructible.h"
 #include "dsda/excmd.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
@@ -521,6 +522,7 @@ static void CheckForDamageSpecial(line_t *line, mobj_t *mo)
   }
 
   damage = ((P_Random(pr_damage) % 8) + 1) * mo->info->damage;
+  dsda_DamageLinedef(line, mo->target, damage);
 }
 
 static void CheckForPushSpecial(line_t * line, int side, mobj_t * mobj);
@@ -2112,6 +2114,11 @@ dboolean PTR_ShootTraverse (intercept_t* in)
     x = trace.x + FixedMul (trace.dx, frac);
     y = trace.y + FixedMul (trace.dy, frac);
 
+    if (li->health)
+    {
+      dsda_DamageLinedef(li, shootthing, la_damage);
+    }
+
     // Spawn bullet puffs.
 
     P_SpawnPuff (x,y,z);
@@ -2505,6 +2512,10 @@ void P_RadiusAttack(mobj_t* spot,mobj_t* source, int damage, int distance, int f
     for (x=xl ; x<=xh ; x++)
       P_BlockThingsIterator (x, y, PIT_RadiusAttack );
 
+  if (map_format.zdoom)
+  {
+    dsda_RadiusAttackDestructibles(xl, xh, yl, yh);
+  }
 }
 
 

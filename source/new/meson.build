@@ -10,6 +10,7 @@ quickerDSDASrc =  [
  'core/dsda/configuration.c',
  'core/dsda/data_organizer.c',
  'core/dsda/death.c',
+ 'core/dsda/destructible.c',
  'core/dsda/endoom.c',
  'core/dsda/episode.c',
  'core/dsda/excmd.c',

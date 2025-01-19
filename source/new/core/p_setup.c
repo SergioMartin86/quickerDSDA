@@ -54,6 +54,7 @@
 #include "dsda.h"
 #include "dsda/args.h"
 #include "dsda/compatibility.h"
+#include "dsda/destructible.h"
 #include "dsda/id_list.h"
 #include "dsda/line_special.h"
 #include "dsda/map_format.h"
@@ -2988,6 +2989,8 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
     Z_Free(sectors);
     Z_Free(vertexes);
   }
+
+  dsda_ResetHealthGroups();
 
   map_loader.load_vertexes(level_components.vertexes);
   map_loader.load_sectors(level_components.sectors);
