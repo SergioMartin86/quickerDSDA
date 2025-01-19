@@ -299,7 +299,7 @@ static wi_anim_t *anims[NUMEPISODES] =
 
 
 // used to accelerate or skip a stage
-int   acceleratestage;           // killough 3/28/98: made global
+__thread int   acceleratestage;           // killough 3/28/98: made global
 
 // wbs->pnum
 static int    me;

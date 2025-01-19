@@ -156,7 +156,7 @@ typedef struct {
   int episodes_cleared;
 } doom_mapinfo_t;
 
-extern doom_mapinfo_t doom_mapinfo;
+extern __thread doom_mapinfo_t doom_mapinfo;
 
 typedef void (*doom_mapinfo_errorfunc)(const char *fmt, ...);	// this must not return!
 

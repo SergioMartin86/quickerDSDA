@@ -29,7 +29,7 @@
 
 #include "mapinfo.h"
 
-map_info_t map_info;
+__thread map_info_t map_info;
 
 int dsda_NameToMap(const char* name, int* episode, int* map) {
   int found;

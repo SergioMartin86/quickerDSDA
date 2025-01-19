@@ -34,13 +34,13 @@
 
 #include "doom.h"
 
-static const doom_mapinfo_map_t* last_map;
-static const doom_mapinfo_map_t* next_map;
-static const doom_mapinfo_map_t* current_map;
-static doom_mapinfo_cluster_t* last_cluster;
-static doom_mapinfo_cluster_t* next_cluster;
-static doom_mapinfo_cluster_t* current_cluster;
-static const doom_mapinfo_map_next_t* end_data;
+static __thread const doom_mapinfo_map_t* last_map;
+static __thread const doom_mapinfo_map_t* next_map;
+static __thread const doom_mapinfo_map_t* current_map;
+static __thread doom_mapinfo_cluster_t* last_cluster;
+static __thread doom_mapinfo_cluster_t* next_cluster;
+static __thread doom_mapinfo_cluster_t* current_cluster;
+static __thread const doom_mapinfo_map_next_t* end_data;
 
 static doom_mapinfo_map_next_t default_end_data = {
   .end = dmi_end_game_cast
@@ -343,13 +343,13 @@ int dsda_DoomInterMusic(int* music_index, int* music_lump) {
   return true;
 }
 
-extern int finalestage;
-extern int finalecount;
-extern const char* finaletext;
-extern const char* finaleflat;
-extern const char* finalepatch;
-extern int acceleratestage;
-extern int midstage;
+extern __thread int finalestage;
+extern __thread int finalecount;
+extern __thread const char* finaletext;
+extern __thread const char* finaleflat;
+extern __thread const char* finalepatch;
+extern __thread int acceleratestage;
+extern __thread int midstage;
 
 // TODO: use end_game everywhere and collapse all the finale implementations
 

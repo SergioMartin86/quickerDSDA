@@ -32,12 +32,11 @@ extern "C" {
 
 #include "parser.h"
 
-static std::vector<doom_mapinfo_map_t> doom_mapinfo_maps;
-static doom_mapinfo_map_t default_map;
-
-static std::vector<doom_mapinfo_skill_t> doom_mapinfo_skills;
-static std::vector<doom_mapinfo_cluster_t> doom_mapinfo_clusters;
-static std::vector<doom_mapinfo_episode_t> doom_mapinfo_episodes;
+static thread_local std::vector<doom_mapinfo_map_t> doom_mapinfo_maps;
+static thread_local doom_mapinfo_map_t default_map;
+static thread_local std::vector<doom_mapinfo_skill_t> doom_mapinfo_skills;
+static thread_local std::vector<doom_mapinfo_cluster_t> doom_mapinfo_clusters;
+static thread_local std::vector<doom_mapinfo_episode_t> doom_mapinfo_episodes;
 
 static void dsda_SkipValue(Scanner &scanner) {
   if (scanner.CheckToken('=')) {
@@ -795,7 +794,7 @@ static void dsda_ParseDoomMapInfoIdentifier(Scanner &scanner) {
   }
 }
 
-doom_mapinfo_t doom_mapinfo;
+__thread doom_mapinfo_t doom_mapinfo;
 
 void dsda_ParseDoomMapInfo(const unsigned char* buffer, size_t length, doom_mapinfo_errorfunc err) {
   Scanner scanner((const char*) buffer, length);

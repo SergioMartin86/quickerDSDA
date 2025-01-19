@@ -61,7 +61,7 @@ typedef struct {
   map_info_flags_t flags;
 } map_info_t;
 
-extern map_info_t map_info;
+extern __thread map_info_t map_info;
 
 void dsda_FirstMap(int* episode, int* map);
 void dsda_NewGameMap(int* episode, int* map);

@@ -53,11 +53,11 @@
 
 // Stage of animation:
 //  0 = text, 1 = art screen, 2 = character cast
-int finalestage;
-int finalecount;
-const char*   finaletext;
-const char*   finaleflat;
-const char*   finalepatch;
+__thread int finalestage;
+__thread int finalecount;
+__thread const char*   finaletext;
+__thread const char*   finaleflat;
+__thread const char*   finalepatch;
 
 // defines for the end mission display text                     // phares
 
@@ -71,8 +71,8 @@ dboolean F_CastResponder (event_t *ev);
 void    F_CastDrawer (void);
 
 void WI_checkForAccelerate(void);    // killough 3/28/98: used to
-extern int acceleratestage;          // accelerate intermission screens
-int midstage;                 // whether we're in "mid-stage"
+extern __thread int acceleratestage;          // accelerate intermission screens
+__thread int midstage;                 // whether we're in "mid-stage"
 
 //
 // F_StartFinale
