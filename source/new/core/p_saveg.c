@@ -405,10 +405,10 @@ void P_UnArchiveThinkerSubclasses(mobj_t** mobj_p, int mobj_count)
   P_UnArchiveThinkerSubclass(th_enemies, mobj_p, mobj_count);
 }
 
-extern mobj_t** blocklinks;
-extern int      blocklinks_count;
-extern int      bmapwidth;
-extern int      bmapheight;
+extern __thread mobj_t** blocklinks;
+extern __thread int      blocklinks_count;
+extern __thread int      bmapwidth;
+extern __thread int      bmapheight;
 
 void P_ArchiveBlockLinks(void)
 {

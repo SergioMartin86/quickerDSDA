@@ -39,22 +39,20 @@
 void P_SetupLevel(int episode, int map, int playermask, int skill);
 void P_Init(void);               /* Called by startup code. */
 
-extern const byte *rejectmatrix;   /* for fast sight rejection -  cph - const* */
+extern __thread const byte *rejectmatrix;   /* for fast sight rejection -  cph - const* */
+extern __thread int      *blockmaplump;   /* offsets in blockmap are from here */
+extern __thread int      *blockmap;
+extern __thread int      bmapwidth;
+extern __thread int      bmapheight;      /* in mapblocks */
+extern __thread fixed_t  bmaporgx;
+extern __thread fixed_t  bmaporgy;        /* origin of block map */
+extern __thread mobj_t   **blocklinks;    /* for thing chains */
 
-/* killough 3/1/98: change blockmap from "short" to "long" offsets: */
-extern int      *blockmaplump;   /* offsets in blockmap are from here */
-extern int      *blockmap;
-extern int      bmapwidth;
-extern int      bmapheight;      /* in mapblocks */
-extern fixed_t  bmaporgx;
-extern fixed_t  bmaporgy;        /* origin of block map */
-extern mobj_t   **blocklinks;    /* for thing chains */
-
-extern dboolean skipblstart; // MaxW: Skip initial blocklist short
+extern __thread dboolean skipblstart; // MaxW: Skip initial blocklist short
 
 // MAES: extensions to support 512x512 blockmaps.
-extern int blockmapxneg;
-extern int blockmapyneg;
+extern __thread int blockmapxneg;
+extern __thread int blockmapyneg;
 
 typedef struct
 {
@@ -64,7 +62,7 @@ typedef struct
   fixed_t orgy;
 } blockmap_t;
 
-extern blockmap_t original_blockmap;
+extern __thread blockmap_t original_blockmap;
 
 void P_RestoreOriginalBlockMap(void);
 
@@ -80,7 +78,7 @@ typedef struct
   void (*po_load_things)(int lump);
 } map_loader_t;
 
-extern map_loader_t map_loader;
+extern __thread map_loader_t map_loader;
 
 
 #endif

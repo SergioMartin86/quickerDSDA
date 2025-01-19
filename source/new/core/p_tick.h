@@ -63,7 +63,7 @@ typedef enum {
   th_all = NUMTHCLASS, /* For P_NextThinker, indicates "any class" */
 } th_class;
 
-extern thinker_t thinkerclasscap[];
+extern __thread thinker_t thinkerclasscap[];
 #define thinkercap thinkerclasscap[th_all]
 
 /* cph 2002/01/13 - iterator for thinker lists */

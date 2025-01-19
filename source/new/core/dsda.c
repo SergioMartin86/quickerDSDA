@@ -35,30 +35,27 @@
 #define TELEFRAG_DAMAGE 10000
 
 // command-line toggles
-int dsda_track_pacifist;
-int dsda_track_100k;
-int dsda_track_reality;
-
-int dsda_last_leveltime;
-int dsda_last_gamemap;
-int dsda_startmap;
-int dsda_movie_target;
-dboolean dsda_any_map_completed;
+__thread int dsda_track_pacifist;
+__thread int dsda_track_100k;
+__thread int dsda_track_reality;
+__thread int dsda_last_leveltime;
+__thread int dsda_last_gamemap;
+__thread int dsda_startmap;
+__thread int dsda_movie_target;
+__thread dboolean dsda_any_map_completed;
 
 // other
-int dsda_max_kill_requirement;
+__thread int dsda_max_kill_requirement;
 static int dsda_session_attempts = 1;
 
-static int turbo_scale;
-static int start_in_build_mode;
-
-static int line_activation[2][LINE_ACTIVATION_INDEX_MAX + 1];
-static int line_activation_frame;
-static int line_activation_index;
-
-static int dsda_time_keys;
-static int dsda_time_use;
-static int dsda_time_secrets;
+static __thread int turbo_scale;
+static __thread int start_in_build_mode;
+static __thread int line_activation[2][LINE_ACTIVATION_INDEX_MAX + 1];
+static __thread int line_activation_frame;
+static __thread int line_activation_index;
+static __thread int dsda_time_keys;
+static __thread int dsda_time_use;
+static __thread int dsda_time_secrets;
 
 dboolean dsda_IsWeapon(mobj_t* thing);
 void dsda_DisplayNotification(const char* msg);
@@ -159,7 +156,7 @@ void dsda_ReadCommandLine(void) {
   if (dsda_Flag(dsda_arg_tas) || dsda_Flag(dsda_arg_build)) dsda_SetTas();
 }
 
-static int dsda_shown_attempt = 0;
+static __thread int dsda_shown_attempt = 0;
 
 int dsda_SessionAttempts(void) {
   return dsda_session_attempts;
@@ -172,7 +169,7 @@ void dsda_DecomposeILTime(dsda_level_time_t* level_time) {
 }
 
 void dsda_DecomposeMovieTime(dsda_movie_time_t* total_time) {
-  extern int totalleveltimes;
+  extern __thread int totalleveltimes;
 
   total_time->h = totalleveltimes / 35 / 60 / 60;
   total_time->m = (totalleveltimes % (60 * 60 * 35)) / 35 / 60;

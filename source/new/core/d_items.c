@@ -51,7 +51,7 @@
 //  atkstate, i.e. attack/fire/hit frame
 //  flashstate, muzzle flash
 //
-weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
+weaponinfo_t __thread doom_weaponinfo[NUMWEAPONS+2] =
 {
   {
     // fist

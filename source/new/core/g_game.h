@@ -95,22 +95,22 @@ void doom_printf(const char *, ...) __attribute__((format(printf,1,2)));
 
 // killough 5/2/98: moved from m_misc.c:
 
-extern int  key_forward;
-extern int  key_backward;
+extern __thread int  key_forward;
+extern __thread int  key_backward;
 
-extern dboolean haswolflevels;  //jff 4/18/98 wolf levels present
-extern dboolean secretexit;
+extern __thread dboolean haswolflevels;  //jff 4/18/98 wolf levels present
+extern __thread dboolean secretexit;
 
 // killough 5/2/98: moved from d_deh.c:
 // Par times (new item with BOOM) - from g_game.c
-extern int pars[5][10];  // hardcoded array size
-extern int cpars[];      // hardcoded array size
+extern __thread int pars[5][10];  // hardcoded array size
+extern __thread int cpars[];      // hardcoded array size
 // CPhipps - Make savedesciption visible in wider scope
 #define SAVEDESCLEN 32
-extern char savedescription[SAVEDESCLEN];  // Description to save in savegame
+extern __thread char savedescription[SAVEDESCLEN];  // Description to save in savegame
 
 /* cph - compatibility level strings */
-extern const char * comp_lev_str[];
+extern __thread const char * comp_lev_str[];
 
 // e6y
 // There is a new command-line switch "-shorttics".
@@ -118,11 +118,11 @@ extern const char * comp_lev_str[];
 // (e.g. glides, where this makes a significant difference)
 // with the same mouse behaviour as when recording,
 // but without having to be recording every time.
-extern int shorttics;
-extern int longtics;
+extern __thread int shorttics;
+extern __thread int longtics;
 
 // Allows use of HELP2 screen for PWADs under DOOM 1
-extern int pwad_help2_check;
+extern __thread int pwad_help2_check;
 
 // hexen
 

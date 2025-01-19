@@ -56,11 +56,11 @@
 
 #include "dsda/args.h"
 
-dboolean enableOutput;
-static dboolean disable_message_box;
+__thread dboolean enableOutput;
+static __thread dboolean disable_message_box;
 
-int cons_stdout_mask = LO_INFO;
-int cons_stderr_mask = LO_WARN | LO_ERROR;
+__thread int cons_stdout_mask = LO_INFO;
+__thread int cons_stderr_mask = LO_WARN | LO_ERROR;
 
 /* cphipps - enlarged message buffer and made non-static
  * We still have to be careful here, this function can be called after exit

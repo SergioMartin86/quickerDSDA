@@ -38,6 +38,6 @@ typedef struct dsda_pclass_s {
   int attack_end_state;
 } dsda_pclass_t;
 
-extern dsda_pclass_t pclass;
+extern __thread dsda_pclass_t pclass;
 
 #endif

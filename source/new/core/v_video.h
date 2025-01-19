@@ -51,10 +51,10 @@
 // user preferences. The integer ratio is hardly used anymore, so further
 // simplification may be in order.
 void SetRatio(int width, int height);
-extern dboolean tallscreen;
-extern unsigned int ratio_multiplier, ratio_scale;
-extern float gl_ratio;
-extern int psprite_offset; // Needed for "tallscreen" modes
+extern __thread dboolean tallscreen;
+extern __thread unsigned int ratio_multiplier, ratio_scale;
+extern __thread float gl_ratio;
+extern __thread int psprite_offset; // Needed for "tallscreen" modes
 
 #define CENTERY     (SCREENHEIGHT/2)
 
@@ -62,7 +62,7 @@ extern int psprite_offset; // Needed for "tallscreen" modes
 // Screen 1 is an extra buffer.
 
 // array of pointers to color translation tables
-extern const byte *colrngs[];
+extern __thread const byte *colrngs[];
 
 // symbolic indices into color translation table pointer array
 typedef enum
@@ -106,8 +106,8 @@ typedef struct {
 } screeninfo_t;
 
 #define NUM_SCREENS 6
-extern screeninfo_t screens[NUM_SCREENS];
-extern int          usegamma;
+extern __thread screeninfo_t screens[NUM_SCREENS];
+extern __thread int          usegamma;
 
 // Varying bit-depth support -POPE
 //
@@ -153,33 +153,33 @@ void V_Init (void);
 
 // V_BeginUIDraw
 typedef void(*V_BeginUIDraw_f)(void);
-extern V_BeginUIDraw_f V_BeginUIDraw;
+extern __thread V_BeginUIDraw_f V_BeginUIDraw;
 
 // V_EndUIDraw
 typedef void(*V_EndUIDraw_f)(void);
-extern V_EndUIDraw_f V_EndUIDraw;
+extern __thread V_EndUIDraw_f V_EndUIDraw;
 
 // V_BeginAutomapDraw
 typedef void(*V_BeginAutomapDraw_f)(void);
-extern V_BeginAutomapDraw_f V_BeginAutomapDraw;
+extern __thread V_BeginAutomapDraw_f V_BeginAutomapDraw;
 
 // V_EndAutomapDraw
 typedef void(*V_EndAutomapDraw_f)(void);
-extern V_EndAutomapDraw_f V_EndAutomapDraw;
+extern __thread V_EndAutomapDraw_f V_EndAutomapDraw;
 
 // V_CopyRect
 typedef void (*V_CopyRect_f)(int srcscrn, int destscrn,
                              int x, int y,
                              int width, int height,
                              enum patch_translation_e flags);
-extern V_CopyRect_f V_CopyRect;
+extern __thread V_CopyRect_f V_CopyRect;
 
 void V_CopyScreen(int srcscrn, int destscrn);
 
 // V_FillRect
 typedef void (*V_FillRect_f)(int scrn, int x, int y,
                              int width, int height, byte colour);
-extern V_FillRect_f V_FillRect;
+extern __thread V_FillRect_f V_FillRect;
 
 // CPhipps - patch drawing
 // Consolidated into the 3 really useful functions:
@@ -188,12 +188,12 @@ extern V_FillRect_f V_FillRect;
 typedef void (*V_DrawNumPatch_f)(int x, int y, int scrn,
                                  int lump, int cm,
                                  enum patch_translation_e flags);
-extern V_DrawNumPatch_f V_DrawNumPatch;
+extern __thread V_DrawNumPatch_f V_DrawNumPatch;
 
 typedef void (*V_DrawNumPatchPrecise_f)(float x, float y, int scrn,
                                  int lump, int cm,
                                  enum patch_translation_e flags);
-extern V_DrawNumPatchPrecise_f V_DrawNumPatchPrecise;
+extern __thread V_DrawNumPatchPrecise_f V_DrawNumPatchPrecise;
 
 // V_DrawNamePatch - Draws the patch from lump "name"
 #define V_DrawNamePatch(x,y,s,n,t,f) V_DrawNumPatch(x,y,s,W_GetNumForName(n),t,f)
@@ -201,22 +201,22 @@ extern V_DrawNumPatchPrecise_f V_DrawNumPatchPrecise;
 
 // e6y
 typedef void (*V_FillFlat_f)(int lump, int scrn, int x, int y, int width, int height, enum patch_translation_e flags);
-extern V_FillFlat_f V_FillFlat;
+extern __thread V_FillFlat_f V_FillFlat;
 #define V_FillFlatName(flatname, scrn, x, y, width, height, flags) \
   V_FillFlat(R_FlatNumForName(flatname), (scrn), (x), (y), (width), (height), (flags))
 
 typedef void (*V_FillPatch_f)(int lump, int scrn, int x, int y, int width, int height, enum patch_translation_e flags);
-extern V_FillPatch_f V_FillPatch;
+extern __thread V_FillPatch_f V_FillPatch;
 #define V_FillPatchName(name, scrn, x, y, width, height, flags) \
   V_FillPatch(W_GetNumForName(name), (scrn), (x), (y), (width), (height), (flags))
 
 
 /* cphipps 10/99: function to tile a flat over the screen */
 typedef void (*V_DrawBackground_f)(const char* flatname, int scrn);
-extern V_DrawBackground_f V_DrawBackground;
+extern __thread V_DrawBackground_f V_DrawBackground;
 
 typedef void (*V_DrawShaded_f)(int scrn, int x, int y, int width, int height, int shade);
-extern V_DrawShaded_f V_DrawShaded;
+extern __thread V_DrawShaded_f V_DrawShaded;
 
 // CPhipps - function to set the palette to palette number pal.
 void V_TouchPalette(void);
@@ -231,7 +231,7 @@ void V_ChangeScreenResolution(void);
 
 // V_PlotPixel
 typedef void (*V_PlotPixel_f)(int,int,int,byte);
-extern V_PlotPixel_f V_PlotPixel;
+extern __thread V_PlotPixel_f V_PlotPixel;
 
 typedef struct
 {
@@ -246,15 +246,15 @@ typedef struct
 
 // V_DrawLine
 typedef void (*V_DrawLine_f)(fline_t* fl, int color);
-extern V_DrawLine_f V_DrawLine;
+extern __thread V_DrawLine_f V_DrawLine;
 
 // V_DrawLineWu
 typedef void (*V_DrawLineWu_f)(fline_t* fl, int color);
-extern V_DrawLineWu_f V_DrawLineWu;
+extern __thread V_DrawLineWu_f V_DrawLineWu;
 
 // V_PlotPixelWu
 typedef void (*V_PlotPixelWu_f)(int scrn, int x, int y, byte color, int weight);
-extern V_PlotPixelWu_f V_PlotPixelWu;
+extern __thread V_PlotPixelWu_f V_PlotPixelWu;
 
 void V_AllocScreen(screeninfo_t *scrn);
 void V_AllocScreens();

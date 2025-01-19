@@ -376,15 +376,15 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_comperr_passuse] = {
     "comperr_passuse", dsda_config_comperr_passuse,
-    CONF_BOOL(0), &default_comperr[comperr_passuse]
+    CONF_BOOL(0), 0
   },
   [dsda_config_comperr_hangsolid] = {
     "comperr_hangsolid", dsda_config_comperr_hangsolid,
-    CONF_BOOL(0), &default_comperr[comperr_hangsolid]
+    CONF_BOOL(0), 0
   },
   [dsda_config_comperr_blockmap] = {
     "comperr_blockmap", dsda_config_comperr_blockmap,
-    CONF_BOOL(0), &default_comperr[comperr_blockmap]
+    CONF_BOOL(0), 0
   },
   [dsda_config_mapcolor_back] = {
     "mapcolor_back", dsda_config_mapcolor_back,
@@ -1046,7 +1046,7 @@ dsda_config_t dsda_config[dsda_config_count] = {
   },
   [dsda_config_usegamma] = {
     "usegamma", dsda_config_usegamma,
-    dsda_config_int, 0, 4, { 0 }, &usegamma, NOT_STRICT, NULL
+    dsda_config_int, 0, 4, { 0 }, 0, NOT_STRICT, NULL
   },
   [dsda_config_screenblocks] = {
     "screenblocks", dsda_config_screenblocks,

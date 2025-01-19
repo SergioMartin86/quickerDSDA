@@ -34,12 +34,12 @@
 
 #include "save.h"
 
-static char* dsda_base_save_dir;
-static char* dsda_wad_save_dir;
+static __thread char* dsda_base_save_dir;
+static __thread char* dsda_wad_save_dir;
 
-extern int dsda_max_kill_requirement;
-extern dboolean reachedLevelExit;
-extern dboolean reachedGameEnd;
+extern __thread int dsda_max_kill_requirement;
+extern __thread dboolean reachedLevelExit;
+extern __thread dboolean reachedGameEnd;
 
 static void dsda_ArchiveInternal(void) {
   uint64_t features;
@@ -197,9 +197,9 @@ char* dsda_SaveDir(void) {
   return dsda_base_save_dir;
 }
 
-static int* demo_save_slots;
-static int allocated_save_slot_count;
-static int demo_save_slot_count;
+static __thread int* demo_save_slots;
+static __thread int allocated_save_slot_count;
+static __thread int demo_save_slot_count;
 
 void dsda_ResetDemoSaveSlots(void) {
   demo_save_slot_count = 0;

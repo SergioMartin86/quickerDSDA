@@ -70,31 +70,31 @@
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
 //
 
-int      numvertexes;
-vertex_t *vertexes;
+__thread int      numvertexes;
+__thread vertex_t *vertexes;
 
-int      numsegs;
-seg_t    *segs;
+__thread int      numsegs;
+__thread seg_t    *segs;
 
-int      numsectors;
-sector_t *sectors;
+__thread int      numsectors;
+__thread sector_t *sectors;
 
-int      numsubsectors;
-subsector_t *subsectors;
+__thread int      numsubsectors;
+__thread subsector_t *subsectors;
 
-int      numnodes;
-node_t   *nodes;
+__thread int      numnodes;
+__thread node_t   *nodes;
 
-int      numlines;
-line_t   *lines;
+__thread int      numlines;
+__thread line_t   *lines;
 
-int      numsides;
-side_t   *sides;
+__thread int      numsides;
+__thread side_t   *sides;
 
-int      *sslines_indexes;
-ssline_t *sslines;
+__thread int      *sslines_indexes;
+__thread ssline_t *sslines;
 
-byte     *map_subsectors;
+__thread byte     *map_subsectors;
 
 typedef enum {
   UNKNOWN_NODES = -1,
@@ -110,10 +110,10 @@ typedef enum {
   ZDOOM_ZGL3_NODES,
 } nodes_version_t;
 
-int firstglvertex = 0;
-static nodes_version_t nodesVersion = DEFAULT_BSP_NODES;
-dboolean use_gl_nodes = false;
-dboolean has_behavior;
+__thread int firstglvertex = 0;
+static __thread nodes_version_t nodesVersion = DEFAULT_BSP_NODES;
+__thread dboolean use_gl_nodes = false;
+__thread dboolean has_behavior;
 
 // figgi 08/21/00 -- glSegs
 typedef struct
@@ -137,18 +137,18 @@ typedef struct
 //
 // Blockmap size.
 
-int       bmapwidth, bmapheight;  // size in mapblocks
+__thread int       bmapwidth, bmapheight;  // size in mapblocks
 
 // killough 3/1/98: remove blockmap limit internally:
-int       *blockmap;              // was short -- killough
+__thread int       *blockmap;              // was short -- killough
 
 // offsets in blockmap are from here
-int       *blockmaplump;          // was short -- killough
+__thread int       *blockmaplump;          // was short -- killough
 
-fixed_t   bmaporgx, bmaporgy;     // origin of block map
+__thread fixed_t   bmaporgx, bmaporgy;     // origin of block map
 
-mobj_t    **blocklinks;           // for thing chains
-int       blocklinks_count;
+__thread mobj_t    **blocklinks;           // for thing chains
+__thread int       blocklinks_count;
 
 // MAES: extensions to support 512x512 blockmaps.
 // They represent the maximum negative number which represents
@@ -160,10 +160,10 @@ int       blocklinks_count;
 // A 511x511 blockmap would still have a valid negative number
 // e.g. -1..510, so they would be set to -2
 // Non-extreme maps remain unaffected.
-int blockmapxneg = -257;
-int blockmapyneg = -257;
+__thread int blockmapxneg = -257;
+__thread int blockmapyneg = -257;
 
-dboolean skipblstart;  // MaxW: Skip initial blocklist short
+__thread dboolean skipblstart;  // MaxW: Skip initial blocklist short
 
 //
 // REJECT
@@ -174,22 +174,22 @@ dboolean skipblstart;  // MaxW: Skip initial blocklist short
 // be used as a PVS lookup as well.
 //
 
-const byte *rejectmatrix; // cph - const*
+__thread const byte *rejectmatrix; // cph - const*
 
 // Maintain single and multi player starting spots.
 
 // 1/11/98 killough: Remove limit on deathmatch starts
-mapthing_t *deathmatchstarts;      // killough
-size_t     num_deathmatchstarts;   // killough
+__thread mapthing_t *deathmatchstarts;      // killough
+__thread size_t     num_deathmatchstarts;   // killough
 
-mapthing_t *deathmatch_p;
-mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
+__thread mapthing_t *deathmatch_p;
+__thread mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
-static int current_episode = -1;
-static int current_map = -1;
-static nodes_version_t current_nodesVersion = UNKNOWN_NODES;
-static int samelevel = false;
-static int inconsistent_nodes;
+static __thread int current_episode = -1;
+static __thread int current_map = -1;
+static __thread nodes_version_t current_nodesVersion = UNKNOWN_NODES;
+static __thread int samelevel = false;
+static __thread int inconsistent_nodes;
 
 typedef struct
 {
@@ -209,7 +209,7 @@ typedef struct
   int znodes;
 } level_components_t;
 
-static level_components_t level_components;
+static __thread level_components_t level_components;
 
 // e6y: Smart malloc
 // Used by P_SetupLevel() for smart data loading
@@ -1358,7 +1358,7 @@ static void P_LoadZNodes(int lump, int glnodes)
     Z_Free(output);
 }
 
-static int no_overlapped_sprites;
+static __thread int no_overlapped_sprites;
 #define GETXY(mobj) ((mobj)->x + ((mobj)->y >> 16))
 static int C_DECL dicmp_sprite_by_pos(const void *a, const void *b)
 {
@@ -1981,7 +1981,7 @@ static void AddBlockLine
   done[blockno] = 1;
 }
 
-blockmap_t original_blockmap;
+__thread blockmap_t original_blockmap;
 
 static void RememberOriginalBlockMap(void)
 {
@@ -2814,7 +2814,7 @@ map_loader_t legacy_map_loader = {
   .po_load_things = NULL,
 };
 
-map_loader_t map_loader;
+__thread map_loader_t map_loader;
 
 void P_UpdateMapLoader(int lumpnum)
 {
@@ -2931,7 +2931,7 @@ void P_InitSubsectorsLines(void)
   }
 }
 
-static dboolean must_rebuild_blockmap;
+static __thread dboolean must_rebuild_blockmap;
 
 void P_MustRebuildBlockmap(void)
 {

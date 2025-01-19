@@ -67,16 +67,16 @@ typedef struct
   int         flags;
 } weaponinfo_t;
 
-extern weaponinfo_t doom_weaponinfo[NUMWEAPONS+2];
+extern __thread weaponinfo_t doom_weaponinfo[NUMWEAPONS+2];
 
 // heretic
 
-extern weaponinfo_t wpnlev1info[NUMWEAPONS];
-extern weaponinfo_t wpnlev2info[NUMWEAPONS];
+extern __thread weaponinfo_t wpnlev1info[NUMWEAPONS];
+extern __thread weaponinfo_t wpnlev2info[NUMWEAPONS];
 
 
 // dynamically selected in global.c
 
-extern weaponinfo_t* weaponinfo;
+extern __thread weaponinfo_t* weaponinfo;
 
 #endif

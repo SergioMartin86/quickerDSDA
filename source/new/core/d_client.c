@@ -61,9 +61,9 @@
 #include "dsda/args.h"
 #include "dsda/settings.h"
 
-ticcmd_t local_cmds[MAX_MAXPLAYERS];
-int maketic;
-int solo_net = 0;
+__thread ticcmd_t local_cmds[MAX_MAXPLAYERS];
+__thread int maketic;
+__thread int solo_net = 0;
 
 void D_InitFakeNetGame (void)
 {
@@ -84,7 +84,7 @@ void FakeNetUpdate(void)
 }
 
 // Implicitly tracked whenever we check the current tick
-int ms_to_next_tick;
+__thread int ms_to_next_tick;
 
 void TryRunTics (void)
 {

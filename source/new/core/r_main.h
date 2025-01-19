@@ -37,38 +37,36 @@
 #include "d_player.h"
 #include "r_data.h"
 
-extern int r_frame_count;
+extern __thread int r_frame_count;
 
 //
 // POV related.
 //
 
-extern fixed_t  viewcos;
-extern fixed_t  viewsin;
-extern fixed_t  viewtancos;
-extern fixed_t  viewtansin;
-extern int      viewwidth;
-extern int      viewheight;
-extern int      centerx;
-extern int      centery;
-extern fixed_t  globaluclip;
-extern fixed_t  globaldclip;
-extern fixed_t  centerxfrac;
-extern fixed_t  centeryfrac;
-extern fixed_t  yaspectmul;
-extern fixed_t  viewheightfrac; //e6y: for correct cliping of things
-extern fixed_t  projection;
-extern fixed_t  skyiscale;
-// e6y: wide-res
-extern int wide_centerx;
+extern __thread fixed_t  viewcos;
+extern __thread fixed_t  viewsin;
+extern __thread fixed_t  viewtancos;
+extern __thread fixed_t  viewtansin;
+extern __thread int      viewwidth;
+extern __thread int      viewheight;
+extern __thread int      centerx;
+extern __thread int      centery;
+extern __thread fixed_t  globaluclip;
+extern __thread fixed_t  globaldclip;
+extern __thread fixed_t  centerxfrac;
+extern __thread fixed_t  centeryfrac;
+extern __thread fixed_t  yaspectmul;
+extern __thread fixed_t  viewheightfrac; //e6y: for correct cliping of things
+extern __thread fixed_t  projection;
+extern __thread fixed_t  skyiscale;
+extern __thread int wide_centerx;
 #define RMUL (1.6f/1.333333f)
 
 // proff 11/06/98: Added for high-res
-extern fixed_t  projectiony;
-extern int      validcount;
-extern int      validcount2;
-// e6y: Added for more precise flats drawing
-extern fixed_t viewfocratio;
+extern __thread fixed_t  projectiony;
+extern __thread int      validcount;
+extern __thread int      validcount2;
+extern __thread fixed_t viewfocratio;
 
 //
 // Lighting LUT.
@@ -85,9 +83,9 @@ extern fixed_t viewfocratio;
 // except for maybe memory usage savings.
 #define LIGHTLEVELS_MAX   32
 
-extern int LIGHTSEGSHIFT;
-extern int LIGHTBRIGHT;
-extern int LIGHTLEVELS;
+extern __thread int LIGHTSEGSHIFT;
+extern __thread int LIGHTBRIGHT;
+extern __thread int LIGHTLEVELS;
 
 #define MAXLIGHTSCALE     48
 #define LIGHTSCALESHIFT   12
@@ -95,21 +93,20 @@ extern int LIGHTLEVELS;
 #define LIGHTZSHIFT       20
 
 // killough 3/20/98: Allow colormaps to be dynamic (e.g. underwater)
-extern const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
-extern const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
-extern const lighttable_t *(*zlight)[MAXLIGHTZ];
-extern const lighttable_t *fullcolormap;
-extern int numcolormaps;    // killough 4/4/98: dynamic number of maps
-extern const lighttable_t **colormaps;
+extern __thread const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
+extern __thread const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
+extern __thread const lighttable_t *(*zlight)[MAXLIGHTZ];
+extern __thread const lighttable_t *fullcolormap;
+extern __thread int numcolormaps;    // killough 4/4/98: dynamic number of maps
+extern __thread const lighttable_t **colormaps;
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
 //e6y: for Boom colormaps in OpenGL mode
-extern dboolean use_boom_cm;
-extern int boom_cm;         // current colormap
-extern int frame_fixedcolormap;
-
-extern int          extralight;
-extern const lighttable_t *fixedcolormap;
+extern __thread dboolean use_boom_cm;
+extern __thread int boom_cm;         // current colormap
+extern __thread int frame_fixedcolormap;
+extern __thread int          extralight;
+extern __thread const lighttable_t *fixedcolormap;
 
 // Number of diminishing brightness levels.
 // There a 0-31, i.e. 32 LUT in the COLORMAP lump.
@@ -160,9 +157,9 @@ dboolean R_StatusBarVisible(void);
 #define MAP_COEFF 128.0f
 #define MAP_SCALE (MAP_COEFF*(float)FRACUNIT)
 
-extern int viewport[4];
-extern float modelMatrix[16];
-extern float projMatrix[16];
+extern __thread int viewport[4];
+extern __thread float modelMatrix[16];
+extern __thread float projMatrix[16];
 int R_Project(float objx, float objy, float objz, float *winx, float *winy, float *winz);
 
 #endif

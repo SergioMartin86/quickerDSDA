@@ -196,7 +196,7 @@ fixed_t PUREFUNC P_InterceptVector(const divline_t *v2, const divline_t *v1)
 // OPTIMIZE: keep this precalculated
 //
 
-line_opening_t line_opening;
+__thread line_opening_t line_opening;
 
 dboolean P_GetMidTexturePosition(const line_t *line, int sideno, fixed_t *top, fixed_t *bottom)
 {
@@ -554,7 +554,7 @@ dboolean P_BlockThingsIterator(int x, int y, dboolean func(mobj_t*))
 //
 
 // 1/11/98 killough: Intercept limit removed
-intercept_t *intercepts, *intercept_p;
+__thread intercept_t *intercepts, *intercept_p;
 
 // Check for limit and double size if necessary -- killough
 void check_intercept(void)
@@ -569,7 +569,7 @@ void check_intercept(void)
     }
 }
 
-divline_t trace;
+__thread divline_t trace;
 
 // PIT_AddLineIntercepts.
 // Looks for lines in the given block
@@ -1041,41 +1041,41 @@ int P_GetSafeBlockY(int coord)
 // playerstarts, which is effectively an array of 16-bit integers and
 // must be treated differently.
 
-extern fixed_t bulletslope;
+extern __thread fixed_t bulletslope;
 
-intercepts_overrun_t intercepts_overrun[] =
+__thread intercepts_overrun_t intercepts_overrun[] =
 {
   {4,   NULL,                          NULL},
   {4,   NULL, /* &earlyout, */         NULL},
   {4,   NULL, /* &intercept_p, */      NULL},
-  {4,   &line_opening.lowfloor,        NULL},
-  {4,   &line_opening.bottom,          NULL},
-  {4,   &line_opening.top,             NULL},
-  {4,   &line_opening.range,           NULL},
+  {4,   NULL,        NULL},
+  {4,   NULL,          NULL},
+  {4,   NULL,             NULL},
+  {4,   NULL,           NULL},
   {4,   NULL,                          NULL},
   {120, NULL, /* &activeplats, */      NULL},
   {8,   NULL,                          NULL},
-  {4,   &bulletslope,                  NULL},
+  {4,   NULL,                  NULL},
   {4,   NULL, /* &swingx, */           NULL},
   {4,   NULL, /* &swingy, */           NULL},
   {4,   NULL,                          NULL},
-  {4,  &playerstarts[0][0].x,       &playerstarts[0][0].y},
-  {4,  &playerstarts[0][0].angle,   &playerstarts[0][0].type},
-  {4,  &playerstarts[0][0].options, &playerstarts[0][1].x},
-  {4,  &playerstarts[0][1].y,       &playerstarts[0][1].angle},
-  {4,  &playerstarts[0][1].type,    &playerstarts[0][1].options},
-  {4,  &playerstarts[0][2].x,       &playerstarts[0][2].y},
-  {4,  &playerstarts[0][2].angle,   &playerstarts[0][2].type},
-  {4,  &playerstarts[0][2].options, &playerstarts[0][3].x},
-  {4,  &playerstarts[0][3].y,       &playerstarts[0][3].angle},
-  {4,  &playerstarts[0][3].type,    &playerstarts[0][3].options},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
+  {4,  NULL, NULL},
   {4,   NULL, /* &blocklinks, */       NULL},
-  {4,   &bmapwidth,                    NULL},
+  {4,   0,                    NULL},
   {4,   NULL, /* &blockmap, */         NULL},
-  {4,   &bmaporgx,                     NULL},
-  {4,   &bmaporgy,                     NULL},
+  {4,   0,                     NULL},
+  {4,   0,                     NULL},
   {4,   NULL, /* &blockmaplump, */     NULL},
-  {4,   &bmapheight,                   NULL},
+  {4,   0,                   NULL},
   {0,   NULL,                          NULL},
 };
 

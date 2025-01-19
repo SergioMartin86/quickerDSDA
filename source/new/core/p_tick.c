@@ -40,9 +40,9 @@
 
 #include "dsda.h"
 
-int leveltime;
+__thread int leveltime;
 
-static dboolean newthinkerpresent;
+static __thread dboolean newthinkerpresent;
 
 //
 // THINKERS
@@ -54,8 +54,8 @@ static dboolean newthinkerpresent;
 
 // killough 8/29/98: we maintain several separate threads, each containing
 // a special class of thinkers, to allow more efficient searches.
-thinker_t thinkerclasscap[th_all+1];
-int init_thinkers_count = 0;
+__thread thinker_t thinkerclasscap[th_all+1];
+__thread int init_thinkers_count = 0;
 
 //
 // P_InitThinkers
@@ -134,7 +134,7 @@ void P_AddThinker(thinker_t* thinker)
 // Make currentthinker external, so that P_RemoveThinkerDelayed
 // can adjust currentthinker when thinkers self-remove.
 
-static thinker_t *currentthinker;
+static __thread thinker_t *currentthinker;
 
 //
 // P_RemoveThinkerDelayed()

@@ -23,11 +23,11 @@
 
 #include "sprite.h"
 
-const char** sprnames;
-int num_sprites;
-static int deh_spritenames_size;
-static char** deh_spritenames;
-static byte* sprnames_state;
+__thread const char** sprnames;
+__thread int num_sprites;
+static __thread int deh_spritenames_size;
+static __thread char** deh_spritenames;
+static __thread byte* sprnames_state;
 
 static void dsda_PrepAllocation(void) {
   static int first_allocation = true;

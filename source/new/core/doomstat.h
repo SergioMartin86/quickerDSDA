@@ -46,25 +46,25 @@
 // Command line parameters.
 //
 
-extern  dboolean nomonsters; // checkparm of -nomonsters
-extern  dboolean respawnparm;  // checkparm of -respawn
-extern  dboolean fastparm; // checkparm of -fast
+extern  __thread dboolean nomonsters; // checkparm of -nomonsters
+extern  __thread dboolean respawnparm;  // checkparm of -respawn
+extern __thread  dboolean fastparm; // checkparm of -fast
 
 // -----------------------------------------------------
 // Game Mode - identify IWAD as shareware, retail etc.
 //
 
-extern GameMode_t gamemode;
-extern GameMission_t  gamemission;
-extern const char *doomverstr;
+extern __thread GameMode_t gamemode;
+extern __thread GameMission_t  gamemission;
+extern __thread const char *doomverstr;
 
 extern char *VANILLA_MAP_LUMP_NAME(int e, int m);
 
 // Set if homebrew PWAD stuff has been added.
-extern  dboolean modifiedgame;
+extern  __thread dboolean modifiedgame;
 
 // CPhipps - new compatibility handling
-extern complevel_t compatibility_level;
+extern __thread complevel_t compatibility_level;
 
 // CPhipps - old compatibility testing flags aliased to new handling
 #define compatibility (compatibility_level<=boom_compatibility_compatibility)
@@ -72,7 +72,7 @@ extern complevel_t compatibility_level;
 #define mbf_features (compatibility_level>=mbf_compatibility)
 #define mbf21 (compatibility_level == mbf21_compatibility)
 
-extern int demo_insurance;      // killough 4/5/98
+extern __thread int demo_insurance;      // killough 4/5/98
 
 // -------------------------------------------
 // killough 10/98: compatibility vector
@@ -126,27 +126,28 @@ enum {
   COMPERR_NUM
 };
 
-extern int comp[MBF_COMP_TOTAL];
-extern int default_comperr[COMPERR_NUM];
+extern __thread int comp[MBF_COMP_TOTAL];
+extern __thread int default_comperr[COMPERR_NUM];
 
 // -------------------------------------------
 // Language.
-extern  Language_t   language;
+extern  __thread Language_t   language;
 
 // -------------------------------------------
 // Selected skill type, map etc.
 //
 
 // Defaults for menu, methinks.
-extern  int   startskill;
-extern  int             startepisode;
+extern  __thread int   startskill;
+extern  __thread int             startepisode;
 
-extern  dboolean   autostart;
+extern  __thread dboolean   autostart;
 
 // Selected by user.
-extern  int   gameskill;
-extern  int   gameepisode;
-extern  int   gamemap;
+extern  __thread int   gameskill;
+extern  __thread int   gameepisode;
+
+extern  __thread int   gamemap;
 
 typedef struct
 {
@@ -156,22 +157,22 @@ typedef struct
   angle_t angle;
 } leave_data_t;
 
-extern leave_data_t leave_data;
+extern __thread leave_data_t leave_data;
 
 #define LF_SET_ANGLE 0x01
 #define LEAVE_VICTORY -1
 
 // Netgame? Only true if >1 player.
-extern  dboolean netgame;
+extern  __thread dboolean netgame;
 
 // Flag: true only if started as net deathmatch.
 // An enum might handle altdeath/cooperative better.
-extern  dboolean deathmatch;
+extern  __thread dboolean deathmatch;
 
-extern int solo_net;
-extern dboolean coop_spawns;
+extern __thread int solo_net;
+extern __thread dboolean coop_spawns;
 
-extern dboolean randomclass;
+extern __thread  dboolean randomclass;
 
 // ------------------------------------------
 // Internal parameters for sound rendering.
@@ -184,11 +185,11 @@ extern dboolean randomclass;
 //  Sound FX volume has default, 0 - 15
 //  Music volume has default, 0 - 15
 // These are multiplied by 8.
-extern int snd_SfxVolume;      // maximum volume for sound
-extern int snd_MusicVolume;    // maximum volume for music
+extern __thread int snd_SfxVolume;      // maximum volume for sound
+extern __thread int snd_MusicVolume;    // maximum volume for music
 
 // CPhipps - screen parameters
-extern int desired_screenwidth, desired_screenheight;
+extern __thread int desired_screenwidth, desired_screenheight;
 
 typedef enum {
   mnact_nochange = -1,
@@ -196,30 +197,29 @@ typedef enum {
   mnact_float, // doom-style large font menu, doesn't overlap anything
   mnact_full, // boom-style small font menu, may overlap status bar
 } menuactive_t;
-extern menuactive_t menuactive; // Type of menu overlaid, if any
+extern __thread menuactive_t menuactive; // Type of menu overlaid, if any
 
-extern  dboolean nodrawers;
+extern  __thread dboolean nodrawers;
 
 // Player taking events, and displaying.
-extern  int consoleplayer;
-extern  int displayplayer;
+extern  __thread int consoleplayer;
+extern  __thread int displayplayer;
 
 // -------------------------------------
 // Scores, rating.
 // Statistics on a given map, for intermission.
 //
-extern  int totalkills, totallive;
-extern  int totalitems;
-extern  int totalsecret;
+extern  __thread int totalkills, totallive;
+extern  __thread int totalitems;
+extern  __thread int totalsecret;
+extern  __thread int boom_basetic;
+extern  __thread int true_basetic;
+extern  __thread int leveltime;       // level time in tics
+extern  __thread int totalleveltimes; // sum of intermission times in tics at second resolution
+extern  __thread int levels_completed;
 
-extern  int boom_basetic;
-extern  int true_basetic;
-extern  int leveltime;       // level time in tics
-extern  int totalleveltimes; // sum of intermission times in tics at second resolution
-extern  int levels_completed;
-
-extern  gamestate_t  gamestate;
-extern  dboolean     in_game;
+extern  __thread gamestate_t  gamestate;
+extern  __thread dboolean     in_game;
 
 //-----------------------------
 // Internal parameters, fixed.
@@ -227,95 +227,89 @@ extern  dboolean     in_game;
 //  according to user inputs. Partly load from
 //  WAD, partly set at startup time.
 
-extern  int   gametic;
-
+extern  __thread int   gametic;
 #define boom_logictic (gametic - boom_basetic)
 #define true_logictic (gametic - true_basetic)
 
 //e6y
-extern  dboolean realframe;
+extern __thread  dboolean realframe;
 
 // Bookkeeping on players - state.
-extern  player_t  players[MAX_MAXPLAYERS];
-extern  int       upmove;
+extern __thread  player_t  players[MAX_MAXPLAYERS];
+extern __thread  int       upmove;
 
 // Alive? Disconnected?
-extern  dboolean   playeringame[MAX_MAXPLAYERS];
+extern  __thread dboolean   playeringame[MAX_MAXPLAYERS];
 
-extern  mapthing_t *deathmatchstarts;     // killough
-extern  size_t     num_deathmatchstarts; // killough
+extern  __thread mapthing_t *deathmatchstarts;     // killough
+extern  __thread size_t     num_deathmatchstarts; // killough
 
-extern  mapthing_t *deathmatch_p;
+extern  __thread mapthing_t *deathmatch_p;
 
 // Player spawn spots.
 #define MAX_PLAYER_STARTS 8
-extern  mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
+extern __thread  mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
 // Intermission stats.
 // Parameters for world map / intermission.
-extern wbstartstruct_t wminfo;
+extern __thread wbstartstruct_t wminfo;
 
 //-----------------------------------------
 // Internal parameters, used for engine.
 //
 
 // File handling stuff.
-extern  FILE   *debugfile;
+extern __thread  FILE   *debugfile;
 
 // wipegamestate can be set to -1
 //  to force a wipe on the next draw
-extern  gamestate_t     wipegamestate;
+extern  __thread gamestate_t     wipegamestate;
 
 // debug flag to cancel adaptiveness
-extern  dboolean         singletics;
+extern  __thread dboolean         singletics;
 
 // Needed to store the number of the dummy sky flat.
 // Used for rendering, as well as tracking projectiles etc.
 
-extern int    skyflatnum;
+extern __thread int    skyflatnum;
 
-extern  int        maketic;
+extern __thread   int        maketic;
 
 // Networking and tick handling related.
 #define BACKUPTICS              12
 
-extern  ticcmd_t   local_cmds[];
+extern __thread  ticcmd_t   local_cmds[];
 
 //-----------------------------------------------------------------------------
 
-extern int allow_pushers;         // MT_PUSH Things    // phares 3/10/98
-
-extern int variable_friction;  // ice & mud            // phares 3/10/98
-
-extern int monsters_remember;                          // killough 3/1/98
-
-extern int weapon_recoil;          // weapon recoil    // phares
-
-extern int player_bobbing;  // whether player bobs or not   // phares 2/25/98
-
-extern int dogs;     // killough 7/19/98: Marine's best friend :)
-extern int dog_jumping;   // killough 10/98
+extern __thread int allow_pushers;         // MT_PUSH Things    // phares 3/10/98
+extern __thread int variable_friction;  // ice & mud            // phares 3/10/98
+extern __thread int monsters_remember;                          // killough 3/1/98
+extern __thread int weapon_recoil;          // weapon recoil    // phares
+extern __thread int player_bobbing;  // whether player bobs or not   // phares 2/25/98
+extern __thread int dogs;     // killough 7/19/98: Marine's best friend :)
+extern __thread int dog_jumping;   // killough 10/98
 
 /* killough 8/8/98: distance friendly monsters tend to stay from player */
-extern int distfriend;
+extern __thread int distfriend;
 
 /* killough 9/8/98: whether monsters are allowed to strafe or retreat */
-extern int monster_backing;
+extern __thread int monster_backing;
 
 /* killough 9/9/98: whether monsters intelligently avoid hazards */
-extern int monster_avoid_hazards;
+extern __thread int monster_avoid_hazards;
 
 /* killough 10/98: whether monsters are affected by friction */
-extern int monster_friction;
+extern __thread int monster_friction;
 
 /* killough 9/9/98: whether monsters help friends */
-extern int help_friends;
+extern __thread int help_friends;
 
 /* killough 7/19/98: whether monsters should fight against each other */
-extern int monster_infighting;
+extern __thread int monster_infighting;
 
-extern int monkeys;
+extern __thread int monkeys;
 
-extern int HelperThing;          // type of thing to use for helper
+extern __thread int HelperThing;          // type of thing to use for helper
 
 #endif

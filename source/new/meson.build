@@ -9,7 +9,6 @@ quickerDSDASrc =  [
  'core/dsda/compatibility.c',
  'core/dsda/configuration.c',
  'core/dsda/data_organizer.c',
- 'core/dsda/death.c',
  'core/dsda/endoom.c',
  'core/dsda/episode.c',
  'core/dsda/excmd.c',
@@ -120,7 +119,7 @@ quickerDSDACompileArgs = [
 # DSDA dependency
 
  quickerDSDADependency = declare_dependency(
-  compile_args        : [  quickerDSDACompileArgs ],
+  compile_args        : [  quickerDSDACompileArgs, '-D__STORAGE_MODIFIER=__thread' ],
 	link_args        : [  ],
   include_directories : include_directories(quickerDSDAIncludeDirs),
   sources             : [ quickerDSDASrc ],

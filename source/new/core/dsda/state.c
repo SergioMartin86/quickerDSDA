@@ -20,12 +20,12 @@
 
 #include "state.h"
 
-state_t* states;
-int num_states;
-byte* defined_codeptr_args;
-statenum_t* seenstate_tab;
+__thread state_t* states;
+__thread int num_states;
+__thread byte* defined_codeptr_args;
+__thread statenum_t* seenstate_tab;
 
-static actionf_t* deh_codeptr;
+static __thread actionf_t* deh_codeptr;
 
 static void dsda_ResetStates(int from, int to) {
   int i;

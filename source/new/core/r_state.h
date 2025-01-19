@@ -45,73 +45,73 @@
 //
 
 // needed for texture pegging
-extern fixed_t *textureheight;
+extern __thread fixed_t *textureheight;
 
-extern int firstflat, numflats;
+extern __thread int firstflat, numflats;
 
 // for global animation
-extern int *flattranslation;
-extern int *texturetranslation;
+extern __thread int *flattranslation;
+extern __thread int *texturetranslation;
 
 // Sprite....
-extern int firstspritelump;
-extern int lastspritelump;
-extern int numspritelumps;
+extern __thread int firstspritelump;
+extern __thread int lastspritelump;
+extern __thread int numspritelumps;
 
 //
 // Lookup tables for map data.
 //
-extern spritedef_t      *sprites;
+extern __thread spritedef_t      *sprites;
 
-extern int              numvertexes;
-extern vertex_t         *vertexes;
+extern __thread int              numvertexes;
+extern __thread vertex_t         *vertexes;
 
-extern int              numsegs;
-extern seg_t            *segs;
+extern __thread int              numsegs;
+extern __thread seg_t            *segs;
 
-extern int              numsectors;
-extern sector_t         *sectors;
+extern __thread int              numsectors;
+extern __thread sector_t         *sectors;
 
-extern int              numsubsectors;
-extern subsector_t      *subsectors;
+extern __thread int              numsubsectors;
+extern __thread subsector_t      *subsectors;
 
-extern int              numnodes;
-extern node_t           *nodes;
+extern __thread int              numnodes;
+extern __thread node_t           *nodes;
 
-extern int              numlines;
-extern line_t           *lines;
+extern __thread int              numlines;
+extern __thread line_t           *lines;
 
-extern int              numsides;
-extern side_t           *sides;
+extern __thread int              numsides;
+extern __thread side_t           *sides;
 
-extern int              *sslines_indexes;
-extern ssline_t         *sslines;
+extern __thread int              *sslines_indexes;
+extern __thread ssline_t         *sslines;
 
-extern byte             *map_subsectors;
+extern __thread byte             *map_subsectors;
 
 //
 // POV data.
 //
-extern fixed_t          viewx;
-extern fixed_t          viewy;
-extern fixed_t          viewz;
-extern angle_t          viewangle;
-extern player_t         *viewplayer;
-extern angle_t          clipangle;
-extern int              viewangletox[FINEANGLES/2];
+extern __thread fixed_t          viewx;
+extern __thread fixed_t          viewy;
+extern __thread fixed_t          viewz;
+extern __thread angle_t          viewangle;
+extern __thread player_t         *viewplayer;
+extern __thread angle_t          clipangle;
+extern __thread int              viewangletox[FINEANGLES/2];
 
 // e6y: resolution limitation is removed
-extern angle_t          *xtoviewangle;  // killough 2/8/98
+extern __thread angle_t          *xtoviewangle;  // killough 2/8/98
 
-extern int              FieldOfView;
+extern __thread int              FieldOfView;
 
-extern fixed_t          rw_distance;
-extern angle_t          rw_normalangle;
+extern __thread fixed_t          rw_distance;
+extern __thread angle_t          rw_normalangle;
 
 // angle to line origin
-extern int              rw_angle1;
+extern __thread int              rw_angle1;
 
-extern visplane_t       *floorplane;
-extern visplane_t       *ceilingplane;
+extern __thread visplane_t       *floorplane;
+extern __thread visplane_t       *ceilingplane;
 
 #endif

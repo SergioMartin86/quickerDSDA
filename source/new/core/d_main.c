@@ -95,39 +95,38 @@
 static void D_PageDrawer(void);
 
 // jff 1/24/98 add new versions of these variables to remember command line
-dboolean clnomonsters;   // checkparm of -nomonsters
-dboolean clrespawnparm;  // checkparm of -respawn
-dboolean clfastparm;     // checkparm of -fast
+__thread dboolean clnomonsters;   // checkparm of -nomonsters
+__thread dboolean clrespawnparm;  // checkparm of -respawn
+__thread dboolean clfastparm;     // checkparm of -fast
 // jff 1/24/98 end definition of command line version of play mode switches
 
-dboolean nomonsters;     // working -nomonsters
-dboolean respawnparm;    // working -respawn
-dboolean fastparm;       // working -fast
+__thread dboolean nomonsters;     // working -nomonsters
+__thread dboolean respawnparm;    // working -respawn
+__thread dboolean fastparm;       // working -fast
 
-dboolean randomclass;
+__thread dboolean randomclass;
 
-dboolean singletics = false; // debug flag to cancel adaptiveness
+__thread dboolean singletics = false; // debug flag to cancel adaptiveness
 
 //jff 1/22/98 parms for disabling music and sound
-dboolean nosfxparm;
-dboolean nomusicparm;
+__thread dboolean nosfxparm;
+__thread dboolean nomusicparm;
 
 //jff 4/18/98
-extern dboolean inhelpscreens;
-extern dboolean BorderNeedRefresh;
+extern __thread dboolean inhelpscreens;
+extern __thread dboolean BorderNeedRefresh;
+extern __thread dboolean enableOutput;
 
-extern dboolean enableOutput;
+__thread int     startskill;
+__thread int     startepisode;
+__thread int     startmap;
+__thread dboolean autostart;
+__thread FILE    *debugfile;
 
-int     startskill;
-int     startepisode;
-int     startmap;
-dboolean autostart;
-FILE    *debugfile;
-
-dboolean advancedemo;
+__thread dboolean advancedemo;
 
 //jff 4/19/98 list of standard IWAD names
-const char *const standard_iwads[]=
+__thread const char *const standard_iwads[]=
 {
   "doom2f.wad",
   "doom2.wad",
@@ -155,7 +154,7 @@ const char *const standard_iwads[]=
   "heretic1.wad"
 };
 //e6y static
-const int nstandard_iwads = sizeof standard_iwads/sizeof*standard_iwads;
+__thread const int nstandard_iwads = sizeof standard_iwads/sizeof*standard_iwads;
 
 /*
  * D_PostEvent - Event handling
@@ -190,8 +189,8 @@ static void D_Wipe(void)
 //
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
-gamestate_t    wipegamestate = GS_DEMOSCREEN;
-extern dboolean setsizeneeded;
+__thread gamestate_t    wipegamestate = GS_DEMOSCREEN;
+extern __thread dboolean setsizeneeded;
 
 static void D_DrawPause(void)
 {
@@ -213,10 +212,10 @@ void D_Display (fixed_t frac)
 //  DEMO LOOP
 //
 
-static int  demosequence;         // killough 5/2/98: made static
-static int  pagetic;
-static const char *pagename; // CPhipps - const
-dboolean bfgedition = 0;
+static __thread int  demosequence;         // killough 5/2/98: made static
+static __thread int  pagetic;
+static __thread const char *pagename; // CPhipps - const
+__thread dboolean bfgedition = 0;
 
 //
 // D_PageTicker
@@ -290,9 +289,9 @@ static void D_DrawTitle2(const char *name)
 /* killough 11/98: tabulate demo sequences
  */
 
-extern const demostate_t (*demostates)[4];
+extern __thread const demostate_t (*demostates)[4];
 
-const demostate_t doom_demostates[][4] =
+const __thread demostate_t doom_demostates[][4] =
 {
   {
     {D_DrawTitle1, "TITLEPIC"},
@@ -827,15 +826,15 @@ static void DoLooseFiles(void)
   }
 }
 
-const char *port_wad_file;
+__thread const char *port_wad_file;
 
 // CPhipps - misc screen stuff
-int desired_screenwidth, desired_screenheight;
+__thread int desired_screenwidth, desired_screenheight;
 
 // Calculate the path to the directory for autoloaded WADs/DEHs.
 // Creates the directory as necessary.
 
-static char *autoload_path = NULL;
+static __thread char *autoload_path = NULL;
 
 static char *GetAutoloadDir(const char *iwadname, dboolean createdir)
 {
@@ -938,7 +937,7 @@ static void HandleClass(void)
   return;
 }
 
-const char* doomverstr = "Unknown";
+__thread const char* doomverstr = "Unknown";
 
 static void EvaluateDoomVerStr(void)
 {
@@ -1009,10 +1008,10 @@ static void EvaluateDoomVerStr(void)
 //
 // CPhipps - the old contents of D_DoomMain, but moved out of the main
 //  line of execution so its stack space can be freed
-extern dboolean preventLevelExit;
-extern dboolean preventGameEnd;
-extern dboolean reachedLevelExit;
-extern dboolean reachedGameEnd;
+extern __thread dboolean preventLevelExit;
+extern __thread dboolean preventGameEnd;
+extern __thread dboolean reachedLevelExit;
+extern __thread dboolean reachedGameEnd;
 
 
 void D_DoomMainSetup(void)
@@ -1188,7 +1187,6 @@ void D_DoomMainSetup(void)
   // Using -deh in BOOM, others use -dehacked.
   // Ty 03/18/98 also allow .bex extension.  .bex overrides if both exist.
 
-  dsda_AppendZDoomMobjInfo();
   dsda_ApplyDefaultMapFormat();
 
   lprintf(LO_DEBUG, "dsda_InitWadStats: Setting up wad stats.\n");

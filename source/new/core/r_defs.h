@@ -613,13 +613,13 @@ typedef struct polyblock_s
 #define PO_LINE_START 1         // polyobj line start special
 #define PO_LINE_EXPLICIT 5
 
-extern polyobj_t *polyobjs;     // list of all poly-objects on the level
-extern int po_NumPolyobjs;
+extern __thread polyobj_t *polyobjs;     // list of all poly-objects on the level
+extern __thread int po_NumPolyobjs;
 
-extern int Sky1Texture;
-extern int Sky2Texture;
-extern fixed_t Sky1ColumnOffset;
-extern fixed_t Sky2ColumnOffset;
-extern dboolean DoubleSky;
+extern __thread int Sky1Texture;
+extern __thread int Sky2Texture;
+extern __thread fixed_t Sky1ColumnOffset;
+extern __thread fixed_t Sky2ColumnOffset;
+extern __thread dboolean DoubleSky;
 
 #endif

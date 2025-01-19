@@ -106,13 +106,13 @@ void dsda_FreeDehMobjInfo(void) {
   // free(edited_mobjinfo_bits);
 }
 
-int ZMT_MAPSPOT = ZMT_UNDEFINED;
-int ZMT_MAPSPOT_GRAVITY = ZMT_UNDEFINED;
-int ZMT_TELEPORTDEST2 = ZMT_UNDEFINED;
-int ZMT_TELEPORTDEST3 = ZMT_UNDEFINED;
-int ZMT_AMBIENTSOUND = ZMT_UNDEFINED;
+__thread int ZMT_MAPSPOT = ZMT_UNDEFINED;
+__thread int ZMT_MAPSPOT_GRAVITY = ZMT_UNDEFINED;
+__thread int ZMT_TELEPORTDEST2 = ZMT_UNDEFINED;
+__thread int ZMT_TELEPORTDEST3 = ZMT_UNDEFINED;
+__thread int ZMT_AMBIENTSOUND = ZMT_UNDEFINED;
 
-static mobjinfo_t zmt_mapspot_info = {
+static __thread mobjinfo_t zmt_mapspot_info = {
   .doomednum = 9001,
   .spawnstate = S_NULL,
   .spawnhealth = 1000,
@@ -149,7 +149,7 @@ static mobjinfo_t zmt_mapspot_info = {
   .visibility = VF_ZDOOM,
 };
 
-static mobjinfo_t zmt_mapspot_gravity_info = {
+static __thread mobjinfo_t zmt_mapspot_gravity_info = {
   .doomednum = 9013,
   .spawnstate = S_NULL,
   .spawnhealth = 1000,
@@ -186,7 +186,7 @@ static mobjinfo_t zmt_mapspot_gravity_info = {
   .visibility = VF_ZDOOM,
 };
 
-static mobjinfo_t zmt_teleportdest2_info = {
+static __thread mobjinfo_t zmt_teleportdest2_info = {
   .doomednum = 9044,
   .spawnstate = S_NULL,
   .spawnhealth = 1000,
@@ -223,7 +223,7 @@ static mobjinfo_t zmt_teleportdest2_info = {
   .visibility = VF_ZDOOM,
 };
 
-static mobjinfo_t zmt_teleportdest3_info = {
+static __thread mobjinfo_t zmt_teleportdest3_info = {
   .doomednum = 9043,
   .spawnstate = S_NULL,
   .spawnhealth = 1000,
@@ -260,7 +260,7 @@ static mobjinfo_t zmt_teleportdest3_info = {
   .visibility = VF_ZDOOM,
 };
 
-static mobjinfo_t zmt_ambient_sound = {
+static __thread mobjinfo_t zmt_ambient_sound = {
   .doomednum = 14064,
   .spawnstate = S_NULL,
   .spawnhealth = 1000,
@@ -302,26 +302,13 @@ typedef struct {
   mobjinfo_t* mobjinfo_p;
 } append_mobjinfo_t;
 
-static append_mobjinfo_t append_mobjinfo[] = {
-  { &ZMT_MAPSPOT, &zmt_mapspot_info },
-  { &ZMT_MAPSPOT_GRAVITY, &zmt_mapspot_gravity_info },
-  { &ZMT_TELEPORTDEST2, &zmt_teleportdest2_info },
-  { &ZMT_TELEPORTDEST3, &zmt_teleportdest3_info },
-  { &ZMT_AMBIENTSOUND, &zmt_ambient_sound },
+static __thread append_mobjinfo_t append_mobjinfo[] = {
+  { NULL, NULL },
+  { NULL, NULL },
+  { NULL, NULL },
+  { NULL, NULL },
+  { NULL, NULL },
 };
 
 static __thread int append_mobjinfo_count = sizeof(append_mobjinfo) / sizeof(append_mobjinfo[0]);
 
-void dsda_AppendZDoomMobjInfo(void) {
-  int i;
-  int index;
-  dsda_deh_mobjinfo_t mobjinfo;
-
-  index = deh_mobj_index_hash.end_index;
-  for (i = 0; i < append_mobjinfo_count; ++i) {
-    mobjinfo = dsda_GetDehMobjInfo(index);
-    *(append_mobjinfo[i].index_p) = index;
-    *(mobjinfo.info) = *(append_mobjinfo[i].mobjinfo_p);
-    ++index;
-  }
-}

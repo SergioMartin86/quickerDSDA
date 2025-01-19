@@ -19,7 +19,7 @@
 
 #include "pclass.h"
 
-dsda_pclass_t pclass = {
+dsda_pclass_t __thread pclass = {
     .armor_increment = 0 ,
     .auto_armor_save = 0,
     .armor_max = 0,

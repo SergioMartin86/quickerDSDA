@@ -90,7 +90,7 @@
 #include "dsda/utility.h"
 
 // Allows use of HELP2 screen for PWADs under DOOM 1
-int pwad_help2_check;
+__thread int pwad_help2_check;
 
 struct
 {
@@ -121,56 +121,46 @@ struct
 // The old format is still supported.
 #define NEWFORMATSIG "\xff\xff\xff\xff"
 
-static const byte *demobuffer;   /* cph - only used for playback */
-static int demolength; // check for overrun (missing DEMOMARKER)
+static __thread const byte *demobuffer;   /* cph - only used for playback */
+static __thread int demolength; // check for overrun (missing DEMOMARKER)
 
-dboolean        preventLevelExit;
-dboolean        preventGameEnd;
-
-dboolean        reachedLevelExit;
-dboolean        reachedGameEnd;
-
-gameaction_t    gameaction;
-gamestate_t     gamestate;
-dboolean        in_game;
-int             gameskill;
-int             gameepisode;
-int             gamemap;
-// CPhipps - moved *_loadgame vars here
-static dboolean forced_loadgame = false;
-static dboolean load_via_cmd = false;
-
-dboolean         timingdemo;    // if true, exit with report on completion
-dboolean         fastdemo;      // if true, run at full speed -- killough
-dboolean         nodrawers;     // for comparative timing purposes
-int             starttime;     // for comparative timing purposes
-dboolean         deathmatch;    // only if started as net death
-dboolean         netgame;       // only true if packets are broadcast
-dboolean         playeringame[MAX_MAXPLAYERS];
-player_t        players[MAX_MAXPLAYERS];
-int             upmove;
-int             consoleplayer; // player taking events and displaying
-int             displayplayer; // view being displayed
-int             gametic;
-int             boom_basetic;       /* killough 9/29/98: for demo sync */
-int             true_basetic;
-int             totalkills, totallive, totalitems, totalsecret;    // for intermission
-dboolean         demorecording;
-wbstartstruct_t wminfo;               // parms for world map / intermission
-dboolean         haswolflevels = false;// jff 4/18/98 wolf levels present
-int             totalleveltimes;      // CPhipps - total time for all completed levels
-int             levels_completed;
-int             longtics;
-
-dboolean coop_spawns;
-
-// e6y
-// There is a new command-line switch "-shorttics".
-// This makes it possible to practice routes and tricks
-// (e.g. glides, where this makes a significant difference)
-// with the same mouse behaviour as when recording,
-// but without having to be recording every time.
-int shorttics;
+__thread dboolean        preventLevelExit;
+__thread dboolean        preventGameEnd;
+__thread dboolean        reachedLevelExit;
+__thread dboolean        reachedGameEnd;
+__thread gameaction_t    gameaction;
+__thread gamestate_t     gamestate;
+__thread dboolean        in_game;
+__thread int             gameskill;
+__thread int             gameepisode;
+ __thread int             gamemap;
+ static __thread dboolean forced_loadgame = false;
+ static __thread dboolean load_via_cmd = false;
+__thread dboolean         timingdemo;    // if true, exit with report on completion
+__thread dboolean         fastdemo;      // if true, run at full speed -- killough
+__thread dboolean         nodrawers;     // for comparative timing purposes
+__thread int             starttime;     // for comparative timing purposes
+__thread dboolean         deathmatch;    // only if started as net death
+__thread dboolean         netgame;       // only true if packets are broadcast
+__thread dboolean         playeringame[MAX_MAXPLAYERS];
+__thread player_t        players[MAX_MAXPLAYERS];
+__thread int             upmove;
+__thread int             consoleplayer; // player taking events and displaying
+__thread int             displayplayer; // view being displayed
+__thread int             gametic;
+__thread int             boom_basetic;       /* killough 9/29/98: for demo sync */
+__thread int             true_basetic;
+__thread int             totalkills, totallive, totalitems, totalsecret;    // for intermission
+__thread dboolean         demorecording;
+__thread wbstartstruct_t wminfo;               // parms for world map / intermission
+__thread dboolean         haswolflevels = false;// jff 4/18/98 wolf levels present
+__thread int             totalleveltimes;      // CPhipps - total time for all completed levels
+__thread int             levels_completed;
+__thread int             longtics;
+__thread dboolean coop_spawns;
+__thread int shorttics;
+static __thread int     turnheld;       // for accelerative turning
+static __thread int next_weapon = 0;
 
 //
 // controls (have defaults)
@@ -185,15 +175,8 @@ fixed_t sidemove[2]    = {0x18, 0x28};
 fixed_t angleturn[3]   = {640, 1280, 320};  // + slow turn
 fixed_t flyspeed[2]    = {1*256, 3*256};
 
-static int     turnheld;       // for accelerative turning
 
-// Set to -1 or +1 to switch to the previous or next weapon.
-
-static int next_weapon = 0;
-
-// Used for prev/next weapon keys.
-
-static const struct
+static __thread const struct
 {
   weapontype_t weapon;
   weapontype_t weapon_num;
@@ -227,27 +210,26 @@ static const struct
 // };
 
 // mouse values are used once
-static int   mousex;
-static int   mousey;
-static int   dclicktime;
-static int   dclickstate;
-static int   dclicks;
-static int   dclicktime2;
-static int   dclickstate2;
-static int   dclicks2;
-
-static int left_analog_x;
-static int left_analog_y;
+static __thread  int   mousex;
+static __thread  int   mousey;
+static __thread  int   dclicktime;
+static __thread  int   dclickstate;
+static __thread  int   dclicks;
+static __thread  int   dclicktime2;
+static __thread  int   dclickstate2;
+static __thread  int   dclicks2;
+static __thread  int left_analog_x;
+static __thread  int left_analog_y;
 
 // Game events info
-static buttoncode_t special_event; // Event triggered by local player, to send
-static int   savegameslot;         // Slot to load if gameaction == ga_loadgame
-char         savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
+static __thread buttoncode_t special_event; // Event triggered by local player, to send
+static __thread int   savegameslot;         // Slot to load if gameaction == ga_loadgame
+__thread char         savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
 
 // heretic
 #include "p_user.h"
 
-int lookheld;
+__thread int lookheld;
 
 static dboolean InventoryMoveLeft(void);
 static dboolean InventoryMoveRight(void);
@@ -256,9 +238,9 @@ static dboolean InventoryMoveRight(void);
 // hexen
 
 // Position indicator for cooperative net-play reborn
-int RebornPosition;
+__thread int RebornPosition;
 
-leave_data_t leave_data;
+__thread leave_data_t leave_data;
 
 void G_DoTeleportNewMap(void);
 static void Hexen_G_DoReborn(int playernum);
@@ -272,7 +254,7 @@ typedef enum
   NUMDOUBLECARRY
 } double_carry_t;
 
-static double double_carry[NUMDOUBLECARRY];
+static __thread double double_carry[NUMDOUBLECARRY];
 
 static int G_CarryDouble(double_carry_t c, double value)
 {
@@ -414,10 +396,10 @@ static int G_NextWeapon(int direction)
   return weapon_order_table[i].weapon_num;
 }
 
-static double mouse_sensitivity_horiz;
-static double mouse_sensitivity_vert;
-static double mouse_sensitivity_mlook;
-static double mouse_strafe_divisor;
+static __thread double mouse_sensitivity_horiz;
+static __thread double mouse_sensitivity_vert;
+static __thread double mouse_sensitivity_mlook;
+static __thread double mouse_strafe_divisor;
 
 void G_UpdateMouseSensitivity(void)
 {
@@ -877,7 +859,7 @@ static void G_ResetInventory(player_t *p)
 //
 // G_DoLoadLevel
 //
-int skyflatnum;
+int __thread skyflatnum;
 
 static void G_DoLoadLevel (void)
 {
@@ -1521,7 +1503,7 @@ void G_DoReborn (int playernum)
 }
 
 // DOOM Par Times
-int pars[5][10] = {
+__thread int pars[5][10] = {
   {0},
   {0,30,75,120,90,165,180,180,30,165},
   {0,90,90,90,120,90,360,240,30,170},
@@ -1531,14 +1513,14 @@ int pars[5][10] = {
 };
 
 // DOOM II Par Times
-int cpars[34] = {
+__thread  int cpars[34] = {
   30,90,120,120,90,150,120,120,270,90,  //  1-10
   210,150,150,150,210,150,420,150,210,150,  // 11-20
   240,150,180,150,150,300,330,420,300,180,  // 21-30
   120,30,30,30          // 31-34
 };
 
-dboolean secretexit;
+__thread dboolean secretexit;
 
 void G_ExitLevel(int position)
 {
@@ -1775,7 +1757,7 @@ static void G_LoadGameErr(const char *msg)
   P_FreeSaveBuffer();
 }
 
-const char * comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
+__thread const char * comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
 { "Doom v1.2", "Doom v1.666", "Doom/Doom2 v1.9", "Ultimate Doom/Doom95", "Final Doom",
   "early DosDoom", "TASDoom", "\"boom compatibility\"", "boom v2.01", "boom v2.02", "lxdoom v1.3.2+",
   "MBF", "PrBoom 2.03beta", "PrBoom v2.1.0-2.1.1", "PrBoom v2.1.2-v2.2.6",
@@ -1853,9 +1835,9 @@ static void G_DoSaveGame(dboolean via_cmd)
 
 }
 
-static int     d_skill;
-static int     d_episode;
-static int     d_map;
+static __thread int     d_skill;
+static __thread int     d_episode;
+static __thread int     d_map;
 
 void G_DeferedInitNew(int skill, int episode, int map)
 {
@@ -2188,7 +2170,7 @@ int G_ValidateMapName(const char *mapname, int *pEpi, int *pMap)
 // consoleplayer, displayplayer, playeringame[] should be set.
 //
 
-extern int EpiCustom;
+extern __thread int EpiCustom;
 
 void G_InitNew(int skill, int episode, int map, dboolean prepare)
 {
@@ -2266,7 +2248,7 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   }
 
   {
-    extern int dsda_startmap;
+    extern __thread int dsda_startmap;
 
     dsda_startmap = map;
   }
@@ -2553,7 +2535,7 @@ void G_BeginRecording (void)
 // G_PlayDemo
 //
 
-static const char *defdemoname;
+static __thread const char *defdemoname;
 
 void G_DeferedPlayDemo (const char* name)
 {

@@ -37,12 +37,12 @@
 
 #define IGNORE_VALUE -1
 
-const demostate_t (*demostates)[4];
-extern const demostate_t doom_demostates[][4];
-extern const demostate_t heretic_demostates[][4];
-extern const demostate_t hexen_demostates[][4];
+const __thread demostate_t (*demostates)[4];
+extern __thread const demostate_t doom_demostates[][4];
+extern __thread const demostate_t heretic_demostates[][4];
+extern __thread const demostate_t hexen_demostates[][4];
 
-weaponinfo_t* weaponinfo;
+__thread weaponinfo_t* weaponinfo;
 
 __thread int g_maxplayers = 4;
 __thread int g_viewheight = 41 * FRACUNIT;

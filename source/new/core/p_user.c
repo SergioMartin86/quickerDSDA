@@ -49,7 +49,6 @@
 #include "e6y.h"//e6y
 
 #include "dsda/aim.h"
-#include "dsda/death.h"
 #include "dsda/excmd.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
@@ -510,10 +509,6 @@ if ((int)player->mo->pitch > -(int)ANG1*19)
       player->poisoncount--;
   }
 
-  if (player->cmd.buttons & BT_USE)
-  {
-    dsda_DeathUse(player);
-  }
 }
 
 void P_PlayerEndFlight(player_t * player)

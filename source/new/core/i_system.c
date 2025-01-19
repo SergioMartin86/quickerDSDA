@@ -86,9 +86,9 @@ void I_uSleep(unsigned long usecs)
 {
 }
 
-static dboolean InDisplay = false;
-static int saved_gametic = -1;
-dboolean realframe = false;
+static __thread dboolean InDisplay = false;
+static __thread int saved_gametic = -1;
+__thread dboolean realframe = false;
 
 dboolean I_StartDisplay(void)
 {
@@ -99,7 +99,7 @@ void I_EndDisplay(void)
 {
 }
 
-int interpolation_method;
+__thread int interpolation_method;
 fixed_t I_GetTimeFrac (void)
 {
   fixed_t frac = FRACUNIT;

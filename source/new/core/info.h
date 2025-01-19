@@ -6648,22 +6648,20 @@ typedef struct
 
 // all the stuff - dynamically selected in global.c
 
-extern state_t heretic_states[HERETIC_NUMSTATES];
-extern const char *heretic_sprnames[];
-extern raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES];
+extern __thread state_t heretic_states[HERETIC_NUMSTATES];
+extern __thread const char *heretic_sprnames[];
+extern __thread raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES];
+extern __thread state_t hexen_states[HEXEN_NUMSTATES];
+extern __thread const char *hexen_sprnames[];
+extern __thread raven_mobjinfo_t hexen_mobjinfo[HEXEN_NUMMOBJTYPES];
+extern __thread state_t doom_states[DOOM_NUMSTATES];
+extern __thread const char *doom_sprnames[];
+extern __thread doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES];
 
-extern state_t hexen_states[HEXEN_NUMSTATES];
-extern const char *hexen_sprnames[];
-extern raven_mobjinfo_t hexen_mobjinfo[HEXEN_NUMMOBJTYPES];
-
-extern state_t doom_states[DOOM_NUMSTATES];
-extern const char *doom_sprnames[];
-extern doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES];
-
-extern state_t* states;
-extern int num_states;
-extern const char** sprnames;
-extern int num_sprites;
+extern __thread state_t* states;
+extern __thread int num_states;
+extern __thread const char** sprnames;
+extern __thread int num_sprites;
 extern __thread  mobjinfo_t* mobjinfo;
 extern __thread int num_mobj_types;
 extern __thread int mobj_types_zero;
@@ -6673,10 +6671,10 @@ extern __thread int mobj_types_max;
 
 #define ZMT_UNDEFINED -2
 
-extern int ZMT_MAPSPOT;
-extern int ZMT_MAPSPOT_GRAVITY;
-extern int ZMT_TELEPORTDEST2;
-extern int ZMT_TELEPORTDEST3;
-extern int ZMT_AMBIENTSOUND;
+extern __thread int ZMT_MAPSPOT;
+extern __thread int ZMT_MAPSPOT_GRAVITY;
+extern __thread int ZMT_TELEPORTDEST2;
+extern __thread int ZMT_TELEPORTDEST3;
+extern __thread int ZMT_AMBIENTSOUND;
 
 #endif

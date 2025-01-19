@@ -39,11 +39,11 @@
 // None.
 
 // proff 08/17/98: Changed for high-res
-int SCREENWIDTH=320;
-int SCREENHEIGHT=200;
-int SCREENPITCH=320;
+__thread int SCREENWIDTH=320;
+__thread int SCREENHEIGHT=200;
+__thread int SCREENPITCH=320;
 
 // e6y: wide-res
-int SCREEN_320x200;
-int WIDE_SCREENWIDTH = 320;
-int WIDE_SCREENHEIGHT = 200;
+__thread int SCREEN_320x200;
+__thread int WIDE_SCREENWIDTH = 320;
+__thread int WIDE_SCREENHEIGHT = 200;

@@ -38,14 +38,14 @@ extern "C"
 }
 
 // Players information
-extern "C" int enableOutput;
-extern "C" player_t players[MAX_MAXPLAYERS];
-extern "C" int preventLevelExit;
-extern "C" int preventGameEnd;
-extern "C" int reachedLevelExit;
-extern "C" int reachedGameEnd;
-extern "C" int gamemap;
-extern "C" int gametic;
+extern "C" __STORAGE_MODIFIER int enableOutput;
+extern "C" __STORAGE_MODIFIER player_t players[MAX_MAXPLAYERS];
+extern "C" __STORAGE_MODIFIER int preventLevelExit;
+extern "C" __STORAGE_MODIFIER int preventGameEnd;
+extern "C" __STORAGE_MODIFIER int reachedLevelExit;
+extern "C" __STORAGE_MODIFIER int reachedGameEnd;
+extern "C" __STORAGE_MODIFIER int gamemap;
+extern "C" __STORAGE_MODIFIER int gametic;
 
 namespace jaffar
 {

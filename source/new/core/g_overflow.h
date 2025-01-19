@@ -86,7 +86,7 @@ typedef struct
     void *addr2;
 } intercepts_overrun_t;
 
-extern intercepts_overrun_t intercepts_overrun[];
+extern __thread intercepts_overrun_t intercepts_overrun[];
 void InterceptsOverrun(int num_intercepts, intercept_t *intercept);
 
 //

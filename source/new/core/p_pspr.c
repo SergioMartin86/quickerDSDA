@@ -169,7 +169,7 @@ static void P_BringUpWeapon(player_t *player)
 // in DOOM2 to bring up the weapon, i.e. 6 = plasma gun. These    //    |
 // are NOT the wp_* constants.                                    //    V
 
-int weapon_preferences[2][NUMWEAPONS+1] = {
+__thread int weapon_preferences[2][NUMWEAPONS+1] = {
   {6, 9, 4, 3, 2, 8, 5, 7, 1, 0},  // !compatibility preferences
   {6, 9, 4, 3, 2, 8, 5, 7, 1, 0},  //  compatibility preferences
 };
@@ -798,7 +798,7 @@ void A_FireBFG(player_t *player, pspdef_t *psp)
 // This code may not be used in other mods without appropriate credit given.
 // Code leeches will be telefragged.
 
-int autoaim = 0;  // killough 7/19/98: autoaiming was not in original beta
+__thread int autoaim = 0;  // killough 7/19/98: autoaiming was not in original beta
 void A_FireOldBFG(player_t *player, pspdef_t *psp)
 {
   int type = MT_PLASMA1;
@@ -822,7 +822,7 @@ void A_FireOldBFG(player_t *player, pspdef_t *psp)
     angle_t an = mo->angle;
     angle_t an1 = ((P_Random(pr_bfg)&127) - 64) * (ANG90/768) + an;
     angle_t an2 = ((P_Random(pr_bfg)&127) - 64) * (ANG90/640) + ANG90;
-    extern int autoaim;
+    extern __thread int autoaim;
 
     if (autoaim/* || !beta_emulation*/)
     {
@@ -876,7 +876,7 @@ void A_FirePlasma(player_t *player, pspdef_t *psp)
 //
 
 //e6y static
-fixed_t bulletslope;
+__thread fixed_t bulletslope;
 
 static void P_BulletSlope(mobj_t *mo)
 {

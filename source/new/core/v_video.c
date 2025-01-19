@@ -59,19 +59,19 @@
 // SetRatio sets the following global variables based on window geometry and
 // user preferences. The integer ratio is hardly used anymore, so further
 // simplification may be in order.
-dboolean tallscreen;
-unsigned int ratio_multiplier, ratio_scale;
-float gl_ratio;
-int psprite_offset; // Needed for "tallscreen" modes
+__thread dboolean tallscreen;
+__thread unsigned int ratio_multiplier, ratio_scale;
+__thread float gl_ratio;
+__thread int psprite_offset; // Needed for "tallscreen" modes
 
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT];
-screeninfo_t screens[NUM_SCREENS];
+__thread screeninfo_t screens[NUM_SCREENS];
 
 /* jff 4/24/98 initialize this at runtime */
-const byte *colrngs[CR_LIMIT];
+__thread const byte *colrngs[CR_LIMIT];
 
-int usegamma;
+__thread int usegamma;
 
 int V_BloodColor(int blood)
 {
@@ -92,8 +92,8 @@ int V_BloodColor(int blood)
 // so it can be considered GPL as used here, rather than BSD. But,
 // I don't care either way. It is effectively dual-licensed I suppose.
 
-unsigned int Col2RGB8[65][256];
-byte RGB32k[32][32][32];
+__thread unsigned int Col2RGB8[65][256];
+__thread byte RGB32k[32][32][32];
 
 #define MAKECOLOR(a) (((a)<<3)|((a)>>2))
 
@@ -319,7 +319,7 @@ void V_Init (void)
 //
 static void FUNC_V_DrawShaded(int scrn, int x, int y, int width, int height, int shade)
 {
-  extern const lighttable_t **colormaps;
+  extern __thread const lighttable_t **colormaps;
   byte* dest;
   int ix, iy;
 
@@ -491,24 +491,24 @@ static void NULL_DrawLine(fline_t* fl, int color) {}
 static void NULL_DrawLineWu(fline_t* fl, int color) {}
 static void NULL_DrawShaded(int scrn, int x, int y, int width, int height, int shade) {}
 
-static video_mode_t current_videomode = VID_MODESW;
+static __thread video_mode_t current_videomode = VID_MODESW;
 
-V_BeginUIDraw_f V_BeginUIDraw = NULL_BeginUIDraw;
-V_EndUIDraw_f V_EndUIDraw = NULL_EndUIDraw;
-V_BeginUIDraw_f V_BeginAutomapDraw = NULL_BeginAutomapDraw;
-V_EndUIDraw_f V_EndAutomapDraw = NULL_EndAutomapDraw;
-V_CopyRect_f V_CopyRect = NULL_CopyRect;
-V_FillRect_f V_FillRect = NULL_FillRect;
-V_DrawNumPatch_f V_DrawNumPatch = NULL_DrawNumPatch;
-V_DrawNumPatchPrecise_f V_DrawNumPatchPrecise = NULL_DrawNumPatchPrecise;
-V_FillFlat_f V_FillFlat = NULL_FillFlat;
-V_FillPatch_f V_FillPatch = NULL_FillPatch;
-V_DrawBackground_f V_DrawBackground = NULL_DrawBackground;
-V_PlotPixel_f V_PlotPixel = NULL_PlotPixel;
-V_PlotPixelWu_f V_PlotPixelWu = NULL_PlotPixelWu;
-V_DrawLine_f V_DrawLine = NULL_DrawLine;
-V_DrawLineWu_f V_DrawLineWu = NULL_DrawLineWu;
-V_DrawShaded_f V_DrawShaded = NULL_DrawShaded;
+__thread V_BeginUIDraw_f V_BeginUIDraw = NULL_BeginUIDraw;
+__thread V_EndUIDraw_f V_EndUIDraw = NULL_EndUIDraw;
+__thread V_BeginUIDraw_f V_BeginAutomapDraw = NULL_BeginAutomapDraw;
+__thread V_EndUIDraw_f V_EndAutomapDraw = NULL_EndAutomapDraw;
+__thread V_CopyRect_f V_CopyRect = NULL_CopyRect;
+__thread V_FillRect_f V_FillRect = NULL_FillRect;
+__thread V_DrawNumPatch_f V_DrawNumPatch = NULL_DrawNumPatch;
+__thread V_DrawNumPatchPrecise_f V_DrawNumPatchPrecise = NULL_DrawNumPatchPrecise;
+__thread V_FillFlat_f V_FillFlat = NULL_FillFlat;
+__thread V_FillPatch_f V_FillPatch = NULL_FillPatch;
+__thread V_DrawBackground_f V_DrawBackground = NULL_DrawBackground;
+__thread V_PlotPixel_f V_PlotPixel = NULL_PlotPixel;
+__thread V_PlotPixelWu_f V_PlotPixelWu = NULL_PlotPixelWu;
+__thread V_DrawLine_f V_DrawLine = NULL_DrawLine;
+__thread V_DrawLineWu_f V_DrawLineWu = NULL_DrawLineWu;
+__thread V_DrawShaded_f V_DrawShaded = NULL_DrawShaded;
 
 //
 // V_InitMode

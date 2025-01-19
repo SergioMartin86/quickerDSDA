@@ -74,7 +74,7 @@ dboolean P_SetMobjState(mobj_t* mobj,statenum_t state)
 
   // killough 4/9/98: remember states seen, to detect cycles:
 
-  extern statenum_t* seenstate_tab;           // fast transition table
+  extern __thread statenum_t* seenstate_tab;           // fast transition table
   statenum_t *seenstate;                      // pointer to table
   static int recursion;                       // detects recursion
   statenum_t i;                               // initial state

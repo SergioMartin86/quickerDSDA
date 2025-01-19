@@ -65,8 +65,8 @@ typedef struct
   texpatch_t patches[1]; // back-to-front into the cached texture.
 } texture_t;
 
-extern int numtextures;
-extern texture_t **textures;
+extern __thread int numtextures;
+extern __thread texture_t **textures;
 
 
 // I/O, setting up the stuff.

@@ -61,90 +61,83 @@
 // e6y
 // Now they are variables. Depends from render_doom_lightmaps variable.
 // Unify colour maping logic by cph is removed, because of bugs.
-int LIGHTLEVELS   = 32;
-int LIGHTSEGSHIFT = 3;
-int LIGHTBRIGHT   = 2;
-
-int r_frame_count;
+__thread int LIGHTLEVELS   = 32;
+__thread int LIGHTSEGSHIFT = 3;
+__thread int LIGHTBRIGHT   = 2;
+__thread int r_frame_count;
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW 2048
 
 #define HEXEN_PI 3.141592657
 
-int validcount = 1;         // increment every time a check is made
-int validcount2 = 1;
-const lighttable_t *fixedcolormap;
-int      centerx, centery;
-// e6y: wide-res
-int wide_centerx;
+__thread int validcount = 1;         // increment every time a check is made
+__thread int validcount2 = 1;
+__thread const lighttable_t *fixedcolormap;
+__thread int      centerx, centery;
+__thread int wide_centerx;
 
-fixed_t  focallength;
-fixed_t  focallengthy;
-fixed_t  globaluclip, globaldclip;
-fixed_t  centerxfrac, centeryfrac;
-fixed_t  yaspectmul;
-fixed_t  viewheightfrac; //e6y: for correct cliping of things
-fixed_t  projection;
-// proff 11/06/98: Added for high-res
-fixed_t  projectiony;
-fixed_t  skyiscale;
-fixed_t  viewx, viewy, viewz;
-angle_t  viewangle;
-fixed_t  viewcos, viewsin;
-fixed_t  viewtancos, viewtansin;
-player_t *viewplayer;
-// e6y: Added for more precise flats drawing
-fixed_t viewfocratio;
+__thread fixed_t  focallength;
+__thread fixed_t  focallengthy;
+__thread fixed_t  globaluclip, globaldclip;
+__thread fixed_t  centerxfrac, centeryfrac;
+__thread fixed_t  yaspectmul;
+__thread fixed_t  viewheightfrac; //e6y: for correct cliping of things
+__thread fixed_t  projection;
+__thread fixed_t  projectiony;
+__thread fixed_t  skyiscale;
+__thread fixed_t  viewx, viewy, viewz;
+__thread angle_t  viewangle;
+__thread fixed_t  viewcos, viewsin;
+__thread fixed_t  viewtancos, viewtansin;
+__thread player_t *viewplayer;
+__thread fixed_t viewfocratio;
+__thread int r_nearclip = 5;
+__thread int FieldOfView;
+__thread int viewport[4];
+__thread float modelMatrix[16];
+__thread float projMatrix[16];
 
-int r_nearclip = 5;
-
-int FieldOfView;
-int viewport[4];
-float modelMatrix[16];
-float projMatrix[16];
-
-extern const lighttable_t **walllights;
+extern __thread const lighttable_t **walllights;
 
 //
 // precalculated math tables
 //
 
-angle_t clipangle;
+__thread angle_t clipangle;
 
 // The viewangletox[viewangle + FINEANGLES/4] lookup
 // maps the visible view angles to screen X coordinates,
 // flattening the arc to a flat projection plane.
 // There will be many angles mapped to the same X.
 
-int viewangletox[FINEANGLES/2];
+__thread int viewangletox[FINEANGLES/2];
 
 // The xtoviewangleangle[] table maps a screen pixel
 // to the lowest viewangle that maps back to x ranges
 // from clipangle to -clipangle.
 
 // e6y: resolution limitation is removed
-angle_t *xtoviewangle;   // killough 2/8/98
+__thread angle_t *xtoviewangle;   // killough 2/8/98
 
 // killough 3/20/98: Support dynamic colormaps, e.g. deep water
 // killough 4/4/98: support dynamic number of them as well
 
-int numcolormaps;
-const lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
-const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
-const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
-const lighttable_t *(*zlight)[MAXLIGHTZ];
-const lighttable_t *fullcolormap;
-const lighttable_t **colormaps;
+__thread int numcolormaps;
+const __thread lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
+const __thread lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
+const __thread lighttable_t *(*scalelight)[MAXLIGHTSCALE];
+const __thread lighttable_t *(*zlight)[MAXLIGHTZ];
+const __thread lighttable_t *fullcolormap;
+const __thread lighttable_t **colormaps;
 
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
 //e6y: for Boom colormaps in OpenGL mode
-dboolean use_boom_cm;
-int boom_cm;         // current colormap
-int frame_fixedcolormap = 0;
-
-int extralight;                           // bumped light from gun blasts
+__thread dboolean use_boom_cm;
+__thread int boom_cm;         // current colormap
+__thread int frame_fixedcolormap = 0;
+__thread int extralight;                           // bumped light from gun blasts
 
 //
 // R_PointOnSide
