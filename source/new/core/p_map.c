@@ -2937,7 +2937,7 @@ void P_MapEnd(void) {
 	tmthing = NULL;
 }
 
-mobj_t *onmobj; // generic global onmobj...used for landing on pods/players
+__thread mobj_t *onmobj; // generic global onmobj...used for landing on pods/players
 
 dboolean P_TestMobjLocation(mobj_t * mobj)
 {

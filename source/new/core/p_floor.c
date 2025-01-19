@@ -1142,24 +1142,23 @@ int EV_DoFloorAndCeiling(line_t * line, byte * args, dboolean raise)
 #define STAIR_SECTOR_TYPE       26
 #define STAIR_QUEUE_SIZE        32
 
-struct
+__thread struct
 {
     sector_t *sector;
     int type;
     int height;
 } StairQueue[STAIR_QUEUE_SIZE];
 
-static int QueueHead;
-static int QueueTail;
-
-static int StepDelta;
-static int Direction;
-static int Speed;
-static int Texture;
-static int StartDelay;
-static int StartDelayDelta;
-static int TextureChange;
-static int StartHeight;
+static __thread int QueueHead;
+static __thread int QueueTail;
+static __thread int StepDelta;
+static __thread int Direction;
+static __thread int Speed;
+static __thread int Texture;
+static __thread int StartDelay;
+static __thread int StartDelayDelta;
+static __thread int TextureChange;
+static __thread int StartHeight;
 
 static void QueueStairSector(sector_t * sec, int type, int height)
 {

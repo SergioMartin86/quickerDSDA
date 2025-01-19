@@ -192,7 +192,7 @@ PUREFUNC int R_ZDoomPointOnSide(fixed_t x, fixed_t y, const node_t *node)
   return (long long) y * node->dx >= (long long) x * node->dy;
 }
 
-int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
+__thread int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
 
 // killough 5/2/98: reformatted
 
@@ -240,7 +240,7 @@ PUREFUNC int R_ZDoomPointOnSegSide(fixed_t x, fixed_t y, const seg_t *line)
   return (long long) y * ldx >= (long long) x * ldy;
 }
 
-int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
+__thread int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
 
 //
 // R_PointToAngle

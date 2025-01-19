@@ -518,8 +518,8 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   }
 
   {
-    extern dboolean boom_weapon_state_injection;
-    static dboolean done_autoswitch = false;
+    extern __thread dboolean boom_weapon_state_injection;
+    static __thread dboolean done_autoswitch = false;
 
     if (!players[consoleplayer].attackdown)
     {

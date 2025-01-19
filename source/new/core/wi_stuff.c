@@ -476,9 +476,9 @@ static void WI_DrawString(int cx, int cy, const char* ch)
 // Args:    none
 // Returns: void
 //
-const char *lf_levelname;
-const char *lf_levelpic;
-const char *lf_author;
+__thread const char *lf_levelname;
+__thread const char *lf_levelpic;
+__thread const char *lf_author;
 
 void WI_drawLF(void)
 {
@@ -491,9 +491,9 @@ void WI_drawLF(void)
 // Args:    none
 // Returns: void
 //
-const char *el_levelname;
-const char *el_levelpic;
-const char *el_author;
+__thread const char *el_levelname;
+__thread const char *el_levelpic;
+__thread const char *el_author;
 
 void WI_drawEL(void)
 {
@@ -829,7 +829,7 @@ void WI_updateNoState(void)
     G_WorldDone();
 }
 
-static dboolean    snl_pointeron = false;
+static __thread dboolean    snl_pointeron = false;
 
 
 // ====================================================================
@@ -1178,12 +1178,12 @@ void WI_drawDeathmatchStats(void)
 // Note: The term "Netgame" means a coop game
 //
 
-static int *cnt_kills;
-static int *cnt_items;
-static int *cnt_secret;
-static int *cnt_frags;
-static int    dofrags;
-static int    ng_state;
+static __thread int *cnt_kills;
+static __thread int *cnt_items;
+static __thread int *cnt_secret;
+static __thread int *cnt_frags;
+static __thread int    dofrags;
+static __thread int    ng_state;
 
 // ====================================================================
 // CPhipps - WI_endNetgameStats
@@ -1421,7 +1421,7 @@ void WI_initStats(void)
 void WI_updateStats(void)
 {
   //e6y
-  static dboolean play_early_explosion = true;
+  static __thread  dboolean play_early_explosion = true;
 
   WI_updateAnimatedBack();
 

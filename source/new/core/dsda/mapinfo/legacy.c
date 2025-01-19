@@ -569,9 +569,9 @@ int dsda_LegacyBorderTexture(const char** border_texture) {
 }
 
 int dsda_LegacyPrepareEntering(void) {
-  extern const char *el_levelname;
-  extern const char *el_levelpic;
-  extern const char *el_author;
+  extern __thread const char *el_levelname;
+  extern __thread const char *el_levelpic;
+  extern __thread const char *el_author;
 
   el_levelname = NULL;
   el_levelpic = NULL;
@@ -581,9 +581,9 @@ int dsda_LegacyPrepareEntering(void) {
 }
 
 int dsda_LegacyPrepareFinished(void) {
-  extern const char *lf_levelname;
-  extern const char *lf_levelpic;
-  extern const char *lf_author;
+  extern __thread const char *lf_levelname;
+  extern __thread const char *lf_levelpic;
+  extern __thread const char *lf_author;
 
   lf_levelname = NULL;
   lf_levelpic = NULL;

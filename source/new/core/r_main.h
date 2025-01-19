@@ -121,11 +121,11 @@ extern __thread const lighttable_t *fixedcolormap;
 
 PUREFUNC int R_CompatiblePointOnSide(fixed_t x, fixed_t y, const node_t *node);
 PUREFUNC int R_ZDoomPointOnSide(fixed_t x, fixed_t y, const node_t *node);
-extern int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
+extern __thread int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
 
 PUREFUNC int R_CompatiblePointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
 PUREFUNC int R_ZDoomPointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
-extern int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
+extern __thread int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
 
 angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x, fixed_t y);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);

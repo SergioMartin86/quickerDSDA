@@ -59,8 +59,8 @@ void P_UnArchiveMap(void);
 void P_ArchiveThinkers(void);
 void P_UnArchiveThinkers(void);
 
-extern byte *save_p;
-extern byte* savebuffer;
+extern __thread byte *save_p;
+extern __thread byte* savebuffer;
 
 void CheckSaveGame(size_t size);
 void P_InitSaveBuffer(void);

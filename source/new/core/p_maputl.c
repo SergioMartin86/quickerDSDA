@@ -85,7 +85,7 @@ int PUREFUNC P_ZDoomPointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
     ((long long) y - line->v1->y) * line->dx >= ((long long) x - line->v1->x) * line->dy;
 }
 
-int (*P_PointOnLineSide)(fixed_t x, fixed_t y, const line_t *line);
+__thread int (*P_PointOnLineSide)(fixed_t x, fixed_t y, const line_t *line);
 
 //
 // P_BoxOnLineSide
@@ -143,7 +143,7 @@ int PUREFUNC P_ZDoomPointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *li
     (long long) y * line->dx >= (long long) x * line->dy;
 }
 
-int (*P_PointOnDivlineSide)(fixed_t x, fixed_t y, const divline_t *line);
+__thread int (*P_PointOnDivlineSide)(fixed_t x, fixed_t y, const divline_t *line);
 
 //
 // P_MakeDivline

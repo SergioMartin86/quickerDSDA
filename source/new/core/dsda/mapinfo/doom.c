@@ -657,9 +657,9 @@ int dsda_DoomBorderTexture(const char** border_texture) {
 }
 
 int dsda_DoomPrepareEntering(void) {
-  extern const char *el_levelname;
-  extern const char *el_levelpic;
-  extern const char *el_author;
+  extern __thread const char *el_levelname;
+  extern __thread const char *el_levelpic;
+  extern __thread const char *el_author;
 
   if (!next_map)
     return false;
@@ -679,9 +679,9 @@ int dsda_DoomPrepareEntering(void) {
 }
 
 int dsda_DoomPrepareFinished(void) {
-  extern const char *lf_levelname;
-  extern const char *lf_levelpic;
-  extern const char *lf_author;
+  extern __thread const char *lf_levelname;
+  extern __thread const char *lf_levelpic;
+  extern __thread const char *lf_author;
 
   if (!last_map)
     return false;

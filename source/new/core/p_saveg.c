@@ -52,9 +52,9 @@
 
 #define SAVEGAMESIZE 0x20000
 
-byte *save_p;
-byte *savebuffer;
-static int savegamesize;
+__thread byte *save_p;
+__thread byte *savebuffer;
+static __thread int savegamesize;
 
 // Check for overrun and realloc if necessary -- Lee Killough 1/22/98
 void CheckSaveGame(size_t size)
@@ -227,7 +227,7 @@ void P_UnArchiveWorld (void)
 // phares 9/13/98: Moved this code outside of P_ArchiveThinkers so the
 // thinker indices could be used by the code that saves sector info.
 
-static int number_of_thinkers;
+static __thread int number_of_thinkers;
 
 static dboolean P_IsMobjThinker(thinker_t* thinker)
 {

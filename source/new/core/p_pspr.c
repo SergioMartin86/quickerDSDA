@@ -544,7 +544,7 @@ void A_ReFire(player_t *player, pspdef_t *psp)
     }
 }
 
-dboolean boom_weapon_state_injection;
+__thread dboolean boom_weapon_state_injection;
 
 void A_CheckReload(player_t *player, pspdef_t *psp)
 {
