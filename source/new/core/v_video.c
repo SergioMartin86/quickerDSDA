@@ -99,7 +99,7 @@ __thread byte RGB32k[32][32][32];
 
 void V_InitFlexTranTable(void)
 {
-  static int flexTranInit = false;
+  int flexTranInit = false;
 
   if (!flexTranInit)
   {
