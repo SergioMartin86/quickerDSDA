@@ -1983,7 +1983,7 @@ spawnit:
 // P_SpawnPuff
 //
 
-extern fixed_t attackrange;
+extern __thread fixed_t attackrange;
 
 void P_SpawnPuff(fixed_t x,fixed_t y,fixed_t z)
 {

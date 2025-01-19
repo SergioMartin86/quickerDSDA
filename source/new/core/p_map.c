@@ -55,14 +55,14 @@
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
 
-static mobj_t    *tmthing;
-static mobj_t    *tsthing; // hexen
-static fixed_t   tmx;
-static fixed_t   tmy;
-static int pe_x; // Pain Elemental position for Lost Soul checks // phares
-static int pe_y; // Pain Elemental position for Lost Soul checks // phares
-static int ls_x; // Lost Soul position for Lost Soul checks      // phares
-static int ls_y; // Lost Soul position for Lost Soul checks      // phares
+static __thread mobj_t    *tmthing;
+static __thread mobj_t    *tsthing; // hexen
+static __thread fixed_t   tmx;
+static __thread fixed_t   tmy;
+static __thread int pe_x; // Pain Elemental position for Lost Soul checks // phares
+static __thread int pe_y; // Pain Elemental position for Lost Soul checks // phares
+static __thread int ls_x; // Lost Soul position for Lost Soul checks      // phares
+static __thread int ls_y; // Lost Soul position for Lost Soul checks      // phares
 
 //
 // SECTOR HEIGHT CHANGING
@@ -78,51 +78,51 @@ static int ls_y; // Lost Soul position for Lost Soul checks      // phares
 //  to undo the changes.
 //
 
-static int crushchange;
-static dboolean nofit;
+static __thread int crushchange;
+static __thread dboolean nofit;
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
 
-dboolean   floatok;
+__thread dboolean   floatok;
 
 /* killough 11/98: if "felldown" true, object was pushed down ledge */
-dboolean   felldown;
+__thread dboolean   felldown;
 
 // The tm* items are used to hold information globally, usually for
 // line or object intersection checking
 
-fixed_t   tmbbox[4];  // bounding box for line intersection checks
-fixed_t   tmfloorz;   // floor you'd hit if free to fall
-fixed_t   tmceilingz; // ceiling of sector you're in
-fixed_t   tmdropoffz; // dropoff on other side of line you're crossing
+__thread fixed_t   tmbbox[4];  // bounding box for line intersection checks
+__thread fixed_t   tmfloorz;   // floor you'd hit if free to fall
+__thread fixed_t   tmceilingz; // ceiling of sector you're in
+__thread fixed_t   tmdropoffz; // dropoff on other side of line you're crossing
 
 // heretic
-int tmflags;
+__thread int tmflags;
 
 // hexen
-int tmfloorpic;
-mobj_t *BlockingMobj;
+__thread int tmfloorpic;
+__thread mobj_t *BlockingMobj;
 
 // keep track of the line that lowers the ceiling,
 // so missiles don't explode against sky hack walls
 
-line_t        *ceilingline;
-line_t        *blockline;    /* killough 8/11/98: blocking linedef */
-line_t        *floorline;    /* killough 8/1/98: Highest touched floor */
-static int    tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
+__thread line_t        *ceilingline;
+__thread line_t        *blockline;    /* killough 8/11/98: blocking linedef */
+__thread line_t        *floorline;    /* killough 8/1/98: Highest touched floor */
+ static __thread int    tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
 
 // keep track of special lines as they are hit,
 // but don't process them until the move is proven valid
 
 // 1/11/98 killough: removed limit on special lines crossed
-line_t **spechit;                // new code -- killough
-static int spechit_max;          // killough
+__thread line_t **spechit;                // new code -- killough
+static __thread int spechit_max;          // killough
 
-int numspechit;
+__thread int numspechit;
 
 // Temporary holder for thing_sectorlist threads
-msecnode_t* sector_list = NULL;                             // phares 3/16/98
+__thread msecnode_t* sector_list = NULL;                             // phares 3/16/98
 
 //
 // TELEPORT MOVE
@@ -132,7 +132,7 @@ msecnode_t* sector_list = NULL;                             // phares 3/16/98
 // PIT_StompThing
 //
 
-static dboolean telefrag;   /* killough 8/9/98: whether to telefrag at exit */
+static __thread dboolean telefrag;   /* killough 8/9/98: whether to telefrag at exit */
 
 dboolean PIT_StompThing (mobj_t* thing)
 {
@@ -1804,26 +1804,26 @@ void P_SlideMove(mobj_t *mo)
 //
 // P_LineAttack
 //
-mobj_t*   linetarget; // who got hit (or NULL)
-mobj_t*   crosshair_target;
-static mobj_t*   shootthing;
+__thread mobj_t*    linetarget; // who got hit (or NULL)
+__thread mobj_t*   crosshair_target;
+static __thread mobj_t*   shootthing;
 
 /* killough 8/2/98: for more intelligent autoaiming */
-static uint64_t aim_flags_mask;
+static __thread uint64_t aim_flags_mask;
 
 // Height if not aiming up or down
-fixed_t   shootz;
+__thread fixed_t   shootz;
 
-int       la_damage;
-fixed_t   attackrange;
+__thread int       la_damage;
+__thread fixed_t   attackrange;
 
-static fixed_t   aimslope;
+static __thread fixed_t   aimslope;
 
 // slopes to top and bottom of target
 // killough 4/20/98: make static instead of using ones in p_sight.c
 
-static fixed_t  topslope;
-static fixed_t  bottomslope;
+static __thread fixed_t  topslope;
+static __thread fixed_t  bottomslope;
 
 
 //
@@ -3139,23 +3139,4 @@ void P_AppendSpecHit(line_t * ld)
     spechit = Z_Realloc(spechit,sizeof *spechit*spechit_max); // killough
   }
   spechit[numspechit++] = ld;
-  // e6y: Spechits overrun emulation code
-  if (numspechit > 8 && demo_compatibility)
-  {
-    static spechit_overrun_param_t spechit_overrun_param = {
-      NULL,          // line_t *line;
-
-      &spechit,      // line_t **spechit;
-      &numspechit,   // int *numspechit;
-
-      tmbbox,        // fixed_t *tmbbox[4];
-      &tmfloorz,     // fixed_t *tmfloorz;
-      &tmceilingz,   // fixed_t *tmceilingz;
-
-      &crushchange,  // int *crushchange;
-      &nofit,        // dboolean *nofit;
-    };
-    spechit_overrun_param.line = ld;
-    SpechitOverrun(&spechit_overrun_param);
-  }
 }

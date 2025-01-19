@@ -345,8 +345,8 @@ static fixed_t xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000};
 static fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
 
 // 1/11/98 killough: Limit removed on special lines crossed
-extern  line_t **spechit;          // New code -- killough
-extern  int    numspechit;
+extern  __thread line_t **spechit;          // New code -- killough
+extern  __thread int    numspechit;
 
 static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
 {
@@ -2285,39 +2285,6 @@ void A_Scream(mobj_t *actor)
 
 }
 
-void A_XScream(mobj_t *actor)
-{
-}
-
-void A_SkullPop(mobj_t *actor)
-{
-  mobj_t *mo;
-  player_t *player;
-
-  actor->flags &= ~MF_SOLID;
-  mo = P_SpawnMobj(actor->x, actor->y, actor->z + 48 * FRACUNIT, g_skullpop_mt);
-  //mo->target = actor;
-  mo->momx = P_SubRandom() << 9;
-  mo->momy = P_SubRandom() << 9;
-  mo->momz = FRACUNIT * 2 + (P_Random(pr_heretic) << 6);
-  // Attach player mobj to bloody skull
-  player = actor->player;
-  actor->player = NULL;
-  mo->player = player;
-  mo->health = actor->health;
-  mo->angle = actor->angle;
-  mo->pitch = 0;
-  if (player)
-  {
-    player->mo = mo;
-    player->lookdir = 0;
-    player->damagecount = 32;
-  }
-}
-
-void A_Pain(mobj_t *actor)
-{
-}
 
 void A_Fall(mobj_t *actor)
 {

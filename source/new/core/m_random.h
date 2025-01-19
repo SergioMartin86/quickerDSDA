@@ -138,9 +138,9 @@ typedef struct {
   int rndindex, prndindex;             // For compatibility support
 } rng_t;
 
-extern rng_t rng;                      // The rng's state
+extern __thread rng_t rng;                      // The rng's state
 
-extern unsigned int rngseed;           // The starting seed (not part of state)
+extern __thread unsigned int rngseed;           // The starting seed (not part of state)
 
 // As M_Random, but used by the play simulation.
 int P_Random(pr_class_t);
@@ -155,10 +155,5 @@ void M_ClearRandom(void);
 int P_RandomHitscanAngle(pr_class_t pr_class, fixed_t spread);
 int P_RandomHitscanSlope(pr_class_t pr_class, fixed_t spread);
 
-// heretic
-
-#define HITDICE(a) ((1+(P_Random(pr_heretic)&7))*a)
-
-int P_SubRandom (void);
 
 #endif

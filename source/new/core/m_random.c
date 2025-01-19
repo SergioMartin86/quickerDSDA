@@ -90,9 +90,9 @@ static const unsigned char hexen_rndtable[256] = {
 
 static const unsigned char *rndtable = doom_rndtable;
 
-rng_t rng;     // the random number state
+__thread rng_t rng;     // the random number state
 
-unsigned int rngseed = 1993;   // killough 3/26/98: The seed
+__thread unsigned int rngseed = 1993;   // killough 3/26/98: The seed
 
 int (P_Random)(pr_class_t pr_class)
 {
@@ -199,17 +199,3 @@ int P_RandomHitscanSlope(pr_class_t pr_class, fixed_t spread)
     return finetangent[(ANG90 - angle) >> ANGLETOFINESHIFT];
 }
 
-// heretic
-
-int P_SubRandom (void)
-{
-    int r = P_Random(pr_heretic);
-    return r - P_Random(pr_heretic);
-}
-
-// hexen
-
-void P_UseHexenRNG(void)
-{
-  rndtable = hexen_rndtable;
-}

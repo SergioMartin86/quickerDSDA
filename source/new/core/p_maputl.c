@@ -265,7 +265,7 @@ void P_LineOpening_3dMidtex(const line_t *line, const mobj_t *actor)
 
 void P_LineOpening(const line_t *linedef, const mobj_t *actor)
 {
-  extern int tmfloorpic;
+  extern __thread int tmfloorpic;
 
   if (linedef->sidenum[1] == NO_INDEX)      // single sided line
   {

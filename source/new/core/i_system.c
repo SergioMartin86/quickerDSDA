@@ -172,99 +172,6 @@ int I_Filelength(int handle)
   return fileinfo.st_size;
 }
 
-// Return the path where the executable lies -- Lee Killough
-// proff_fs 2002-07-04 - moved to i_system
-#ifdef _WIN32
-
-void I_SwitchToWindow(HWND hwnd)
-{
-  typedef BOOL (WINAPI *TSwitchToThisWindow) (HWND wnd, BOOL restore);
-  static TSwitchToThisWindow SwitchToThisWindow = NULL;
-
-  if (!SwitchToThisWindow)
-    SwitchToThisWindow = (TSwitchToThisWindow)GetProcAddress(GetModuleHandle("user32.dll"), "SwitchToThisWindow");
-
-  if (SwitchToThisWindow)
-  {
-    HWND hwndLastActive = GetLastActivePopup(hwnd);
-
-    if (IsWindowVisible(hwndLastActive))
-      hwnd = hwndLastActive;
-
-    SetForegroundWindow(hwnd);
-    Sleep(100);
-    SwitchToThisWindow(hwnd, TRUE);
-  }
-}
-
-const char *I_ConfigDir(void)
-{
-  return I_ExeDir();
-}
-
-const char *I_ExeDir(void)
-{
-  extern char **dsda_argv;
-
-  static char *base;
-  if (!base)        // cache multiple requests
-    {
-      size_t len = strlen(*dsda_argv);
-      char *p = (base = (char*)Z_Malloc(len+1)) + len - 1;
-      strcpy(base,*dsda_argv);
-      while (p > base && *p!='/' && *p!='\\')
-        *p--=0;
-      if (*p=='/' || *p=='\\')
-        *p--=0;
-      if (strlen(base) < 2 || !M_WriteAccess(base))
-      {
-        Z_Free(base);
-        base = (char*)Z_Malloc(1024);
-        if (!M_getcwd(base, 1024) || !M_WriteAccess(base))
-          strcpy(base, ".");
-      }
-    }
-  return base;
-}
-
-const char* I_GetTempDir(void)
-{
-  static const char* tmp_path;
-
-  if (!tmp_path)
-  {
-    wchar_t wpath[PATH_MAX];
-    DWORD result;
-
-    result = GetTempPathW(PATH_MAX, wpath);
-
-    if (result == 0 || result > MAX_PATH)
-      I_Error("I_GetTempDir: GetTempPathW failed");
-    else
-      tmp_path = ConvertWideToUtf8(wpath);
-  }
-
-  return tmp_path;
-}
-
-#elif defined(AMIGA)
-
-const char *I_ConfigDir(void)
-{
-  return "PROGDIR:";
-}
-
-const char *I_ExeDir(void)
-{
-  return "PROGDIR:";
-}
-
-const char* I_GetTempDir(void)
-{
-  return "PROGDIR:";
-}
-
-#else
 
 const char *I_ConfigDir(void)
 {
@@ -340,8 +247,6 @@ const char *I_GetTempDir(void)
 {
   return "/tmp";
 }
-
-#endif
 
 /*
  * HasTrailingSlash
