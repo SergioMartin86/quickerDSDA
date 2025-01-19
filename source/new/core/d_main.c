@@ -1326,3 +1326,5 @@ int headlessMain(int argc, char **argv)
   D_DoomMainSetup();
   return 0;
 }
+
+uint32_t* headlessGetPallette() { return (uint32_t*) NULL; }

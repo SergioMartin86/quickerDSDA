@@ -232,7 +232,7 @@ typedef struct {
   int value;
 } dsda_parsed_option_t;
 
-static dsda_parsed_option_t parsed_option_list[arrlen(option_list)];
+static __thread dsda_parsed_option_t parsed_option_list[arrlen(option_list)];
 
 #define OPTIONS_LINE_LENGTH 80
 

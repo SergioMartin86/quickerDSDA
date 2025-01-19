@@ -20,10 +20,10 @@
 
 #include "mouse.h"
 
-static int quickstart_cache_tics;
-static int quickstart_queued;
-static signed short angleturn_cache[35];
-static unsigned int angleturn_cache_index;
+static __thread int quickstart_cache_tics;
+static __thread int quickstart_queued;
+static __thread signed short angleturn_cache[35];
+static __thread unsigned int angleturn_cache_index;
 
 void dsda_InitQuickstartCache(void) {
   quickstart_cache_tics = dsda_IntConfig(dsda_config_quickstart_cache_tics);
