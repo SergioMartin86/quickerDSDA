@@ -100,7 +100,6 @@ void P_SetYellowMessage(player_t * player, const char *message, dboolean ultmsg)
 void P_FallingDamage(player_t * player);
 void P_PoisonPlayer(player_t * player, mobj_t * poisoner, int poison);
 void P_PoisonDamage(player_t * player, mobj_t * source, int damage, dboolean playPainSound);
-dboolean P_GiveMana(player_t * player, manatype_t mana, int count);
 dboolean Hexen_P_GiveArmor(player_t *player, armortype_t armortype, int amount);
 dboolean P_MorphPlayer(player_t * player);
 

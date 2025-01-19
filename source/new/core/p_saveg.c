@@ -164,7 +164,6 @@ void P_ArchiveWorld (void)
     P_SAVE_X(sec->lightlevel);
     P_SAVE_X(sec->special);
     P_SAVE_X(sec->tag);
-    P_SAVE_X(sec->seqType);
     P_SAVE_X(sec->flags);
   }
 
@@ -200,7 +199,6 @@ void P_UnArchiveWorld (void)
     P_LOAD_X(sec->lightlevel);
     P_LOAD_X(sec->special);
     P_LOAD_X(sec->tag);
-    P_LOAD_X(sec->seqType);
     P_LOAD_X(sec->flags);
 
     sec->ceilingdata = 0; //jff 2/22/98 now three thinker fields, not two

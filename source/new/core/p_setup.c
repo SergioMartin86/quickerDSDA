@@ -742,9 +742,6 @@ static void P_InitializeSectorDefaults(sector_t *ss)
   ss->cachedheight = 0;
   ss->scaleindex = 0;
 
-  // hexen
-  ss->seqType = SEQTYPE_STONE;    // default seqType
-
   // killough 8/28/98: initialize all sectors to normal friction
   ss->friction = ORIG_FRICTION;
   ss->movefactor = ORIG_FRICTION_FACTOR;

@@ -196,9 +196,6 @@ typedef struct sector_s
   int INTERP_CeilingPanning;
   int fakegroup[2];
 
-  // hexen
-  seqtype_t seqType;          // stone, metal, heavy, etc...
-
   // zdoom
   fixed_t gravity;
   damage_t damage;
