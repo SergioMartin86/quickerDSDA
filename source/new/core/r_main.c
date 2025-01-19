@@ -55,7 +55,6 @@
 #include "dsda/configuration.h"
 #include "dsda/map_format.h"
 #include "dsda/mapinfo.h"
-#include "dsda/render_stats.h"
 #include "dsda/settings.h"
 #include "dsda/signal_context.h"
 #include "dsda/stretch.h"
