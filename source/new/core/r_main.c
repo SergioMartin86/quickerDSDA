@@ -589,17 +589,6 @@ void R_SetupFreelook(void)
 
 void R_SetupMatrix(void)
 {
-  float fovy, aspect, znear;
-  int r_nearclip = 5;
-
-  R_SetupViewport();
-
-  fovy = gl_render_fovy;
-  aspect = gl_render_ratio;
-  znear = (float)r_nearclip / 100.0f;
-
-  R_SetupPerspective(fovy, aspect, znear);
-  R_BuildModelViewMatrix();
 }
 
 void R_ResetColorMap(void)

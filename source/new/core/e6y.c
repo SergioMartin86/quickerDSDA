@@ -68,54 +68,26 @@
 #include "dsda/stretch.h"
 #include <math.h>
 
-dboolean wasWiped = false;
+__thread dboolean wasWiped = false;
 
-int secretfound;
-int demo_playerscount;
-int demo_tics_count;
-char demo_len_st[80];
+__thread int secretfound;
+__thread int demo_playerscount;
+__thread int demo_tics_count;
+__thread char demo_len_st[80];
 
-int mouse_handler;
-int gl_render_fov = 90;
+__thread int mouse_handler;
+__thread int gl_render_fov = 90;
 
-camera_t walkcamera;
+__thread camera_t walkcamera;
 
-angle_t viewpitch;
-float skyscale;
-float screen_skybox_zplane;
-float tan_pitch;
-float skyUpAngle;
-float skyUpShift;
-float skyXShift;
-float skyYShift;
-
-#ifdef _WIN32
-const char* WINError(void)
-{
-  static char *WinEBuff = NULL;
-  DWORD err = GetLastError();
-  char *ch;
-
-  if (WinEBuff)
-  {
-    LocalFree(WinEBuff);
-  }
-
-  if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-    NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-    (LPTSTR) &WinEBuff, 0, NULL) == 0)
-  {
-    return "Unknown error";
-  }
-
-  if ((ch = strchr(WinEBuff, '\n')) != 0)
-    *ch = 0;
-  if ((ch = strchr(WinEBuff, '\r')) != 0)
-    *ch = 0;
-
-  return WinEBuff;
-}
-#endif
+__thread angle_t viewpitch;
+__thread float skyscale;
+__thread float screen_skybox_zplane;
+__thread float tan_pitch;
+__thread float skyUpAngle;
+__thread float skyUpShift;
+__thread float skyXShift;
+__thread float skyYShift;
 
 //--------------------------------------------------
 
@@ -139,7 +111,7 @@ void ParamsMatchingCheck()
     I_Error("Params are not matching: Can not being played back and recorded at the same time.");
 }
 
-prboom_comp_t prboom_comp[PC_MAX] = {
+__thread  prboom_comp_t prboom_comp[PC_MAX] = {
   {0xffffffff, 0x02020615, 0, dsda_arg_force_monster_avoid_hazards},
   {0x00000000, 0x02040601, 0, dsda_arg_force_remove_slime_trails},
   {0x02020200, 0x02040801, 0, dsda_arg_force_no_dropoff},
@@ -276,11 +248,6 @@ void CheckPitch(signed int *pitch)
   (*pitch) <<= 16;
 }
 
-float gl_render_ratio;
-float gl_render_fovratio;
-float gl_render_fovy = FOV90;
-float gl_render_multiplier;
-
 void M_ChangeAspectRatio(void)
 {
   M_ChangeFOV();
@@ -295,53 +262,9 @@ void M_ChangeStretch(void)
 
 void M_ChangeFOV(void)
 {
-  float f1, f2;
-  dsda_arg_t* arg;
-  int gl_render_aspect_width, gl_render_aspect_height;
-
-  arg = dsda_Arg(dsda_arg_aspect);
-  if (
-    arg->found &&
-    sscanf(arg->value.v_string, "%dx%d", &gl_render_aspect_width, &gl_render_aspect_height) == 2
-  )
-  {
-    SetRatio(SCREENWIDTH, SCREENHEIGHT);
-    gl_render_fovratio = (float)gl_render_aspect_width / (float)gl_render_aspect_height;
-    gl_render_ratio = RMUL * gl_render_fovratio;
-    gl_render_multiplier = 64.0f / gl_render_fovratio / RMUL;
-  }
-  else
-  {
-    SetRatio(SCREENWIDTH, SCREENHEIGHT);
-    gl_render_ratio = gl_ratio;
-    gl_render_multiplier = (float)ratio_multiplier;
-    if (!tallscreen)
-    {
-      gl_render_fovratio = 1.6f;
-    }
-    else
-    {
-      gl_render_fovratio = gl_render_ratio;
-    }
-  }
-
-  gl_render_fovy = (float)(2 * RAD2DEG(atan(tan(DEG2RAD(gl_render_fov) / 2) / gl_render_fovratio)));
-
-  screen_skybox_zplane = 320.0f/2.0f/(float)tan(DEG2RAD(gl_render_fov/2));
-
-  f1 = (float)(320.0f / 200.0f * (float)gl_render_fov / (float)FOV90 - 0.2f);
-  f2 = (float)tan(DEG2RAD(gl_render_fovy)/2.0f);
-  if (f1-f2<1)
-    skyUpAngle = (float)-RAD2DEG(asin(f1-f2));
-  else
-    skyUpAngle = -90.0f;
-
-  skyUpShift = (float)tan(DEG2RAD(gl_render_fovy)/2.0f);
-
-  skyscale = 1.0f / (float)tan(DEG2RAD(gl_render_fov / 2));
 }
 
-float viewPitch;
+float __thread viewPitch;
 
 int StepwiseSum(int value, int direction, int minval, int maxval, int defval)
 {
@@ -401,11 +324,11 @@ int I_MessageBox(const char* text, unsigned int type)
   return PRB_IDCANCEL;
 }
 
-int stats_level;
-int stroller;
-int numlevels = 0;
-int levels_max = 0;
-timetable_t *stats = NULL;
+__thread int stats_level;
+__thread int stroller;
+__thread int numlevels = 0;
+__thread int levels_max = 0;
+__thread timetable_t *stats = NULL;
 
 void e6y_G_DoCompleted(void)
 {
@@ -424,8 +347,8 @@ void e6y_WriteStats(void)
 
 //--------------------------------------------------
 
-static double mouse_accelfactor;
-static double analog_accelfactor;
+static __thread double mouse_accelfactor;
+static __thread double analog_accelfactor;
 
 void AccelChanging(void)
 {
@@ -441,7 +364,7 @@ int AccelerateAnalog(float val)
   return 0;
 }
 
-int mlooky = 0;
+__thread int mlooky = 0;
 
 void e6y_G_Compatibility(void)
 {
@@ -482,9 +405,9 @@ const char* PathFindFileName(const char* pPath)
   return pT;
 }
 
-int levelstarttic;
+__thread int levelstarttic;
 
-int force_singletics_to = 0;
+__thread int force_singletics_to = 0;
 
 int HU_DrawDemoProgress(int force)
 {

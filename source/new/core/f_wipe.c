@@ -58,12 +58,12 @@
 #define SRC_SCR 2
 #define DEST_SCR 3
 
-static screeninfo_t wipe_scr_start;
-static screeninfo_t wipe_scr_end;
-static screeninfo_t wipe_scr;
+static __thread screeninfo_t wipe_scr_start;
+static __thread screeninfo_t wipe_scr_end;
+static __thread screeninfo_t wipe_scr;
 
 // e6y: resolution limitation is removed
-static int *y_lookup = NULL;
+static __thread int *y_lookup = NULL;
 
 // e6y: resolution limitation is removed
 void R_InitMeltRes(void)
