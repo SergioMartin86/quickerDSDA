@@ -547,29 +547,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   if (players[consoleplayer].mo && players[consoleplayer].mo->pitch && !dsda_MouseLook())
     dsda_QueueExCmdLook(XC_LOOK_RESET);
 
-  if (dsda_AllowFreeLook())
-  {
-    short look;
-
-    look = mlooky;
-
-    if (look)
-    {
-      if (players[consoleplayer].mo && !V_IsOpenGLMode())
-      {
-        int target_look = players[consoleplayer].mo->pitch + (look << 16);
-
-        if (target_look < (int) raven_angle_up_limit)
-          look = (raven_angle_up_limit - players[consoleplayer].mo->pitch) >> 16;
-
-        if (target_look > (int) raven_angle_down_limit)
-          look = (raven_angle_down_limit - players[consoleplayer].mo->pitch) >> 16;
-      }
-
-      dsda_QueueExCmdLook(look);
-    }
-  }
-
   if (dsda_InputActive(dsda_input_fire))
     cmd->buttons |= BT_ATTACK;
 

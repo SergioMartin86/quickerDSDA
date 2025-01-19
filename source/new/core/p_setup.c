@@ -3098,14 +3098,6 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
         I_Error("P_SetupLevel: missing player %d start\n", i+1);
   }
 
-  players[consoleplayer].viewz = players[consoleplayer].mo->z +
-                                 players[consoleplayer].viewheight;
-
-  if (players[consoleplayer].cheats & CF_FLY)
-  {
-    players[consoleplayer].mo->flags |= (MF_NOGRAVITY | MF_FLY);
-  }
-
   // killough 3/26/98: Spawn icon landings:
   if (gamemode == commercial)
     P_SpawnBrainTargets();

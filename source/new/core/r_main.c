@@ -684,11 +684,6 @@ static void R_SetupFrame (player_t *player)
   else
     fixedcolormap = 0;
 
-  R_SetClipPlanes();
-
-  if (V_IsOpenGLMode() || HU_CrosshairEnabled())
-    R_SetupMatrix();
-
   validcount++;
 }
 
