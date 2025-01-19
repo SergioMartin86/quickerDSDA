@@ -313,7 +313,7 @@ const char *I_ConfigDir(void)
 
 const char *I_ExeDir(void)
 {
-  extern char **dsda_argv;
+  extern __thread  char **dsda_argv;
 
   static char *base;
   if (!base)        // cache multiple requests

@@ -26,7 +26,7 @@
 
 #include "map_format.h"
 
-map_format_t map_format;
+__thread map_format_t map_format;
 
 typedef enum {
   door_type_none = -1,

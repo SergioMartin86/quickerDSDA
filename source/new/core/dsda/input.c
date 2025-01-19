@@ -20,8 +20,8 @@
 
 #include "input.h"
 
-int dsda_input_profile;
-static dsda_input_t dsda_input[DSDA_INPUT_PROFILE_COUNT][DSDA_INPUT_IDENTIFIER_COUNT];
+int __thread dsda_input_profile;
+static __thread dsda_input_t dsda_input[DSDA_INPUT_PROFILE_COUNT][DSDA_INPUT_IDENTIFIER_COUNT];
 
 typedef struct
 {
@@ -33,13 +33,13 @@ typedef struct
   int game_deactivated_at;
 } dsda_input_state_t;
 
-static int dsda_input_counter; // +1 for each event
-static int dsda_input_tick_counter; // +1 for each game tick
-static dsda_input_state_t gamekeys[NUMKEYS];
-static dsda_input_state_t mousearray[MAX_MOUSE_BUTTONS + 1];
-static dsda_input_state_t *mousebuttons = &mousearray[1]; // allow [-1]
-static dsda_input_state_t joyarray[MAX_JOY_BUTTONS + 1];
-static dsda_input_state_t *joybuttons = &joyarray[1];    // allow [-1]
+static __thread int dsda_input_counter; // +1 for each event
+static __thread int dsda_input_tick_counter; // +1 for each game tick
+static __thread dsda_input_state_t gamekeys[NUMKEYS];
+static __thread dsda_input_state_t mousearray[MAX_MOUSE_BUTTONS + 1];
+static __thread dsda_input_state_t *mousebuttons; // allow [-1]
+static __thread dsda_input_state_t joyarray[MAX_JOY_BUTTONS + 1];
+static __thread dsda_input_state_t *joybuttons;    // allow [-1]
 
 static void dsda_InputTrackButtons(dsda_input_state_t* buttons, int max, event_t* ev) {
   int i;

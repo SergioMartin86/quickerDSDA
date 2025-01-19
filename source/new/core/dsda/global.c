@@ -44,94 +44,81 @@ extern const demostate_t hexen_demostates[][4];
 
 weaponinfo_t* weaponinfo;
 
-int g_maxplayers = 4;
-int g_viewheight = 41 * FRACUNIT;
-int g_numammo;
-
-int g_mt_player;
-int g_mt_tfog;
-int g_mt_blood;
-int g_skullpop_mt;
-int g_s_bloodyskullx1;
-int g_s_bloodyskullx2;
-int g_s_play_fdth20;
-
-int g_wp_fist;
-int g_wp_chainsaw;
-int g_wp_pistol;
-
-int g_telefog_height;
-int g_thrust_factor;
-int g_fuzzy_aim_shift;
-int g_jump;
-
-int g_s_null;
-
-int g_mt_bloodsplatter;
-int g_bloodsplatter_shift;
-int g_bloodsplatter_weight;
-int g_mons_look_range;
-int g_hide_state;
-int g_lava_type;
-
-int g_mntr_charge_speed;
-int g_mntr_atk1_sfx;
-int g_mntr_decide_range;
-int g_mntr_charge_rng;
-int g_mntr_fire_rng;
-int g_mntr_charge_state;
-int g_mntr_fire_state;
-int g_mntr_charge_puff;
-int g_mntr_atk2_sfx;
-int g_mntr_atk2_dice;
-int g_mntr_atk2_missile;
-int g_mntr_atk3_sfx;
-int g_mntr_atk3_dice;
-int g_mntr_atk3_missile;
-int g_mntr_atk3_state;
-int g_mntr_fire;
-
-int g_arti_health;
-int g_arti_superhealth;
-int g_arti_fly;
-int g_arti_limit;
-
-int g_sfx_sawup;
-int g_sfx_telept;
-int g_sfx_stnmov;
-int g_sfx_stnmov_plats;
-int g_sfx_swtchn;
-int g_sfx_swtchx;
-int g_sfx_dorcls;
-int g_sfx_doropn;
-int g_sfx_dorlnd;
-int g_sfx_pstart;
-int g_sfx_pstop;
-int g_sfx_itemup;
-int g_sfx_pistol;
-int g_sfx_oof;
-int g_sfx_menu;
-int g_sfx_respawn;
-int g_sfx_secret;
-int g_sfx_revive;
-int g_sfx_console;
-
-int g_door_normal;
-int g_door_raise_in_5_mins;
-int g_door_open;
-
-int g_st_height;
-int g_border_offset;
-int g_mf_translucent;
-int g_mf_shadow;
-
-const char* g_menu_flat;
-int g_menu_save_page_size;
-int g_menu_font_spacing;
-
-const char* g_skyflatname;
-
-dboolean hexen = false;
+__thread int g_maxplayers = 4;
+__thread int g_viewheight = 41 * FRACUNIT;
+__thread int g_numammo;
+__thread int g_mt_player;
+__thread int g_mt_tfog;
+__thread int g_mt_blood;
+__thread int g_skullpop_mt;
+__thread int g_s_bloodyskullx1;
+__thread int g_s_bloodyskullx2;
+__thread int g_s_play_fdth20;
+__thread int g_wp_fist;
+__thread int g_wp_chainsaw;
+__thread int g_wp_pistol;
+__thread int g_telefog_height;
+__thread int g_thrust_factor;
+__thread int g_fuzzy_aim_shift;
+__thread int g_jump;
+__thread int g_s_null;
+__thread int g_mt_bloodsplatter;
+__thread int g_bloodsplatter_shift;
+__thread int g_bloodsplatter_weight;
+__thread int g_mons_look_range;
+__thread int g_hide_state;
+__thread int g_lava_type;
+__thread int g_mntr_charge_speed;
+__thread int g_mntr_atk1_sfx;
+__thread int g_mntr_decide_range;
+__thread int g_mntr_charge_rng;
+__thread int g_mntr_fire_rng;
+__thread int g_mntr_charge_state;
+__thread int g_mntr_fire_state;
+__thread int g_mntr_charge_puff;
+__thread int g_mntr_atk2_sfx;
+__thread int g_mntr_atk2_dice;
+__thread int g_mntr_atk2_missile;
+__thread int g_mntr_atk3_sfx;
+__thread int g_mntr_atk3_dice;
+__thread int g_mntr_atk3_missile;
+__thread int g_mntr_atk3_state;
+__thread int g_mntr_fire;
+__thread int g_arti_health;
+__thread int g_arti_superhealth;
+__thread int g_arti_fly;
+__thread int g_arti_limit;
+__thread int g_sfx_sawup;
+__thread int g_sfx_telept;
+__thread int g_sfx_stnmov;
+__thread int g_sfx_stnmov_plats;
+__thread int g_sfx_swtchn;
+__thread int g_sfx_swtchx;
+__thread int g_sfx_dorcls;
+__thread int g_sfx_doropn;
+__thread int g_sfx_dorlnd;
+__thread int g_sfx_pstart;
+__thread int g_sfx_pstop;
+__thread int g_sfx_itemup;
+__thread int g_sfx_pistol;
+__thread int g_sfx_oof;
+__thread int g_sfx_menu;
+__thread int g_sfx_respawn;
+__thread int g_sfx_secret;
+__thread int g_sfx_revive;
+__thread int g_sfx_console;
+__thread int g_door_normal;
+__thread int g_door_raise_in_5_mins;
+__thread int g_door_open;
+__thread int g_st_height;
+__thread int g_border_offset;
+__thread int g_mf_translucent;
+__thread int g_mf_shadow;
+__thread const char* g_menu_flat;
+__thread int g_menu_save_page_size;
+__thread int g_menu_font_spacing;
+__thread const char* g_skyflatname;
+__thread dboolean hexen = false;
 
 static void dsda_InitDoom(void) {
   int i;

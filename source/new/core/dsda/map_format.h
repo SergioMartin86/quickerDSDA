@@ -84,7 +84,7 @@ typedef struct {
   int visibility;
 } map_format_t;
 
-extern map_format_t map_format;
+extern __thread map_format_t map_format;
 
 int dsda_DoorType(int index);
 dboolean dsda_IsExitLine(int index);

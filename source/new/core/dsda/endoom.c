@@ -309,8 +309,8 @@ typedef enum {
   format_utf8,
 } output_format_t;
 
-static byte* endoom;
-static output_format_t output_format;
+static __thread byte* endoom;
+static __thread output_format_t output_format;
 
 #ifdef _WIN32
 static HANDLE hConsole;

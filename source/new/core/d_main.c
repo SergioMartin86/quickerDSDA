@@ -653,7 +653,7 @@ void AddIWAD(const char *iwad)
  */
 static inline dboolean CheckExeSuffix(const char *suffix)
 {
-  extern char **dsda_argv;
+  extern __thread char **dsda_argv;
 
   char *dash;
 
@@ -782,8 +782,8 @@ static void IdentifyVersion (void)
 
 static void DoLooseFiles(void)
 {
-  extern int dsda_argc;
-  extern char **dsda_argv;
+  extern __thread int dsda_argc;
+  extern __thread char **dsda_argv;
 
   int i, k;
   const int loose_wad_index = 0;

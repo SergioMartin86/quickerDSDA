@@ -25,8 +25,8 @@
 
 #include "excmd.h"
 
-static dboolean excmd_enabled;
-static dboolean casual_excmd_features;
+static __thread dboolean excmd_enabled;
+static __thread dboolean casual_excmd_features;
 
 void dsda_EnableExCmd(void) {
   excmd_enabled = true;
@@ -112,7 +112,7 @@ void dsda_WriteExCmd(char** p, ticcmd_t* cmd) {
   *p = demo_p;
 }
 
-static excmd_t excmd_queue;
+static __thread excmd_t excmd_queue;
 
 void dsda_ResetExCmdQueue(void) {
   memset(&excmd_queue, 0, sizeof(excmd_queue));

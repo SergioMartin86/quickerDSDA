@@ -30,8 +30,8 @@ typedef struct {
   int start_episode;
 } dsda_episode_t;
 
-extern dsda_episode_t* episodes;
-extern size_t num_episodes;
+extern __thread dsda_episode_t* episodes;
+extern __thread size_t num_episodes;
 
 void dsda_AddOriginalEpisodes(void);
 void dsda_AddCustomEpisodes(void);

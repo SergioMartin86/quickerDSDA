@@ -36,8 +36,8 @@ typedef struct {
   id_index_t* data;
 } id_hash_t;
 
-static id_hash_t line_id_hash;
-static id_hash_t sector_id_hash;
+static __thread id_hash_t line_id_hash;
+static __thread id_hash_t sector_id_hash;
 
 static id_list_t* dsda_NewListForIndex(id_index_t* index, int id) {
   id_list_t* new_list;
@@ -88,8 +88,8 @@ void dsda_AddSectorID(int id, int value) {
   dsda_AddToIDHash(&sector_id_hash, id, value);
 }
 
-static int empty_list[] = { -1 };
-static int missing_id_list[] = { -1, -1 };
+static __thread int empty_list[] = { -1 };
+static __thread int missing_id_list[] = { -1, -1 };
 
 const int* dsda_FindLinesFromID(int id) {
   return dsda_GetIDList(&line_id_hash, id)->data;
@@ -112,7 +112,7 @@ const int* dsda_FindSectorsFromIDOrLine(int id, const line_t* line)
     return dsda_FindSectorsFromID(id);
 }
 
-const int hash_factor = 10;
+const __thread int hash_factor = 10;
 
 void dsda_ResetLineIDList(int size) {
   line_id_hash.size = (size > hash_factor ? size / hash_factor : size);

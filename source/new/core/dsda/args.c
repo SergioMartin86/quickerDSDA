@@ -23,8 +23,8 @@
 
 #include "dsda/args.h"
 
-int dsda_argc;
-char** dsda_argv;
+__thread int dsda_argc;
+__thread char** dsda_argv;
 
 typedef enum {
   arg_null,
@@ -695,7 +695,7 @@ static arg_config_t arg_config[dsda_arg_count] = {
   },
 };
 
-static dsda_arg_t arg_value[dsda_arg_count];
+static __thread dsda_arg_t arg_value[dsda_arg_count];
 
 static void dsda_ParseIntArg(arg_config_t* config, int* value, const char* param) {
   if (sscanf(param, "%d", value) != 1) {

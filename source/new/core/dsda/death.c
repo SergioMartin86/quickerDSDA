@@ -27,10 +27,10 @@
 
 #include "death.h"
 
-extern int inv_ptr;
-extern int curpos;
-extern int newtorch;
-extern int newtorchdelta;
+extern __thread int inv_ptr;
+extern __thread int curpos;
+extern __thread int newtorch;
+extern __thread int newtorchdelta;
 
 typedef enum {
   death_use_default,
