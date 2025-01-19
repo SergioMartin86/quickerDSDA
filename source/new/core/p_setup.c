@@ -61,7 +61,6 @@
 #include "dsda/preferences.h"
 #include "dsda/scroll.h"
 #include "dsda/settings.h"
-#include "dsda/tranmap.h"
 #include "dsda/utility.h"
 
 #include "config.h"
@@ -1814,34 +1813,6 @@ void P_PostProcessHexenLineSpecial(line_t *ld)
 
 void P_PostProcessZDoomLineSpecial(line_t *ld)
 {
-  switch (ld->special)
-  {
-    case zl_translucent_line:
-    {
-      float alpha;
-      const int *id_p;
-
-      alpha = (float) ld->special_args[1] / 256.f;
-      alpha = BETWEEN(0.f, 1.f, alpha);
-
-      if (!ld->special_args[0])
-      {
-        ld->tranmap = dsda_TranMap(dsda_FloatToPercent(alpha));
-        ld->alpha = alpha;
-      }
-      else
-      {
-        FIND_LINES(id_p, ld->special_args[0])
-        {
-          lines[*id_p].tranmap = dsda_TranMap(dsda_FloatToPercent(alpha));
-          lines[*id_p].alpha = alpha;
-        }
-      }
-
-      ld->special = 0;
-    }
-    break;
-  }
 }
 
 // killough 4/4/98: delay using sidedefs until they are loaded
