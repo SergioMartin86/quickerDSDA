@@ -94,39 +94,6 @@ void P_CompatiblePlayerThrust(player_t* player, angle_t angle, fixed_t move)
   player->mo->momy += FixedMul(move, finesine[angle]);
 }
 
-void P_HereticPlayerThrust(player_t* player, angle_t angle, fixed_t move)
-{
-  if (player->powers[pw_flight] && !(player->mo->z <= player->mo->floorz))
-  {
-    player->mo->momx += FixedMul(move, finecosine[angle]);
-    player->mo->momy += FixedMul(move, finesine[angle]);
-  }
-  else if (player->mo->subsector->sector->special == 15)
-  {
-    player->mo->momx += FixedMul(move >> 2, finecosine[angle]);
-    player->mo->momy += FixedMul(move >> 2, finesine[angle]);
-  }
-  else
-  {
-    player->mo->momx += FixedMul(move, finecosine[angle]);
-    player->mo->momy += FixedMul(move, finesine[angle]);
-  }
-}
-
-void P_HexenPlayerThrust(player_t* player, angle_t angle, fixed_t move)
-{
-  if (player->powers[pw_flight] && !(player->mo->z <= player->mo->floorz))
-  {
-    player->mo->momx += FixedMul(move, finecosine[angle]);
-    player->mo->momy += FixedMul(move, finesine[angle]);
-  }
-  else
-  {
-    player->mo->momx += FixedMul(move, finecosine[angle]);
-    player->mo->momy += FixedMul(move, finesine[angle]);
-  }
-}
-
 // In doom, P_Thrust is always player-originated
 // In heretic / hexen P_Thrust can come from effects
 // Need to differentiate the two because of the flight cheat
@@ -672,12 +639,6 @@ void P_PlayerThink (player_t* player)
     }
   }
 
-  if (player->powers[pw_minotaur])
-    player->powers[pw_minotaur]--;
-
-  if (player->powers[pw_speed])
-    player->powers[pw_speed]--;
-
   if (player->powers[pw_invisibility] > 0)    // killough
     if (! --player->powers[pw_invisibility] )
       player->mo->flags &= ~MF_SHADOW;
@@ -687,14 +648,6 @@ void P_PlayerThink (player_t* player)
 
   if (player->powers[pw_ironfeet] > 0)        // killough
     player->powers[pw_ironfeet]--;
-
-  if (player->powers[pw_flight])
-  {
-    if (!--player->powers[pw_flight])
-    {
-      P_PlayerEndFlight(player);
-    }
-  }
 
   if (player->damagecount)
     player->damagecount--;

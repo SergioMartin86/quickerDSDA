@@ -169,15 +169,6 @@ typedef enum {
 #define MTF_FRIEND      0x0080
 #define MTF_RESERVED    0x0100
 
-// hexen
-#define MTF_DORMANT     0x0010
-#define MTF_FIGHTER     0x0020
-#define MTF_CLERIC      0x0040
-#define MTF_MAGE        0x0080
-#define MTF_GSINGLE     0x0100
-#define MTF_GCOOP       0x0200
-#define MTF_GDEATHMATCH 0x0400
-
 // zdoom
 #define MTF_TRANSLUCENT 0x0800
 #define MTF_INVISIBLE   0x1000
@@ -202,24 +193,6 @@ typedef enum {
   it_yellowskull,
   it_redskull,
   DOOM_NUMCARDS,
-
-  // heretic
-  key_blue = 0,
-  key_yellow,
-  key_green,
-
-  // hexen
-  key_1 = 0,
-  key_2,
-  key_3,
-  key_4,
-  key_5,
-  key_6,
-  key_7,
-  key_8,
-  key_9,
-  key_a,
-  key_b,
   NUMCARDS
 } card_t;
 
@@ -236,26 +209,8 @@ typedef enum {
   wp_chainsaw,
   wp_supershotgun,
 
-  // heretic
-  wp_staff = 0,
-  wp_goldwand,
-  wp_crossbow,
-  wp_blaster,
-  wp_skullrod,
-  wp_phoenixrod,
-  wp_mace,
-  wp_gauntlets,
-  wp_beak,
-
   NUMWEAPONS,
   wp_nochange,             // No pending weapon change.
-
-  // hexen
-  wp_first = 0,
-  wp_second,
-  wp_third,
-  wp_fourth,
-  HEXEN_NUMWEAPONS
 } weapontype_t;
 
 // Ammunition types defined.
@@ -266,24 +221,9 @@ typedef enum {
   am_misl,    // Missile launcher.
   DOOM_NUMAMMO,
 
-  // heretic
-  am_goldwand = 0,
-  am_crossbow,
-  am_blaster,
-  am_skullrod,
-  am_phoenixrod,
-  am_mace,
-  HERETIC_NUMAMMO,
-
-  NUMAMMO = HERETIC_NUMAMMO,
+  NUMAMMO = DOOM_NUMAMMO,
   am_noammo,   // fist, chainsaw, staff, gauntlets
 
-  // hexen
-  MANA_1 = 0,
-  MANA_2,
-  NUMMANA,
-  MANA_BOTH,
-  MANA_NONE = am_noammo
 } ammotype_t;
 
 // Power up artifacts.
@@ -295,16 +235,6 @@ typedef enum {
   pw_allmap,
   pw_infrared,
 
-  // heretic
-  pw_weaponlevel2,
-  pw_flight,
-  pw_shield,
-  pw_health2,
-
-  // hexen
-  pw_speed,
-  pw_minotaur,
-
   NUMPOWERS
 } powertype_t;
 
@@ -313,12 +243,7 @@ typedef enum {
   INVULNTICS   = (30*TICRATE),
   INVISTICS    = (60*TICRATE),
   INFRATICS    = (120*TICRATE),
-  IRONTICS     = (60*TICRATE),
-  WPNLEV2TICS  = (40*TICRATE),
-  FLIGHTTICS   = (60*TICRATE),
-  SPEEDTICS    = (45*TICRATE),
-  MORPHTICS    = (40*TICRATE),
-  MAULATORTICS = (25*TICRATE)
+  IRONTICS     = (60*TICRATE)
 } powerduration_t;
 
 // DOOM keyboard definition.

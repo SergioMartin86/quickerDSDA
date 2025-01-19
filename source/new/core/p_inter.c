@@ -87,16 +87,6 @@ int clipammo[NUMAMMO] = { 10,  4,  20,  1, 0, 0}; // heretic +2 ammo types
 // GET STUFF
 //
 
-// heretic
-static weapontype_t GetAmmoChange[] = {
-    wp_goldwand,
-    wp_crossbow,
-    wp_blaster,
-    wp_skullrod,
-    wp_phoenixrod,
-    wp_mace
-};
-
 //
 // P_AutoSwitchWeapon
 // Autoswitches player to a weapon,
@@ -361,9 +351,7 @@ dboolean P_GivePower(player_t *player, int power)
 {
   static const int tics[NUMPOWERS] = {
     INVULNTICS, 1 /* strength */, INVISTICS,
-    IRONTICS, 1 /* allmap */, INFRATICS,
-    WPNLEV2TICS, FLIGHTTICS, 1 /* shield */, 1 /* health2 */,
-    SPEEDTICS, MAULATORTICS
+    IRONTICS, 1 /* allmap */, INFRATICS
    };
 
 
@@ -380,14 +368,6 @@ dboolean P_GivePower(player_t *player, int power)
       break;
     case pw_strength:
       P_GiveBody(player,100);
-      break;
-    case pw_flight:
-      player->mo->flags2 |= MF2_FLY;
-      player->mo->flags |= MF_NOGRAVITY;
-      if (player->mo->z <= player->mo->floorz)
-      {
-          player->flyheight = 10;     // thrust the player in the air a bit
-      }
       break;
   }
 
@@ -811,11 +791,6 @@ static void P_KillMobj(mobj_t *source, mobj_t *target)
 
     target->flags &= ~MF_SOLID;
 
-    // heretic
-    target->flags2 &= ~MF2_FLY;
-    target->player->powers[pw_flight] = 0;
-    target->player->powers[pw_weaponlevel2] = 0;
-
     target->player->playerstate = PST_DEAD;
     P_DropWeapon (target->player);
   }
@@ -947,23 +922,8 @@ void P_DamageMobj(mobj_t *target,mobj_t *inflictor, mobj_t *source, int damage)
 
     ang >>= ANGLETOFINESHIFT;
 
-    if (source && source->player && (source == inflictor)
-        && source->player->powers[pw_weaponlevel2]
-        && source->player->readyweapon == wp_staff)
-    {
-      // Staff power level 2
-      target->momx += FixedMul(10 * FRACUNIT, finecosine[ang]);
-      target->momy += FixedMul(10 * FRACUNIT, finesine[ang]);
-      if (!(target->flags & MF_NOGRAVITY))
-      {
-          target->momz += 5 * FRACUNIT;
-      }
-    }
-    else
-    {
-      target->momx += FixedMul(thrust, finecosine[ang]);
-      target->momy += FixedMul(thrust, finesine[ang]);
-    }
+    target->momx += FixedMul(thrust, finecosine[ang]);
+    target->momy += FixedMul(thrust, finesine[ang]);
 
     /* killough 11/98: thrust objects hanging off ledges */
     if (target->intflags & MIF_FALLING && target->gear >= MAXGEAR)

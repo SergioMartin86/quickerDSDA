@@ -742,12 +742,6 @@ void G_BuildTiccmd(ticcmd_t* cmd)
     }
   }
 
-  if (players[consoleplayer].powers[pw_speed] && !players[consoleplayer].morphTics)
-  {                           // Adjust for a player with a speed artifact
-      forward = (3 * forward) >> 1;
-      side = (3 * side) >> 1;
-  }
-
   if (stroller) side = 0;
 
   cmd->forwardmove += fudgef((signed char)forward);
@@ -1245,8 +1239,6 @@ static void G_PlayerFinishLevel(int player)
   p->rain2 = NULL;
 
   memset(p->powers, 0, sizeof p->powers);
-  if (flb.flight_carryover)
-    p->powers[pw_flight] = flb.flight_carryover;
 
   if (flb.remove_cards)
     memset(p->cards, 0, sizeof p->cards);
@@ -2597,91 +2589,6 @@ void G_DoTeleportNewMap(void)
     gamestate = GS_LEVEL;
     gameaction = ga_nothing;
     RebornPosition = leave_data.position;
-}
-
-void Hexen_G_DoReborn(int playernum)
-{
-    int i;
-    dboolean oldWeaponowned[HEXEN_NUMWEAPONS];
-    dboolean oldKeys[NUMCARDS];
-    int oldPieces;
-    dboolean foundSpot;
-    int bestWeapon;
-
-    if (!netgame)
-    {
-        gameaction = ga_loadlevel;
-    }
-    else
-    {                           // Net-game
-        players[playernum].mo->player = NULL;   // Dissassociate the corpse
-
-        if (deathmatch)
-        {                       // Spawn at random spot if in death match
-            G_DeathMatchSpawnPlayer(playernum);
-            return;
-        }
-
-        // Cooperative net-play, retain keys and weapons
-        for (i = 0; i < NUMCARDS; ++i)
-          oldKeys[i] = players[playernum].cards[i];
-        oldPieces = players[playernum].pieces;
-        for (i = 0; i < HEXEN_NUMWEAPONS; i++)
-        {
-            oldWeaponowned[i] = players[playernum].weaponowned[i];
-        }
-
-        foundSpot = false;
-        if (G_CheckSpot(playernum, &playerstarts[RebornPosition][playernum]))
-        {                       // Appropriate player start spot is open
-            P_SpawnPlayer(playernum, &playerstarts[RebornPosition][playernum]);
-            foundSpot = true;
-        }
-        else
-        {
-            // Try to spawn at one of the other player start spots
-            for (i = 0; i < g_maxplayers; i++)
-            {
-                if (G_CheckSpot(playernum, &playerstarts[RebornPosition][i]))
-                {               // Found an open start spot
-
-                    // Fake as other player
-                    playerstarts[RebornPosition][i].type = playernum + 1;
-                    P_SpawnPlayer(playernum, &playerstarts[RebornPosition][i]);
-
-                    // Restore proper player type
-                    playerstarts[RebornPosition][i].type = i + 1;
-
-                    foundSpot = true;
-                    break;
-                }
-            }
-        }
-
-        if (foundSpot == false)
-        {                       // Player's going to be inside something
-            P_SpawnPlayer(playernum, &playerstarts[RebornPosition][playernum]);
-        }
-
-        // Restore keys and weapons
-        for (i = 0; i < NUMCARDS; ++i)
-          players[playernum].cards[i] = oldKeys[i];
-        players[playernum].pieces = oldPieces;
-        for (bestWeapon = 0, i = 0; i < HEXEN_NUMWEAPONS; i++)
-        {
-            if (oldWeaponowned[i])
-            {
-                bestWeapon = i;
-                players[playernum].weaponowned[i] = true;
-            }
-        }
-        players[playernum].ammo[MANA_1] = 25;
-        players[playernum].ammo[MANA_2] = 25;
-        if (bestWeapon)
-        {                       // Bring up the best weapon
-            players[playernum].pendingweapon = bestWeapon;
-        }
-    }
 }
 
 // Headless functions
