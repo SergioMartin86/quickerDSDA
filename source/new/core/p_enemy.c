@@ -2344,7 +2344,7 @@ dboolean P_CheckBossDeath(mobj_t *mo)
 
 void A_BossDeath(mobj_t *mo)
 {
-  line_t junk;
+  static __thread line_t junk;
 
   if (dsda_BossAction(mo))
   {

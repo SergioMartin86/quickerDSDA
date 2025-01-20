@@ -242,7 +242,7 @@ int wipe_EndScreen(void)
 // killough 3/5/98: reformatted and cleaned up
 int wipe_ScreenWipe(int ticks)
 {
-  dboolean go;                               // when zero, stop the wipe
+  static __thread dboolean go;                               // when zero, stop the wipe
 
   if (!dsda_RenderWipeScreen())
     return 0;//e6y

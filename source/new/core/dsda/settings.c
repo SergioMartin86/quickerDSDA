@@ -42,8 +42,8 @@ void dsda_InitSettings(void) {
 }
 
 static int dsda_WadCompatibilityLevel(void) {
-  int complvl = -1;
-  int last_numwadfiles = -1;
+  static __thread int complvl = -1;
+  static __thread int last_numwadfiles = -1;
 
   // This might be called before all wads are loaded
   if (numwadfiles != last_numwadfiles) {

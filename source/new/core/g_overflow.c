@@ -279,7 +279,7 @@ unsigned char *dos_mem_dump = mem_dump_dos622;
 
 static int GetMemoryValue(unsigned int offset, void *value, int size)
 {
-  int firsttime = true;
+  static __thread int firsttime = true;
 
   if (firsttime)
   {
@@ -349,8 +349,8 @@ int MissedBackSideOverrun(line_t *line)
 //
 sector_t* GetSectorAtNullAddress(void)
 {
-  int null_sector_is_initialized = false;
-  sector_t null_sector;
+  static __thread int null_sector_is_initialized = false;
+  static __thread sector_t null_sector;
 
   if (demo_compatibility && EMULATE(OVERFLOW_MISSEDBACKSIDE))
   {

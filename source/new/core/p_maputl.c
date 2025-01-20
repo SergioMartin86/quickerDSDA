@@ -560,7 +560,7 @@ __thread intercept_t *intercept_p = 0;
 // Check for limit and double size if necessary -- killough
 void check_intercept(void)
 {
-  size_t num_intercepts;
+  static __thread size_t num_intercepts = 0;
   size_t offset = intercept_p - intercepts;
   if (offset >= num_intercepts)
     {

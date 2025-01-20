@@ -84,3 +84,15 @@ foreach testFile : rerecordTestSet
        args : [ 'run_test_rerecord.sh', baseTester.path(),  newTester.path(), testFile + '.test', testFile + '.sol' ],
        suite : [ testSuite ])
 endforeach
+
+# Parallel testing
+foreach testFile : rerecordTestSet
+  testSuite = testFile.split('.')[0]
+  testName = testFile.split('.')[1] + '.' + testFile.split('.')[2] + '.' + 'parallel'
+  test(testName,
+       pTester,
+       workdir : meson.current_source_dir(),
+       timeout: testTimeout,
+       args : [ testFile + '.test', testFile + '.sol', '--cycleType', 'Rerecord', '--rerecordDepth', '16' ],
+       suite : [ testSuite ])
+endforeach

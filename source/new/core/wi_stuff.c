@@ -1397,7 +1397,7 @@ void WI_initStats(void)
 void WI_updateStats(void)
 {
   //e6y
-  dboolean play_early_explosion = true;
+  static __thread dboolean play_early_explosion = true;
 
   WI_updateAnimatedBack();
 

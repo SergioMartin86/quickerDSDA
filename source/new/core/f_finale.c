@@ -278,11 +278,10 @@ void F_CastDrawer (void)
 //
 // F_BunnyScroll
 //
-static const char* pfub1 = "PFUB1";
-static const char* pfub2 = "PFUB2";
-
-static const char* scrollpic1;
-static const char* scrollpic2;
+static __thread const char* pfub1 = "PFUB1";
+static __thread const char* pfub2 = "PFUB2";
+static __thread const char* scrollpic1;
+static __thread const char* scrollpic2;
 
 static void F_StartScrollMusic(const char* music, dboolean loop_music)
 {

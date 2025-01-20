@@ -427,12 +427,12 @@ fixed_t P_FindNextHighestFloor(sector_t *sec, int currentheight)
   {
     int h;
     int min;
-    int MAX_ADJOINING_SECTORS = 0;
-    fixed_t *heightlist = NULL;
-    int heightlist_size = 0;
+    static __thread int MAX_ADJOINING_SECTORS = 0;
+    static __thread fixed_t *heightlist = NULL;
+    static __thread int heightlist_size = 0;
     line_t* check;
     fixed_t height = currentheight;
-    fixed_t last_height_0 = 0;
+    static __thread fixed_t last_height_0 = 0;
 
     // 20 adjoining sectors max!
     if (!MAX_ADJOINING_SECTORS)
