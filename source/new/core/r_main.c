@@ -659,16 +659,11 @@ static void R_SetupFrame (player_t *player)
       fixedcolormap = fullcolormap   // killough 3/20/98: use fullcolormap
         + player->fixedcolormap*256*sizeof(lighttable_t);
 
-      walllights = scalelightfixed;
-
       for (i=0 ; i<MAXLIGHTSCALE ; i++)
         scalelightfixed[i] = fixedcolormap;
     }
   else
     fixedcolormap = 0;
-
-  if (V_IsOpenGLMode() || HU_CrosshairEnabled())
-    R_SetupMatrix();
 
   validcount++;
 }
