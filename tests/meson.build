@@ -65,7 +65,7 @@ endif
 # Adding tests to the suite
 foreach testFile : simpleTestSet
   testSuite = testFile.split('.')[0]
-  testName = testFile.split('.')[1]
+  testName = testFile.split('.')[1] + '.' + testFile.split('.')[2]
   test(testName,
        bash,
        workdir : meson.current_source_dir(),
@@ -76,7 +76,7 @@ endforeach
 
 foreach testFile : rerecordTestSet
   testSuite = testFile.split('.')[0]
-  testName = testFile.split('.')[1]
+  testName = testFile.split('.')[1] + '.' + testFile.split('.')[2]
   test(testName,
        bash,
        workdir : meson.current_source_dir(),

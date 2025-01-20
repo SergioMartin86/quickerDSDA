@@ -51,7 +51,7 @@ static void dsda_EnsureMapCount(int count) {
 }
 
 static const char* dsda_WadStatsPath(void) {
-  static dsda_string_t path;
+  dsda_string_t path;
 
   if (!path.string)
     dsda_StringPrintF(&path, "%s/%s", dsda_DataDir(), filename);
@@ -200,7 +200,7 @@ static void dsda_LoadWadStats(void) {
   }
 }
 
-static dboolean forget_wad_stats;
+static __thread dboolean forget_wad_stats;
 
 void M_ForgetWadStats(void)
 {

@@ -128,6 +128,26 @@ int main(int argc, char *argv[])
   // Flag for successful execution
   bool isSuccess = true;
 
+  // If warmup is enabled, run it now. This helps in reducing variation in performance results due to CPU throttling
+  if (useWarmUp)
+  {
+    printf("[] ********** Warming Up **********\n");
+
+    auto tw = jaffarCommon::timing::now();
+    double waitedTime = 0.0;
+    #pragma omp parallel
+    while(waitedTime < 2.0) waitedTime = jaffarCommon::timing::timeDeltaSeconds(jaffarCommon::timing::now(), tw);
+  }
+
+  // Printing test information
+  printf("[] -----------------------------------------\n");
+  printf("[] Running Script:                         '%s'\n", scriptFilePath.c_str());
+  printf("[] Cycle Type:                             '%s'\n", cycleType.c_str());
+  printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
+  printf("[] Sequence Length:                        %lu\n", sequenceLength);
+  printf("[] ********** Running Test **********\n");
+  fflush(stdout);
+
   JAFFAR_PARALLEL
   {
     // Creating emulator instance
@@ -155,32 +175,6 @@ int main(int argc, char *argv[])
 
     // Getting emulation core name
     std::string emulationCoreName = e.getCoreName();
-
-    // Printing test information
-    printf("[] -----------------------------------------\n");
-    printf("[] Running Script:                         '%s'\n", scriptFilePath.c_str());
-    printf("[] Cycle Type:                             '%s'\n", cycleType.c_str());
-    printf("[] Emulation Core:                         '%s'\n", emulationCoreName.c_str());
-    printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
-    printf("[] Sequence Length:                        %lu\n", sequenceLength);
-
-    if (cycleType == "Rerecord")
-    printf("[] State Size:                             %lu bytes\n", stateSize);
-    
-    // If warmup is enabled, run it now. This helps in reducing variation in performance results due to CPU throttling
-    if (useWarmUp)
-    {
-      printf("[] ********** Warming Up **********\n");
-
-      auto tw = jaffarCommon::timing::now();
-      double waitedTime = 0.0;
-      #pragma omp parallel
-      while(waitedTime < 2.0) waitedTime = jaffarCommon::timing::timeDeltaSeconds(jaffarCommon::timing::now(), tw);
-    }
-
-    printf("[] ********** Running Test **********\n");
-
-    fflush(stdout);
 
     // Serializing initial state
     auto currentState = (uint8_t *)malloc(stateSize);

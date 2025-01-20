@@ -1111,7 +1111,7 @@ static dboolean P_IsTypeMatch(unsigned doomednum, int type)
 static PUREFUNC int P_FindDoomedNum(unsigned type)
 {
   struct { int first, next; } *hash;
-  register int i;
+  int i;
 
   if (!hash)
   {

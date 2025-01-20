@@ -603,69 +603,6 @@ void R_ResetColorMap(void)
 
 static void R_SetupFrame (player_t *player)
 {
-  dboolean HU_CrosshairEnabled(void);
-
-  int i, cm;
-
-  int FocalTangent = finetangent[FINEANGLES/4 + FieldOfView/2];
-
-  viewplayer = player;
-
-  extralight = player->extralight;
-
-  viewsin = finesine[viewangle>>ANGLETOFINESHIFT];
-  viewcos = finecosine[viewangle>>ANGLETOFINESHIFT];
-
-  viewtansin = FixedMul(FocalTangent, viewsin);
-  viewtancos = FixedMul(FocalTangent, viewcos);
-
-  R_SetupFreelook();
-
-  // killough 3/20/98, 4/4/98: select colormap based on player status
-
-  if (player->mo->subsector->sector->colormap)
-    cm = player->mo->subsector->sector->colormap;
-  else if (player->mo->subsector->sector->heightsec != -1)
-  {
-    const sector_t *s = player->mo->subsector->sector->heightsec + sectors;
-    cm = viewz < s->floorheight ? s->bottommap :
-         viewz > s->ceilingheight ? s->topmap :
-         s->midmap;
-    if (cm < 0 || cm > numcolormaps)
-      cm = 0;
-  }
-  else
-    cm = map_info.default_colormap;
-
-  //e6y: save previous and current colormap
-  boom_cm = cm;
-
-  fullcolormap = colormaps[cm];
-  zlight = c_zlight[cm];
-  scalelight = c_scalelight[cm];
-
-  //e6y
-  frame_fixedcolormap = player->fixedcolormap;
-  if (frame_fixedcolormap < 0 || frame_fixedcolormap > NUMCOLORMAPS)
-  {
-    I_Error("<fixedcolormap> value out of range: %d\n", player->fixedcolormap);
-  }
-
-  if (player->fixedcolormap)
-    {
-      // killough 3/20/98: localize scalelightfixed (readability/optimization)
-      const lighttable_t *scalelightfixed[MAXLIGHTSCALE];
-
-      fixedcolormap = fullcolormap   // killough 3/20/98: use fullcolormap
-        + player->fixedcolormap*256*sizeof(lighttable_t);
-
-      for (i=0 ; i<MAXLIGHTSCALE ; i++)
-        scalelightfixed[i] = fixedcolormap;
-    }
-  else
-    fixedcolormap = 0;
-
-  validcount++;
 }
 
 static void R_InitDrawScene(void)

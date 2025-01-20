@@ -706,7 +706,7 @@ void M_LoadDefaults (void)
   }
   else
   {
-    const char* configdir = I_ConfigDir();
+    const char* configdir = ".";
     int len = snprintf(NULL, 0, "%s/dsda-doom.cfg", configdir);
     defaultfile = Z_Malloc(len + 1);
     snprintf(defaultfile, len + 1, "%s/dsda-doom.cfg", configdir);
