@@ -88,7 +88,7 @@ typedef struct {
   int handle;
 } wadfile_info_t;
 
-extern __thread wadfile_info_t *wadfiles;
+extern __thread wadfile_info_t *wadfiles; 
 
 extern __thread size_t numwadfiles; // CPhipps - size of the wadfiles array
 

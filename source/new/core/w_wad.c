@@ -480,7 +480,7 @@ int W_ListNumFromName(const char *name, int lump)
 //
 __thread wadfile_info_t *wadfiles=NULL;
 
-__thread size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit)
+__thread size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit) 
 
 void W_Init(void)
 {

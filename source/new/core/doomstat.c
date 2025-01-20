@@ -93,7 +93,7 @@ __thread int monkeys;
 
 char *VANILLA_MAP_LUMP_NAME(int e, int m)
 {
-  static char name[9];
+  static __thread char name[9];
 
   if (gamemode == commercial || map_format.map99)
     snprintf(name, sizeof(name), "MAP%02d", m);

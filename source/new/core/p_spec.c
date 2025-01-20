@@ -113,7 +113,7 @@ static void P_SpawnScrollers(void);
 static void P_SpawnFriction(void);    // phares 3/16/98
 static void P_SpawnPushers(void);     // phares 3/20/98
 
-static const animdef_t heretic_animdefs[] = {
+const animdef_t heretic_animdefs[] = {
     // false = flat
     // true = texture
     { false, "FLTWAWA3", "FLTWAWA1", 8 }, // Water
@@ -3889,7 +3889,7 @@ static dboolean P_ArgToCrushType(int arg)
 
 static crushmode_e P_ArgToCrushMode(int arg, dboolean slowdown)
 {
-  static const crushmode_e map[] = { crushDoom, crushHexen, crushSlowdown };
+  const crushmode_e map[] = { crushDoom, crushHexen, crushSlowdown };
 
   if (arg >= 1 && arg <= 3) return map[arg - 1];
 
@@ -3903,7 +3903,7 @@ static int P_ArgToCrush(int arg)
 
 static byte P_ArgToChange(int arg)
 {
-  static const byte ChangeMap[8] = { 0, 1, 5, 3, 7, 2, 6, 0 };
+  const byte ChangeMap[8] = { 0, 1, 5, 3, 7, 2, 6, 0 };
 
   return (arg >= 0 && arg < 8) ? ChangeMap[arg] : 0;
 }

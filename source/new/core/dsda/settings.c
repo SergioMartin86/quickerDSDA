@@ -42,8 +42,8 @@ void dsda_InitSettings(void) {
 }
 
 static int dsda_WadCompatibilityLevel(void) {
-  static __thread int complvl = -1;
-  static __thread int last_numwadfiles = -1;
+  int complvl = -1;
+  int last_numwadfiles = -1;
 
   // This might be called before all wads are loaded
   if (numwadfiles != last_numwadfiles) {
@@ -242,7 +242,7 @@ int dsda_ShowAliveMonsters(void) {
   return dsda_IntConfig(dsda_config_show_alive_monsters);
 }
 
-int dsda_reveal_map;
+__thread int dsda_reveal_map;
 
 int dsda_RevealAutomap(void) {
   if (dsda_StrictMode()) return 0;

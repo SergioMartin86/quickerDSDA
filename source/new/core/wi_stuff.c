@@ -331,54 +331,30 @@ static __thread int    cnt_pause;
 //
 
 // You Are Here graphic
-static const char* yah[3] = { "WIURH0", "WIURH1", 0 };
-
-// splat
-static const char* splat[2] = {"WISPLAT", 0};
-
-// %, : graphics
-static const char percent[] = {"WIPCNT"};
-static const char colon[] = {"WICOLON"};
-
-// 0-9 graphic
-static patchnum_t num[10];
-
-// minus sign
-static const char wiminus[] = {"WIMINUS"};
-
-// "Finished!" graphics
-static const char finished[] = {"WIF"};
-
-// "Entering" graphic
-static const char entering[] = {"WIENTER"};
-
-// "secret"
-static const char sp_secret[] = {"WISCRT2"};
-
-// "Kills", "Scrt", "Items", "Frags"
-static const char kills[] = {"WIOSTK"};
-static const char secret[] = {"WIOSTS"};
-static const char items[] = {"WIOSTI"};
-static const char frags[] = {"WIFRGS"};
-
-// Time sucks.
-static const char time1[] = {"WITIME"};
-static const char par[] = {"WIPAR"};
-static const char sucks[] = {"WISUCKS"};
-
-// "killers", "victims"
-static const char killers[] = {"WIKILRS"};
-static const char victims[] = {"WIVCTMS"};
-
-// "Total", your face, your dead face
-static const char total[] = {"WIMSTT"};
-static const char star[] = {"STFST01"};
-static const char bstar[] = {"STFDEAD0"};
-
-// "red P[1..g_maxplayers]"
-static const char facebackp[] = {"STPB0"};
-
-static const char *exitpic, *enterpic;
+static __thread const char* yah[3] = { "WIURH0", "WIURH1", 0 };
+static __thread const char* splat[2] = {"WISPLAT", 0};
+static __thread const char percent[] = {"WIPCNT"};
+static __thread const char colon[] = {"WICOLON"};
+static __thread patchnum_t num[10];
+static __thread const char wiminus[] = {"WIMINUS"};
+static __thread const char finished[] = {"WIF"};
+static __thread const char entering[] = {"WIENTER"};
+static __thread const char sp_secret[] = {"WISCRT2"};
+static __thread const char kills[] = {"WIOSTK"};
+static __thread const char secret[] = {"WIOSTS"};
+static __thread const char items[] = {"WIOSTI"};
+static __thread const char frags[] = {"WIFRGS"};
+static __thread const char time1[] = {"WITIME"};
+static __thread const char par[] = {"WIPAR"};
+static __thread const char sucks[] = {"WISUCKS"};
+static __thread const char killers[] = {"WIKILRS"};
+static __thread const char victims[] = {"WIVCTMS"};
+static __thread const char total[] = {"WIMSTT"};
+static __thread const char star[] = {"STFST01"};
+static __thread const char bstar[] = {"STFDEAD0"};
+static __thread const char facebackp[] = {"STPB0"};
+static __thread const char *exitpic;
+static __thread const char *enterpic;
 
 //
 // CODE

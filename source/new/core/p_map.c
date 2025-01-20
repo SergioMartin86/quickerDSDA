@@ -2277,7 +2277,7 @@ void P_UseLines (player_t*  player)
 // RADIUS ATTACK
 //
 
-bomb_t bomb;
+__thread bomb_t bomb;
 
 //
 // PIT_RadiusAttack

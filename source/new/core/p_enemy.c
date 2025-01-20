@@ -630,7 +630,9 @@ static void P_DoNewChaseDir(mobj_t *actor, fixed_t deltax, fixed_t deltay)
 // monsters to free themselves without making them tend to
 // hang over dropoffs.
 
-static fixed_t dropoff_deltax, dropoff_deltay, floorz;
+static __thread fixed_t dropoff_deltax;
+static __thread fixed_t dropoff_deltay;
+static __thread fixed_t floorz;
 
 static dboolean PIT_AvoidDropoff(line_t *line)
 {

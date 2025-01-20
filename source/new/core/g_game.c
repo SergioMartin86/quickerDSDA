@@ -268,7 +268,7 @@ static inline signed char fudgef(signed char b)
 void G_SetSpeed(dboolean reset)
 {
   dsda_pclass_t *player_class;
-  static dsda_pclass_t *last_player_class = NULL;
+  dsda_pclass_t *last_player_class = NULL;
 
   player_class = &pclass;
 
@@ -691,7 +691,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
   if (strafe)
   {
-    static double mousestrafe_carry = 0;
+    double mousestrafe_carry = 0;
     int delta;
     double true_delta;
 
@@ -753,7 +753,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
     // Don't discard mouse delta even if value is too small to
     // turn the player this tic
     if (dsda_IntConfig(dsda_config_mouse_carrytics)) {
-      static signed short carry = 0;
+      signed short carry = 0;
       signed short desired_angleturn = cmd->angleturn + carry;
       cmd->angleturn = (desired_angleturn + 128) & 0xff00;
       carry = desired_angleturn - cmd->angleturn;
@@ -1031,7 +1031,7 @@ void G_Ticker (void)
   int entry_leveltime;
   int pause_mask;
   dboolean advance_frame = false;
-  static gamestate_t prevgamestate;
+  gamestate_t prevgamestate;
 
   entry_leveltime = leveltime;
 
@@ -1661,8 +1661,8 @@ static uint64_t G_UpdateSignature(uint64_t s, const char *name)
 
 static uint64_t G_Signature(void)
 {
-  static uint64_t s = 0;
-  static dboolean computed = false;
+  uint64_t s = 0;
+  dboolean computed = false;
   int episode, map;
 
   if (!computed) {
@@ -1823,7 +1823,7 @@ void G_DeferedInitNew(int skill, int episode, int map)
 
 void G_Compatibility(void)
 {
-  static const struct {
+  const struct {
     complevel_t fix; // level at which fix/change was introduced
     complevel_t opt; // level at which fix/change was made optional
   } levels[] = {
@@ -2067,7 +2067,7 @@ void G_DoNewGame (void)
 
 void G_RefreshFastMonsters(void)
 {
-  static int fast = 0;            // remembers fast state
+  int fast = 0;            // remembers fast state
   int i;
   int fast_pending;
 

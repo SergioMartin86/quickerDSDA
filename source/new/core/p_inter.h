@@ -53,24 +53,23 @@ int P_PlayerHealthIncrease(int value);
 
 /* killough 5/2/98: moved from d_deh.c, g_game.c, m_misc.c, others: */
 
-extern int god_health;   /* Ty 03/09/98 - deh support, see also p_inter.c */
-extern int idfa_armor;
-extern int idfa_armor_class;
-extern int idkfa_armor;
-extern int idkfa_armor_class;  /* Ty - end */
-/* Ty 03/13/98 - externalized initial settings for respawned player */
-extern int initial_health;
-extern int initial_bullets;
-extern int maxhealth;
-extern int maxhealthbonus;
-extern int max_armor;
-extern int green_armor_class;
-extern int blue_armor_class;
-extern int max_soul;
-extern int soul_health;
-extern int mega_health;
-extern int bfgcells;
-extern int monsters_infight; // e6y: Dehacked support - monsters infight
-extern int maxammo[], clipammo[];
+extern __thread  int god_health;   /* Ty 03/09/98 - deh support, see also p_inter.c */
+extern __thread  int idfa_armor;
+extern __thread  int idfa_armor_class;
+extern __thread  int idkfa_armor;
+extern __thread  int idkfa_armor_class;  /* Ty - end */
+extern __thread  int initial_health;
+extern __thread  int initial_bullets;
+extern __thread  int maxhealth;
+extern __thread  int maxhealthbonus;
+extern __thread  int max_armor;
+extern __thread  int green_armor_class;
+extern __thread  int blue_armor_class;
+extern __thread  int max_soul;
+extern __thread  int soul_health;
+extern __thread  int mega_health;
+extern __thread  int bfgcells;
+extern __thread  int monsters_infight; // e6y: Dehacked support - monsters infight
+extern __thread  int maxammo[], clipammo[];
 
 #endif

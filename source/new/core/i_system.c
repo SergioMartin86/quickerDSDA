@@ -175,7 +175,7 @@ int I_Filelength(int handle)
 
 const char *I_ConfigDir(void)
 {
-  static char *base;
+  char *base;
 
   if (!base)
   {
@@ -222,7 +222,7 @@ const char *I_ExeDir(void)
 {
   extern __thread  char **dsda_argv;
 
-  static char *base;
+  char *base;
   if (!base)        // cache multiple requests
     {
       size_t len = strlen(*dsda_argv);
@@ -268,7 +268,7 @@ dboolean HasTrailingSlash(const char* dn)
 
 static const char *I_GetBasePath(void)
 {
-  static char *executable_dir = "";
+  char *executable_dir = "";
   return executable_dir;
 }
 
@@ -292,7 +292,7 @@ static const char *I_GetBasePath(void)
 char* I_FindFileInternal(const char* wfname, const char* ext, dboolean isStatic)
 {
   // lookup table of directories to search
-  static struct {
+  struct {
     const char *dir; // directory
     const char *sub; // subdirectory
     const char *env; // environment variable
@@ -316,11 +316,11 @@ char* I_FindFileInternal(const char* wfname, const char* ext, dboolean isStatic)
     {"/usr/share/doom"},
   }, *search;
 
-  static size_t num_search;
+  size_t num_search;
   size_t  i;
   size_t  pl;
 
-  static char static_p[PATH_MAX];
+  char static_p[PATH_MAX];
   char * dinamic_p = NULL;
   char *p = (isStatic ? static_p : dinamic_p);
 

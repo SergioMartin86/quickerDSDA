@@ -217,14 +217,14 @@ typedef struct
   mobjtype_t   type;
 } castinfo_t;
 
-static int castnum;
-static int casttics;
-static state_t* caststate;
-static dboolean castdeath;
-static int castframes;
-static int castonmelee;
-static dboolean castattacking;
-static const char *castbackground;
+static __thread int castnum;
+static __thread int casttics;
+static __thread state_t* caststate;
+static __thread dboolean castdeath;
+static __thread int castframes;
+static __thread int castonmelee;
+static __thread dboolean castattacking;
+static __thread const char *castbackground;
 
 //
 // F_StartCast

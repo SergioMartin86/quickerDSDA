@@ -111,7 +111,7 @@ int dsda_TurboScale(void) {
   return turbo_scale;
 }
 
-static dboolean frozen_mode;
+static __thread dboolean frozen_mode;
 
 dboolean dsda_FrozenMode(void) {
   return frozen_mode;

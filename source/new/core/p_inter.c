@@ -57,31 +57,31 @@
 // dehacked support (and future flexibility).  Most var names came from the key
 // strings used in dehacked.
 
-int initial_health = 100;
-int initial_bullets = 50;
-int maxhealth = 100; // was MAXHEALTH as a #define, used only in this module
-int maxhealthbonus = 200;
-int max_armor = 200;
-int green_armor_class = 1;  // these are involved with armortype below
-int blue_armor_class = 2;
-int max_soul = 200;
-int soul_health = 100;
-int mega_health = 200;
-int god_health = 100;   // these are used in cheats (see st_stuff.c)
-int idfa_armor = 200;
-int idfa_armor_class = 2;
+__thread int initial_health = 100;
+__thread int initial_bullets = 50;
+__thread int maxhealth = 100; // was MAXHEALTH as a #define, used only in this module
+__thread int maxhealthbonus = 200;
+__thread int max_armor = 200;
+__thread int green_armor_class = 1;  // these are involved with armortype below
+__thread int blue_armor_class = 2;
+__thread int max_soul = 200;
+__thread int soul_health = 100;
+__thread int mega_health = 200;
+__thread int god_health = 100;   // these are used in cheats (see st_stuff.c)
+__thread int idfa_armor = 200;
+__thread int idfa_armor_class = 2;
 // not actually used due to pairing of cheat_k and cheat_fa
-int idkfa_armor = 200;
-int idkfa_armor_class = 2;
+__thread int idkfa_armor = 200;
+__thread int idkfa_armor_class = 2;
 
-int bfgcells = 40;      // used in p_pspr.c
-int monsters_infight = 0; // e6y: Dehacked support - monsters infight
+__thread int bfgcells = 40;      // used in p_pspr.c
+__thread int monsters_infight = 0; // e6y: Dehacked support - monsters infight
 // Ty 03/07/98 - end deh externals
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-int maxammo[NUMAMMO]  = {200, 50, 300, 50, 0, 0}; // heretic +2 ammo types
-int clipammo[NUMAMMO] = { 10,  4,  20,  1, 0, 0}; // heretic +2 ammo types
+__thread int maxammo[NUMAMMO]  = {200, 50, 300, 50, 0, 0}; // heretic +2 ammo types
+__thread int clipammo[NUMAMMO] = { 10,  4,  20,  1, 0, 0}; // heretic +2 ammo types
 
 //
 // GET STUFF
