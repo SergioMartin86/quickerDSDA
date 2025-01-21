@@ -123,7 +123,7 @@ quickerDSDACompileArgs = [
 	link_args        : [   '-lpthread' ],
   include_directories : include_directories(quickerDSDAIncludeDirs),
   sources             : [ quickerDSDASrc ],
-  dependencies        : [  ]
+  dependencies        : [  dependency('sdl2',  required : true) ]
  )
 
 # QuickerDSDA Core Configuration

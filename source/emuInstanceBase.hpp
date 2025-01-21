@@ -218,6 +218,7 @@ class EmuInstanceBase
 
     // Setting save state size
     _stateSize = SAVEGAMESIZE;
+    _saveData = (uint8_t*)malloc(_stateSize);
 
     // Setting level exit prevention flag
     if (_preventLevelExit == true) preventLevelExit = 1;
@@ -371,13 +372,15 @@ class EmuInstanceBase
   
   void serializeState(jaffarCommon::serializer::Base& s) const
   {
-    headlessSetSaveStatePointer(s.getOutputDataBuffer(), _stateSize);
+    headlessSetSaveStatePointer(_saveData, _stateSize);
     dsda_ArchiveAll();
+    s.push(_saveData, _stateSize);
   }
 
   void deserializeState(jaffarCommon::deserializer::Base& d) 
   {
-    headlessSetSaveStatePointer((void*)((uint64_t)d.getInputDataBuffer()), _stateSize);
+    d.pop(_saveData, _stateSize);
+    headlessSetSaveStatePointer(_saveData, _stateSize);
     dsda_UnArchiveAll();
   }
 
@@ -400,6 +403,7 @@ class EmuInstanceBase
 
   // State size
   size_t _stateSize;
+  uint8_t* _saveData;
 
   private:
 
