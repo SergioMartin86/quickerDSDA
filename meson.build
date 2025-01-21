@@ -43,6 +43,13 @@ pTester = executable('pTester',
   dependencies        : [ newDependency, jaffarCommonDependency, dependency('sdl2',  required : true) ],
 )
 
+# Building parallel save transfer tool
+tTester = executable('tTester',
+  'source/transfer.cpp',
+  cpp_args            : [ commonCompileArgs ], 
+  dependencies        : [ newDependency, jaffarCommonDependency, dependency('sdl2',  required : true) ],
+)
+
 
 # Building tester tool
 
