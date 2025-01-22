@@ -857,7 +857,7 @@ void P_UnArchiveThinkers(void) {
     thinker_t *next = th->next;
     if (P_IsMobjThinker(th))
     {
-      P_RemoveMobjSP ((mobj_t *) th);
+      P_RemoveMobj ((mobj_t *) th);
       P_RemoveThinkerDelayed(th); // fix mobj leak
     }
     else

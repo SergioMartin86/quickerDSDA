@@ -1459,58 +1459,6 @@ void P_RemoveMobj (mobj_t* mobj)
 }
 
 
-void P_RemoveMobjSP (mobj_t* mobj)
-{
-
-  if ((mobj->flags & MF_SPECIAL)
-      && !(mobj->flags & MF_DROPPED)
-      && (mobj->type != MT_INV)
-      && (mobj->type != MT_INS))
-    {
-    itemrespawnque[iquehead] = mobj->spawnpoint;
-    itemrespawntime[iquehead] = leveltime;
-    iquehead = (iquehead+1)&(ITEMQUESIZE-1);
-
-    // lose one off the end?
-
-    if (iquehead == iquetail)
-      iquetail = (iquetail+1)&(ITEMQUESIZE-1);
-    }
-
-  // // unlink from sector and block lists
-
-  // P_UnsetThingPosition (mobj);
-
-  // // Delete all nodes on the current sector_list               phares 3/16/98
-
-  if (sector_list)
-    {
-    P_DelSeclist(sector_list);
-    sector_list = NULL;
-    }
-
-  // stop any playing sound
-
-  // killough 11/98:
-  //
-  // Remove any references to other mobjs.
-  //
-  // Older demos might depend on the fields being left alone, however,
-  // if multiple thinkers reference each other indirectly before the
-  // end of the current tic.
-  // CPhipps - only leave dead references in old demos; I hope lxdoom_1 level
-  // demos are rare and don't rely on this. I hope.
-
-  if (compatibility_level >= lxdoom_1_compatibility) {
-    P_SetTarget(&mobj->target,    NULL);
-    P_SetTarget(&mobj->tracer,    NULL);
-    P_SetTarget(&mobj->lastenemy, NULL);
-  }
-  // free block
-
-  P_RemoveThinker (&mobj->thinker);
-}
-
 void P_RemoveMonsters(void)
 {
   thinker_t *th;
