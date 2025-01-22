@@ -857,7 +857,7 @@ void P_UnArchiveThinkers(void) {
     thinker_t *next = th->next;
     if (P_IsMobjThinker(th))
     {
-      P_RemoveMobj ((mobj_t *) th);
+      P_RemoveMobjSP ((mobj_t *) th);
       P_RemoveThinkerDelayed(th); // fix mobj leak
     }
     else
@@ -1288,6 +1288,7 @@ void P_UnArchiveThinkers(void) {
     }
   }
 
+
   {  // killough 9/14/98: restore soundtargets
     int i;
     for (i = 0; i < numsectors; i++)
@@ -1297,6 +1298,7 @@ void P_UnArchiveThinkers(void) {
       P_ReplaceIndexWithMobj(&sectors[i].soundtarget, mobj_p, mobj_count);
     }
   }
+
 
   P_UnArchiveBlockLinks(mobj_p, mobj_count);
   P_UnArchiveThinkerSubclasses(mobj_p, mobj_count);
@@ -1323,6 +1325,8 @@ void P_UnArchiveThinkers(void) {
       brain = brain_tmp; // restoring
     }
   }
+
+
 }
 
 // hexen

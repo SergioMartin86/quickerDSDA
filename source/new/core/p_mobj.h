@@ -435,7 +435,7 @@ mobj_t* P_SpawnMapThing (const mapthing_t*  mthing, int index);
 void    P_SpawnPlayer(int n, const mapthing_t *mthing);
 dboolean P_CheckMissileSpawn(mobj_t*);  // killough 8/2/98
 void    P_ExplodeMissile(mobj_t*);    // killough
-
+void P_RemoveMobjSP (mobj_t* mobj);
 void P_RemoveMonsters(void);
 
 // heretic

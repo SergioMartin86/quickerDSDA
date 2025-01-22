@@ -156,6 +156,9 @@ int main(int argc, char *argv[])
           e.deserializeState(d);
         }
       }
+
+      // Barrier
+      JAFFAR_BARRIER;
     }
 
     // Calculating final state hash

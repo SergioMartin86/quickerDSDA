@@ -1189,9 +1189,6 @@ void D_DoomMainSetup(void)
 
   dsda_ApplyDefaultMapFormat();
 
-  lprintf(LO_DEBUG, "dsda_InitWadStats: Setting up wad stats.\n");
-  dsda_InitWadStats();
-
   lprintf(LO_INFO, "\n"); // Separator after file loading
 
   V_InitColorTranslation(); //jff 4/24/98 load color translation lumps
