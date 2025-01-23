@@ -1,6 +1,7 @@
 {
   "IWAD File Path": "wads/DOOM.WAD",
   "Expected IWAD SHA1": "117015379C529573510BE08CF59810AA10BB934E",
+  "State Size": 1048576,
   "PWADS": [ ],
   "Skill Level": 4,
   "Episode": 1, 
