@@ -302,6 +302,13 @@ class EmuInstanceBase
   bool isLevelExit () const { return reachedLevelExit == 1; }
   bool isGameEnd () const { return reachedGameEnd == 1; }
 
+  static float getFloatFrom1616Fixed(const fixed_t value)
+  {
+    double integerPart = (double)(value >> FRACBITS);
+    double floatPart = (double)((value << FRACBITS) >> FRACBITS) / 65535.0;
+    return (float) (integerPart + floatPart);
+  }
+
   void printInformation()
   {
     char mapName[512];
@@ -313,9 +320,9 @@ class EmuInstanceBase
  
     if (players[0].mo != nullptr)
     {
-      jaffarCommon::logger::log("[] Player 1 Coordinates:    (%d, %d, %d)\n", players[0].mo->x, players[0].mo->y, players[0].mo->z);
-      jaffarCommon::logger::log("[] Player 1 Angle:           %u\n", players[0].mo->angle);
-      jaffarCommon::logger::log("[] Player 1 Momenta:        (%d, %d, %d)\n", players[0].mo->momx, players[0].mo->momy, players[0].mo->momz);
+      jaffarCommon::logger::log("[] Player 1 Coordinates:    (%f, %f, %f)\n", getFloatFrom1616Fixed(players[0].mo->x), getFloatFrom1616Fixed(players[0].mo->y), getFloatFrom1616Fixed(players[0].mo->z));
+      jaffarCommon::logger::log("[] Player 1 Angle:           %lu\n", players[0].mo->angle);
+      jaffarCommon::logger::log("[] Player 1 Momenta:        (%f, %f, %f)\n", getFloatFrom1616Fixed(players[0].mo->momx), getFloatFrom1616Fixed(players[0].mo->momy), getFloatFrom1616Fixed(players[0].mo->momz));
       jaffarCommon::logger::log("[] Player 1 Health:          %d\n", players[0].mo->health);
     }
   }
