@@ -50,7 +50,7 @@ extern "C" __STORAGE_MODIFIER int gametic;
 namespace jaffar
 {
 
-#define SAVEGAMESIZE 0x100000
+// #define SAVEGAMESIZE 0x100000
 
 class EmuInstanceBase
 {
@@ -63,6 +63,9 @@ class EmuInstanceBase
 
     // Getting expected IWAD SHA1 hash
     _expectedIWADSHA1 = jaffarCommon::json::getString(config, "Expected IWAD SHA1");
+
+    // Getting maximum state size
+    _stateSize = jaffarCommon::json::getNumber<size_t>(config, "State Size");
  
     // Getting Doom parameters
     _skill  = jaffarCommon::json::getNumber<unsigned int>(config, "Skill Level");
@@ -217,7 +220,6 @@ class EmuInstanceBase
     _videoBuffer = (uint32_t*) malloc (_videoBufferSize);
 
     // Setting save state size
-    _stateSize = SAVEGAMESIZE;
     _saveData = (uint8_t*)malloc(_stateSize);
 
     // Setting level exit prevention flag
