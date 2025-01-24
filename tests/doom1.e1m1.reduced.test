@@ -1,6 +1,7 @@
 {
   "IWAD File Path": "wads/ReducedE1M1Test.wad",
   "Expected IWAD SHA1": "84855FC31CA953E380AF1D635088DE2AF359818D",
+  "State Size": 12288,
   "PWADS": [ ],
   "Skill Level": 4,
   "Episode": 1, 
