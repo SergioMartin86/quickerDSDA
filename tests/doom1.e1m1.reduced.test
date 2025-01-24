@@ -1,0 +1,25 @@
+{
+  "IWAD File Path": "wads/ReducedE1M1Test.wad",
+  "Expected IWAD SHA1": "84855FC31CA953E380AF1D635088DE2AF359818D",
+  "PWADS": [ ],
+  "Skill Level": 4,
+  "Episode": 1, 
+  "Map": 1,
+  "Compatibility Level": 3,
+  "Fast Monsters": false,
+  "Monsters Respawn": false,
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false,
+  "Prevent Level Exit": false,
+  "Prevent Game End": false,
+
+  "Expected Result":
+  {
+    "Map Number": 1,
+    "Is Level Exit": true, 
+    "Is Game End": false
+  }
+}
