@@ -23,6 +23,7 @@ protectedRerecordTestSet = [
 
 # Tests for free wads (for public cloud testing)
 freeRerecordTestSet = [
+    'freedoom011.e1m1.reduced',
     'freedoom011.e1m1.easy',
     'freedoom011.e1m1.pacifist',
     'freedoom011.e1m2.easy',
