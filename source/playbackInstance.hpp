@@ -97,7 +97,7 @@ class PlaybackInstance
   void renderFrame(const size_t stepId)
   {
     // Checking the required step id does not exceed contents of the sequence
-    if (stepId > _stepSequence.size()) JAFFAR_THROW_RUNTIME("[Error] Attempting to render a step larger than the step sequence");
+    if (stepId >= _stepSequence.size() - 1) return;
 
     // Updating video buffer
     const auto &step = _stepSequence[stepId];

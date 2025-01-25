@@ -5,7 +5,7 @@
   "PWADS": [ 
     {
       "File Path": "wads/freedoom011.reduced.e1m1.wad",
-      "Expected SHA1": "F84B0CDDB98429F72AD0A0A82B6345CAE2DF9D38"
+      "Expected SHA1": "1010C06B5CA5B87F3C414F7AB440CF6A87EE2F4C"
     }
   ],
   "Skill Level": 1,
@@ -14,7 +14,7 @@
   "Compatibility Level": 3,
   "Fast Monsters": false,
   "Monsters Respawn": false,
-  "No Monsters": false,
+  "No Monsters": true,
   "Player 1 Present": true,
   "Player 2 Present": false,
   "Player 3 Present": false,
