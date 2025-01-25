@@ -189,19 +189,19 @@ int main(int argc, char *argv[])
       
         if (threadId > 0)
         {
-          // JAFFAR_CRITICAL
+          JAFFAR_CRITICAL
           {
             // Secondary loads state
             jaffarCommon::deserializer::Contiguous d(stateData[i], stateSize);
             e.deserializeState(d);
 
             // Advancing state
-            // e.advanceState(input);
+            e.advanceState(input);
           }
         }
 
         // Barrier
-        // JAFFAR_BARRIER;
+        JAFFAR_BARRIER;
       }
     
       // Calculating final state hash
