@@ -69,6 +69,8 @@
 #include "dsda/thing_id.h"
 #include "dsda/utility.h"
 
+extern void dsda_WatchLineActivation(line_t* line, mobj_t* mo);
+
 //
 //      source animation definition
 //
@@ -1500,6 +1502,8 @@ void P_CrossHexenSpecialLine(line_t *line, int side, mobj_t *thing, dboolean bos
 void P_CrossCompatibleSpecialLine(line_t *line, int side, mobj_t *thing, dboolean bossaction)
 {
   int ok;
+
+  dsda_WatchLineActivation(line, thing);
 
   //  Things that should never trigger lines
   //

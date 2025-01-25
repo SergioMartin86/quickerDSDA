@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
 
   // Getting full state size
-  const auto stateSize = SAVEGAMESIZE;
+  const auto stateSize = 1024 * 1024;
   
   // Buffer for state data
   auto stateData = (uint8_t *)malloc(stateSize);

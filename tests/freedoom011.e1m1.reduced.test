@@ -1,10 +1,11 @@
 {
   "IWAD File Path": "wads/freedoom1.wad",
+  "State Size": 16384,
   "Expected IWAD SHA1": "9E38DCC0D1E9FBD20382BA19A6BDF11F7A2B0502",
   "PWADS": [ 
     {
       "File Path": "wads/freedoom011.reduced.e1m1.wad",
-      "Expected SHA1": "A759485C58FD2450EC2468E6BB4DC6624CD44E50"
+      "Expected SHA1": "F84B0CDDB98429F72AD0A0A82B6345CAE2DF9D38"
     }
   ],
   "Skill Level": 1,
