@@ -139,7 +139,6 @@ void dsda_ArchiveAll(void) {
   P_ArchivePlayers();
   P_ThinkerToIndex();
   P_ArchiveWorld();
-  P_ArchivePolyobjs();
   P_ArchiveThinkers();
   P_ArchiveScripts();
   P_ArchiveSounds();
@@ -164,9 +163,11 @@ void dsda_UnArchiveAll(void) {
   P_MapStart();
   P_UnArchiveACS();
   P_UnArchivePlayers();
-  P_UnArchiveWorld();
-  P_UnArchivePolyobjs();
-  P_UnArchiveThinkers();
+  // #pragma omp critical
+  {
+    P_UnArchiveWorld();
+    P_UnArchiveThinkers();
+  }
   P_UnArchiveScripts();
   P_UnArchiveSounds();
   P_UnArchiveAmbientSound();

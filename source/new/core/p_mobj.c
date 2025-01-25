@@ -1426,6 +1426,8 @@ void P_RemoveMobj (mobj_t* mobj)
 
   // unlink from sector and block lists
 
+#pragma omp critical (thinker)
+{
   P_UnsetThingPosition (mobj);
 
   // Delete all nodes on the current sector_list               phares 3/16/98
@@ -1435,6 +1437,7 @@ void P_RemoveMobj (mobj_t* mobj)
     P_DelSeclist(sector_list);
     sector_list = NULL;
     }
+}
 
   // stop any playing sound
 

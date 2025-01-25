@@ -102,89 +102,133 @@ int main(int argc, char *argv[])
   printf("[] ********** Running Test **********\n");
   fflush(stdout);
 
+  // Getting max thread count
+  auto maxThreads = jaffarCommon::parallel::getMaxThreadCount();
+
+  // Creating emu instance vector
+  std::vector<std::unique_ptr<jaffar::EmuInstance>> emulators;
+  emulators.resize(maxThreads);
+ 
+  // Creating vectors
+  JAFFAR_PARALLEL
+  {
+    // Getting my thread id
+    int threadId = jaffarCommon::parallel::getThreadId();
+
+    // Instantiating emus
+    emulators[threadId] = std::make_unique<jaffar::EmuInstance>(configJs);
+
+    // Initializing emulator instance
+    emulators[threadId]->initialize();
+        
+    // Disable rendering
+    emulators[threadId]->disableRendering();
+  }
 
   // Getting full state size
   const auto stateSize = 1024 * 1024;
   
+  // Buffer for initial state data
+  auto initialStateData = (uint8_t *)malloc(stateSize);
+
   // Buffer for state data
-  auto stateData = (uint8_t *)malloc(stateSize);
+  std::vector<uint8_t*> stateData;
+  stateData.resize(sequence.size());
+  for (size_t i = 0; i < sequence.size(); i++) stateData[i] = (uint8_t *)malloc(stateSize);
 
-  JAFFAR_PARALLEL
+  // Number of iterations to run for
+  size_t maxIterations = 100;
+
+  // Getting input parser from the emulator
+  const auto inputParser = emulators[0]->getInputParser();
+
+  // Getting decoded emulator input for each entry in the sequence
+  std::vector<jaffar::input_t> decodedSequence;
+  for (const auto &inputString : sequence) decodedSequence.push_back(inputParser->parseInputString(inputString));
+
+  // Getting initial state
+  jaffarCommon::serializer::Contiguous cs(initialStateData);
+  emulators[0]->serializeState(cs);
+
+  for (size_t iter = 0; iter < maxIterations; iter++)
   {
-    // Getting thread id
-    int threadId = jaffarCommon::parallel::getThreadId();
+    printf("Running iteration %lu / %lu\n", iter, maxIterations);
 
-    // Creating emulator instance
-    auto e = jaffar::EmuInstance(configJs);
+    // Re-loading initial state
+    jaffarCommon::deserializer::Contiguous d(initialStateData, stateSize);
+    emulators[0]->deserializeState(d);
 
-    // Initializing emulator instance
-    e.initialize();
-      
-    // Disable rendering
-    e.disableRendering();
-
-    // Getting input parser from the emulator
-    const auto inputParser = e.getInputParser();
-
-    // Getting decoded emulator input for each entry in the sequence
-    std::vector<jaffar::input_t> decodedSequence;
-    for (const auto &inputString : sequence) decodedSequence.push_back(inputParser->parseInputString(inputString));
-
-    for (const auto &input : decodedSequence) 
+    // Starting parallel section
+    JAFFAR_PARALLEL
     {
-      // Master saves state
-      if (threadId == 0)
-      {
-        // Actually running the sequence
-        e.advanceState(input);
+      // Getting thread id
+      int threadId = jaffarCommon::parallel::getThreadId();
 
-        // Saving state
-        jaffarCommon::serializer::Contiguous cs(stateData);
-        e.serializeState(cs);
-      }
+      // Creating emulator instance
+      auto& e = *emulators[threadId];
 
-      // Barrier
-      JAFFAR_BARRIER;
-    
-      if (threadId > 0)
+      // Running decoded sequence
+      for (size_t i = 0; i < decodedSequence.size(); i++)
       {
-        // JAFFAR_CRITICAL
+        // Getting input
+        const auto &input = decodedSequence[i];
+
+        // Master saves state
+        if (threadId == 0)
         {
-          // Secondary loads state
-          jaffarCommon::deserializer::Contiguous d(stateData, stateSize);
+          // Actually running the sequence
+          e.advanceState(input);
 
-          e.deserializeState(d);
+          // Saving state
+          jaffarCommon::serializer::Contiguous cs(stateData[i]);
+          e.serializeState(cs);
         }
+
+        // Barrier
+        JAFFAR_BARRIER;
+      
+        if (threadId > 0)
+        {
+          // JAFFAR_CRITICAL
+          {
+            // Secondary loads state
+            jaffarCommon::deserializer::Contiguous d(stateData[i], stateSize);
+            e.deserializeState(d);
+
+            // Advancing state
+            // e.advanceState(input);
+          }
+        }
+
+        // Barrier
+        // JAFFAR_BARRIER;
       }
+    
+      // Calculating final state hash
+      auto result = e.getStateHash(); 
 
-      // Barrier
-      JAFFAR_BARRIER;
+      // Creating hash string
+      char hashStringBuffer[256];
+      sprintf(hashStringBuffer, "0x%lX%lX", result.first, result.second);
+      std::string hashString = std::string(hashStringBuffer);
+
+      // Hash verification
+      mutex.lock();
+      if (verificationHash == "") verificationHash = hashString;
+      else if (hashString != verificationHash) { printf("[] Test Failed: Diverging Hashes (%s vs %s)\n", hashString.c_str(), verificationHash.c_str()); isSuccess = false; }
+      mutex.unlock();
+
+      // Checking expected consitions
+      auto mapNumber = e.getMapNumber ();
+      auto isLevelExit = e.isLevelExit ();
+      auto isGameEnd = e.isGameEnd ();
+
+      if (mapNumber != expectedMapNumber) { printf("[] Test Failed: Map Number (%d) different from expected one (%d)\n", mapNumber, expectedMapNumber); isSuccess = false; }
+      if (isLevelExit != expectedIsLevelExit) { printf("[] Test Failed: Failed to reach level exit on the last tic\n"); isSuccess = false; }
+      if (isGameEnd != expectedIsGameEnd) { printf("[] Test Failed: Failed to reach game end on the last tic\n"); isSuccess = false; }
     }
-
-    // Calculating final state hash
-    auto result = e.getStateHash();
-
-    // Creating hash string
-    char hashStringBuffer[256];
-    sprintf(hashStringBuffer, "0x%lX%lX", result.first, result.second);
-    std::string hashString = std::string(hashStringBuffer);
-
-    // Hash verification
-    mutex.lock();
-    if (verificationHash == "") verificationHash = hashString;
-    else if (hashString != verificationHash) { printf("[] Test Failed: Diverging Hashes (%s vs %s)\n", hashString.c_str(), verificationHash.c_str()); isSuccess = false; }
-    mutex.unlock();
-
-    // Checking expected consitions
-    auto mapNumber = e.getMapNumber ();
-    auto isLevelExit = e.isLevelExit ();
-    auto isGameEnd = e.isGameEnd ();
-
-    if (mapNumber != expectedMapNumber) { printf("[] Test Failed: Map Number (%d) different from expected one (%d)\n", mapNumber, expectedMapNumber); isSuccess = false; }
-    if (isLevelExit != expectedIsLevelExit) { printf("[] Test Failed: Failed to reach level exit on the last tic\n"); isSuccess = false; }
-    if (isGameEnd != expectedIsGameEnd) { printf("[] Test Failed: Failed to reach game end on the last tic\n"); isSuccess = false; }
   }
- 
+
   // If failed, return now
   if (isSuccess == false) return -1;
 

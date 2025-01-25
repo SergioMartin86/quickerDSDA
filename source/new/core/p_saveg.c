@@ -841,10 +841,9 @@ void P_ArchiveThinkers(void) {
 // dsda - fix save / load synchronization
 // merges P_UnArchiveThinkers & P_UnArchiveSpecials
 void P_UnArchiveThinkers(void) {
-  thinker_t *th;
+
   mobj_t    **mobj_p;    // killough 2/14/98: Translation table
   int    mobj_count;        // killough 2/14/98: size of or index into table
-  true_thinkerclass_t tc;
 
   totallive = 0;
 
@@ -852,7 +851,7 @@ void P_UnArchiveThinkers(void) {
   P_LOAD_X(brain);
 
   // remove all the current thinkers
-  for (th = thinkercap.next; th != &thinkercap; )
+  for (struct thinker_s * th = thinkercap.next; th != &thinkercap; )
   {
     thinker_t *next = th->next;
     if (P_IsMobjThinker(th))
@@ -865,16 +864,16 @@ void P_UnArchiveThinkers(void) {
     th = next;
   }
   P_InitThinkers ();
-
+  
   // killough 2/14/98: count number of thinkers by skipping through them
   {
     byte *sp;     // save pointer and skip header
-
     sp = save_p;
     mobj_count = 0;
 
     while (true)
     {
+      true_thinkerclass_t tc;
       P_LOAD_BYTE(tc);
       if (tc == tc_end)
         break;
@@ -923,10 +922,10 @@ void P_UnArchiveThinkers(void) {
     save_p = sp;           // restore save pointer
   }
 
-  // read in saved thinkers
   mobj_count = 0;
   while (true)
   {
+    true_thinkerclass_t tc;
     P_LOAD_BYTE(tc);
     if (tc == tc_end)
       break;
@@ -1245,7 +1244,10 @@ void P_UnArchiveThinkers(void) {
             break;
           }
 
-          P_SetThingPosition (mobj, 0);
+          #pragma omp critical (thinker)
+          {
+            P_SetThingPosition (mobj, 0);
+          }
 
           // killough 2/28/98:
           // Fix for falling down into a wall after savegame loaded:
@@ -1265,13 +1267,14 @@ void P_UnArchiveThinkers(void) {
     }
   }
 
+
   // killough 2/14/98: adjust target and tracer fields, plus
   // lastenemy field, to correctly point to mobj thinkers.
   // NULL entries automatically handled by first table entry.
   //
   // killough 11/98: use P_SetNewTarget() to set fields
 
-  for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
+  for (struct thinker_s * th = thinkercap.next ; th != &thinkercap ; th=th->next)
   {
     if (P_IsMobjThinker(th))
     {
@@ -1325,8 +1328,6 @@ void P_UnArchiveThinkers(void) {
       brain = brain_tmp; // restoring
     }
   }
-
-
 }
 
 // hexen
