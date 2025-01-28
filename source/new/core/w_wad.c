@@ -62,8 +62,8 @@
 //
 
 // Location of each lump on disk.
-__thread lumpinfo_t *lumpinfo;
-__thread int        numlumps;         // killough
+lumpinfo_t *lumpinfo;
+int        numlumps;         // killough
 
 void ExtractFileBase (const char *path, char *dest)
 {
@@ -142,23 +142,6 @@ static void W_AddFile(wadfile_info_t *wadfile)
     return;
   }
 
-  // Close any existing handle
-  if (wadfile->handle > 0)
-  {
-    close(wadfile->handle);
-    wadfile->handle = 0;
-  }
-
-  // open the file and add to directory
-
-  wadfile->handle = M_OpenRB(wadfile->name);
-  if (wadfile->handle == -1)
-  {
-    if (!dsda_HasFileExt(wadfile->name, ".lmp"))
-      I_Error("W_AddFile: couldn't open %s",wadfile->name);
-    return;
-  }
-
   //jff 8/3/98 use logical output routine
   lprintf (LO_INFO," adding %s\n",wadfile->name);
   startlump = numlumps;
@@ -182,14 +165,17 @@ static void W_AddFile(wadfile_info_t *wadfile)
       // single lump file
       fileinfo = &singleinfo;
       singleinfo.filepos = 0;
-      singleinfo.size = LittleLong(I_Filelength(wadfile->handle));
+      singleinfo.size = LittleLong(wadfile->size);
       ExtractFileBase(wadfile->name, singleinfo.name);
       numlumps++;
     }
   else
     {
       // WAD file
-      I_Read(wadfile->handle, &header, sizeof(header));
+
+      // I_Read(wadfile->handle, &header, sizeof(header));
+      memcpy(&header, &wadfile->buffer[0], sizeof(header));
+
       if (strncmp(header.identification,"IWAD",4) &&
           strncmp(header.identification,"PWAD",4))
         I_Error("W_AddFile: Wad file %s doesn't have IWAD or PWAD id", wadfile->name);
@@ -197,8 +183,11 @@ static void W_AddFile(wadfile_info_t *wadfile)
       header.infotableofs = LittleLong(header.infotableofs);
       length = header.numlumps*sizeof(filelump_t);
       fileinfo2free = fileinfo = Z_Malloc(length);    // killough
-      lseek(wadfile->handle, header.infotableofs, SEEK_SET),
-      I_Read(wadfile->handle, fileinfo, length);
+      
+      // lseek(wadfile->handle, header.infotableofs, SEEK_SET),
+      // I_Read(wadfile->handle, fileinfo, length);
+      memcpy(fileinfo, &wadfile->buffer[header.infotableofs], length);
+      
       numlumps += header.numlumps;
     }
 
@@ -478,9 +467,9 @@ int W_ListNumFromName(const char *name, int lump)
 //
 // CPhipps - modified to use the new wadfiles array
 //
-__thread wadfile_info_t *wadfiles=NULL;
+wadfile_info_t *wadfiles=NULL;
 
-__thread size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit) 
+size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit)
 
 void W_Init(void)
 {
@@ -515,6 +504,8 @@ void W_Init(void)
   /* cph 2001/07/07 - separated cache setup */
   lprintf(LO_DEBUG, "W_InitCache\n");
   W_InitCache();
+
+  // V_FreePlaypal();
 }
 
 //
@@ -556,8 +547,9 @@ void W_ReadLump(int lump, void *dest)
     {
       if (l->wadfile)
       {
-        lseek(l->wadfile->handle, l->position, SEEK_SET);
-        I_Read(l->wadfile->handle, dest, l->size);
+        // lseek(l->wadfile->handle, l->position, SEEK_SET);
+        // I_Read(l->wadfile->handle, dest, l->size);
+        memcpy(dest, &l->wadfile->buffer[l->position], l->size);
       }
     }
 }
@@ -570,8 +562,11 @@ char* W_ReadLumpToString(int lump)
   if (lump >= 0 && lump < numlumps && l->wadfile)
   {
     buffer = Z_Malloc(l->size + 1);
-    lseek(l->wadfile->handle, l->position, SEEK_SET);
-    I_Read(l->wadfile->handle, buffer, l->size);
+
+    // lseek(l->wadfile->handle, l->position, SEEK_SET);
+    // I_Read(l->wadfile->handle, buffer, l->size);
+    memcpy(buffer, &l->wadfile->buffer[l->position], l->size);
+
     buffer[l->size] = '\0';
   }
 
@@ -627,12 +622,12 @@ void W_Shutdown(void)
 
   W_DoneCache();
 
-  for (i = 0; i < numwadfiles; ++i)
-  {
-    if (wadfiles[i].handle > 0)
-    {
-      close(wadfiles[i].handle);
-      wadfiles[i].handle = -1;
-    }
-  }
+  // for (i = 0; i < numwadfiles; ++i)
+  // {
+  //   if (wadfiles[i].handle > 0)
+  //   {
+  //     close(wadfiles[i].handle);
+  //     wadfiles[i].handle = -1;
+  //   }
+  // }
 }

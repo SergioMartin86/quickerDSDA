@@ -406,7 +406,7 @@ void D_StartTitle (void)
 // CPhipps - static, const char* parameter
 //         - source is an enum
 //         - modified to allocate & use new wadfiles array
-void D_AddFile (const char *file, wad_source_t source)
+void D_AddFile (const char *file, wad_source_t source, void* const buffer, const size_t size)
 {
   int len;
 
@@ -421,10 +421,12 @@ void D_AddFile (const char *file, wad_source_t source)
   }
 
   wadfiles = Z_Realloc(wadfiles, sizeof(*wadfiles)*(numwadfiles+1));
+  wadfiles[numwadfiles].id = numwadfiles;
   wadfiles[numwadfiles].name =
     AddDefaultExtension(strcpy(Z_Malloc(strlen(file)+5), file), ".wad");
   wadfiles[numwadfiles].src = source; // Ty 08/29/98
-  wadfiles[numwadfiles].handle = 0;
+  wadfiles[numwadfiles].buffer = buffer;
+  wadfiles[numwadfiles].size = size;
 
   // No Rest For The Living
   len=strlen(wadfiles[numwadfiles].name);
@@ -570,7 +572,7 @@ void CheckIWAD(const char *iwadname,GameMode_t *gmode,dboolean *hassec)
 //
 // AddIWAD
 //
-void AddIWAD(const char *iwad)
+void AddIWAD(const char *iwad, void* const buffer, const size_t size)
 {
   size_t i;
 
@@ -636,7 +638,7 @@ void AddIWAD(const char *iwad)
   if (gamemode == indetermined)
     //jff 9/3/98 use logical output routine
     lprintf(LO_WARN,"Unknown Game Version, may not work\n");
-  D_AddFile(iwad,source_iwad);
+  D_AddFile(iwad,source_iwad, buffer, size);
 }
 
 /*
@@ -738,28 +740,29 @@ static dboolean FileMatchesIWAD(const char *name)
 
 static void IdentifyVersion (void)
 {
-  char *iwad;
+  // char *iwad;
 
-  // why is this here?
-  dsda_InitDataDir();
-  dsda_InitSaveDir();
+  // // why is this here?
+  // dsda_InitDataDir();
+  // dsda_InitSaveDir();
 
-  // locate the IWAD and determine game mode from it
+  // // locate the IWAD and determine game mode from it
 
-  iwad = FindIWADFile();
+  // iwad = FindIWADFile();
 
-  if (iwad && *iwad)
-  {
-    AddIWAD(iwad);
-    Z_Free(iwad);
-  }
-  else
-  {
-    I_Error("IdentifyVersion: IWAD not found\n\n"
-            "Make sure your IWADs are in a folder that dsda-doom searches on\n"
-            "For example: %s", I_ConfigDir());
-  }
+  // if (iwad && *iwad)
+  // {
+  //   AddIWAD(iwad);
+  //   Z_Free(iwad);
+  // }
+  // else
+  // {
+  //   I_Error("IdentifyVersion: IWAD not found\n\n"
+  //           "Make sure your IWADs are in a folder that dsda-doom searches on\n"
+  //           "For example: %s", I_ConfigDir());
+  // }
 }
+
 
 //
 // DoLooseFiles
@@ -883,24 +886,23 @@ const char *IWADBaseName(void)
 
 static void LoadWADsAtPath(const char *path, wad_source_t source)
 {
-    glob_t *glob;
-    const char *filename;
+    // glob_t *glob;
+    // const char *filename;
 
-    glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED,
-                            "*.wad", "*.lmp", NULL);
-    for (;;)
-    {
-        filename = I_NextGlob(glob);
-        if (filename == NULL)
-        {
-            break;
-        }
-        D_AddFile(filename, source);
-    }
+    // glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED,
+    //                         "*.wad", "*.lmp", NULL);
+    // for (;;)
+    // {
+    //     filename = I_NextGlob(glob);
+    //     if (filename == NULL)
+    //     {
+    //         break;
+    //     }
+    //     D_AddFile(filename, source);
+    // }
 
-    I_EndGlob(glob);
+    // I_EndGlob(glob);
 }
-
 
 static const char *D_AutoLoadGameBase()
 {
@@ -1119,54 +1121,55 @@ void D_DoomMainSetup(void)
   // CPhipps - autoloading of wads
   autoload = !dsda_Flag(dsda_arg_noautoload);
 
-  D_AddFile(port_wad_file, source_auto_load);
+  // Must be provided externally
+  // D_AddFile(port_wad_file, source_auto_load);
 
   EvaluateDoomVerStr(); // must come after HandlePlayback (may change iwad)
 
   // add any files specified on the command line with -file wadfile
   // to the wad list
 
-  if ((arg = dsda_Arg(dsda_arg_file))->found)
-  {
-    int file_i;
-    // the parms after p are wadfile/lump names,
-    // until end of parms or another - preceded parm
-    modifiedgame = true;            // homebrew levels
+  // if ((arg = dsda_Arg(dsda_arg_file))->found)
+  // {
+  //   int file_i;
+  //   // the parms after p are wadfile/lump names,
+  //   // until end of parms or another - preceded parm
+  //   modifiedgame = true;            // homebrew levels
 
-    for (file_i = 0; file_i < arg->count; ++file_i)
-    {
-      const char* file_name;
-      char *file = NULL;
+  //   for (file_i = 0; file_i < arg->count; ++file_i)
+  //   {
+  //     const char* file_name;
+  //     char *file = NULL;
 
-      file_name = arg->value.v_string_array[file_i];
+  //     file_name = arg->value.v_string_array[file_i];
 
-      if (!dsda_FileExtension(file_name))
-      {
-        const char *extensions[] = { ".wad", ".lmp", ".zip", ".deh", ".bex", NULL };
+  //     if (!dsda_FileExtension(file_name))
+  //     {
+  //       const char *extensions[] = { ".wad", ".lmp", ".zip", ".deh", ".bex", NULL };
 
-        file = I_RequireAnyFile(file_name, extensions);
-        file_name = file;
-      }
+  //       file = I_RequireAnyFile(file_name, extensions);
+  //       file_name = file;
+  //     }
 
-      if (dsda_HasFileExt(file_name, ".deh") || dsda_HasFileExt(file_name, ".bex"))
-      {
-        dsda_AppendStringArg(dsda_arg_deh, file_name);
-      }
-      else if (dsda_HasFileExt(file_name, ".wad") || dsda_HasFileExt(file_name, ".lmp"))
-      {
-        if (!file)
-          file = I_RequireWad(file_name);
+  //     if (dsda_HasFileExt(file_name, ".deh") || dsda_HasFileExt(file_name, ".bex"))
+  //     {
+  //       dsda_AppendStringArg(dsda_arg_deh, file_name);
+  //     }
+  //     else if (dsda_HasFileExt(file_name, ".wad") || dsda_HasFileExt(file_name, ".lmp"))
+  //     {
+  //       if (!file)
+  //         file = I_RequireWad(file_name);
 
-        D_AddFile(file, source_pwad);
-      }
-      else
-      {
-        I_Error("File type \"%s\" is not supported", dsda_FileExtension(file_name));
-      }
+  //       D_AddFile(file, source_pwad);
+  //     }
+  //     else
+  //     {
+  //       I_Error("File type \"%s\" is not supported", dsda_FileExtension(file_name));
+  //     }
 
-      Z_Free(file);
-    }
-  }
+  //     Z_Free(file);
+  //   }
+  // }
 
   D_InitFakeNetGame();
 

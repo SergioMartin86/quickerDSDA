@@ -11,6 +11,7 @@
 #include "inputParser.hpp"
 #include <SDL.h>
 #include <d_player.h>
+#include <w_wad.h>
 
 extern "C"
 {
@@ -35,6 +36,9 @@ extern "C"
   void dsda_ArchiveAll(void);
   void dsda_UnArchiveAll(void);
   void headlessGetMapName(char* outString);
+
+  void D_AddFile (const char *file, wad_source_t source, void* const buffer, const size_t size);
+  void AddIWAD(const char *iwad, void* const buffer, const size_t size);
 }
 
 // Players information
@@ -114,27 +118,32 @@ class EmuInstanceBase
   void initialize()
   {
     // Loading IWAD File
-    std::string IWADFileData;
-    if (jaffarCommon::file::loadStringFromFile(IWADFileData, _IWADFilePath) == false) JAFFAR_THROW_LOGIC("Could not IWAD file: %s\n", _IWADFilePath.c_str());
+    if (jaffarCommon::file::loadStringFromFile(_IWADFileDataBuffer, _IWADFilePath) == false) JAFFAR_THROW_LOGIC("Could not IWAD file: %s\n", _IWADFilePath.c_str());
 
     // Calculating IWAD SHA1
-    auto IWADSHA1 = jaffarCommon::hash::getSHA1String(IWADFileData);
+    auto IWADSHA1 = jaffarCommon::hash::getSHA1String(_IWADFileDataBuffer);
 
     // Checking with the expected SHA1 hash
     if (IWADSHA1 != _expectedIWADSHA1) JAFFAR_THROW_LOGIC("Wrong IWAD SHA1. Found: '%s', Expected: '%s'\n", IWADSHA1.c_str(), _expectedIWADSHA1.c_str());
 
+    // Loading IWAD into DSDA
+    AddIWAD(_IWADFilePath.c_str(), _IWADFileDataBuffer.data(), _IWADFileDataBuffer.size());
+
     // Loading PWAD Files
+    _PWADFileDataBuffers.resize(_PWADFilePaths.size());
     for (size_t i = 0; i < _PWADFilePaths.size(); i++)
     {
       // Loading PWAD File
-      std::string PWADFileData;
-      if (jaffarCommon::file::loadStringFromFile(PWADFileData, _PWADFilePaths[i]) == false) JAFFAR_THROW_LOGIC("Could not PWAD file: %s\n", _PWADFilePaths[i].c_str());
+      if (jaffarCommon::file::loadStringFromFile(_PWADFileDataBuffers[i], _PWADFilePaths[i]) == false) JAFFAR_THROW_LOGIC("Could not PWAD file: %s\n", _PWADFilePaths[i].c_str());
 
       // Calculating IWAD SHA1
-      auto PWADSHA1 = jaffarCommon::hash::getSHA1String(PWADFileData);
+      auto PWADSHA1 = jaffarCommon::hash::getSHA1String(_PWADFileDataBuffers[i]);
 
       // Checking with the expected SHA1 hash
       if (PWADSHA1 != _PWADExpectedSHA1s[i]) JAFFAR_THROW_LOGIC("Wrong PWAD SHA1. Found: '%s', Expected: '%s'\n", PWADSHA1.c_str(), _PWADExpectedSHA1s[i].c_str());
+
+      // Loading IWAD into DSDA
+      D_AddFile(_PWADFilePaths[i].c_str(), source_pwad, _PWADFileDataBuffers[i].data(), _PWADFileDataBuffers[i].size());
     }
 
     // Creating arguments
@@ -144,12 +153,6 @@ class EmuInstanceBase
     // Specifying executable name
     char arg0[] = "dsda";
     argv[argc++] = arg0;
-
-    // Specifying IWAD
-    char arg1[] = "-iwad";
-    argv[argc++] = arg1;
-    char* iwadPath = (char*)((uint64_t)_IWADFilePath.c_str());
-    argv[argc++] = iwadPath;
 
     // Eliminating restrictions to TAS inputs
     char arg2[] = "-tas";
@@ -193,15 +196,6 @@ class EmuInstanceBase
     // Specifying no monsters
     char arg8[] = "-nomonsters";
     if (_noMonsters) argv[argc++] = arg8;
-
-    // Specifying PWAD Files
-    char arg9[] = "-file";
-    for (size_t i = 0; i < _PWADFilePaths.size(); i++)
-    {
-     argv[argc++] = arg9;
-     char* pwadPath = (char*)((uint64_t)_PWADFilePaths[i].c_str());
-     argv[argc++] = pwadPath;
-    }
 
     // Initializing DSDA core
     headlessMain(argc, argv);
@@ -417,9 +411,11 @@ class EmuInstanceBase
   private:
 
   std::string _IWADFilePath;
+  std::string _IWADFileDataBuffer;
   std::string _expectedIWADSHA1;
 
   std::vector<std::string> _PWADFilePaths;
+  std::vector<std::string> _PWADFileDataBuffers;
   std::vector<std::string> _PWADExpectedSHA1s;
 
   unsigned int _skill; 

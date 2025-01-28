@@ -83,14 +83,16 @@ typedef enum {
 // We _must_ have the wadfiles[] the same as those actually loaded, so there
 // is no point having these separate entities. This belongs here.
 typedef struct {
+  int id;
   char* name;
   wad_source_t src;
-  int handle;
+  char* buffer;
+  size_t size;
 } wadfile_info_t;
 
-extern __thread wadfile_info_t *wadfiles; 
+extern wadfile_info_t *wadfiles;
 
-extern __thread size_t numwadfiles; // CPhipps - size of the wadfiles array
+extern size_t numwadfiles; // CPhipps - size of the wadfiles array
 
 void W_Init(void); // CPhipps - uses the above array
 void W_InitCache(void);
@@ -131,8 +133,8 @@ typedef struct
 #define LUMP_STATIC 0x00000001 /* assigned gltexture should be static */
 #define LUMP_PRBOOM 0x00000002 /* from internal resource */
 
-extern __thread lumpinfo_t *lumpinfo;
-extern __thread int        numlumps;
+extern lumpinfo_t *lumpinfo;
+extern int        numlumps;
 
 int     W_FindNumFromName2(const char *name, int ns, int lump);
 

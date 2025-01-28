@@ -65,9 +65,8 @@ void D_Display(fixed_t frac);
 void D_PageTicker(void);
 void D_StartTitle(void);
 void D_DoomMain(void);
-void D_AddFile (const char *file, wad_source_t source);
-
-void AddIWAD(const char *iwad);
+void D_AddFile (const char *file, wad_source_t source, void* const buffer, const size_t size);
+void AddIWAD(const char *iwad, void* const buffer, const size_t size);
 
 extern __thread const char *port_wad_file;
 

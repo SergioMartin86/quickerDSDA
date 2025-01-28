@@ -55,7 +55,7 @@
 
 #include "e6y.h"//e6y
 
-static __thread void **lump_data;
+static void **lump_data;
 
 #ifdef _WIN32
 typedef struct {
@@ -175,11 +175,11 @@ const void* W_LumpByNum(int lump)
 
 #else
 
-__thread void ** mapped_wad;
+void ** mapped_wad;
 
 void W_InitCache(void)
 {
-  int maxfd = 0;
+  int maxId = 0;
   // set up caching
   lump_data = Z_Calloc(numlumps, sizeof *lump_data);
   if (!lump_data)
@@ -189,38 +189,38 @@ void W_InitCache(void)
     int i;
     for (i=0; i<numlumps; i++)
       if (lumpinfo[i].wadfile)
-        if (lumpinfo[i].wadfile->handle > maxfd) maxfd = lumpinfo[i].wadfile->handle;
+        if (lumpinfo[i].wadfile->id > maxId) maxId = lumpinfo[i].wadfile->id;
   }
-  mapped_wad = Z_Calloc(maxfd+1,sizeof *mapped_wad);
-  {
-    int i;
-    for (i=0; i<numlumps; i++) {
-      if (lumpinfo[i].wadfile) {
-        int fd = lumpinfo[i].wadfile->handle;
-        if (!mapped_wad[fd])
-          if ((mapped_wad[fd] = mmap(NULL,I_Filelength(fd),PROT_READ,MAP_SHARED,fd,0)) == MAP_FAILED)
-            I_Error("W_InitCache: failed to mmap");
-      }
-    }
-  }
+  // mapped_wad = Z_Calloc(maxId+1,sizeof *mapped_wad);
+  // {
+  //   int i;
+  //   for (i=0; i<numlumps; i++) {
+  //     if (lumpinfo[i].wadfile) {
+  //       int fd = lumpinfo[i].wadfile->id;
+  //       if (!mapped_wad[fd])
+  //         if ((mapped_wad[fd] = mmap(NULL,I_Filelength(fd),PROT_READ,MAP_SHARED,fd,0)) == MAP_FAILED)
+  //           I_Error("W_InitCache: failed to mmap");
+  //     }
+  //   }
+  // }
 }
 
 void W_DoneCache(void)
 {
-  {
-    int i;
-    for (i=0; i<numlumps; i++)
-      if (lumpinfo[i].wadfile) {
-        int fd = lumpinfo[i].wadfile->handle;
-        if (fd > 0 && mapped_wad[fd]) {
-          if (munmap(mapped_wad[fd],I_Filelength(fd)))
-            I_Error("W_DoneCache: failed to munmap");
-          mapped_wad[fd] = NULL;
-        }
-      }
-  }
-  Z_Free(mapped_wad);
-  mapped_wad = NULL;
+  // {
+  //   int i;
+  //   for (i=0; i<numlumps; i++)
+  //     if (lumpinfo[i].wadfile) {
+  //       int fd = lumpinfo[i].wadfile->id;
+  //       if (fd > 0 && mapped_wad[fd]) {
+  //         if (munmap(mapped_wad[fd],I_Filelength(fd)))
+  //           I_Error("W_DoneCache: failed to munmap");
+  //         mapped_wad[fd] = NULL;
+  //       }
+  //     }
+  // }
+  // Z_Free(mapped_wad);
+  // mapped_wad = NULL;
 }
 
 const void* W_LumpByNum(int lump)
@@ -232,11 +232,13 @@ const void* W_LumpByNum(int lump)
   if (!lumpinfo[lump].wadfile)
     return NULL;
 
-  return
-    (const void *) (
-      ((const byte *) (mapped_wad[lumpinfo[lump].wadfile->handle]))
-      + lumpinfo[lump].position
-    );
+  // return
+  //   (const void *) (
+  //     ((const byte *) (mapped_wad[lumpinfo[lump].wadfile->handle]))
+  //     + lumpinfo[lump].position
+  //   );
+
+  return (const void*) &lumpinfo[lump].wadfile->buffer[lumpinfo[lump].position];
 }
 #endif
 
