@@ -56,11 +56,15 @@ public:
     // Converting input into a stream for parsing
     std::istringstream ss(inputString);
 
+    // Start separator
+    char c = ss.get();
+    if (c != '|') reportBadInputString(inputString, c);
+
     // Parsing controller 1 inputs
     for (uint8_t i = 0; i < _playerCount; i++) parsePlayerInputs(input[i], ss, inputString);
 
     // End separator
-    char c = ss.get();
+    c = ss.get();
     if (c != '|') reportBadInputString(inputString, c);
 
     // If its not the end of the stream, then extra values remain and its invalid
@@ -117,6 +121,19 @@ public:
     // Parsing comma
     c = ss.get();
     if (c != ',') reportBadInputString(inputString, c);
+
+    // Parsing weapon select speed
+    char weaponSelectString[5];
+    weaponSelectString[0] = ss.get();
+    weaponSelectString[1] = ss.get();
+    weaponSelectString[2] = ss.get();
+    weaponSelectString[3] = ss.get();
+    weaponSelectString[4] = '\0';
+    input.weapon = atoi(weaponSelectString);
+
+    // Parsing comma
+    c = ss.get();
+    if (c != ',') reportBadInputString(inputString, c);
     
     // Fire
     c = ss.get();
@@ -128,15 +145,10 @@ public:
     if (c != '.' && c != 'A') reportBadInputString(inputString, c);
     if (c == 'A') input.action = true;
 
-    // Parsing weapon
-    c = ss.get(); 
-    if (c != ' ' && c < 48 && c > 57) reportBadInputString(inputString, c);
-    if (c != ' ') input.weapon += (uint8_t)c - 48;
-
     // Alt Weapon indicator
     c = ss.get();
-    if (c != '.' && c != 'W') reportBadInputString(inputString, c);
-    if (c == 'W') input.altWeapon = true;
+    if (c != '.' && c != 'X') reportBadInputString(inputString, c);
+    if (c == 'X') input.altWeapon = true;
   }
 
   static inline void reportBadInputString(const std::string &inputString, const char c)

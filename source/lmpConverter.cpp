@@ -136,16 +136,19 @@ int main(int argc, char *argv[])
   // Printing inputs to stdout
   for (size_t ticIdx = 0; ticIdx < ticCount; ticIdx++)
   {
+    // Line open
+    printf("|");
+
     for (uint8_t playerId = 0; playerId < playerCount; playerId++)
     {
-      printf("|%4d,%4d,%4d,%s%s%1u%s",
+      printf("|%4d,%4d,%4d,%4d,%s%s%s",
        _inputVector[ticIdx][playerId].forwardSpeed,
        _inputVector[ticIdx][playerId].strafingSpeed,
        _inputVector[ticIdx][playerId].turningSpeed,
+       _inputVector[ticIdx][playerId].weapon,
        _inputVector[ticIdx][playerId].fire ? "F" : ".",
        _inputVector[ticIdx][playerId].action ? "A" : ".",
-       _inputVector[ticIdx][playerId].weapon,
-       _inputVector[ticIdx][playerId].altWeapon ? "W" : "."
+       _inputVector[ticIdx][playerId].altWeapon ? "X" : "."
       );
     }
 

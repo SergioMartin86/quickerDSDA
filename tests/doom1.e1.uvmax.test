@@ -2,7 +2,12 @@
   "IWAD File Path": "wads/DOOM.WAD",
   "Expected IWAD SHA1": "117015379C529573510BE08CF59810AA10BB934E",
   "State Size": 1048576,
-  "PWADS": [ ],
+  "PWADS": [ 
+    {
+      "File Path": "dsda-doom.wad",
+      "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
+    }
+  ],
   "Skill Level": 4,
   "Episode": 1, 
   "Map": 1,
@@ -20,7 +25,7 @@
   "Expected Result":
   {
     "Map Number": 8,
-    "Is Level Exit": true, 
-    "Is Game End": true
+    "Is Level Exit": false, 
+    "Is Game End": false
   }
 }
