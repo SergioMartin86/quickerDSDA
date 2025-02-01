@@ -1,13 +1,12 @@
 {
   "IWAD File Path": "wads/TNT.WAD",
   "Expected IWAD SHA1": "139E26D801A64B404B8D898DEFCA10227A61867B",
-  "PWADS":
-   [
-     { 
-	   "File Path": "wads/tnt31.wad",
-	   "Expected SHA1": "D292445192DD1ECB6E6E5350443755B9B2073255"
-	 }
-   ],
+  "PWADS": [ 
+    {
+      "File Path": "wads/dsda-doom.wad",
+      "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
+    }
+  ],
   "Skill Level": 4,
   "Episode": 0, 
   "Map": 1,

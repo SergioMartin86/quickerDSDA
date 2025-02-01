@@ -4,7 +4,7 @@
   "Expected IWAD SHA1": "9E38DCC0D1E9FBD20382BA19A6BDF11F7A2B0502",
   "PWADS": [ 
     {
-      "File Path": "dsda-doom.wad",
+      "File Path": "wads/dsda-doom.wad",
       "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
     },
     {
@@ -23,6 +23,7 @@
   "Player 2 Present": false,
   "Player 3 Present": false,
   "Player 4 Present": false,
+  "Player Point of View": 0,
   "Prevent Level Exit": true,
   "Prevent Game End": false,
 

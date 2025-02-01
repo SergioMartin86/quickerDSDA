@@ -1,7 +1,12 @@
 {
   "IWAD File Path": "wads/PLUTONIA.WAD",
   "Expected IWAD SHA1": "327F8C41EBD4138354E9FCA63CEBBBD1B9489749",
-  "PWADS": [],
+  "PWADS": [ 
+    {
+      "File Path": "wads/dsda-doom.wad",
+      "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
+    }
+  ],
   "Skill Level": 4,
   "Episode": 0, 
   "Map": 1,

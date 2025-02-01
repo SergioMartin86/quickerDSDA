@@ -9,9 +9,12 @@
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/contiguous.hpp>
 #include "inputParser.hpp"
-#include <SDL.h>
 #include <d_player.h>
 #include <w_wad.h>
+
+#ifdef _ENABLE_RENDERING
+#include <SDL.h>
+#endif
 
 extern "C"
 {
@@ -21,15 +24,22 @@ extern "C"
   void headlessClearTickCommand();
   void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon, int altWeapon);
 
-  // Video-related functions
+  // Rendering-related functions
+  #ifdef _ENABLE_RENDERING
   void headlessUpdateVideo(void);
   void* headlessGetVideoBuffer();
   int headlessGetVideoPitch();
   int headlessGetVideoWidth();
   int headlessGetVideoHeight();
-  void headlessEnableRendering();
-  void headlessDisableRendering();
+  void headlessEnableVideoRendering();
+  void headlessDisableVideoRendering();
+  void headlessEnableAudioRendering();
+  void headlessDisableAudioRendering();
   uint32_t* headlessGetPallette();
+  unsigned char * I_CaptureAudio (int* nsamples);
+  void I_InitSound(void);
+  void I_SetSoundCap (void);
+  #endif
 
   void headlessSetSaveStatePointer(void* savePtr, int saveStateSize);
   size_t headlessGetEffectiveSaveSize();
@@ -50,6 +60,9 @@ extern "C" __STORAGE_MODIFIER int reachedLevelExit;
 extern "C" __STORAGE_MODIFIER int reachedGameEnd;
 extern "C" __STORAGE_MODIFIER int gamemap;
 extern "C" __STORAGE_MODIFIER int gametic;
+extern "C" __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
+extern "C" __STORAGE_MODIFIER int consoleplayer;
+extern "C" __STORAGE_MODIFIER int displayplayer;
 
 namespace jaffar
 {
@@ -87,6 +100,8 @@ class EmuInstanceBase
     _player2Present = jaffarCommon::json::getBoolean(config, "Player 2 Present");
     _player3Present = jaffarCommon::json::getBoolean(config, "Player 3 Present");
     _player4Present = jaffarCommon::json::getBoolean(config, "Player 4 Present");
+
+    _playerPointOfView = jaffarCommon::json::getNumber<uint8_t>(config, "Player Point of View");
 
     _playerCount = 0;
     if (_player1Present == true) _playerCount++;
@@ -197,8 +212,21 @@ class EmuInstanceBase
     char arg8[] = "-nomonsters";
     if (_noMonsters) argv[argc++] = arg8;
 
+    // Setting players in game
+    playeringame[0] = _player1Present;
+    playeringame[1] = _player2Present;
+    playeringame[2] = _player3Present;
+    playeringame[3] = _player4Present;
+
+    // Getting player count
+    auto playerCount = _player1Present + _player2Present + _player3Present + _player4Present;
+    char arg9[] = "-solo-net";
+    if (playerCount > 1) argv[argc++] = arg9;
+
     // Initializing DSDA core
     headlessMain(argc, argv);
+
+    #ifdef _ENABLE_RENDERING
 
     // Getting video information
     _videoSource = (uint8_t*)headlessGetVideoBuffer();
@@ -212,6 +240,8 @@ class EmuInstanceBase
 
     // Allocating buffer
     _videoBuffer = (uint32_t*) malloc (_videoBufferSize);
+
+    #endif
 
     // Setting save state size
     _saveData = (uint8_t*)malloc(_stateSize);
@@ -247,9 +277,12 @@ class EmuInstanceBase
     // Running a single tick
     headlessRunSingleTick();
 
+    #ifdef _ENABLE_RENDERING
+
     // If rendering is enabled, update vid now
     if(_renderingEnabled == true) 
     {
+      displayplayer = consoleplayer = _playerPointOfView;
       headlessUpdateVideo();
 
       auto palette = headlessGetPallette();
@@ -262,7 +295,13 @@ class EmuInstanceBase
        video[2] = color[0];
        video[3] = color[3];
       } 
+
+     	int nSamples = 0;
+      void* audioBuffer = nullptr;
+      audioBuffer = I_CaptureAudio(&nSamples);
     }
+
+    #endif
 
     if (reachedLevelExit == 1) jaffarCommon::logger::log("[] Level Exit detected on tic:   %d\n", gametic);
     if (reachedGameEnd   == 1) jaffarCommon::logger::log("[] Gane End detected on tic:   %d\n", gametic);
@@ -313,7 +352,8 @@ class EmuInstanceBase
     jaffarCommon::logger::log("[] Game Tic:   %d\n", gametic);
     jaffarCommon::logger::log("[] Level Exit: %s\n", reachedLevelExit == 1 ? "Yes" : "No");
     jaffarCommon::logger::log("[] Game End:   %s\n", reachedGameEnd   == 1 ? "Yes" : "No");
- 
+    jaffarCommon::logger::log("[] Players:    %1d%1d%1d%1d\n", playeringame[0], playeringame[1], playeringame[2], playeringame[3]);
+
     if (players[0].mo != nullptr)
     {
       jaffarCommon::logger::log("[] Player 1 Coordinates:    (%f, %f, %f)\n", getFloatFrom1616Fixed(players[0].mo->x), getFloatFrom1616Fixed(players[0].mo->y), getFloatFrom1616Fixed(players[0].mo->z));
@@ -325,34 +365,47 @@ class EmuInstanceBase
 
   void initializeVideoOutput()
   {
+    #ifdef _ENABLE_RENDERING
     SDL_Init(SDL_INIT_VIDEO);
     _renderWindow = SDL_CreateWindow("QuickerDSDA",  SDL_WINDOWPOS_UNDEFINED,  SDL_WINDOWPOS_UNDEFINED, _videoWidth, _videoHeight, 0);
     _renderer = SDL_CreateRenderer(_renderWindow, -1, SDL_RENDERER_ACCELERATED);
     _texture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_STREAMING, _videoWidth, _videoHeight);
+    #endif
   }
 
   void finalizeVideoOutput()
   {
+    #ifdef _ENABLE_RENDERING
     SDL_DestroyTexture(_texture);
     SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_renderWindow);
     SDL_Quit();
+    #endif
   }
 
   void enableRendering()
   {
-    headlessEnableRendering();
+    #ifdef _ENABLE_RENDERING
+    headlessEnableVideoRendering();
+    headlessEnableAudioRendering();
+    I_SetSoundCap();
+    I_InitSound();
     _renderingEnabled = true;
+    #endif
   }
 
   void disableRendering()
   {
-    headlessDisableRendering();
+    #ifdef _ENABLE_RENDERING
+    headlessDisableVideoRendering();
+    headlessDisableAudioRendering();
     _renderingEnabled = false;
+    #endif
   }
 
   void updateRenderer()
   {
+    #ifdef _ENABLE_RENDERING
     SDL_Rect srcRect  = { 0, 0, _videoWidth, _videoHeight };
     SDL_Rect destRect = { 0, 0, _videoWidth, _videoHeight };
 
@@ -364,6 +417,7 @@ class EmuInstanceBase
     SDL_RenderClear(_renderer);
     SDL_RenderCopy(_renderer, _texture, &srcRect, &destRect);
     SDL_RenderPresent(_renderer);
+    #endif
   }
 
   inline size_t getStateSize() const 
@@ -387,8 +441,22 @@ class EmuInstanceBase
     dsda_UnArchiveAll();
   }
 
-  size_t getVideoBufferSize() const { return _videoBufferSize; }
-  uint8_t* getVideoBufferPtr() const { return (uint8_t*)_videoBuffer; }
+  size_t getVideoBufferSize() const
+  {
+    #ifdef _ENABLE_RENDERING
+     return _videoBufferSize;
+    #endif
+     return 0;
+  }
+
+  uint8_t* getVideoBufferPtr() const
+  {
+    #ifdef _ENABLE_RENDERING
+     return (uint8_t*)_videoBuffer;
+    #endif
+     return nullptr;
+  }
+  
   size_t getEffectiveSaveStateSize() const { return headlessGetEffectiveSaveSize(); }
 
   // Virtual functions
@@ -431,12 +499,14 @@ class EmuInstanceBase
   bool _player2Present;  
   bool _player3Present;  
   bool _player4Present;  
+  uint8_t _playerPointOfView;
   uint8_t _playerCount;
 
   std::unique_ptr<jaffar::InputParser> _inputParser;
   static uint32_t InputGetter(void* inputValue) { return *(uint32_t*)inputValue; }
 
   // Rendering stuff
+  #ifdef _ENABLE_RENDERING
   int _videoWidth;
   int _videoHeight;
   int _videoPitch;
@@ -447,6 +517,7 @@ class EmuInstanceBase
   uint32_t* _videoBuffer;
   size_t _videoBufferSize;
   bool _renderingEnabled = false;
+  #endif
 };
 
 } // namespace jaffar

@@ -2,7 +2,12 @@
   "IWAD File Path": "wads/DOOM2.WAD",
   "Expected IWAD SHA1": "7EC7652FCFCE8DDC6E801839291F0E28EF1D5AE7",
   "State Size": 1048576,
-  "PWADS": [ ],
+  "PWADS": [ 
+    {
+      "File Path": "wads/dsda-doom.wad",
+      "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
+    }
+  ],
   "Skill Level": 4,
   "Episode": 0, 
   "Map": 1,
@@ -14,6 +19,7 @@
   "Player 2 Present": false,
   "Player 3 Present": false,
   "Player 4 Present": false,
+  "Player Point of View": 0,
   "Prevent Level Exit": true,
   "Prevent Game End": false,
 

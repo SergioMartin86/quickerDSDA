@@ -272,7 +272,7 @@ DSDACompileArgs = [
 # DSDA dependency
 
  DSDADependency = declare_dependency(
-  compile_args        : [  DSDACompileArgs, '-D__STORAGE_MODIFIER=' ],
+  compile_args        : [  DSDACompileArgs, '-D__STORAGE_MODIFIER=', '-D_ENABLE_RENDERING' ],
 		link_args        : [  ],
   include_directories : include_directories(DSDAIncludeDirs),
   sources             : [ DSDASrc ],
