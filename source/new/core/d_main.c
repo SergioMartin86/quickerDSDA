@@ -419,7 +419,6 @@ void D_AddFile (const char *file, wad_source_t source, void* const buffer, const
       if (wadfiles[i].src == source_iwad)
         wadfiles[i].src = source_skip;
   }
-
   wadfiles = Z_Realloc(wadfiles, sizeof(*wadfiles)*(numwadfiles+1));
   wadfiles[numwadfiles].id = numwadfiles;
   wadfiles[numwadfiles].name =

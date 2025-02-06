@@ -1,6 +1,6 @@
 {
-  "IWAD File Path": "wads/DOOM2.WAD",
-  "Expected IWAD SHA1": "7EC7652FCFCE8DDC6E801839291F0E28EF1D5AE7",
+  "IWAD File Path": "wads/HEXEN.WAD",
+  "Expected IWAD SHA1": "4B53832F0733C1E29E5F1DE2428E5475E891AF29",
   "State Size": 1048576,
   "PWADS": [ 
     {
@@ -11,7 +11,7 @@
   "Skill Level": 4,
   "Episode": 0, 
   "Map": 1,
-  "Compatibility Level": 2,
+  "Compatibility Level": 0,
   "Fast Monsters": false,
   "Monsters Respawn": false,
   "No Monsters": false,
@@ -20,13 +20,13 @@
   "Player 3 Present": false,
   "Player 4 Present": false,
   "Player Point of View": 0,
-  "Prevent Level Exit": false,
-  "Prevent Game End": true,
+  "Prevent Level Exit": true,
+  "Prevent Game End": false,
 
   "Expected Result":
   {
-    "Map Number": 30,
+    "Map Number": 1,
     "Is Level Exit": false, 
-    "Is Game End": true
+    "Is Game End": false
   }
 }
