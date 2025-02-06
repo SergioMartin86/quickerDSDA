@@ -1,11 +1,16 @@
 {
   "IWAD File Path": "wads/ReducedE1M1Test.wad",
-  "Expected IWAD SHA1": "84855FC31CA953E380AF1D635088DE2AF359818D",
   "State Size": 65535,
+  "IWAD File Path": "wads/DOOM.WAD",
+  "Expected IWAD SHA1": "117015379C529573510BE08CF59810AA10BB934E",
   "PWADS": [ 
     {
       "File Path": "wads/dsda-doom.wad",
       "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
+    },
+    {
+      "File Path": "wads/doom1.e1m1.reduced.wad",
+      "Expected SHA1": "DD96DFA0AF2DAB354D67D9CA5CF6269D7DEEA85F"
     }
   ],
   "Skill Level": 4,
