@@ -1,6 +1,0 @@
-[options]
-buildtype = debug
-buildPlayer = true
-
-[properties]
-
