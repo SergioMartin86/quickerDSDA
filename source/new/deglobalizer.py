@@ -29,16 +29,38 @@ for line in globalsContent.splitlines():
 # Set of possible C variable data types
 dataTypes = {'int', 'float', 'double', 'char', 'short', 'long', 'unsigned', 'signed', 'dboolean', 'fixed_t', 'gamestate_t', 'weaponinfo_t', 'player_t', 'mobj_t', 'sector_t', 'line_t', 'thinker_t', 'mapthing_t', 'angle_t', 'fixedangle_t'}
 
-# Replace global variables in the source content
+# Now iterate sourceContent line by line
+isInStruct = False
 newSourceContent = sourceContent
-for var in globalVariables:
-    # Create a regex pattern to match the variable with its data type
-    for dataType in dataTypes:
-        pattern = f'\\b{dataType}\\s+\*?{var}\\b'
-        #print("Pattern:", pattern)
-        replacement = f'__STORAGE_MODIFIER {dataType} {var}'
-        # Use re.sub to replace the variable with the new format
-        newSourceContent = re.sub(pattern, replacement, newSourceContent)
+for line in newSourceContent.splitlines():
+    print("Processing line:", line.strip())
+    
+    if ('}' in line): isInStruct = False
+    if ('typedef struct' in line): isInStruct = True
+    if (isInStruct): continue  # Skip lines inside structs
+    #if the line is empty, skip it
+    if not line.strip(): continue
+    if ('\\' in line): continue
+
+    #if the line is a C comment, skip it
+    if line.strip().startswith('//') or line.strip().startswith('/*'): continue
+
+    #if the line is a C preprocessor directive, skip it
+    if line.strip().startswith('#'): continue
+
+    # Check if the line contains a global variable
+    continueRunning = True
+    for var in globalVariables:
+        for dataType in dataTypes:
+            if continueRunning:
+                pattern = f'\\b{dataType}\\s+{var}\\b'
+                newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} {var}', line)
+
+                # If the line was modified, update the source content
+                if newLine != line:
+                    print(f"Replacing '{line}' with '{newLine}")
+                    newSourceContent = newSourceContent.replace(line, newLine)
+                    continueRunning = False
 
 # Compare the modified source content with the original
 if sourceContent != newSourceContent:
