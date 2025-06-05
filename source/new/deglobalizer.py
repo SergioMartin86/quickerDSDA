@@ -34,7 +34,7 @@ newSourceContent = sourceContent
 for var in globalVariables:
     # Create a regex pattern to match the variable with its data type
     for dataType in dataTypes:
-        pattern = f'\\b{dataType}\\s+{var}\\b'
+        pattern = f'\\b{dataType}\\s*\*?\\s*{var}\\b'
         #print("Pattern:", pattern)
         replacement = f'__STORAGE_MODIFIER {dataType} {var}'
         # Use re.sub to replace the variable with the new format
