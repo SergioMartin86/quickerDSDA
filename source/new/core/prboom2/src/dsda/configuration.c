@@ -1590,6 +1590,7 @@ int dsda_ConfigIDByName(const char* name) {
   int i;
 
   for (i = 1; i < dsda_config_count; ++i)
+  if (dsda_config[i].name != NULL)
     if (!strcmp(name, dsda_config[i].name))
       return i;
 
