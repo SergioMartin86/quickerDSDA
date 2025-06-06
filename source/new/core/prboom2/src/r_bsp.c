@@ -65,13 +65,13 @@ __STORAGE_MODIFIER sector_t *frontsector;
 __STORAGE_MODIFIER sector_t *backsector;
 __STORAGE_MODIFIER sector_t *poly_frontsector;
 __STORAGE_MODIFIER dboolean poly_add_line;
-drawseg_t *ds_p;
+__STORAGE_MODIFIER drawseg_t *ds_p;
 
 // killough 4/7/98: indicates doors closed wrt automap bugfix:
 // cph - replaced by linedef rendering flags - int      doorclosed;
 
 // killough: New code which removes 2s linedef limit
-drawseg_t *drawsegs;
+__STORAGE_MODIFIER drawseg_t *drawsegs;
 __STORAGE_MODIFIER unsigned maxdrawsegs;
 // drawseg_t drawsegs[MAXDRAWSEGS];       // old code -- killough
 
@@ -89,7 +89,7 @@ void R_ClearDrawSegs(void)
 // indicating whether it's blocked by a solid wall yet or not.
 
 // e6y: resolution limitation is removed
-byte *solidcol;
+__STORAGE_MODIFIER byte *solidcol;
 
 // CPhipps -
 // R_ClipWallSegment
@@ -319,7 +319,7 @@ sector_t *R_FakeFlat(sector_t *sec, sector_t *tempsec,
 
 static dboolean CheckClip(seg_t * seg, sector_t * frontsector, sector_t * backsector)
 {
-  static sector_t tempsec_back, tempsec_front;
+  static __STORAGE_MODIFIER sector_t tempsec_back, tempsec_front;
 
   backsector = R_FakeFlat(backsector, &tempsec_back, NULL, NULL, true);
   frontsector = R_FakeFlat(frontsector, &tempsec_front, NULL, NULL, false);
@@ -622,8 +622,8 @@ static dboolean R_CheckBBox(const fixed_t *bspcoord)
   return true;
 }
 
-static visplane_t dummyfloorplane;
-static visplane_t dummyceilingplane;
+static __STORAGE_MODIFIER visplane_t dummyfloorplane;
+static __STORAGE_MODIFIER visplane_t dummyceilingplane;
 
 // e6y
 // New algo can handle fake flats and ceilings

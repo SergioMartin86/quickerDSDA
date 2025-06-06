@@ -56,7 +56,7 @@
 //  and the total size == width*height*depth/8.,
 //
 
-byte *viewimage;
+__STORAGE_MODIFIER byte *viewimage;
 __STORAGE_MODIFIER int viewwidth;
 __STORAGE_MODIFIER int viewheight;
 
@@ -66,8 +66,8 @@ __STORAGE_MODIFIER int viewheight;
 //
 
 // CPhipps - made const*'s
-const byte *tranmap;          // translucency filter maps 256x256   // phares
-const byte *main_tranmap;     // killough 4/11/98
+const __STORAGE_MODIFIER byte *tranmap;          // translucency filter maps 256x256   // phares
+const __STORAGE_MODIFIER byte *main_tranmap;     // killough 4/11/98
 
 //
 // R_DrawColumn
@@ -89,14 +89,14 @@ static __STORAGE_MODIFIER int temp_x = 0;
 static __STORAGE_MODIFIER int tempyl[4], tempyh[4];
 
 // e6y: resolution limitation is removed
-static byte           *tempbuf;
+static __STORAGE_MODIFIER byte           *tempbuf;
 
 static __STORAGE_MODIFIER int startx = 0;
 static __STORAGE_MODIFIER int temptype = COL_NONE;
 static __STORAGE_MODIFIER int commontop, commonbot;
-static const byte *temptranmap = NULL;
+static const __STORAGE_MODIFIER byte *temptranmap = NULL;
 // SoM 7-28-04: Fix the fuzz problem.
-static const byte   *tempfuzzmap;
+static const __STORAGE_MODIFIER byte   *tempfuzzmap;
 
 //
 // Spectre/Invisibility.
@@ -457,7 +457,7 @@ void R_DrawSpan(draw_span_vars_t *dsvars) {
 
 void R_InitBuffersRes(void)
 {
-  extern byte *solidcol;
+  extern __STORAGE_MODIFIER byte *solidcol;
 
   if (solidcol) Z_Free(solidcol);
   if (tempbuf) Z_Free(tempbuf);

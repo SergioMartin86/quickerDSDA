@@ -22,10 +22,10 @@
 
 __STORAGE_MODIFIER state_t *states;
 __STORAGE_MODIFIER int num_states;
-byte* defined_codeptr_args;
-statenum_t* seenstate_tab;
+__STORAGE_MODIFIER byte* defined_codeptr_args;
+__STORAGE_MODIFIER statenum_t* seenstate_tab;
 
-static actionf_t* deh_codeptr;
+static __STORAGE_MODIFIER actionf_t* deh_codeptr;
 
 static void dsda_ResetStates(int from, int to) {
   int i;

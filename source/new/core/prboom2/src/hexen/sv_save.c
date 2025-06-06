@@ -90,8 +90,8 @@ typedef struct
 } thinkInfo_t;
 
 static __STORAGE_MODIFIER int MobjCount;
-static mobj_t **MobjList;
-static mobj_t ***TargetPlayerAddrs;
+static __STORAGE_MODIFIER mobj_t **MobjList;
+static __STORAGE_MODIFIER mobj_t ***TargetPlayerAddrs;
 static __STORAGE_MODIFIER int TargetPlayerCount;
 
 extern __STORAGE_MODIFIER int inv_ptr;
@@ -103,9 +103,9 @@ typedef struct
   byte *buffer;
 } map_archive_t;
 
-static map_archive_t map_archive[MAX_MAPS];
-static map_archive_t *ma_p;
-static byte *buffer_p;
+static __STORAGE_MODIFIER map_archive_t map_archive[MAX_MAPS];
+static __STORAGE_MODIFIER map_archive_t *ma_p;
+static __STORAGE_MODIFIER byte *buffer_p;
 
 static dboolean MapArchiveExists(int map)
 {

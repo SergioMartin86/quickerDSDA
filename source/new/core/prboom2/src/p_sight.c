@@ -430,13 +430,12 @@ typedef struct {
   fixed_t maxz,minz;               // cph - z optimisations for 2sided lines
 } los_t;
 
-static los_t los; // cph - made static
+static __STORAGE_MODIFIER los_t los; // cph - made static
 
 //
 // P_DivlineSide
 // Returns side 0 (front), 1 (back), or 2 (on).
 //
-// killough 4/19/98: made static, cleaned up
 
 INLINE static int P_DivlineSide(fixed_t x, fixed_t y, const divline_t *node)
 {
@@ -460,7 +459,6 @@ INLINE static int P_DivlineCrossed(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y
 // Returns true
 //  if strace crosses the given subsector successfully.
 //
-// killough 4/19/98: made static and cleaned up
 
 dboolean P_CrossSubsector_Poly(int num)
 {

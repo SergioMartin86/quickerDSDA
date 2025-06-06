@@ -72,10 +72,10 @@ __STORAGE_MODIFIER dboolean DoubleSky;
 
 #define MAXVISPLANES 256    /* must be a power of 2 */
 
-static visplane_t *visplanes[MAXVISPLANES];   // killough
-static visplane_t *freetail;                  // killough
-static visplane_t **freehead = &freetail;     // killough
-visplane_t *floorplane, *ceilingplane;
+static __STORAGE_MODIFIER visplane_t *visplanes[MAXVISPLANES];   // killough
+static __STORAGE_MODIFIER visplane_t *freetail;                  // killough
+static __STORAGE_MODIFIER visplane_t **freehead;     // killough
+__STORAGE_MODIFIER visplane_t *floorplane, *ceilingplane;
 
 // killough -- hash function for visplanes
 // Empirically verified to be fairly uniform:
@@ -83,7 +83,7 @@ visplane_t *floorplane, *ceilingplane;
 #define visplane_hash(picnum,lightlevel,height) \
   ((unsigned)((picnum)*3+(lightlevel)+(height)*7) & (MAXVISPLANES-1))
 
-size_t maxopenings;
+__STORAGE_MODIFIER size_t maxopenings;
 __STORAGE_MODIFIER int *openings,*lastopening; // dropoff overflow
 
 // Clip values are the solid pixel bounding the range.
@@ -104,7 +104,6 @@ static __STORAGE_MODIFIER int *spanstart = NULL;                // killough 2/8/
 // texture mapping
 //
 
-// killough 2/8/98: make variables static
 
 static __STORAGE_MODIFIER fixed_t *cachedheight = NULL;
 
@@ -114,6 +113,8 @@ __STORAGE_MODIFIER fixed_t *distscale = NULL;
 
 void R_InitPlanesRes(void)
 {
+  freehead = &freetail;
+
   if (floorclip) Z_Free(floorclip);
   if (ceilingclip) Z_Free(ceilingclip);
   if (spanstart) Z_Free(spanstart);

@@ -295,8 +295,8 @@ void dsda_ResetLastSaveSlot(void) {
 }
 
 void dsda_UpdateAutoSaves(void) {
-  static int automap = -1;
-  static int autoepisode = -1;
+  static __STORAGE_MODIFIER int automap = -1;
+  static __STORAGE_MODIFIER int autoepisode = -1;
 
   void M_AutoSave(void);
 

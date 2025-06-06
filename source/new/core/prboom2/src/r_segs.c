@@ -740,7 +740,7 @@ void R_StoreWallRange(const int start, const int stop)
 
   {     // killough 1/6/98, 2/1/98: remove limit on openings
     extern __STORAGE_MODIFIER int *openings; // dropoff overflow
-    extern size_t maxopenings;
+    extern __STORAGE_MODIFIER size_t maxopenings;
     size_t pos = lastopening - openings;
     size_t need = (rw_stopx - start)*sizeof(*lastopening) + pos;
     if (need > maxopenings)

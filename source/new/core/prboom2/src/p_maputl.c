@@ -627,7 +627,7 @@ intercept_t *intercepts, *intercept_p;
 // Check for limit and double size if necessary -- killough
 void check_intercept(void)
 {
-  static size_t num_intercepts;
+  static __STORAGE_MODIFIER size_t num_intercepts;
   size_t offset = intercept_p - intercepts;
   if (offset >= num_intercepts)
     {

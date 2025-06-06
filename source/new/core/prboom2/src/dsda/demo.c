@@ -47,8 +47,8 @@
 #define INITIAL_DEMO_BUFFER_SIZE 0x20000
 
 static __STORAGE_MODIFIER char *dsda_demo_name_base;
-static byte* dsda_demo_write_buffer;
-static byte* dsda_demo_write_buffer_p;
+static __STORAGE_MODIFIER byte* dsda_demo_write_buffer;
+static __STORAGE_MODIFIER byte* dsda_demo_write_buffer_p;
 static __STORAGE_MODIFIER int dsda_demo_write_buffer_length;
 static __STORAGE_MODIFIER int dsda_extra_demo_header_data_offset;
 static __STORAGE_MODIFIER int largest_real_offset;
@@ -68,7 +68,7 @@ typedef struct {
   byte udmf_version;
 } dsda_demo_header_data_t;
 
-static dsda_demo_header_data_t dsda_demo_header_data;
+static __STORAGE_MODIFIER dsda_demo_header_data_t dsda_demo_header_data;
 
 #define DEMOMARKER 0x80
 
@@ -157,7 +157,7 @@ static dboolean dsda_UseFailedDemoName(void) {
 }
 
 char* dsda_FailedDemoName(void) {
-  static char* dsda_failed_demo_name_base;
+  static __STORAGE_MODIFIER char* dsda_failed_demo_name_base;
   ADD_FILE_COUNTER
 
   if (!dsda_demo_name_base)
@@ -267,7 +267,7 @@ void dsda_MarkCompatibilityLevelUnspecified(void) {
 }
 
 void dsda_InitDemoRecording(void) {
-  static dboolean demo_key_frame_initialized;
+  static __STORAGE_MODIFIER dboolean demo_key_frame_initialized;
 
   if (compatibility_level_unspecified)
     I_Error("You must specify a compatibility level when recording a demo!\n"

@@ -28,8 +28,8 @@
 __STORAGE_MODIFIER sfxinfo_t *S_sfx;
 __STORAGE_MODIFIER int num_sfx;
 static __STORAGE_MODIFIER int deh_soundnames_size;
-static char** deh_soundnames;
-static byte* sfx_state;
+static __STORAGE_MODIFIER char** deh_soundnames;
+static __STORAGE_MODIFIER byte* sfx_state;
 static __STORAGE_MODIFIER int highest_index;
 
 static void dsda_ResetSFX(int from, int to) {

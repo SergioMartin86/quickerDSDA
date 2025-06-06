@@ -59,9 +59,9 @@
 #define SRC_SCR 2
 #define DEST_SCR 3
 
-static screeninfo_t wipe_scr_start;
-static screeninfo_t wipe_scr_end;
-static screeninfo_t wipe_scr;
+static __STORAGE_MODIFIER screeninfo_t wipe_scr_start;
+static __STORAGE_MODIFIER screeninfo_t wipe_scr_end;
+static __STORAGE_MODIFIER screeninfo_t wipe_scr;
 
 // e6y: resolution limitation is removed
 static __STORAGE_MODIFIER int *y_lookup = NULL;
@@ -243,7 +243,7 @@ int wipe_EndScreen(void)
 // killough 3/5/98: reformatted and cleaned up
 int wipe_ScreenWipe(int ticks)
 {
-  static dboolean go;                               // when zero, stop the wipe
+  static __STORAGE_MODIFIER dboolean go;                               // when zero, stop the wipe
 
   if (!dsda_RenderWipeScreen())
     return 0;//e6y

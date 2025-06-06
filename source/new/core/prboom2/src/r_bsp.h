@@ -43,13 +43,13 @@ extern __STORAGE_MODIFIER sector_t *backsector;
 /* old code -- killough:
  * extern drawseg_t drawsegs[MAXDRAWSEGS];
  * new code -- killough: */
-extern drawseg_t *drawsegs;
+extern __STORAGE_MODIFIER drawseg_t *drawsegs;
 extern __STORAGE_MODIFIER unsigned maxdrawsegs;
 
 // e6y: resolution limitation is removed
-extern byte *solidcol;
+extern __STORAGE_MODIFIER byte *solidcol;
 
-extern drawseg_t *ds_p;
+extern __STORAGE_MODIFIER drawseg_t *ds_p;
 
 void R_ClearClipSegs(void);
 void R_ClearDrawSegs(void);

@@ -63,12 +63,12 @@ __STORAGE_MODIFIER char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
 static __STORAGE_MODIFIER dboolean skipintermission;
 static __STORAGE_MODIFIER int interstate = 0;
 static __STORAGE_MODIFIER int intertime = -1;
-static gametype_t gametype;
+static __STORAGE_MODIFIER gametype_t gametype;
 static __STORAGE_MODIFIER int cnt;
 static __STORAGE_MODIFIER int slaughterboy;        // in DM, the player with the most kills
 static __STORAGE_MODIFIER int FontABaseLump;
 
-static signed __STORAGE_MODIFIER int totalFrags[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER signed int totalFrags[MAX_MAXPLAYERS];
 
 static __STORAGE_MODIFIER int HubCount;
 static __STORAGE_MODIFIER char *HubText;
@@ -223,7 +223,7 @@ static void CheckForSkip(void)
 {
     int i;
     player_t *player;
-    static dboolean triedToSkip;
+    static __STORAGE_MODIFIER dboolean triedToSkip;
 
     for (i = 0, player = players; i < g_maxplayers; i++, player++)
     {
@@ -321,7 +321,7 @@ static void DrDeathTally(void)
     fixed_t xStart, scale;
     int x, y;
     dboolean bold;
-    static dboolean showTotals;
+    static __STORAGE_MODIFIER dboolean showTotals;
     int temp;
 
     V_DrawNamePatch(TALLY_TOP_X, TALLY_TOP_Y, 0, "tallytop", CR_DEFAULT, VPT_STRETCH);

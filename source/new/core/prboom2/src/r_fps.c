@@ -185,9 +185,9 @@ void R_InterpolateView(player_t *player, fixed_t frac)
 
   if (localQuakeHappening[displayplayer] && !dsda_Paused())
   {
-    static int x_displacement;
-    static int y_displacement;
-    static int last_leveltime = -1;
+    static __STORAGE_MODIFIER int x_displacement;
+    static __STORAGE_MODIFIER int y_displacement;
+    static __STORAGE_MODIFIER int last_leveltime = -1;
 
     if (leveltime != last_leveltime)
     {

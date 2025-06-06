@@ -72,8 +72,6 @@
 
 #include "hexen/po_man.h"
 
-// heretic_note: static NUMSTATES arrays here - probably fine?
-// NUMSTATES > HERETIC_NUMSTATES
 
 //
 // P_SetMobjState
@@ -86,9 +84,9 @@ dboolean P_SetMobjState(mobj_t* mobj,statenum_t state)
 
   // killough 4/9/98: remember states seen, to detect cycles:
 
-  extern statenum_t* seenstate_tab;           // fast transition table
+  extern __STORAGE_MODIFIER statenum_t* seenstate_tab;           // fast transition table
   statenum_t *seenstate;                      // pointer to table
-  static int recursion;                       // detects recursion
+  static __STORAGE_MODIFIER int recursion;                       // detects recursion
   statenum_t i;                               // initial state
   dboolean ret;                               // return value
   statenum_t* tempstate = NULL;               // for use with recursion
@@ -1458,7 +1456,7 @@ mobj_t *P_SubstNullMobj(mobj_t *mobj)
 {
     if (mobj == NULL)
     {
-        static mobj_t dummy_mobj;
+        static __STORAGE_MODIFIER mobj_t dummy_mobj;
 
         dummy_mobj.x = 0;
         dummy_mobj.y = 0;

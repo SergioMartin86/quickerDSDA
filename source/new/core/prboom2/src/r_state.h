@@ -111,7 +111,7 @@ extern __STORAGE_MODIFIER angle_t rw_normalangle;
 // angle to line origin
 extern __STORAGE_MODIFIER int rw_angle1;
 
-extern visplane_t       *floorplane;
-extern visplane_t       *ceilingplane;
+extern __STORAGE_MODIFIER visplane_t       *floorplane;
+extern __STORAGE_MODIFIER visplane_t       *ceilingplane;
 
 #endif

@@ -180,21 +180,21 @@ static int CmdEndPrintBold(void);
 static void ThingCount(int type, int tid);
 
 __STORAGE_MODIFIER int ACScriptCount;
-const byte *ActionCodeBase;
+const __STORAGE_MODIFIER byte *ActionCodeBase;
 static __STORAGE_MODIFIER int ActionCodeSize;
 __STORAGE_MODIFIER acsInfo_t *ACSInfo;
 __STORAGE_MODIFIER int MapVars[MAX_ACS_MAP_VARS];
 __STORAGE_MODIFIER int WorldVars[MAX_ACS_WORLD_VARS];
-acsstore_t ACSStore[MAX_ACS_STORE + 1]; // +1 for termination marker
+__STORAGE_MODIFIER acsstore_t ACSStore[MAX_ACS_STORE + 1]; // +1 for termination marker
 
 static __STORAGE_MODIFIER char EvalContext[64];
-static acs_t *ACScript;
-static unsigned __STORAGE_MODIFIER int PCodeOffset;
+static __STORAGE_MODIFIER acs_t *ACScript;
+static __STORAGE_MODIFIER unsigned int PCodeOffset;
 static __STORAGE_MODIFIER int SpecArgs[8];
 static __STORAGE_MODIFIER int ACStringCount;
-static const char **ACStrings;
+static __STORAGE_MODIFIER const char **ACStrings;
 static __STORAGE_MODIFIER char PrintBuffer[PRINT_BUFFER_SIZE];
-static acs_t *NewScript;
+static __STORAGE_MODIFIER acs_t *NewScript;
 
 static int (*PCodeCmds[]) (void) =
 {

@@ -42,9 +42,6 @@ static const __STORAGE_MODIFIER char *FinaleLumpName;
 static __STORAGE_MODIFIER int FontABaseLump;
 static __STORAGE_MODIFIER char *FinaleText;
 
-// static fixed_t *Palette;
-// static fixed_t *PaletteDelta;
-// static byte *RealPalette;
 
 void Hexen_F_StartFinale(void)
 {
@@ -285,7 +282,7 @@ static char *GetFinaleText(int sequence)
     const char *msgLumpName;
     int msgSize;
     int msgLump;
-    static const char *winMsgLumpNames[] = {
+    static __STORAGE_MODIFIER const char *winMsgLumpNames[] = {
         "win1msg",
         "win2msg",
         "win3msg"

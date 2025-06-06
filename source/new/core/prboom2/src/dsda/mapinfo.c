@@ -365,7 +365,7 @@ typedef enum {
   finale_owner_doom,
 } finale_owner_t;
 
-static finale_owner_t finale_owner = finale_owner_legacy;
+static __STORAGE_MODIFIER finale_owner_t finale_owner = finale_owner_legacy;
 
 void dsda_StartFinale(void) {
   if (dsda_DoomStartFinale()) {

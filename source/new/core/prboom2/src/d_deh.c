@@ -3379,7 +3379,7 @@ void PostProcessDeh(void)
 
   if (processed_dehacked)
   {
-    extern byte* defined_codeptr_args;
+    extern __STORAGE_MODIFIER  byte* defined_codeptr_args;
 
     for (i = 0; i < num_states; i++)
     {

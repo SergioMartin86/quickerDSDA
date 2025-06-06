@@ -62,8 +62,8 @@ extern __STORAGE_MODIFIER line_t *linespeciallist[];
 __STORAGE_MODIFIER fixed_t Sky1ScrollDelta;
 __STORAGE_MODIFIER fixed_t Sky2ScrollDelta;
 
-animDef_t AnimDefs[MAX_ANIM_DEFS];
-static frameDef_t FrameDefs[MAX_FRAME_DEFS];
+__STORAGE_MODIFIER animDef_t AnimDefs[MAX_ANIM_DEFS];
+static __STORAGE_MODIFIER frameDef_t FrameDefs[MAX_FRAME_DEFS];
 static __STORAGE_MODIFIER int AnimDefCount;
 static __STORAGE_MODIFIER dboolean LevelHasLightning;
 __STORAGE_MODIFIER int NextLightningFlash;
