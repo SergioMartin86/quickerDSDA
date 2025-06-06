@@ -80,18 +80,18 @@ static void ShowOverflowWarning(overrun_list_t overflow, int fatal, const char *
     va_list argptr;
     char buffer[1024];
 
-    static const char *name[OVERFLOW_MAX] = {
+    const char *name[OVERFLOW_MAX] = {
       "SPECHIT", "REJECT", "INTERCEPT", "PLYERINGAME", "DONUT", "MISSEDBACKSIDE"};
 
-    static const char str1[] =
+    const char str1[] =
       "Too big or not supported %s overflow has been detected. "
       "Desync or crash can occur soon "
       "or during playback with the vanilla engine in case you're recording demo.%s%s";
 
-    static const char str2[] =
+    const char str2[] =
       "%s overflow has been detected.%s%s";
 
-    static const char str3[] =
+    const char str3[] =
       "%s overflow has been detected. "
       "The option responsible for emulation of this overflow is switched off "
       "hence desync or crash can occur soon "
@@ -488,7 +488,7 @@ unsigned __STORAGE_MODIFIER char *dos_mem_dump = mem_dump_dos622;
 
 static int GetMemoryValue(unsigned int offset, void *value, int size)
 {
-  static int firsttime = true;
+  static __STORAGE_MODIFIER int firsttime = true;
 
   if (firsttime)
   {
@@ -594,8 +594,8 @@ int MissedBackSideOverrun(line_t *line)
 //
 sector_t* GetSectorAtNullAddress(void)
 {
-  static int null_sector_is_initialized = false;
-  static sector_t null_sector;
+  static __STORAGE_MODIFIER int null_sector_is_initialized = false;
+  static __STORAGE_MODIFIER sector_t null_sector;
 
   if (demo_compatibility && EMULATE(OVERFLOW_MISSEDBACKSIDE))
   {

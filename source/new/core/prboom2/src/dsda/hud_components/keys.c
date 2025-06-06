@@ -26,7 +26,7 @@ typedef struct {
   dboolean horizontal;
 } local_component_t;
 
-static local_component_t* local;
+static __STORAGE_MODIFIER local_component_t* local;
 
 static __STORAGE_MODIFIER int key_patch_num[NUMCARDS];
 

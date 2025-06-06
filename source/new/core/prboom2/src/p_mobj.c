@@ -1259,7 +1259,7 @@ void P_MobjThinker (mobj_t* mobj)
   // removed old code which looked at target references
   // (we use pointer reference counting now)
 
-  extern mobj_t **mobj_ptrs;
+  extern __STORAGE_MODIFIER mobj_t **mobj_ptrs;
 
   if (mobj->type == MT_MUSICSOURCE)
   {

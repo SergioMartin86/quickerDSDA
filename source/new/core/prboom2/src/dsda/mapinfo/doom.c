@@ -35,13 +35,13 @@
 
 #include "doom.h"
 
-static const doom_mapinfo_map_t* last_map;
-static const doom_mapinfo_map_t* next_map;
-static const doom_mapinfo_map_t* current_map;
-static doom_mapinfo_cluster_t* last_cluster;
-static doom_mapinfo_cluster_t* next_cluster;
-static doom_mapinfo_cluster_t* current_cluster;
-static const doom_mapinfo_map_next_t* end_data;
+static __STORAGE_MODIFIER const doom_mapinfo_map_t* last_map;
+static __STORAGE_MODIFIER const doom_mapinfo_map_t* next_map;
+static __STORAGE_MODIFIER const doom_mapinfo_map_t* current_map;
+static __STORAGE_MODIFIER doom_mapinfo_cluster_t* last_cluster;
+static __STORAGE_MODIFIER doom_mapinfo_cluster_t* next_cluster;
+static __STORAGE_MODIFIER doom_mapinfo_cluster_t* current_cluster;
+static __STORAGE_MODIFIER const doom_mapinfo_map_next_t* end_data;
 
 static doom_mapinfo_map_next_t default_end_data = {
   .end = dmi_end_game_cast

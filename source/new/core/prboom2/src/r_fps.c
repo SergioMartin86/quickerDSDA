@@ -87,9 +87,9 @@ void M_ChangeUncappedFrameRate(void)
 }
 
 typedef fixed_t fixed2_t[2];
-static fixed2_t *oldipos;
-static fixed2_t *bakipos;
-static interpolation_t *curipos;
+static __STORAGE_MODIFIER fixed2_t *oldipos;
+static __STORAGE_MODIFIER fixed2_t *bakipos;
+static __STORAGE_MODIFIER interpolation_t *curipos;
 
 static __STORAGE_MODIFIER dboolean NoInterpolateView;
 static __STORAGE_MODIFIER dboolean didInterp;
@@ -101,7 +101,7 @@ dboolean R_ViewInterpolation(void) {
 
 void R_InterpolateView(player_t *player, fixed_t frac)
 {
-  static mobj_t *oviewer;
+  static __STORAGE_MODIFIER mobj_t *oviewer;
   int quake_intensity;
 
   dboolean NoInterpolate = dsda_CameraPaused() || dsda_PausedViaMenu();

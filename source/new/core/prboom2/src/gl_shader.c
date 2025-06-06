@@ -186,9 +186,9 @@ static void glsl_ShaderLookup(const char* name, GLchar const** text, GLint* len)
 static void glsl_ShaderSrcAppendDefine(shader_source_t* src,
                                        const shader_define_t* def)
 {
-  static const char cdefine[] = "#define ";
-  static const char cspace[] = " ";
-  static const char cnl[] = "\n";
+  static __STORAGE_MODIFIER const char cdefine[] = "#define ";
+  static __STORAGE_MODIFIER const char cspace[] = " ";
+  static __STORAGE_MODIFIER const char cnl[] = "\n";
 
   glsl_ShaderSrcAppend(src, cdefine, CSLEN(cdefine));
   glsl_ShaderSrcAppend(src, def->name, strlen(def->name));
@@ -201,10 +201,10 @@ static void glsl_ShaderSrcProcess(shader_source_t* src, const GLchar* text,
                                   GLint len, const shader_define_t* defs,
                                   const shader_define_t* userdefs)
 {
-  static const char vdir[] = "#version";
-  static const char edir[] = "#extension";
-  static const char idir[] = "#include";
-  static const char iext[] = "GL_GOOGLE_include_directive";
+  static __STORAGE_MODIFIER const char vdir[] = "#version";
+  static __STORAGE_MODIFIER const char edir[] = "#extension";
+  static __STORAGE_MODIFIER const char idir[] = "#include";
+  static __STORAGE_MODIFIER const char iext[] = "GL_GOOGLE_include_directive";
   dsda_string_view_t v;
   dsda_string_view_t line;
 
@@ -390,9 +390,9 @@ static shader_t* glsl_ShaderLoad(const shader_info_t* info,
   return shader;
 }
 
-static unsigned int texds[MAX_TEXTURES][2];
-static shader_frame_t stack[MAX_STACK];
-static unsigned int sp = 0;
+static __STORAGE_MODIFIER unsigned int texds[MAX_TEXTURES][2];
+static __STORAGE_MODIFIER shader_frame_t stack[MAX_STACK];
+static __STORAGE_MODIFIER unsigned int sp = 0;
 
 static shader_frame_t* glsl_ShaderFramePush(void)
 {
@@ -576,10 +576,10 @@ enum
   FUZZ_UNIF_SEED
 };
 
-static shader_t *sh_main = NULL;
-static shader_t *sh_fuzz = NULL;
+static __STORAGE_MODIFIER shader_t *sh_main = NULL;
+static __STORAGE_MODIFIER shader_t *sh_fuzz = NULL;
 
-static const shader_info_t main_info =
+static __STORAGE_MODIFIER const shader_info_t main_info =
 {
   .name = "gls_main",
   .unifs =
@@ -592,7 +592,7 @@ static const shader_info_t main_info =
   }
 };
 
-static const shader_info_t fuzz_info =
+static__STORAGE_MODIFIER  const shader_info_t fuzz_info =
 {
   .name = "gls_fuzz",
   .unifs =

@@ -69,7 +69,7 @@
 
 static __STORAGE_MODIFIER dboolean bfgcells_modified = false;
 
-static FILE *deh_log_file;
+static __STORAGE_MODIFIER FILE *deh_log_file;
 
 static int deh_log(const char *s, ...)
 {
@@ -1648,15 +1648,15 @@ void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum)
   DEHFILE infile, *filein = &infile;    // killough 10/98
   char inbuffer[DEH_BUFFERMAX];  // Place to put the primary infostring
   const char *file_or_lump;
-  static unsigned last_block;
-  static long filepos;
+  static __STORAGE_MODIFIER unsigned last_block;
+  static __STORAGE_MODIFIER long filepos;
 
   processed_dehacked = true;
 
   // Open output file if we're writing output
   if (outfilename && *outfilename && !deh_log_file)
   {
-    static dboolean firstfile = true; // to allow append to output log
+    static __STORAGE_MODIFIER dboolean firstfile = true; // to allow append to output log
     if (!strcmp(outfilename, "-"))
       deh_log_file = stdout;
     else if (!(deh_log_file = M_OpenFile(outfilename, firstfile ? "wt" : "at")))
@@ -2915,10 +2915,10 @@ static void deh_procStrings(DEHFILE *fpin, char *line)
   char inbuffer[DEH_BUFFERMAX];
   uint64_t value;    // All deh values are ints or longs
   char *strval;      // holds the string value of the line
-  static size_t maxstrlen = 128; // maximum string length, bumped 128 at
+  static __STORAGE_MODIFIER size_t maxstrlen = 128; // maximum string length, bumped 128 at
   // a time as needed
   // holds the final result of the string after concatenation
-  static char *holdstring = NULL;
+  static __STORAGE_MODIFIER char *holdstring = NULL;
   dboolean found = false;  // looking for string continuation
 
   deh_log("Processing extended string substitution\n");
@@ -3235,7 +3235,7 @@ static void deh_procBexMusic(DEHFILE *fpin, char *line)
 //
 char *dehReformatStr(char *string)
 {
-  static char buff[DEH_BUFFERMAX]; // only processing the changed string,
+  static __STORAGE_MODIFIER char buff[DEH_BUFFERMAX]; // only processing the changed string,
   //  don't need double buffer
   char *s, *t;
 

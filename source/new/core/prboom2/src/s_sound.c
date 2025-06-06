@@ -136,7 +136,7 @@ static int S_getChannel(void *origin, sfxinfo_t *sfxinfo, sfx_params_t *params);
 __STORAGE_MODIFIER int max_snd_dist = 1600;
 __STORAGE_MODIFIER int dist_adjust = 160;
 
-static byte* soundCurve;
+static __STORAGE_MODIFIER byte* soundCurve;
 static __STORAGE_MODIFIER int AmbChan = -1;
 
 static mobj_t* GetSoundListener(void);
@@ -180,7 +180,7 @@ void S_Init(void)
   //jff 1/22/98 skip sound init if sound not enabled
   if (!nosfxparm)
   {
-    static dboolean first_s_init = true;
+    static __STORAGE_MODIFIER dboolean first_s_init = true;
 
     // Whatever these did with DMX, these are rather dummies now.
     I_SetChannels();
@@ -1029,7 +1029,7 @@ static dboolean S_StopSoundInfo(sfxinfo_t* sfx, sfx_params_t *params)
 static int Raven_S_getChannel(mobj_t *listener, mobj_t *origin, sfxinfo_t *sfx, sfx_params_t *params)
 {
   int i;
-  static int sndcount = 0;
+  static __STORAGE_MODIFIER int sndcount = 0;
 
   for (i = 0; i < numChannels; i++)
   {
@@ -1108,16 +1108,15 @@ static int Raven_S_getChannel(mobj_t *listener, mobj_t *origin, sfxinfo_t *sfx, 
 
 static mobj_t* GetSoundListener(void)
 {
-  static degenmobj_t dummy_listener;
+  static __STORAGE_MODIFIER degenmobj_t dummy_listener;
 
   // If we are at the title screen, the display player doesn't have an
-  // object yet, so return a pointer to a static dummy listener instead.
 
   if (players[displayplayer].mo != NULL)
   {
     if (walkcamera.type > 1)
     {
-      static mobj_t walkcamera_listener;
+      static __STORAGE_MODIFIER mobj_t walkcamera_listener;
 
       walkcamera_listener.x = walkcamera.x;
       walkcamera_listener.y = walkcamera.y;

@@ -167,7 +167,7 @@ typedef struct wav_data_s
 } wav_data_t;
 
 #define WAV_DATA_HASH_SIZE 32
-static wav_data_t *wav_data_hash[WAV_DATA_HASH_SIZE];
+static __STORAGE_MODIFIER wav_data_t *wav_data_hash[WAV_DATA_HASH_SIZE];
 
 static wav_data_t *GetWavData(int sfxid, const unsigned char *data, size_t len)
 {
@@ -778,8 +778,8 @@ void I_SetSoundCap (void)
 // grabs len samples of audio (16 bit interleaved)
 unsigned char *I_GrabSound (int len)
 {
-  static unsigned char *buffer = NULL;
-  static size_t buffer_size = 0;
+  static __STORAGE_MODIFIER unsigned char *buffer = NULL;
+  static __STORAGE_MODIFIER size_t buffer_size = 0;
   size_t size;
 
   if (!dumping_sound)
@@ -812,10 +812,10 @@ void I_ResampleStream (void *dest, unsigned nsamp, void (*proc) (void *dest, uns
 
   short *sout = (short*)dest;
 
-  static short *sin = NULL;
-  static unsigned sinsamp = 0;
+  static __STORAGE_MODIFIER short *sin = NULL;
+  static __STORAGE_MODIFIER unsigned sinsamp = 0;
 
-  static unsigned remainder = 0;
+  static __STORAGE_MODIFIER unsigned remainder = 0;
   unsigned step = (sratein << 16) / (unsigned) srateout;
 
   unsigned nreq = (step * nsamp + remainder) >> 16;
@@ -871,7 +871,6 @@ static void PlaySong(int handle, int looping);
 
 // Some tracks are directly streamed from the RWops;
 // we need to free them in the end
-// static SDL_RWops *rwops_stream = NULL;
 
 // note that the "handle" passed around by s_sound is ignored
 // however, a handle is maintained for the individual music players

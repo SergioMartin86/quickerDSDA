@@ -106,7 +106,7 @@ void I_Init2(void)
 
 __STORAGE_MODIFIER int signal_context;
 
-static volatile sig_atomic_t interrupted = 0;
+static __STORAGE_MODIFIER volatile sig_atomic_t interrupted = 0;
 
 dboolean I_Interrupted(void)
 {
@@ -156,7 +156,7 @@ struct atexit_listentry_s
     const char* name;
 };
 
-static atexit_listentry_t *exit_funcs[exit_priority_max];
+static __STORAGE_MODIFIER atexit_listentry_t *exit_funcs[exit_priority_max];
 static __STORAGE_MODIFIER int exit_priority;
 
 void I_AtExit(atexit_func_t func, dboolean run_on_error,

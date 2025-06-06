@@ -389,7 +389,7 @@ static void R_AddLine (seg_t *line)
   angle_t  angle2;
   angle_t  span;
   angle_t  tspan;
-  static sector_t tempsec;     // killough 3/8/98: ceiling/water hack
+  static __STORAGE_MODIFIER sector_t tempsec;     // killough 3/8/98: ceiling/water hack
 
   curline = line;
 
@@ -753,7 +753,7 @@ static void R_HandleGLFakeFlats(sector_t *sector)
 static void R_UpdateGlobalPlanes(sector_t *sector, int *floorlightlevel, int *ceilinglightlevel)
 {
   // TODO: this data must persist, but the reason is to be investigated
-  static sector_t tempsec;
+  static __STORAGE_MODIFIER sector_t tempsec;
 
   // killough 3/8/98, 4/4/98: Deep water / fake ceiling effect
   frontsector = // killough 4/11/98
@@ -807,7 +807,6 @@ static void R_UpdateGlobalPlanes(sector_t *sector, int *floorlightlevel, int *ce
 // Add sprites of things in sector.
 // Draw one or more line segments.
 //
-// killough 1/31/98 -- made static, polished
 
 static void R_AddPolyLines(polyobj_t *poly)
 {

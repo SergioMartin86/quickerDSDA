@@ -31,8 +31,8 @@
 
 #include "playback.h"
 
-static const byte* playback_origin_p;
-static const byte* playback_p;
+static __STORAGE_MODIFIER const byte* playback_origin_p;
+static __STORAGE_MODIFIER const byte* playback_p;
 static __STORAGE_MODIFIER int playback_length;
 static __STORAGE_MODIFIER int playback_behaviour;
 static __STORAGE_MODIFIER int playback_tics;

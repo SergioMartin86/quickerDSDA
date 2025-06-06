@@ -63,7 +63,7 @@ static void dsda_EnsureCapacity(int limit) {
   }
 }
 
-static deh_index_hash_t deh_mobj_index_hash;
+static __STORAGE_MODIFIER deh_index_hash_t deh_mobj_index_hash;
 
 int dsda_FindDehMobjIndex(int index) {
   return dsda_FindDehIndex(index, &deh_mobj_index_hash);

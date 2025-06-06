@@ -66,7 +66,7 @@ static void IN_DrawTime(int x, int y, int h, int m, int s);
 static void IN_DrTextB(const char *text, int x, int y);
 
 // contains information passed into intermission
-static wbstartstruct_t* wbs;
+static __STORAGE_MODIFIER wbstartstruct_t* wbs;
 
 static __STORAGE_MODIFIER int prevmap;
 static __STORAGE_MODIFIER int nextmap;
@@ -76,7 +76,7 @@ static __STORAGE_MODIFIER dboolean finalintermission;
 static __STORAGE_MODIFIER int interstate = 0;
 static __STORAGE_MODIFIER int intertime = -1;
 static __STORAGE_MODIFIER int oldintertime = 0;
-static gametype_t gametype;
+static __STORAGE_MODIFIER gametype_t gametype;
 
 static __STORAGE_MODIFIER int cnt;
 
@@ -101,7 +101,7 @@ static __STORAGE_MODIFIER int FontBLump;
 static __STORAGE_MODIFIER int patchFaceOkayBase;
 static __STORAGE_MODIFIER int patchFaceDeadBase;
 
-static signed __STORAGE_MODIFIER int totalFrags[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER signed int totalFrags[MAX_MAXPLAYERS];
 static __STORAGE_MODIFIER fixed_t dSlideX[MAX_MAXPLAYERS];
 static __STORAGE_MODIFIER fixed_t dSlideY[MAX_MAXPLAYERS];
 
@@ -507,7 +507,7 @@ void IN_CheckForSkip(void)
 
 void IN_Drawer(void)
 {
-    static int oldinterstate;
+    static __STORAGE_MODIFIER int oldinterstate;
 
     if (!intermission)
     {
@@ -671,7 +671,7 @@ void IN_DrawSingleStats(void)
     const char *prev_level_name = NameForMap(prevmap);
     const char *next_level_name = NameForMap(nextmap);
     int x;
-    static int sounds;
+    static __STORAGE_MODIFIER int sounds;
 
     // [crispy] offset the stats for Ep.4 and up, to make room for level time
     int yoffset = 0;
@@ -779,7 +779,7 @@ void IN_DrawCoopStats(void)
     int x;
     int ypos;
 
-    static int sounds;
+    static __STORAGE_MODIFIER int sounds;
 
     IN_DrTextB("KILLS", 95, 35);
     IN_DrTextB("BONUS", 155, 35);
@@ -831,7 +831,7 @@ void IN_DrawDMStats(void)
     int xpos;
     int kpos;
 
-    static int sounds;
+    static __STORAGE_MODIFIER int sounds;
 
     xpos = 90;
     ypos = 55;

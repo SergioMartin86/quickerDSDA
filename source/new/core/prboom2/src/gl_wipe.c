@@ -45,8 +45,8 @@
 
 #include "dsda/gl/render_scale.h"
 
-static GLuint wipe_scr_start_tex = 0;
-static GLuint wipe_scr_end_tex = 0;
+static __STORAGE_MODIFIER GLuint wipe_scr_start_tex = 0;
+static __STORAGE_MODIFIER GLuint wipe_scr_end_tex = 0;
 
 GLuint CaptureScreenAsTexID(void)
 {

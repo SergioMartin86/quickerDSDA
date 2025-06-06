@@ -610,7 +610,7 @@ static void cheat_ddt()
 
 static void cheat_reveal_secret()
 {
-  static int last_secret = -1;
+  static __STORAGE_MODIFIER int last_secret = -1;
 
   if (automap_input)
   {
@@ -690,8 +690,8 @@ static void cheat_reveal_kill()
 {
   if (automap_input)
   {
-    static int last_count;
-    static mobj_t *last_mobj;
+    static __STORAGE_MODIFIER int last_count;
+    static __STORAGE_MODIFIER mobj_t *last_mobj;
 
     dsda_TrackFeature(uf_iddt);
 
@@ -703,8 +703,8 @@ static void cheat_reveal_item()
 {
   if (automap_input)
   {
-    static int last_count;
-    static mobj_t *last_mobj;
+    static __STORAGE_MODIFIER int last_count;
+    static __STORAGE_MODIFIER mobj_t *last_mobj;
 
     dsda_TrackFeature(uf_iddt);
 
@@ -886,7 +886,7 @@ static dboolean M_CheatAllowed(int when)
 
 static void cht_InitCheats(void)
 {
-  static int init = false;
+  static __STORAGE_MODIFIER int init = false;
 
   if (!init)
   {
@@ -956,7 +956,7 @@ static int M_FindCheats(int key)
       {
         if (cht->param_chars_read)
         {
-          static char argbuf[CHEAT_ARGS_MAX + 1];
+          static __STORAGE_MODIFIER char argbuf[CHEAT_ARGS_MAX + 1];
 
           // process the arg buffer
           memcpy(argbuf, cht->parameter_buf, -cht->arg);
@@ -1267,7 +1267,7 @@ static void cheat_script(char buf[3])
   int script;
   byte script_args[3];
   int tens, ones;
-  static char textBuffer[40];
+  static __STORAGE_MODIFIER char textBuffer[40];
 
   if (!map_format.acs) return;
 

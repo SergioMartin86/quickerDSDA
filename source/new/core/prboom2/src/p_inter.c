@@ -828,7 +828,6 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 
 static mobj_t *ActiveMinotaur(player_t * master);
 
-// killough 11/98: make static
 static void P_KillMobj(mobj_t *source, mobj_t *target)
 {
   mobjtype_t item;

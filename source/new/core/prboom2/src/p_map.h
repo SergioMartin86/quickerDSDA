@@ -121,9 +121,9 @@ extern __STORAGE_MODIFIER fixed_t tmfloorz;
 extern __STORAGE_MODIFIER fixed_t tmceilingz;
 extern __STORAGE_MODIFIER line_t *ceilingline;
 extern __STORAGE_MODIFIER line_t *floorline;      // killough 8/23/98
-extern mobj_t *linetarget;     // who got hit (or NULL)
+extern __STORAGE_MODIFIER mobj_t *linetarget;     // who got hit (or NULL)
 extern __STORAGE_MODIFIER mobj_t *crosshair_target;
-extern msecnode_t *sector_list;                             // phares 3/16/98
+extern __STORAGE_MODIFIER msecnode_t *sector_list;                             // phares 3/16/98
 extern __STORAGE_MODIFIER fixed_t tmbbox[4];         // phares 3/20/98
 extern __STORAGE_MODIFIER line_t *blockline;   // killough 8/11/98
 

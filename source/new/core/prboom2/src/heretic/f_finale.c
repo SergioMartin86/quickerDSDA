@@ -198,8 +198,8 @@ void Heretic_F_TextWrite(void)
 
 void F_DemonScroll(void)
 {
-  static int yval = 0;
-  static int nextscroll = 0;
+  static __STORAGE_MODIFIER int yval = 0;
+  static __STORAGE_MODIFIER int nextscroll = 0;
 
   if (finalecount < 70)
   {

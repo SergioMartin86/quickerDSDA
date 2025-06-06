@@ -21,7 +21,7 @@
 #include "input.h"
 
 __STORAGE_MODIFIER int dsda_input_profile;
-static dsda_input_t dsda_input[DSDA_INPUT_PROFILE_COUNT][DSDA_INPUT_IDENTIFIER_COUNT];
+static __STORAGE_MODIFIER dsda_input_t dsda_input[DSDA_INPUT_PROFILE_COUNT][DSDA_INPUT_IDENTIFIER_COUNT];
 
 typedef struct
 {
@@ -35,14 +35,17 @@ typedef struct
 
 static __STORAGE_MODIFIER int dsda_input_counter; // +1 for each event
 static __STORAGE_MODIFIER int dsda_input_tick_counter; // +1 for each game tick
-static dsda_input_state_t gamekeys[NUMKEYS];
-static dsda_input_state_t mousearray[MAX_MOUSE_BUTTONS + 1];
-static dsda_input_state_t *mousebuttons = &mousearray[1]; // allow [-1]
-static dsda_input_state_t joyarray[MAX_JOY_BUTTONS + 1];
-static dsda_input_state_t *joybuttons = &joyarray[1];    // allow [-1]
+static __STORAGE_MODIFIER dsda_input_state_t gamekeys[NUMKEYS];
+static __STORAGE_MODIFIER dsda_input_state_t mousearray[MAX_MOUSE_BUTTONS + 1];
+static __STORAGE_MODIFIER dsda_input_state_t *mousebuttons;
+static __STORAGE_MODIFIER dsda_input_state_t joyarray[MAX_JOY_BUTTONS + 1];
+static __STORAGE_MODIFIER dsda_input_state_t *joybuttons;
 
 static void dsda_InputTrackButtons(dsda_input_state_t* buttons, int max, event_t* ev) {
   int i;
+
+  mousebuttons = &mousearray[1]; // allow [-1]
+  joybuttons = &joyarray[1];    // allow [-1]
 
   for (i = 0; i < max; ++i) {
     unsigned int button_on = (ev->data1.i & (1 << i)) != 0;

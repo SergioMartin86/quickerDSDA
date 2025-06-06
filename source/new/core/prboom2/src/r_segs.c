@@ -56,8 +56,6 @@
 
 // OPTIMIZE: closed two sided lines as single sided
 
-// killough 1/6/98: replaced globals with statics where appropriate
-
 // True if any of the segs textures might be visible.
 static __STORAGE_MODIFIER dboolean segtextured;
 static __STORAGE_MODIFIER dboolean markfloor;      // False if the back side is the same plane.
@@ -150,7 +148,7 @@ fake_contrast_mode_t fake_contrast_mode;
 
 void R_FixWiggle(sector_t *sec)
 {
-  static int  lastheight = 0;
+  static __STORAGE_MODIFIER int  lastheight = 0;
 
   static const struct
   {

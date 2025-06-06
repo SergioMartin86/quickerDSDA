@@ -105,7 +105,7 @@ byte RGB32k[32][32][32];
 
 void V_InitFlexTranTable(void)
 {
-  static int flexTranInit = false;
+  static __STORAGE_MODIFIER int flexTranInit = false;
 
   if (!flexTranInit)
   {
@@ -821,7 +821,7 @@ static void NULL_DrawLine(fline_t* fl, int color) {}
 static void NULL_DrawLineWu(fline_t* fl, int color) {}
 static void NULL_DrawShaded(int scrn, int x, int y, int width, int height, int shade) {}
 
-static video_mode_t current_videomode = VID_MODESW;
+static __STORAGE_MODIFIER video_mode_t current_videomode = VID_MODESW;
 
 V_BeginUIDraw_f V_BeginUIDraw = NULL_BeginUIDraw;
 V_EndUIDraw_f V_EndUIDraw = NULL_EndUIDraw;
@@ -984,7 +984,7 @@ static void WRAP_V_DrawLine(fline_t* fl, int color)
   register int d;
 
 #ifdef RANGECHECK         // killough 2/22/98
-  static int fuck = 0;
+  static __STORAGE_MODIFIER int fuck = 0;
 
   // For debugging only
   if

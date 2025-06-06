@@ -43,7 +43,7 @@ int dsda_HudComponentY(int y_offset, int vpt, double ratio) {
 }
 
 void dsda_InitTextHC(dsda_text_t* component, int x_offset, int y_offset, int vpt) {
-  static double ratio;
+  static __STORAGE_MODIFIER double ratio;
   int x, y;
 
   DO_ONCE
@@ -58,7 +58,7 @@ void dsda_InitTextHC(dsda_text_t* component, int x_offset, int y_offset, int vpt
 }
 
 void dsda_InitBlockyHC(dsda_text_t* component, int x_offset, int y_offset, int vpt) {
-  static double ratio;
+  static __STORAGE_MODIFIER double ratio;
   int x, y;
 
   DO_ONCE

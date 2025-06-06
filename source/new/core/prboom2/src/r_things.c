@@ -67,7 +67,7 @@ __STORAGE_MODIFIER fixed_t pspritexscale;
 __STORAGE_MODIFIER fixed_t pspriteyscale;
 __STORAGE_MODIFIER fixed_t pspriteiyscale;
 
-static const lighttable_t **spritelights;        // killough 1/25/98 made static
+static __STORAGE_MODIFIER const lighttable_t **spritelights;        // killough 1/25/98 made static
 
 //e6y: added for GL
 __STORAGE_MODIFIER float pspriteyscale_f;
@@ -86,9 +86,8 @@ typedef struct drawsegs_xrange_s
 } drawsegs_xrange_t;
 
 #define DS_RANGES_COUNT 3
-static drawsegs_xrange_t drawsegs_xranges[DS_RANGES_COUNT];
-
-static drawseg_xrange_item_t *drawsegs_xrange;
+static __STORAGE_MODIFIER drawsegs_xrange_t drawsegs_xranges[DS_RANGES_COUNT];
+static __STORAGE_MODIFIER drawseg_xrange_item_t *drawsegs_xrange;
 static unsigned __STORAGE_MODIFIER int drawsegs_xrange_size = 0;
 static __STORAGE_MODIFIER int drawsegs_xrange_count = 0;
 
@@ -1079,7 +1078,7 @@ static void R_DrawPSprite (pspdef_t *psp)
 
     if (!dsda_WeaponBob())
     {
-      static fixed_t last_sy = 32 * FRACUNIT;
+      static __STORAGE_MODIFIER fixed_t last_sy = 32 * FRACUNIT;
 
       psp_sx = FRACUNIT;
 
@@ -1220,7 +1219,7 @@ static void R_DrawPSprite (pspdef_t *psp)
       int lump;
     } psp_interpolate_t;
 
-    static psp_interpolate_t psp_inter;
+    static __STORAGE_MODIFIER psp_interpolate_t psp_inter;
 
     if (realframe)
     {

@@ -959,7 +959,7 @@ static void R_SetupFrame (player_t *player)
   if (player->fixedcolormap)
     {
       // killough 3/20/98: localize scalelightfixed (readability/optimization)
-      static const lighttable_t *scalelightfixed[MAXLIGHTSCALE];
+      static __STORAGE_MODIFIER const lighttable_t *scalelightfixed[MAXLIGHTSCALE];
 
       fixedcolormap = fullcolormap   // killough 3/20/98: use fullcolormap
         + player->fixedcolormap*256*sizeof(lighttable_t);
@@ -983,8 +983,8 @@ static void R_SetupFrame (player_t *player)
 static void R_InitDrawScene(void)
 {
   // Framerate-independent fuzz progression
-  static int fuzzgametic = 0;
-  static int savedfuzzpos = 0;
+  static __STORAGE_MODIFIER int fuzzgametic = 0;
+  static __STORAGE_MODIFIER int savedfuzzpos = 0;
 
 #ifdef __ENABLE_OPENGL_
   if (V_IsOpenGLMode())

@@ -123,7 +123,7 @@ static void dsda_ParseCommandlineTrackers(int arg_id, dboolean (*track)(int)) {
 }
 
 void dsda_ResetTrackers(void) {
-  static dboolean first_time = true;
+  static __STORAGE_MODIFIER dboolean first_time = true;
 
   if (first_time) {
     first_time = false;

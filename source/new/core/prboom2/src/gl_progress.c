@@ -43,8 +43,8 @@
 #include "dsda/font.h"
 #include "dsda/utility.h"
 
-static GLuint progress_texid = 0;
-static unsigned int lastupdate = 0;
+static __STORAGE_MODIFIER GLuint progress_texid = 0;
+static __STORAGE_MODIFIER unsigned int lastupdate = 0;
 
 int gld_ProgressStart(void)
 {
@@ -108,7 +108,7 @@ int gld_ProgressEnd(void)
   return false;
 }
 
-static hu_textline_t w_precache;
+static __STORAGE_MODIFIER hu_textline_t w_precache;
 
 static void gld_InitProgressUpdate(void)
 {

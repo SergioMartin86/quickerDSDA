@@ -25,12 +25,12 @@
 
 #include "dsda/utility.h"
 
-static char **temp_dirs;
+static __STORAGE_MODIFIER char **temp_dirs;
 
 /* Allow a maximum of 1GB to be uncompressed to prevent zip-bombs */
 #define UNZIPPED_BYTES_LIMIT 1000000000ULL
 
-static zip_uint64_t total_bytes_read;
+static __STORAGE_MODIFIER zip_uint64_t total_bytes_read;
 
 #define CHUNK_SIZE 4 * 1024U
 
@@ -112,7 +112,7 @@ static void dsda_UnzipFileToDestination(const char *zipped_file_name, const char
 
 const char* dsda_UnzipFile(const char *zipped_file_name) {
   dsda_string_t temporary_directory;
-  static unsigned int file_counter = 0;
+  static __STORAGE_MODIFIER unsigned int file_counter = 0;
 
   dsda_StringPrintF(&temporary_directory, "%s/%u-%s", I_GetTempDir(), file_counter, dsda_BaseName(zipped_file_name));
   if (M_IsDir(temporary_directory.string))

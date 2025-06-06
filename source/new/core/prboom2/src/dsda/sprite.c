@@ -26,11 +26,11 @@
 const char** sprnames;
 __STORAGE_MODIFIER int num_sprites;
 static __STORAGE_MODIFIER int deh_spritenames_size;
-static char** deh_spritenames;
-static byte* sprnames_state;
+static __STORAGE_MODIFIER char** deh_spritenames;
+static __STORAGE_MODIFIER byte* sprnames_state;
 
 static void dsda_PrepAllocation(void) {
-  static int first_allocation = true;
+  static __STORAGE_MODIFIER int first_allocation = true;
 
   if (first_allocation) {
     const char** source = sprnames;

@@ -35,7 +35,7 @@
 #define CLOCK_MONOTONIC -1
 
 static int clock_gettime(int clockid, struct timespec *tp) {
-  static unsigned long long timer_frequency = 0;
+  static __STORAGE_MODIFIER unsigned long long timer_frequency = 0;
   unsigned long long time;
 
   // Get number of timer counts per second
@@ -126,7 +126,7 @@ void dsda_LimitFPS(void) {
 int dsda_GameSpeed(void);
 
 static unsigned long long dsda_RealTime(void) {
-  static dboolean started = false;
+  static __STORAGE_MODIFIER dboolean started = false;
 
   if (!started)
   {
@@ -146,7 +146,7 @@ extern __STORAGE_MODIFIER int ms_to_next_tick;
 // During a fast demo, each call yields a new tick
 static int dsda_GetTickFastDemo(void)
 {
-  static int tick;
+  static __STORAGE_MODIFIER int tick;
   return tick++;
 }
 

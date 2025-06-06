@@ -72,10 +72,8 @@ typedef struct mapInfo_s {
 } mapInfo_t;
 
 static __STORAGE_MODIFIER int MapCount = 98;
-
-static mapInfo_t MapInfo[99];
-
-static mapInfo_t *CurrentMap = MapInfo;
+static __STORAGE_MODIFIER mapInfo_t MapInfo[99];
+static __STORAGE_MODIFIER mapInfo_t *CurrentMap;
 
 static __STORAGE_MODIFIER const char *MapCmdNames[] = {
   "SKY1",

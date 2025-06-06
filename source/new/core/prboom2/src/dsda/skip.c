@@ -165,7 +165,7 @@ void dsda_EvaluateSkipModeDoCompleted(void) {
 
 void dsda_EvaluateSkipModeDoTeleportNewMap(void) {
   if (dsda_SkipMode()) {
-    static int firstmap = 1;
+    static __STORAGE_MODIFIER int firstmap = 1;
 
     demo_warp_reached = skip_until_next_map ||
       (
@@ -183,7 +183,7 @@ void dsda_EvaluateSkipModeDoTeleportNewMap(void) {
 
 void dsda_EvaluateSkipModeDoWorldDone(void) {
   if (dsda_SkipMode()) {
-    static int firstmap = 1;
+    static __STORAGE_MODIFIER int firstmap = 1;
 
     demo_warp_reached = skip_until_next_map ||
       (

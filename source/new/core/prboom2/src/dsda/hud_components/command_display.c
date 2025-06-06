@@ -52,11 +52,10 @@ typedef struct {
   int base_y;
 } local_component_t;
 
-static local_component_t* local;
-
-static dsda_command_display_t command_history[MAX_HISTORY];
-static dsda_command_display_t* current_command = command_history;
-static dsda_command_display_t next_command_display;
+static __STORAGE_MODIFIER local_component_t* local;
+static __STORAGE_MODIFIER dsda_command_display_t command_history[MAX_HISTORY];
+static __STORAGE_MODIFIER dsda_command_display_t* current_command;
+static __STORAGE_MODIFIER dsda_command_display_t next_command_display;
 
 static void dsda_TicCmdToCommand(dsda_command_t* command, ticcmd_t* cmd) {
   command->forwardmove = cmd->forwardmove;
@@ -112,6 +111,7 @@ void dsda_ResetCommandHistory(void) {
 void dsda_InitCommandHistory(void) {
   int i;
 
+  current_command = command_history;
   dsda_command_history_size = dsda_IntConfig(dsda_config_command_history_size);
   dsda_hide_empty_commands = dsda_IntConfig(dsda_config_hide_empty_commands);
 

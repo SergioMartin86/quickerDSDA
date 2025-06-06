@@ -173,8 +173,8 @@ static void I_UploadNewPalette(int pal, int force)
   // This is used to replace the current 256 colour cmap with a new one
   // Used by 256 colour PseudoColor modes
 
-  static int cachedgamma;
-  static size_t num_pals;
+  static __STORAGE_MODIFIER int cachedgamma;
+  static __STORAGE_MODIFIER size_t num_pals;
   dsda_playpal_t* playpal_data;
 
   if (V_IsOpenGLMode())
@@ -531,7 +531,7 @@ void I_SetWindowIcon(void)
 
 void I_InitGraphics(void)
 {
-  static int    firsttime=1;
+  static __STORAGE_MODIFIER int    firsttime=1;
 
   if (firsttime)
   {
@@ -620,7 +620,7 @@ static void DeactivateMouse(void)
 // Interpolates mouse input to mitigate stuttering
 static void CorrectMouseStutter(int *x, int *y)
 {
-  static int x_remainder_old, y_remainder_old;
+  static __STORAGE_MODIFIER int x_remainder_old, y_remainder_old;
   int x_remainder, y_remainder;
   fixed_t fractic, correction_factor;
 

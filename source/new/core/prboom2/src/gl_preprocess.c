@@ -55,19 +55,19 @@
 #include "am_map.h"
 #include "lprintf.h"
 
-static FILE *levelinfo;
+static __STORAGE_MODIFIER FILE *levelinfo;
 
-static int gld_max_vertexes = 0;
-static int gld_num_vertexes = 0;
+static __STORAGE_MODIFIER int gld_max_vertexes = 0;
+static __STORAGE_MODIFIER int gld_num_vertexes = 0;
 
-static int triangulate_subsectors = 0;
+static __STORAGE_MODIFIER int triangulate_subsectors = 0;
 
 // this is the list for all sectors to the loops
-GLSector *sectorloops;
+__STORAGE_MODIFIER GLSector *sectorloops;
 
 // this is the list for all subsectors to the loops
 // uses by textured automap
-GLMapSubsector *subsectorloops;
+__STORAGE_MODIFIER GLMapSubsector *subsectorloops;
 
 static void gld_AddGlobalVertexes(int count)
 {
@@ -358,7 +358,7 @@ static void gld_CarveFlats(int bspnode, int numdivlines, divline_t *divlines)
   Z_Free(childlist);
 }
 
-static int currentsector; // the sector which is currently tesselated
+static __STORAGE_MODIFIER int currentsector; // the sector which is currently tesselated
 
 // ntessBegin
 //
@@ -1030,8 +1030,8 @@ void gld_PreprocessLevel(void)
   if (!gl_preprocessed)
   {
     int i;
-    static int numsectors_prev = 0;
-    static int numsubsectors_prev = 0;
+    static __STORAGE_MODIFIER int numsectors_prev = 0;
+    static __STORAGE_MODIFIER int numsubsectors_prev = 0;
 
     Z_Free(gl_segs);
     Z_Free(gl_lines);

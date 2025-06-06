@@ -91,14 +91,14 @@ typedef struct vertexsplit_info_s
   byte validcount;
 } vertexsplit_info_t;
 
-static vertexsplit_info_t * gl_vertexsplit = NULL;
+static __STORAGE_MODIFIER vertexsplit_info_t * gl_vertexsplit = NULL;
 
 typedef struct splitsbysector_s
 {
   int numsplits;
   vertexsplit_info_t **splits;
 } splitsbysector_t;
-static splitsbysector_t * gl_splitsbysector = NULL;
+static __STORAGE_MODIFIER splitsbysector_t * gl_splitsbysector = NULL;
 
 //==========================================================================
 //

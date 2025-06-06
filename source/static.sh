@@ -1,1 +1,37 @@
-grep --color=always -e "static" new/core/prboom2/src/ * -Rn | grep --color=always -v "void" | grep --color=always -v "(" | grep --color=always -v "cmake" | grep --color=always -v "__STORAGE_MODIFIER"  | grep --color=always -v "struct" | grep --color=always -v ".cfg"  | grep --color=always -v ".md" | grep --color=always -v "{" | grep --color=always -v "}" | grep --color=always -v "line_special.h" | grep --color=always -v "#" | head
+grep --color=always -e "static" new/core/prboom2/src/ -Rn | \
+grep --color=always -v "void" | \
+grep --color=always -v "(" | \
+grep --color=always -v "cmake" | \
+grep --color=always -v "__STORAGE_MODIFIER"  | \
+grep --color=always -v "struct" | \
+grep --color=always -v ".cfg"  | \
+grep --color=always -v ".md" | \
+grep --color=always -v "{" | \
+grep --color=always -v "}" | \
+grep --color=always -v "line_special.h" | \
+grep --color=always -v "#" | \
+grep --color=always -v "inline" | \
+grep --color=always -v "mbf_options" | \
+grep --color=always -v "debug_quit_msg" | \
+grep --color=always -v "thread_local" | \
+grep --color=always -v "ammo_component_config_t" | \
+grep --color=always -v "/* cphipps" | \
+grep --color=always -v "//e6y" | \
+grep --color=always -v "icon_" | \
+grep --color=always -v "CPhipps" | \
+grep --color=always -v "TokenNames" | \
+grep --color=always -v "music_players" | \
+grep --color=always -v "hexenScrollies" | \
+grep --color=always -v "case " | \
+grep --color=always -v "NUMEPISODES" | \
+grep --color=always -v "animinfo" | \
+grep --color=always -v "mobjinfo_fields" | \
+grep --color=always -v "float fuzz" | \
+grep --color=always -v "stat_settings" | \
+grep --color=always -v "crosshair_str" | \
+grep --color=always -v "\\[\\] =" | \
+grep --color=always -v "setup_menu_t" | \
+grep --color=always -v "checkcoord" | \
+grep --color=always -v "castorder" | \
+grep --color=always -v ".yml" | \
+head

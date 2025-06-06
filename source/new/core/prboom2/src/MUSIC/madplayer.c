@@ -76,25 +76,21 @@ const music_player_t mp_player =
 
 #include "i_sound.h"
 
-static struct mad_stream Stream;
-static struct mad_frame  Frame;
-static struct mad_synth  Synth;
-static struct mad_header Header;
+static __STORAGE_MODIFIER struct mad_stream Stream;
+static __STORAGE_MODIFIER struct mad_frame  Frame;
+static __STORAGE_MODIFIER struct mad_synth  Synth;
+static __STORAGE_MODIFIER struct mad_header Header;
+static __STORAGE_MODIFIER int mp_looping = 0;
+static __STORAGE_MODIFIER int mp_volume = 0; // 0-15
+static __STORAGE_MODIFIER int mp_samplerate_target = 0;
+static __STORAGE_MODIFIER int mp_paused = 0;
+static __STORAGE_MODIFIER int mp_playing = 0;
+static __STORAGE_MODIFIER const void *mp_data;
+static __STORAGE_MODIFIER int mp_len;
 
 
-static int mp_looping = 0;
-static int mp_volume = 0; // 0-15
-static int mp_samplerate_target = 0;
-static int mp_paused = 0;
-static int mp_playing = 0;
-
-static const void *mp_data;
-static int mp_len;
-
-
-static int mp_leftoversamps = 0; // number of extra samples
-                                 // left over in mad decoder
-static int mp_leftoversamppos = 0;
+static __STORAGE_MODIFIER int mp_leftoversamps = 0; // number of extra samples
+static __STORAGE_MODIFIER int mp_leftoversamppos = 0;
 
 
 static const char *mp_name (void)

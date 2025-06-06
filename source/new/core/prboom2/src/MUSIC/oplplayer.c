@@ -323,25 +323,24 @@ typedef enum {
     opl_doom_1_9        // Doom v1.9, Strife
 } opl_driver_ver_t;
 
-static opl_driver_ver_t opl_drv_ver = opl_doom_1_9;
+static __STORAGE_MODIFIER opl_driver_ver_t opl_drv_ver = opl_doom_1_9;
 static __STORAGE_MODIFIER dboolean music_initialized = false;
 
-//static dboolean musicpaused = false;
 static __STORAGE_MODIFIER int start_music_volume;
 static __STORAGE_MODIFIER int current_music_volume;
 
 // GENMIDI lump instrument data:
 
-static const genmidi_instr_t *main_instrs;
-static const genmidi_instr_t *percussion_instrs;
-static char (*main_instr_names)[32];
-static char (*percussion_names)[32];
+static __STORAGE_MODIFIER const genmidi_instr_t *main_instrs;
+static __STORAGE_MODIFIER const genmidi_instr_t *percussion_instrs;
+static __STORAGE_MODIFIER char (*main_instr_names)[32];
+static __STORAGE_MODIFIER char (*percussion_names)[32];
 
 // Voices:
 
-static opl_voice_t voices[OPL_NUM_VOICES * 2];
-static opl_voice_t *voice_free_list[OPL_NUM_VOICES * 2];
-static opl_voice_t *voice_alloced_list[OPL_NUM_VOICES * 2];
+static __STORAGE_MODIFIER opl_voice_t voices[OPL_NUM_VOICES * 2];
+static __STORAGE_MODIFIER opl_voice_t *voice_free_list[OPL_NUM_VOICES * 2];
+static __STORAGE_MODIFIER opl_voice_t *voice_alloced_list[OPL_NUM_VOICES * 2];
 static __STORAGE_MODIFIER int voice_free_num;
 static __STORAGE_MODIFIER int voice_alloced_num;
 static __STORAGE_MODIFIER int opl_opl3mode;
@@ -349,13 +348,13 @@ static __STORAGE_MODIFIER int num_opl_voices;
 
 // Data for each channel.
 
-static opl_channel_data_t channels[MIDI_CHANNELS_PER_TRACK];
+static __STORAGE_MODIFIER opl_channel_data_t channels[MIDI_CHANNELS_PER_TRACK];
 
 // Track data for playing tracks:
 
-static opl_track_data_t *tracks;
-static unsigned __STORAGE_MODIFIER int num_tracks = 0;
-static unsigned __STORAGE_MODIFIER int running_tracks = 0;
+static __STORAGE_MODIFIER opl_track_data_t *tracks;
+static __STORAGE_MODIFIER unsigned int num_tracks = 0;
+static __STORAGE_MODIFIER unsigned int running_tracks = 0;
 static __STORAGE_MODIFIER dboolean song_looping;
 
 // Tempo control variables

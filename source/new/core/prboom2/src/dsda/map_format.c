@@ -26,7 +26,7 @@
 
 #include "map_format.h"
 
-map_format_t map_format;
+__STORAGE_MODIFIER map_format_t map_format;
 
 typedef enum {
   door_type_none = -1,
@@ -145,7 +145,7 @@ dboolean dsda_IsTeleportLine(int index) {
 // Migrate some non-hexen data to hexen format
 static void dsda_MigrateMobjInfo(void) {
   int i;
-  static dboolean migrated = false;
+  static __STORAGE_MODIFIER dboolean migrated = false;
 
   if (hexen) return;
 

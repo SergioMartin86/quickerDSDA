@@ -30,8 +30,8 @@ __STORAGE_MODIFIER musicinfo_t *S_music;
 __STORAGE_MODIFIER int num_music;
 __STORAGE_MODIFIER int mus_musinfo;
 static __STORAGE_MODIFIER int deh_musicnames_size;
-static char** deh_musicnames;
-static byte* music_state;
+static __STORAGE_MODIFIER char** deh_musicnames;
+static __STORAGE_MODIFIER byte* music_state;
 
 static void dsda_EnsureCapacity(int limit) {
   while (limit >= num_music) {

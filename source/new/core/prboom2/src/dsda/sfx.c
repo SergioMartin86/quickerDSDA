@@ -42,7 +42,7 @@ static void dsda_ResetSFX(int from, int to) {
 }
 
 static void dsda_PrepAllocation(void) {
-  static int first_allocation = true;
+  static __STORAGE_MODIFIER int first_allocation = true;
 
   if (first_allocation) {
     sfxinfo_t* source = S_sfx;

@@ -564,7 +564,7 @@ void I_CaptureFrame (void)
 {
   unsigned char *snd;
   unsigned char *vid;
-  static int partsof35 = 0; // correct for sync when samplerate % 35 != 0
+  static __STORAGE_MODIFIER int partsof35 = 0; // correct for sync when samplerate % 35 != 0
   int nsampreq;
 
   if (!capturing_video)

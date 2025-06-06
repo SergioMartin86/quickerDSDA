@@ -127,7 +127,7 @@ typedef enum {
 } nodes_version_t;
 
 __STORAGE_MODIFIER int firstglvertex = 0;
-static nodes_version_t nodesVersion = DEFAULT_BSP_NODES;
+static __STORAGE_MODIFIER nodes_version_t nodesVersion = DEFAULT_BSP_NODES;
 __STORAGE_MODIFIER dboolean use_gl_nodes = false;
 __STORAGE_MODIFIER dboolean has_behavior;
 __STORAGE_MODIFIER dboolean udmf_map;
@@ -164,7 +164,7 @@ __STORAGE_MODIFIER int *blockmaplump;          // was short -- killough
 
 __STORAGE_MODIFIER fixed_t bmaporgx, bmaporgy;     // origin of block map
 
-mobj_t    **blocklinks;           // for thing chains
+__STORAGE_MODIFIER mobj_t    **blocklinks;           // for thing chains
 __STORAGE_MODIFIER int blocklinks_count;
 
 // MAES: extensions to support 512x512 blockmaps.
@@ -191,24 +191,24 @@ __STORAGE_MODIFIER dboolean skipblstart;  // MaxW: Skip initial blocklist short
 // be used as a PVS lookup as well.
 //
 
-const byte *rejectmatrix; // cph - const*
+__STORAGE_MODIFIER const byte *rejectmatrix; // cph - const*
 
 // Maintain single and multi player starting spots.
 
 // 1/11/98 killough: Remove limit on deathmatch starts
 __STORAGE_MODIFIER mapthing_t *deathmatchstarts;      // killough
-size_t     num_deathmatchstarts;   // killough
+__STORAGE_MODIFIER size_t     num_deathmatchstarts;   // killough
 
 __STORAGE_MODIFIER mapthing_t *deathmatch_p;
 __STORAGE_MODIFIER mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
 // for thing tracking (xdre style)
 __STORAGE_MODIFIER int numthings;
-mobj_t **mobj_ptrs;
+__STORAGE_MODIFIER mobj_t **mobj_ptrs;
 
 static __STORAGE_MODIFIER int current_episode = -1;
 static __STORAGE_MODIFIER int current_map = -1;
-static nodes_version_t current_nodesVersion = UNKNOWN_NODES;
+static __STORAGE_MODIFIER nodes_version_t current_nodesVersion = UNKNOWN_NODES;
 static __STORAGE_MODIFIER int samelevel = false;
 static __STORAGE_MODIFIER int inconsistent_nodes;
 
@@ -230,7 +230,7 @@ typedef struct
   int znodes;
 } level_components_t;
 
-static level_components_t level_components;
+static __STORAGE_MODIFIER level_components_t level_components;
 
 // e6y: Smart malloc
 // Used by P_SetupLevel() for smart data loading

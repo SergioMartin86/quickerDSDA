@@ -77,23 +77,20 @@
 int imageformats[5] = {0, GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA};
 
 /* TEXTURES */
-static GLTexture **gld_GLTextures=NULL;
-/* PATCHES FLATS SPRITES */
-static GLTexture **gld_GLPatchTextures=NULL;
-static GLTexture **gld_GLStaticPatchTextures = NULL;
-/* [XA] Indexed textures, for indexed lightmode */
-static GLTexture **gld_GLIndexedTextures = NULL;
-static GLTexture **gld_GLIndexedPatchTextures = NULL;
-static GLTexture **gld_GLIndexedStaticPatchTextures = NULL;
-/* [XA] Colormap textures, for indexed lightmode */
-static GLTexture **gld_GLColormapTextures = NULL;
-static GLTexture **gld_GLFullbrightColormapTextures = NULL; // yeah, a "fullbright colormap" is really just a palette, but it matches the name elsewhere...
-int gld_numGLColormaps = -1;
-int gld_paletteIndex = 0;
+static __STORAGE_MODIFIER GLTexture **gld_GLTextures=NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLPatchTextures=NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLStaticPatchTextures = NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLIndexedTextures = NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLIndexedPatchTextures = NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLIndexedStaticPatchTextures = NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLColormapTextures = NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLFullbrightColormapTextures = NULL; // yeah, a "fullbright colormap" is really just a palette, but it matches the name elsewhere...
+__STORAGE_MODIFIER int gld_numGLColormaps = -1;
+__STORAGE_MODIFIER int gld_paletteIndex = 0;
 /* [XA] Sky textures for indexed lightmode -- name is sort
 of a misnomer since the textures themselves aren't indexed,
 but rather have the GL colormaps pre-applied, but meh. */
-static GLTexture **gld_GLIndexedSkyTextures = NULL;
+static __STORAGE_MODIFIER GLTexture **gld_GLIndexedSkyTextures = NULL;
 
 GLuint* last_glTexID = NULL;
 
@@ -797,8 +794,8 @@ GLTexture *gld_RegisterTexture(int texture_num, dboolean mipmap, dboolean force,
 unsigned char* gld_GetTextureBuffer(GLuint texid, int miplevel, int *width, int *height)
 {
   int w, h;
-  static unsigned char *buf = NULL;
-  static int buf_size = 512 * 256 * 4;
+  static __STORAGE_MODIFIER unsigned char *buf = NULL;
+  static __STORAGE_MODIFIER int buf_size = 512 * 256 * 4;
 
   if (!buf)
   {
@@ -1342,7 +1339,7 @@ static const float fuzz[50] =
   FUZZ5, FUZZ1, FUZZ1, FUZZ1, FUZZ1, FUZZ2, FUZZ1, FUZZ1, FUZZ2, FUZZ1
 };
 
-static GLuint fuzz_texid = 0;
+static __STORAGE_MODIFIER GLuint fuzz_texid = 0;
 
 void gld_InitFuzzTexture(void)
 {

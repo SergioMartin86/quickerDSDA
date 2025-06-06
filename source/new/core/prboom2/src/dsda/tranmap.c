@@ -28,12 +28,12 @@
 
 #include "tranmap.h"
 
-static char* tranmap_base_dir;
-static char* tranmap_palette_dir;
-static dsda_cksum_t playpal_cksum;
-static const int default_tranmap_alpha = 66;
-static const int tranmap_length = 256 * 256;
-static const byte* tranmap_data[100];
+static __STORAGE_MODIFIER char* tranmap_base_dir;
+static __STORAGE_MODIFIER char* tranmap_palette_dir;
+static __STORAGE_MODIFIER dsda_cksum_t playpal_cksum;
+static __STORAGE_MODIFIER const int default_tranmap_alpha = 66;
+static __STORAGE_MODIFIER const int tranmap_length = 256 * 256;
+static __STORAGE_MODIFIER const byte* tranmap_data[100];
 
 static void dsda_CalculatePlaypalCksum(void) {
   struct MD5Context md5;

@@ -430,7 +430,7 @@ void dsda_WatchCommand(void) {
 }
 
 void dsda_WatchLedgeImpact(mobj_t* thing, int target_z) {
-  static int old_gametic;
+  static __STORAGE_MODIFIER int old_gametic;
 
   if (
     thing->player &&

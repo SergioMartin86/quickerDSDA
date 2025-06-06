@@ -148,7 +148,7 @@ __STORAGE_MODIFIER int startskill;
 __STORAGE_MODIFIER int startepisode;
 __STORAGE_MODIFIER int startmap;
 __STORAGE_MODIFIER dboolean autostart;
-FILE    *debugfile;
+__STORAGE_MODIFIER FILE    *debugfile;
 
 __STORAGE_MODIFIER dboolean advancedemo;
 
@@ -350,9 +350,9 @@ void D_MustFillBackScreen(void)
 
 void D_Display (fixed_t frac)
 {
-  static dboolean isborderstate        = false;
-  static dboolean borderwillneedredraw = false;
-  static gamestate_t oldgamestate = -1;
+  static __STORAGE_MODIFIER dboolean isborderstate        = false;
+  static __STORAGE_MODIFIER dboolean borderwillneedredraw = false;
+  static __STORAGE_MODIFIER gamestate_t oldgamestate = -1;
   dboolean wipe;
   dboolean viewactive = false, isborder = false;
 
@@ -1058,7 +1058,7 @@ void AddIWAD(const char *iwad, void* const buffer, const size_t size)
  */
 static inline dboolean CheckExeSuffix(const char *suffix)
 {
-  extern char **dsda_argv;
+  extern __STORAGE_MODIFIER char **dsda_argv;
 
   char *dash;
 
@@ -1188,7 +1188,7 @@ static void IdentifyVersion (void)
 static void DoLooseFiles(void)
 {
   extern __STORAGE_MODIFIER int dsda_argc;
-  extern char **dsda_argv;
+  extern __STORAGE_MODIFIER char **dsda_argv;
 
   int i, k;
   const int loose_wad_index = 0;
@@ -1295,10 +1295,10 @@ typedef struct {
   int allocated_count;
 } deh_queue_t;
 
-static deh_queue_t autoload_deh_all_queue;
-static deh_queue_t autoload_deh_game_queue;
-static deh_queue_t autoload_deh_iwad_queue;
-static deh_queue_t *autoload_deh_pwad_queue;
+static __STORAGE_MODIFIER deh_queue_t autoload_deh_all_queue;
+static __STORAGE_MODIFIER deh_queue_t autoload_deh_game_queue;
+static __STORAGE_MODIFIER deh_queue_t autoload_deh_iwad_queue;
+static __STORAGE_MODIFIER deh_queue_t *autoload_deh_pwad_queue;
 static __STORAGE_MODIFIER int autoload_deh_pwad_count;
 
 static void D_QueueAutoloadDeh(deh_queue_t *queue, const char *name)

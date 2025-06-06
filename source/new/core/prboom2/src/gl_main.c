@@ -254,15 +254,15 @@ static int C_DECL dicmp_visible_subsectors_by_pic(const void *a, const void *b)
          (*((const subsector_t *const *)a))->sector->floorpic;
 }
 
-static int visible_subsectors_count_prev = -1;
+static __STORAGE_MODIFIER int visible_subsectors_count_prev = -1;
 void gld_ResetTexturedAutomap(void)
 {
   visible_subsectors_count_prev = -1;
 }
 
-static int map_textured_trans;
-static int map_textured_overlay_trans;
-static int map_lines_overlay_trans;
+static __STORAGE_MODIFIER int map_textured_trans;
+static __STORAGE_MODIFIER int map_textured_overlay_trans;
+static __STORAGE_MODIFIER int map_lines_overlay_trans;
 
 void gld_ResetAutomapTransparency(void)
 {
@@ -273,8 +273,8 @@ void gld_ResetAutomapTransparency(void)
 
 void gld_MapDrawSubsectors(player_t *plr, int fx, int fy, fixed_t mx, fixed_t my, int fw, int fh, fixed_t scale)
 {
-  static subsector_t **visible_subsectors = NULL;
-  static int visible_subsectors_size = 0;
+  static __STORAGE_MODIFIER subsector_t **visible_subsectors = NULL;
+  static __STORAGE_MODIFIER int visible_subsectors_size = 0;
   int visible_subsectors_count;
 
   int i;
@@ -305,7 +305,6 @@ void gld_MapDrawSubsectors(player_t *plr, int fx, int fy, fixed_t mx, fixed_t my
     }
   }
 
-  // Do not sort static visible_subsectors array at all
   // if there are no new visible subsectors.
   if (visible_subsectors_count != visible_subsectors_count_prev)
   {
@@ -875,7 +874,7 @@ void gld_DrawShaded(int x, int y, int width, int height, int shade)
 
 void gld_SetPalette(int palette)
 {
-  static int last_palette = 0;
+  static __STORAGE_MODIFIER int last_palette = 0;
 
   if (palette < 0)
     palette = last_palette;
@@ -887,10 +886,10 @@ void gld_SetPalette(int palette)
 }
 
 unsigned char *gld_ReadScreen(void)
-{ // NSM convert to static
-  static unsigned char *scr = NULL;
-  static unsigned char *buffer = NULL;
-  static int scr_size = 0;
+{ 
+  static __STORAGE_MODIFIER unsigned char *scr = NULL;
+  static __STORAGE_MODIFIER unsigned char *buffer = NULL;
+  static __STORAGE_MODIFIER int scr_size = 0;
 
   int src_row, dest_row, size, pixels_per_row;
 
@@ -2481,7 +2480,7 @@ static void gld_DrawItemsSortByTexture(GLDrawItemType itemtype)
 
 static void gld_DrawItemsSortSprites(GLDrawItemType itemtype)
 {
-  static const float delta = 0.2f / MAP_COEFF;
+  static __STORAGE_MODIFIER const float delta = 0.2f / MAP_COEFF;
   int i;
 
   if (scene_has_overlapped_sprites)

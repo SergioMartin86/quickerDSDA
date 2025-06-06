@@ -74,8 +74,8 @@ typedef struct custom_message_s
   const char *msg;
 } custom_message_t;
 
-static custom_message_t custom_message[MAX_MAXPLAYERS];
-static custom_message_t *custom_message_p;
+static __STORAGE_MODIFIER custom_message_t custom_message[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER custom_message_t *custom_message_p;
 
 //jff 2/16/98 status color change levels
 __STORAGE_MODIFIER int hud_ammo_red;      // ammo percent less than which status is red
@@ -123,7 +123,7 @@ typedef struct crosshair_s
   float target_screen_x, target_screen_y;
 } crosshair_t;
 
-static crosshair_t crosshair;
+static __STORAGE_MODIFIER crosshair_t crosshair;
 
 static __STORAGE_MODIFIER const char *crosshair_nam[HU_CROSSHAIRS] =
   { NULL, "CROSS1", "CROSS2", "CROSS3", "CROSS4", "CROSS5", "CROSS6", "CROSS7" };
@@ -305,8 +305,8 @@ void HU_AnnounceMap(void)
 {
   if (dsda_IntConfig(dsda_config_announce_map))
   {
-    static int last_gamemap;
-    static int last_gameepisode;
+    static __STORAGE_MODIFIER int last_gamemap;
+    static __STORAGE_MODIFIER int last_gameepisode;
 
     if (gamemap != last_gamemap || gameepisode != last_gameepisode)
     {

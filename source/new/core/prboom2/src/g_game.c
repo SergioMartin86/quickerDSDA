@@ -147,7 +147,7 @@ struct
 // The old format is still supported.
 #define NEWFORMATSIG "\xff\xff\xff\xff"
 
-static const byte *demobuffer;   /* cph - only used for playback */
+static __STORAGE_MODIFIER const byte *demobuffer;   /* cph - only used for playback */
 static __STORAGE_MODIFIER int demolength; // check for overrun (missing DEMOMARKER)
 
 __STORAGE_MODIFIER dboolean preventLevelExit;
@@ -156,7 +156,7 @@ __STORAGE_MODIFIER dboolean preventGameEnd;
 __STORAGE_MODIFIER dboolean reachedLevelExit;
 __STORAGE_MODIFIER dboolean reachedGameEnd;
 
-gameaction_t    gameaction;
+__STORAGE_MODIFIER gameaction_t    gameaction;
 __STORAGE_MODIFIER gamestate_t gamestate;
 __STORAGE_MODIFIER dboolean in_game;
 __STORAGE_MODIFIER int gameskill;
@@ -183,7 +183,7 @@ __STORAGE_MODIFIER int boom_basetic;       /* killough 9/29/98: for demo sync */
 __STORAGE_MODIFIER int true_basetic;
 __STORAGE_MODIFIER int totalkills, totallive, totalitems, totalsecret;    // for intermission
 __STORAGE_MODIFIER dboolean demorecording;
-wbstartstruct_t wminfo;               // parms for world map / intermission
+__STORAGE_MODIFIER wbstartstruct_t wminfo;               // parms for world map / intermission
 __STORAGE_MODIFIER dboolean haswolflevels = false;// jff 4/18/98 wolf levels present
 __STORAGE_MODIFIER int totalleveltimes;      // CPhipps - total time for all completed levels
 __STORAGE_MODIFIER int levels_completed;
@@ -267,7 +267,7 @@ static __STORAGE_MODIFIER int left_analog_x;
 static __STORAGE_MODIFIER int left_analog_y;
 
 // Game events info
-static buttoncode_t special_event; // Event triggered by local player, to send
+static __STORAGE_MODIFIER buttoncode_t special_event; // Event triggered by local player, to send
 static __STORAGE_MODIFIER int savegameslot;         // Slot to load if gameaction == ga_loadgame
 __STORAGE_MODIFIER char savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
 
@@ -292,7 +292,7 @@ static dboolean InventoryMoveRight(void);
 // Position indicator for cooperative net-play reborn
 __STORAGE_MODIFIER int RebornPosition;
 
-leave_data_t leave_data;
+__STORAGE_MODIFIER leave_data_t leave_data;
 
 void G_DoTeleportNewMap(void);
 static void Hexen_G_DoReborn(int playernum);
@@ -331,7 +331,6 @@ static void G_DoSaveGame(dboolean via_cmd);
 static inline signed char fudgef(signed char b)
 {
 /*e6y
-  static int c;
   if (!b || !demo_compatibility || longtics) return b;
   if (++c & 0x1f) return b;
   b |= 1; if (b>2) b-=2;*/
@@ -341,7 +340,7 @@ static inline signed char fudgef(signed char b)
 void G_SetSpeed(dboolean reset)
 {
   dsda_pclass_t *player_class;
-  static dsda_pclass_t *last_player_class = NULL;
+  static __STORAGE_MODIFIER dsda_pclass_t *last_player_class = NULL;
 
   player_class = &pclass[players[consoleplayer].pclass];
 
@@ -839,7 +838,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
   {
     extern __STORAGE_MODIFIER dboolean boom_weapon_state_injection;
-    static dboolean done_autoswitch = false;
+    static __STORAGE_MODIFIER dboolean done_autoswitch = false;
 
     if (!players[consoleplayer].attackdown)
     {
@@ -1020,7 +1019,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
   if (strafe)
   {
-    static double mousestrafe_carry = 0;
+    static __STORAGE_MODIFIER double mousestrafe_carry = 0;
     int delta;
     double true_delta;
 
@@ -1088,7 +1087,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
     // Don't discard mouse delta even if value is too small to
     // turn the player this tic
     if (dsda_IntConfig(dsda_config_mouse_carrytics)) {
-      static signed short carry = 0;
+      static __STORAGE_MODIFIER signed short carry = 0;
       signed short desired_angleturn = cmd->angleturn + carry;
       cmd->angleturn = (desired_angleturn + 128) & 0xff00;
       carry = desired_angleturn - cmd->angleturn;
@@ -1266,7 +1265,7 @@ static void G_DoLoadLevel (void)
   {
     void D_MustFillBackScreen();
 
-    static int old_grnrock = -1;
+    static __STORAGE_MODIFIER int old_grnrock = -1;
 
     if (old_grnrock != grnrock.lumpnum)
     {
@@ -1280,7 +1279,7 @@ static void G_DoLoadLevel (void)
 
   if (timingdemo)
   {
-    static int first=1;
+    static __STORAGE_MODIFIER int first=1;
     if (first)
       {
         starttime = dsda_GetTickRealTime();
@@ -2313,8 +2312,8 @@ static uint64_t G_UpdateSignature(uint64_t s, const char *name)
 
 static uint64_t G_Signature(void)
 {
-  static uint64_t s = 0;
-  static dboolean computed = false;
+  static __STORAGE_MODIFIER uint64_t s = 0;
+  static __STORAGE_MODIFIER dboolean computed = false;
   int episode, map;
 
   if (!computed) {
@@ -2887,7 +2886,7 @@ void G_DoNewGame (void)
 
 void G_RefreshFastMonsters(void)
 {
-  static int fast = 0;            // remembers fast state
+  static __STORAGE_MODIFIER int fast = 0;            // remembers fast state
   int i;
   int fast_pending;
 
@@ -4055,7 +4054,6 @@ dboolean G_CheckDemoStatus (void)
 // killough 1/22/98: this is a "Doom printf" for messages. I've gotten
 // tired of using players->message=... and so I've added this dprintf.
 //
-// killough 3/6/98: Made limit static to allow z_zone functions to call
 // this function, without calling realloc(), which seems to cause problems.
 
 #define MAX_MESSAGE_SIZE 1024
@@ -4063,7 +4061,7 @@ dboolean G_CheckDemoStatus (void)
 // CPhipps - renamed to doom_printf to avoid name collision with glibc
 void doom_printf(const char *s, ...)
 {
-  static char msg[MAX_MESSAGE_SIZE];
+  static __STORAGE_MODIFIER char msg[MAX_MESSAGE_SIZE];
   va_list v;
   va_start(v,s);
   vsnprintf(msg,sizeof(msg),s,v);   /* print message in buffer */

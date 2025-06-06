@@ -109,7 +109,7 @@ typedef struct
 
 static __STORAGE_MODIFIER anim_t *lastanim;
 static __STORAGE_MODIFIER anim_t *anims;                // new structure w/o limits -- killough
-static size_t maxanims;
+static __STORAGE_MODIFIER size_t maxanims;
 
 TAnimItemParam *anim_flats = NULL;
 TAnimItemParam *anim_textures = NULL;
@@ -178,7 +178,6 @@ void MarkAnimatedTextures(void)
 // and end entry, in the order found in the WAD file.
 //
 // This routine modified to read its data from a predefined lump or
-// PWAD lump called ANIMATED rather than a static table in this module to
 // allow wad designers to insert or modify animation sequences.
 //
 // Lump format is an array of byte packed animdef_t structures, terminated
@@ -444,12 +443,12 @@ fixed_t P_FindNextHighestFloor(sector_t *sec, int currentheight)
   {
     int h;
     int min;
-    static int MAX_ADJOINING_SECTORS = 0;
-    static fixed_t *heightlist = NULL;
-    static int heightlist_size = 0;
+    static __STORAGE_MODIFIER int MAX_ADJOINING_SECTORS = 0;
+    static __STORAGE_MODIFIER fixed_t *heightlist = NULL;
+    static __STORAGE_MODIFIER int heightlist_size = 0;
     line_t* check;
     fixed_t height = currentheight;
-    static fixed_t last_height_0 = 0;
+    static __STORAGE_MODIFIER fixed_t last_height_0 = 0;
 
     // 20 adjoining sectors max!
     if (!MAX_ADJOINING_SECTORS)
@@ -3808,7 +3807,7 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
 
 static __STORAGE_MODIFIER int copyscroller_count = 0;
 static __STORAGE_MODIFIER int copyscroller_max = 0;
-static line_t **copyscrollers;
+static __STORAGE_MODIFIER line_t **copyscrollers;
 
 static void P_AddCopyScroller(line_t *l)
 {
@@ -6464,7 +6463,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         int i;
         const int *id_p;
-        static const int flags[] =
+        const int flags[] =
         {
           ML_BLOCKING,
           ML_BLOCKMONSTERS,
@@ -6503,7 +6502,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         int i;
         const int *id_p;
-        static const int flags[] =
+        const int flags[] =
         {
           SECF_SILENT,
           0,
@@ -6540,7 +6539,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         int i;
         const int *id_p;
-        static const int flags[] =
+        const int flags[] =
         {
           ML_SECRET,
           ML_DONTDRAW,

@@ -131,7 +131,7 @@ mapcolor_t mapcolor_hexen = {
   .trail_2 = 15,
 };
 
-static mapcolor_t *mapcolor_p;
+static __STORAGE_MODIFIER mapcolor_t *mapcolor_p;
 
 static void AM_SetColors(void)
 {
@@ -156,7 +156,7 @@ typedef struct
   int connection_max;
 } highlight_t;
 
-static highlight_t highlight;
+static __STORAGE_MODIFIER highlight_t highlight;
 
 static __STORAGE_MODIFIER int map_blinking_locks;
 static __STORAGE_MODIFIER int map_secret_after;
@@ -167,7 +167,7 @@ static __STORAGE_MODIFIER int map_wheel_zoom;
 __STORAGE_MODIFIER int map_textured;
 __STORAGE_MODIFIER int map_use_multisampling;
 
-static map_things_appearance_t map_things_appearance;
+static __STORAGE_MODIFIER map_things_appearance_t map_things_appearance;
 
 // drawing stuff
 #define FB    0
@@ -455,7 +455,7 @@ void AM_restoreScaleAndLoc(void)
 void AM_setMarkParams(int num)
 {
   int i;
-  static char namebuf[16] = "AMMNUM0";
+  static __STORAGE_MODIFIER char namebuf[16] = "AMMNUM0";
 
   markpoints[num].w = 0;
   markpoints[num].h = 0;
@@ -745,10 +745,10 @@ void AM_InitParams(void)
 
 void AM_ExchangeScales(int full_automap, int *last_full_automap)
 {
-  static int full_min_scale_mtof;
-  static int full_max_scale_mtof;
-  static int full_scale_mtof;
-  static int full_scale_ftom;
+  static __STORAGE_MODIFIER int full_min_scale_mtof;
+  static __STORAGE_MODIFIER int full_max_scale_mtof;
+  static __STORAGE_MODIFIER int full_scale_mtof;
+  static __STORAGE_MODIFIER int full_scale_ftom;
 
   if (*last_full_automap && !full_automap)
   {
@@ -802,8 +802,8 @@ void AM_Stop (dboolean minimap)
 //
 void AM_Start(dboolean full_automap)
 {
-  static int lastlevel = -1, lastepisode = -1;
-  static int last_full_automap;
+  static __STORAGE_MODIFIER int lastlevel = -1, lastepisode = -1;
+  static __STORAGE_MODIFIER int last_full_automap;
 
   AM_InitParams();
 
@@ -1007,7 +1007,7 @@ static void AM_HighlightByTag(void)
 dboolean AM_Responder
 ( event_t*  ev )
 {
-  static int bigstate=0;
+  static __STORAGE_MODIFIER int bigstate=0;
 
   if (dsda_InputActivated(dsda_input_map_overlay) && (automap_input || dsda_ShowMinimap()))
   {
@@ -1326,8 +1326,7 @@ void AM_Ticker (void)
 // clipping on them in the lines frame coordinates.
 // Returns true if any part of line was not clipped
 //
-static dboolean AM_clipMline
-( mline_t*  ml,
+static dboolean AM_clipMline( mline_t*  ml,
   fline_t*  fl )
 {
   enum
@@ -1505,7 +1504,7 @@ static void AM_drawMline
 ( mline_t*  ml,
   int   color )
 {
-  static fline_t fl;
+  static __STORAGE_MODIFIER fline_t fl;
 
   if (color==-1)  // jff 4/3/98 allow not drawing any sort of line
     return;       // by setting its color to -1
@@ -1747,7 +1746,7 @@ static void AM_drawWalls(void)
 {
   int i;
   automap_style_t automap_style;
-  static mline_t l;
+  static __STORAGE_MODIFIER mline_t l;
   int hide_locks;
 
   hide_locks = map_blinking_locks && (gametic & 16);

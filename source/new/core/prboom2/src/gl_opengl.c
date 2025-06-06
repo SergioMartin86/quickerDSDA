@@ -452,7 +452,7 @@ void gld_EnableClientCoordArray(GLenum texture, int enable)
 
 void gld_EnableMultisample(int enable)
 {
-  static int multisample_is_enabled = 0;
+  static __STORAGE_MODIFIER int multisample_is_enabled = 0;
   if (enable)
   {
     if (!multisample_is_enabled)

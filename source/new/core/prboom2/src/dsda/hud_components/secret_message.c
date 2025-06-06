@@ -24,7 +24,7 @@ typedef struct {
   dboolean center;
 } local_component_t;
 
-static local_component_t* local;
+static __STORAGE_MODIFIER local_component_t* local;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {
   char* HU_SecretMessage(void);

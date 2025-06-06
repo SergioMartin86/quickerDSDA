@@ -1204,8 +1204,8 @@ int WI_fragSum(int playernum)
 
 static __STORAGE_MODIFIER int dm_state;
 // CPhipps - short, dynamically allocated
-static short int  **dm_frags;  // frags matrix
-static short __STORAGE_MODIFIER int *dm_totals;  // totals by player
+static __STORAGE_MODIFIER short int  **dm_frags;  // frags matrix
+static __STORAGE_MODIFIER short int *dm_totals;  // totals by player
 
 // ====================================================================
 // WI_initDeathmatchStats
@@ -1776,7 +1776,7 @@ void WI_initStats(void)
 void WI_updateStats(void)
 {
   //e6y
-  static dboolean play_early_explosion = true;
+  static __STORAGE_MODIFIER dboolean play_early_explosion = true;
 
   WI_updateAnimatedBack();
 

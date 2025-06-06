@@ -86,7 +86,7 @@ void dsda_DeathUse(player_t* player) {
     case death_use_reload:
       {
         int slot = dsda_LastSaveSlot();
-        static int last_load_tic;
+        static __STORAGE_MODIFIER int last_load_tic;
 
         if (slot >= 0 && gametic > last_load_tic + 1) {
           last_load_tic = gametic;

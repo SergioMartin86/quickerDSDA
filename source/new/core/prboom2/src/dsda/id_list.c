@@ -36,8 +36,8 @@ typedef struct {
   id_index_t* data;
 } id_hash_t;
 
-static id_hash_t line_id_hash;
-static id_hash_t sector_id_hash;
+static __STORAGE_MODIFIER id_hash_t line_id_hash;
+static __STORAGE_MODIFIER id_hash_t sector_id_hash;
 
 static id_list_t* dsda_NewListForIndex(id_index_t* index, int id) {
   id_list_t* new_list;

@@ -3147,7 +3147,7 @@ void A_RandomJump(mobj_t *mo)
 
 void A_LineEffect(mobj_t *mo)
 {
-  static line_t junk;
+  static __STORAGE_MODIFIER line_t junk;
   player_t player;
   player_t *oldplayer;
 
@@ -4901,7 +4901,7 @@ void A_FreeTargMobj(mobj_t * mo)
 }
 
 static __STORAGE_MODIFIER int bodyqueslot, bodyquesize;
-static mobj_t** bodyque;
+static __STORAGE_MODIFIER mobj_t** bodyque;
 
 void A_ResetPlayerCorpseQueue(void)
 {
@@ -4913,7 +4913,7 @@ void A_AddPlayerCorpse(mobj_t * actor)
 {
   if (bodyquesize > 0)
   {
-    static int queuesize;
+    static __STORAGE_MODIFIER int queuesize;
 
     if (queuesize < bodyquesize)
   	{

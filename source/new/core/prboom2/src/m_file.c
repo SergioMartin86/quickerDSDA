@@ -501,15 +501,6 @@ char *M_getcwd(char *buffer, int len)
 #endif
 }
 
-#ifdef _WIN32
-typedef struct {
-  char *var;
-  const char *name;
-} env_var_t;
-
-static env_var_t *env_vars;
-static int num_vars;
-#endif
 
 char *M_getenv(const char *name) {
 #ifdef _WIN32

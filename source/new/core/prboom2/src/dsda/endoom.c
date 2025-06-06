@@ -309,13 +309,13 @@ typedef enum {
   format_utf8,
 } output_format_t;
 
-static byte* endoom;
-static output_format_t output_format;
+static __STORAGE_MODIFIER byte* endoom;
+static __STORAGE_MODIFIER output_format_t output_format;
 
 #ifdef _WIN32
-static HANDLE hConsole;
-static DWORD OldMode;
-static dboolean restore_mode = false;
+static __STORAGE_MODIFIER HANDLE hConsole;
+static __STORAGE_MODIFIER DWORD OldMode;
+static __STORAGE_MODIFIER dboolean restore_mode = false;
 
 static void EnableVTMode(void) {
   hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

@@ -720,9 +720,8 @@ void F_CastDrawer (void)
 //
 // F_BunnyScroll
 //
-static const char* pfub1 = "PFUB1";
-static const char* pfub2 = "PFUB2";
-
+static __STORAGE_MODIFIER const char* pfub1 = "PFUB1";
+static __STORAGE_MODIFIER const char* pfub2 = "PFUB2";
 static const __STORAGE_MODIFIER char *scrollpic1;
 static const __STORAGE_MODIFIER char *scrollpic2;
 
@@ -765,8 +764,8 @@ void F_BunnyScroll (void)
 {
   char        name[10];
   int         stage;
-  static int  laststage;
-  static int  p1offset, p2width;
+  static __STORAGE_MODIFIER int  laststage;
+  static __STORAGE_MODIFIER int  p1offset, p2width;
 
   if (finalecount == 0)
   {

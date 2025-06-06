@@ -127,7 +127,7 @@ static __STORAGE_MODIFIER int spechit_max;          // killough
 __STORAGE_MODIFIER int numspechit;
 
 // Temporary holder for thing_sectorlist threads
-msecnode_t* sector_list = NULL;                             // phares 3/16/98
+__STORAGE_MODIFIER msecnode_t* sector_list = NULL;                             // phares 3/16/98
 
 //
 // TELEPORT MOVE
@@ -486,8 +486,7 @@ dboolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y, dboolean boss)
 // longer and probably really isn't worth the effort.
 //
 
-static // killough 3/26/98: make static
-dboolean PIT_CrossLine (line_t* ld)
+static dboolean PIT_CrossLine (line_t* ld)
 {
   if (!(ld->flags & ML_TWOSIDED) ||
       (ld->flags & (ML_BLOCKING|ML_BLOCKMONSTERS)))
@@ -542,8 +541,7 @@ static void CheckForDamageSpecial(line_t *line, mobj_t *mo)
 
 static void CheckForPushSpecial(line_t * line, int side, mobj_t * mobj);
 
-static // killough 3/26/98: make static
-dboolean PIT_CheckLine (line_t* ld)
+static dboolean PIT_CheckLine (line_t* ld)
 {
   dboolean rail = false;
 
@@ -1884,7 +1882,6 @@ dboolean P_ThingHeightClip (mobj_t* thing)
 // Allows the player to slide along any angled walls.
 //
 
-/* killough 8/2/98: make variables static */
 static __STORAGE_MODIFIER fixed_t bestslidefrac;
 static __STORAGE_MODIFIER line_t *bestslideline;
 static __STORAGE_MODIFIER mobj_t *slidemo;
@@ -2177,7 +2174,7 @@ void P_SlideMove(mobj_t *mo)
 //
 // P_LineAttack
 //
-mobj_t*   linetarget; // who got hit (or NULL)
+__STORAGE_MODIFIER mobj_t* linetarget; // who got hit (or NULL)
 __STORAGE_MODIFIER mobj_t *crosshair_target;
 static __STORAGE_MODIFIER mobj_t *shootthing;
 
@@ -2193,7 +2190,6 @@ __STORAGE_MODIFIER fixed_t attackrange;
 static __STORAGE_MODIFIER fixed_t aimslope;
 
 // slopes to top and bottom of target
-// killough 4/20/98: make static instead of using ones in p_sight.c
 
 static __STORAGE_MODIFIER fixed_t topslope;
 static __STORAGE_MODIFIER fixed_t bottomslope;

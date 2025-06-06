@@ -34,7 +34,7 @@
 #include "data_organizer.h"
 
 #define DATA_DIR_LIMIT 9
-static const char* dsda_data_root = "dsda_doom_data";
+static __STORAGE_MODIFIER const char* dsda_data_root = "dsda_doom_data";
 static __STORAGE_MODIFIER char *dsda_data_dir_strings[DATA_DIR_LIMIT];
 static __STORAGE_MODIFIER char *dsda_base_data_dir;
 static __STORAGE_MODIFIER char *dsda_wad_data_dir;

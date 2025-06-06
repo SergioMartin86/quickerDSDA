@@ -64,8 +64,8 @@
 
 #define SAVEGAMESIZE 0x20000
 
-byte *save_p;
-byte *savebuffer;
+__STORAGE_MODIFIER byte *save_p;
+__STORAGE_MODIFIER byte *savebuffer;
 static __STORAGE_MODIFIER int savegamesize;
 
 // Check for overrun and realloc if necessary -- Lee Killough 1/22/98
@@ -567,7 +567,7 @@ void P_UnArchiveThinkerSubclasses(mobj_t** mobj_p, int mobj_count)
   P_UnArchiveThinkerSubclass(th_enemies, mobj_p, mobj_count);
 }
 
-extern mobj_t** blocklinks;
+extern __STORAGE_MODIFIER mobj_t** blocklinks;
 extern __STORAGE_MODIFIER int blocklinks_count;
 extern __STORAGE_MODIFIER int bmapwidth;
 extern __STORAGE_MODIFIER int bmapheight;

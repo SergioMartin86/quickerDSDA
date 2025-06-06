@@ -34,7 +34,7 @@
 
 #include "dsda/configuration.h"
 
-static int init_stage_reg_writes = 1;
+static __STORAGE_MODIFIER int init_stage_reg_writes = 1;
 
 unsigned __STORAGE_MODIFIER int opl_sample_rate = 22050;
 
@@ -49,7 +49,7 @@ typedef struct
 } opl_timer_t;
 
 // Queue of callbacks waiting to be invoked.
-static opl_callback_queue_t *callback_queue;
+static __STORAGE_MODIFIER opl_callback_queue_t *callback_queue;
 
 // Current time, in us since startup:
 static __STORAGE_MODIFIER uint64_t current_time;
@@ -62,15 +62,15 @@ static __STORAGE_MODIFIER int opl_paused;
 static __STORAGE_MODIFIER uint64_t pause_offset;
 
 // OPL software emulator structure.
-static opl3_chip opl_chip;
+static __STORAGE_MODIFIER opl3_chip opl_chip;
 static __STORAGE_MODIFIER int opl_opl3mode;
 
 // Register number that was written.
 static __STORAGE_MODIFIER int register_num = 0;
 
 // Timers; DBOPL does not do timer stuff itself.
-static opl_timer_t timer1 = { 12500, 0, 0, 0 };
-static opl_timer_t timer2 = { 3125, 0, 0, 0 };
+static __STORAGE_MODIFIER opl_timer_t timer1 = { 12500, 0, 0, 0 };
+static __STORAGE_MODIFIER opl_timer_t timer2 = { 3125, 0, 0, 0 };
 
 // Initialize the OPL library.  Returns true if initialized
 // successfully.

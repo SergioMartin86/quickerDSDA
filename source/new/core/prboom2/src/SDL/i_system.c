@@ -125,8 +125,8 @@ fixed_t I_GetTimeFrac (void)
   }
   else
   {
-    static fixed_t last_frac;
-    static int last_gametic;
+    static __STORAGE_MODIFIER fixed_t last_frac;
+    static __STORAGE_MODIFIER int last_gametic;
     unsigned long long tic_time;
     const double tics_per_usec = TICRATE / 1000000.0f;
 
@@ -220,7 +220,7 @@ int I_Filelength(int handle)
 void I_SwitchToWindow(HWND hwnd)
 {
   typedef BOOL (WINAPI *TSwitchToThisWindow) (HWND wnd, BOOL restore);
-  static TSwitchToThisWindow SwitchToThisWindow = NULL;
+  static __STORAGE_MODIFIER TSwitchToThisWindow SwitchToThisWindow = NULL;
 
   if (!SwitchToThisWindow)
     SwitchToThisWindow = (TSwitchToThisWindow)GetProcAddress(GetModuleHandle("user32.dll"), "SwitchToThisWindow");
@@ -245,9 +245,9 @@ const char *I_ConfigDir(void)
 
 const char *I_ExeDir(void)
 {
-  extern char **dsda_argv;
+  extern __STORAGE_MODIFIER char **dsda_argv;
 
-  static char *base;
+  static __STORAGE_MODIFIER char *base;
   if (!base)        // cache multiple requests
     {
       size_t len = strlen(*dsda_argv);
@@ -270,7 +270,7 @@ const char *I_ExeDir(void)
 
 const char* I_GetTempDir(void)
 {
-  static const char* tmp_path;
+  static __STORAGE_MODIFIER const char* tmp_path;
 
   if (!tmp_path)
   {
@@ -309,7 +309,7 @@ const char* I_GetTempDir(void)
 
 const char *I_ConfigDir(void)
 {
-  static char *base;
+  static __STORAGE_MODIFIER char *base;
 
   if (!base)
   {
@@ -354,9 +354,9 @@ const char *I_ConfigDir(void)
 
 const char *I_ExeDir(void)
 {
-  extern char **dsda_argv;
+  extern __STORAGE_MODIFIER char **dsda_argv;
 
-  static char *base;
+  static __STORAGE_MODIFIER char *base;
   if (!base)        // cache multiple requests
     {
       size_t len = strlen(*dsda_argv);
@@ -404,7 +404,7 @@ dboolean HasTrailingSlash(const char* dn)
 
 static const char *I_GetBasePath(void)
 {
-  static char *executable_dir = "";
+  static __STORAGE_MODIFIER char *executable_dir = "";
   return executable_dir;
 }
 
@@ -452,11 +452,11 @@ char* I_FindFileInternal(const char* wfname, const char* ext, dboolean isStatic)
     {"/usr/share/doom"},
   }, *search;
 
-  static size_t num_search;
+  static __STORAGE_MODIFIER size_t num_search;
   size_t  i;
   size_t  pl;
 
-  static char static_p[PATH_MAX];
+  static __STORAGE_MODIFIER char static_p[PATH_MAX];
   char * dinamic_p = NULL;
   char *p = (isStatic ? static_p : dinamic_p);
 
@@ -467,7 +467,6 @@ char* I_FindFileInternal(const char* wfname, const char* ext, dboolean isStatic)
   {
     char *dwp;
 
-    // initialize with the static lookup table
     num_search = sizeof(search0)/sizeof(*search0);
     search = Z_Malloc(num_search * sizeof(*search));
     memcpy(search, search0, num_search * sizeof(*search));

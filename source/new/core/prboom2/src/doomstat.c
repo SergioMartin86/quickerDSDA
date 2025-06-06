@@ -37,11 +37,11 @@
 #include "dsda/map_format.h"
 
 // Game Mode - identify IWAD as shareware, retail etc.
-GameMode_t gamemode = indetermined;
-GameMission_t   gamemission = doom;
+__STORAGE_MODIFIER GameMode_t gamemode = indetermined;
+__STORAGE_MODIFIER GameMission_t   gamemission = doom;
 
 // Language.
-Language_t   language = english;
+__STORAGE_MODIFIER Language_t   language = english;
 
 // Set if homebrew PWAD stuff has been added.
 __STORAGE_MODIFIER dboolean modifiedgame;
@@ -49,7 +49,7 @@ __STORAGE_MODIFIER dboolean modifiedgame;
 //-----------------------------------------------------------------------------
 
 // CPhipps - compatibility vars
-complevel_t compatibility_level;
+__STORAGE_MODIFIER complevel_t compatibility_level;
 
 // e6y
 // it's required for demos recorded in "demo compatibility" mode by boom201 for example
@@ -93,7 +93,7 @@ __STORAGE_MODIFIER int monkeys;
 
 char *VANILLA_MAP_LUMP_NAME(int e, int m)
 {
-  static char name[9];
+  static __STORAGE_MODIFIER char name[9];
 
   if (gamemode == commercial || map_format.map99)
     snprintf(name, sizeof(name), "MAP%02d", m);

@@ -40,7 +40,7 @@ typedef struct {
   dsda_text_t dsda_dy_display;
 } local_component_t;
 
-static local_component_t* local;
+static __STORAGE_MODIFIER local_component_t* local;
 
 static __STORAGE_MODIFIER const char *dsda_coordinate_color;
 static __STORAGE_MODIFIER const char *dsda_velocity_color;

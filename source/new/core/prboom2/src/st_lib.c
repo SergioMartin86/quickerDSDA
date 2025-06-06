@@ -89,7 +89,6 @@ void STlib_initNum
  * Returns nothing
  *
  * jff 2/16/98 add color translation to digit output
- * cphipps 10/99 - const pointer to colour trans table, made function static
  */
 static void STlib_drawNum
 ( st_number_t*  n,

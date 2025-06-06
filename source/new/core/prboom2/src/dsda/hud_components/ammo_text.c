@@ -24,7 +24,7 @@ typedef struct {
   dboolean show_names;
 } local_component_t;
 
-static local_component_t* local;
+static __STORAGE_MODIFIER local_component_t* local;
 
 typedef struct {
   const char** ammo_name;
@@ -62,8 +62,7 @@ static const int hexen_ammo_type[2] = { 0, 1 };
 static const ammo_component_config_t doom_ammo = { doom_ammo_name, doom_ammo_type, 4 };
 static const ammo_component_config_t heretic_ammo = { heretic_ammo_name, heretic_ammo_type, 6 };
 static const ammo_component_config_t hexen_ammo = { hexen_ammo_name, hexen_ammo_type, 2 };
-
-static const ammo_component_config_t* component_config;
+static __STORAGE_MODIFIER const ammo_component_config_t* component_config;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size, int i) {
   player_t* player;

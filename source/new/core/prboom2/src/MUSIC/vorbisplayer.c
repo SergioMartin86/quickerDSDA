@@ -81,24 +81,24 @@ const music_player_t vorb_player =
 // zdoom-style audio loops
 #define ZDOOM_AUDIO_LOOP
 
-static int vorb_looping = 0;
-static int vorb_volume = 0; // 0-15
-static int vorb_samplerate_target = 0;
-static int vorb_samplerate_in = 0;
-static int vorb_paused = 0;
-static int vorb_playing = 0;
+static __STORAGE_MODIFIER int vorb_looping = 0;
+static __STORAGE_MODIFIER int vorb_volume = 0; // 0-15
+static __STORAGE_MODIFIER int vorb_samplerate_target = 0;
+static __STORAGE_MODIFIER int vorb_samplerate_in = 0;
+static __STORAGE_MODIFIER int vorb_paused = 0;
+static __STORAGE_MODIFIER int vorb_playing = 0;
 
 #ifdef ZDOOM_AUDIO_LOOP
-static unsigned vorb_loop_from;
-static unsigned vorb_loop_to;
-static unsigned vorb_total_pos;
+static __STORAGE_MODIFIER unsigned vorb_loop_from;
+static __STORAGE_MODIFIER unsigned vorb_loop_to;
+static __STORAGE_MODIFIER unsigned vorb_total_pos;
 #endif // ZDOOM_AUDIO_LOOP
 
-static const char *vorb_data;
-static size_t vorb_len;
-static size_t vorb_pos;
+static __STORAGE_MODIFIER const char *vorb_data;
+static __STORAGE_MODIFIER size_t vorb_len;
+static __STORAGE_MODIFIER size_t vorb_pos;
 
-OggVorbis_File vf;
+__STORAGE_MODIFIER OggVorbis_File vf;
 
 // io callbacks
 

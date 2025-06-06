@@ -54,9 +54,9 @@ extern  __STORAGE_MODIFIER dboolean fastparm; // checkparm of -fast
 // Game Mode - identify IWAD as shareware, retail etc.
 //
 
-extern GameMode_t gamemode;
-extern GameMission_t  gamemission;
-extern const __STORAGE_MODIFIER char *doomverstr;
+extern __STORAGE_MODIFIER GameMode_t gamemode;
+extern __STORAGE_MODIFIER GameMission_t  gamemission;
+extern __STORAGE_MODIFIER const char *doomverstr;
 
 extern char *VANILLA_MAP_LUMP_NAME(int e, int m);
 
@@ -64,7 +64,7 @@ extern char *VANILLA_MAP_LUMP_NAME(int e, int m);
 extern  __STORAGE_MODIFIER dboolean modifiedgame;
 
 // CPhipps - new compatibility handling
-extern complevel_t compatibility_level;
+extern __STORAGE_MODIFIER complevel_t compatibility_level;
 
 // CPhipps - old compatibility testing flags aliased to new handling
 #define compatibility (compatibility_level<=boom_compatibility_compatibility)
@@ -131,7 +131,7 @@ extern __STORAGE_MODIFIER int default_comperr[COMPERR_NUM];
 
 // -------------------------------------------
 // Language.
-extern  Language_t   language;
+extern  __STORAGE_MODIFIER Language_t   language;
 
 // -------------------------------------------
 // Selected skill type, map etc.
@@ -156,7 +156,7 @@ typedef struct
   angle_t angle;
 } leave_data_t;
 
-extern leave_data_t leave_data;
+extern __STORAGE_MODIFIER leave_data_t leave_data;
 
 #define LF_SET_ANGLE 0x01
 #define LEAVE_VICTORY -1
@@ -276,7 +276,7 @@ extern  __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
 extern __STORAGE_MODIFIER pclass_t PlayerClass[MAX_MAXPLAYERS];
 
 extern  __STORAGE_MODIFIER mapthing_t *deathmatchstarts;     // killough
-extern  size_t     num_deathmatchstarts; // killough
+extern  __STORAGE_MODIFIER size_t     num_deathmatchstarts; // killough
 
 extern  __STORAGE_MODIFIER mapthing_t *deathmatch_p;
 
@@ -286,14 +286,14 @@ extern  __STORAGE_MODIFIER mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLA
 
 // Intermission stats.
 // Parameters for world map / intermission.
-extern wbstartstruct_t wminfo;
+extern __STORAGE_MODIFIER wbstartstruct_t wminfo;
 
 //-----------------------------------------
 // Internal parameters, used for engine.
 //
 
 // File handling stuff.
-extern  FILE   *debugfile;
+extern  __STORAGE_MODIFIER FILE   *debugfile;
 
 // wipegamestate can be set to -1
 //  to force a wipe on the next draw

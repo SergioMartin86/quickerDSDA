@@ -69,17 +69,17 @@ typedef struct {
   bf_t best_bf[MAX_BF_DEPTH];
 } bf_target_t;
 
-static bf_t brute_force[MAX_BF_DEPTH];
+static __STORAGE_MODIFIER bf_t brute_force[MAX_BF_DEPTH];
 static __STORAGE_MODIFIER int bf_depth;
 static __STORAGE_MODIFIER int bf_logictic;
 static __STORAGE_MODIFIER int bf_condition_count;
-static bf_condition_t bf_condition[MAX_BF_CONDITIONS];
+static __STORAGE_MODIFIER bf_condition_t bf_condition[MAX_BF_CONDITIONS];
 static long __STORAGE_MODIFIER long bf_volume;
 static long __STORAGE_MODIFIER long bf_volume_max;
 static __STORAGE_MODIFIER dboolean bf_mode;
 static __STORAGE_MODIFIER dboolean bf_nomonsters;
-static dsda_key_frame_t nomo_key_frame;
-static bf_target_t bf_target;
+static __STORAGE_MODIFIER dsda_key_frame_t nomo_key_frame;
+static __STORAGE_MODIFIER bf_target_t bf_target;
 static __STORAGE_MODIFIER ticcmd_t bf_result[MAX_BF_DEPTH];
 
 __STORAGE_MODIFIER const char *dsda_bf_attribute_names[dsda_bf_attribute_max] = {

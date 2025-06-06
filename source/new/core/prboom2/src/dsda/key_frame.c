@@ -55,11 +55,11 @@ static __STORAGE_MODIFIER int auto_kf_timeout_count;
 
 #define TIMEOUT_LIMIT 1
 
-static dsda_key_frame_t first_kf;
-static dsda_key_frame_t quick_kf;
-static dsda_key_frame_t temp_kf;
-static auto_kf_t* auto_key_frames;
-static auto_kf_t* last_auto_kf;
+static __STORAGE_MODIFIER dsda_key_frame_t first_kf;
+static __STORAGE_MODIFIER dsda_key_frame_t quick_kf;
+static __STORAGE_MODIFIER dsda_key_frame_t temp_kf;
+static __STORAGE_MODIFIER auto_kf_t* auto_key_frames;
+static __STORAGE_MODIFIER auto_kf_t* last_auto_kf;
 static __STORAGE_MODIFIER int auto_kf_size;
 static __STORAGE_MODIFIER int restore_key_frame_index = -1;
 

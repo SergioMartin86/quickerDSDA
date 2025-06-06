@@ -101,33 +101,6 @@ __STORAGE_MODIFIER float skyUpShift;
 __STORAGE_MODIFIER float skyXShift;
 __STORAGE_MODIFIER float skyYShift;
 
-#ifdef _WIN32
-const char* WINError(void)
-{
-  static char *WinEBuff = NULL;
-  DWORD err = GetLastError();
-  char *ch;
-
-  if (WinEBuff)
-  {
-    LocalFree(WinEBuff);
-  }
-
-  if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-    NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-    (LPTSTR) &WinEBuff, 0, NULL) == 0)
-  {
-    return "Unknown error";
-  }
-
-  if ((ch = strchr(WinEBuff, '\n')) != 0)
-    *ch = 0;
-  if ((ch = strchr(WinEBuff, '\r')) != 0)
-    *ch = 0;
-
-  return WinEBuff;
-}
-#endif
 
 //--------------------------------------------------
 
@@ -716,8 +689,8 @@ __STORAGE_MODIFIER int force_singletics_to = 0;
 
 int HU_DrawDemoProgress(int force)
 {
-  static unsigned int last_update = 0;
-  static int prev_len = -1;
+  static __STORAGE_MODIFIER unsigned int last_update = 0;
+  static __STORAGE_MODIFIER int prev_len = -1;
 
   int len, tics_count, diff;
   unsigned int tick, max_period;

@@ -853,8 +853,8 @@ void M_DoScreenShot (const char* fname)
 
 const char* M_CheckWritableDir(const char *dir)
 {
-  static char *base = NULL;
-  static int base_len = 0;
+  static __STORAGE_MODIFIER char *base = NULL;
+  static __STORAGE_MODIFIER int base_len = 0;
 
   const char *result = NULL;
   int len;
@@ -889,7 +889,7 @@ const char* M_CheckWritableDir(const char *dir)
 
 void M_ScreenShot(void)
 {
-  static int shot;
+  static __STORAGE_MODIFIER int shot;
   char       *lbmname = NULL;
   int        startshot;
   const char *shot_dir = NULL;

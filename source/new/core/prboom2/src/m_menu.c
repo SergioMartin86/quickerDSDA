@@ -192,7 +192,7 @@ __STORAGE_MODIFIER int hide_setup=1; // killough 5/15/98
 __STORAGE_MODIFIER int messageToPrint;  // 1 = message to be printed
 
 // CPhipps - static const
-static const char* messageString; // ...and here is the message string!
+static __STORAGE_MODIFIER const char* messageString; // ...and here is the message string!
 
 // message x & y
 __STORAGE_MODIFIER int messx;
@@ -374,16 +374,16 @@ const char shiftxform[] =
   '{', '|', '}', '~', 127
 };
 
-static int cr_title;
-static int cr_label;
-static int cr_label_highlight;
-static int cr_label_edit;
-static int cr_value;
-static int cr_value_highlight;
-static int cr_value_edit;
-static int cr_info_highlight;
-static int cr_info_edit;
-static int cr_warning;
+static __STORAGE_MODIFIER int cr_title;
+static __STORAGE_MODIFIER int cr_label;
+static __STORAGE_MODIFIER int cr_label_highlight;
+static __STORAGE_MODIFIER int cr_label_edit;
+static __STORAGE_MODIFIER int cr_value;
+static __STORAGE_MODIFIER int cr_value_highlight;
+static __STORAGE_MODIFIER int cr_value_edit;
+static __STORAGE_MODIFIER int cr_info_highlight;
+static __STORAGE_MODIFIER int cr_info_edit;
+static __STORAGE_MODIFIER int cr_warning;
 
 static void M_LoadTextColors(void)
 {
@@ -399,7 +399,7 @@ static void M_LoadTextColors(void)
   cr_warning = dsda_TextCR(dsda_tc_menu_warning);
 }
 
-static const dsda_font_t *menu_font;
+static __STORAGE_MODIFIER const dsda_font_t *menu_font;
 
 static void M_LoadMenuFont(void)
 {
@@ -614,7 +614,7 @@ menu_t EpiDef =
 //    M_Episode
 //
 
-static int chosen_episode;
+static __STORAGE_MODIFIER int chosen_episode;
 
 void M_DrawEpisode(void)
 {
@@ -694,7 +694,7 @@ void M_NewGame(int choice)
     M_SetupNextMenu(&EpiDef);
 }
 
-static int chosen_skill;
+static __STORAGE_MODIFIER int chosen_skill;
 
 static void M_FinishGameSelection(void)
 {
@@ -770,8 +770,8 @@ enum
   load_end
 } load_e;
 
-static int save_page = 0;
-static const int save_page_limit = 16;
+static __STORAGE_MODIFIER int save_page = 0;
+static __STORAGE_MODIFIER const int save_page_limit = 16;
 
 #define SAVE_PAGE_STRING_SIZE 16
 char __STORAGE_MODIFIER save_page_string[SAVE_PAGE_STRING_SIZE];
@@ -890,7 +890,7 @@ void M_LoadSelect(int choice)
 // killough 5/15/98: add forced loadgames
 //
 
-static char *forced_loadgame_message;
+static __STORAGE_MODIFIER char *forced_loadgame_message;
 
 static void M_VerifyForcedLoadGame(int ch)
 {
@@ -1266,7 +1266,7 @@ static void M_QuitResponse(dboolean affirmative)
 
 void M_QuitDOOM(int choice)
 {
-  static char endstring[160];
+  static __STORAGE_MODIFIER char endstring[160];
   setup_active = false;
   currentMenu = NULL;
 
@@ -1534,8 +1534,8 @@ void M_SizeDisplay(int choice)
 //
 // current_setup_menu is a pointer to the current setup menu table.
 
-static int set_menu_itemon; // which setup item is selected?   // phares 3/98
-static setup_menu_t* current_setup_menu; // points to current setup menu table
+static __STORAGE_MODIFIER int set_menu_itemon; // which setup item is selected?   // phares 3/98
+static __STORAGE_MODIFIER setup_menu_t* current_setup_menu; // points to current setup menu table
 
 // save the setup menu's itemon value in the S_END element's x coordinate
 
@@ -1583,7 +1583,7 @@ static void M_UpdateSetupMenu(setup_menu_t *new_setup_menu)
 
 #define MENU_BUFFER_SIZE 128
 
-static char menu_buffer[MENU_BUFFER_SIZE];
+static __STORAGE_MODIFIER char menu_buffer[MENU_BUFFER_SIZE];
 
 /////////////////////////////
 //
@@ -1692,9 +1692,9 @@ menu_t LevelTableDef =
 // killough 10/98: reduced, for more general uses
 #define MAXENTRYWIDTH         272
 
-static int entry_index;
-static char entry_string_index[ENTRY_STRING_BFR_SIZE]; // points to new strings while editing
-static int choice_value;
+static __STORAGE_MODIFIER int entry_index;
+static __STORAGE_MODIFIER char entry_string_index[ENTRY_STRING_BFR_SIZE]; // points to new strings while editing
+static __STORAGE_MODIFIER int choice_value;
 
 /////////////////////////////
 //
@@ -1892,7 +1892,7 @@ static void M_DrawSetting(const setup_menu_t* s, int y)
 
   // Is the item a string?
   if (flags & S_STRING) {
-    static char text[ENTRY_STRING_BFR_SIZE];
+    static __STORAGE_MODIFIER char text[ENTRY_STRING_BFR_SIZE];
 
     // Are we editing this string? If so, display a cursor under
     // the correct character.
@@ -3330,7 +3330,7 @@ typedef struct {
   int best_sk5_time;
 } wad_stats_summary_t;
 
-static wad_stats_summary_t wad_stats_summary;
+static __STORAGE_MODIFIER wad_stats_summary_t wad_stats_summary;
 
 static void M_CalculateWadStatsSummary(void)
 {
@@ -3378,7 +3378,7 @@ static void M_CalculateWadStatsSummary(void)
   }
 }
 
-static int level_table_cursor_position[LEVEL_TABLE_PAGES];
+static __STORAGE_MODIFIER int level_table_cursor_position[LEVEL_TABLE_PAGES];
 
 static void M_ResetLevelTable(void)
 {
@@ -3416,7 +3416,7 @@ static void M_PrintTime(dsda_string_t* m_text, int tics)
                     (float) (tics % (60 * 35)) / 35);
 }
 
-static int wad_stats_summary_page;
+static __STORAGE_MODIFIER int wad_stats_summary_page;
 
 static void M_BuildLevelTable(void)
 {
@@ -3776,7 +3776,7 @@ void M_DrawLevelTable(void)
 // General routines used by the Setup screens.
 //
 
-static dboolean shiftdown = false; // phares 4/10/98: SHIFT key down or not
+static __STORAGE_MODIFIER dboolean shiftdown = false; // phares 4/10/98: SHIFT key down or not
 
 // phares 4/17/98:
 // M_SelectDone() gets called when you have finished entering your
@@ -3922,7 +3922,6 @@ void M_DrawExtHelp(void)
 //
 // Dynamic HELP screen                     // phares 3/2/98
 //
-// Rather than providing the static HELP screens from DOOM and its versions,
 // BOOM provides the player with a dynamic HELP screen that displays the
 // current settings of major key bindings.
 //
@@ -5609,7 +5608,7 @@ int M_EventToCharacter(event_t* ev)
   {
     if (ev->data1.i)
     {
-      static int wait;
+      static __STORAGE_MODIFIER int wait;
 
       if (wait < dsda_GetTick())
       {
@@ -5623,7 +5622,7 @@ int M_EventToCharacter(event_t* ev)
   {
     if (ev->data1.i)
     {
-      static int wait;
+      static __STORAGE_MODIFIER int wait;
 
       if (wait < dsda_GetTick())
       {

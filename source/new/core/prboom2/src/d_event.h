@@ -118,6 +118,6 @@ typedef enum
 // GLOBAL VARIABLES
 //
 
-extern gameaction_t gameaction;
+extern __STORAGE_MODIFIER gameaction_t gameaction;
 
 #endif

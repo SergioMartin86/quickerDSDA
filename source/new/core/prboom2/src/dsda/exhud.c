@@ -364,8 +364,8 @@ static dsda_hud_container_t containers[] = {
   [hud_null] = { NULL }
 };
 
-static dsda_hud_container_t* container;
-static exhud_component_t* components;
+static __STORAGE_MODIFIER dsda_hud_container_t* container;
+static __STORAGE_MODIFIER exhud_component_t* components;
 
 __STORAGE_MODIFIER int dsda_show_render_stats;
 

@@ -32,8 +32,8 @@
 
 #define SPLIT_VERSION 1
 
-static dsda_split_t* dsda_splits;
-static size_t dsda_splits_count;
+static __STORAGE_MODIFIER dsda_split_t* dsda_splits;
+static __STORAGE_MODIFIER size_t dsda_splits_count;
 static __STORAGE_MODIFIER int attempts;
 static __STORAGE_MODIFIER int current_split;
 static __STORAGE_MODIFIER char *dsda_split_tracker_dir;
@@ -105,7 +105,7 @@ static void dsda_LoadSplits(void) {
   char* path;
   char* buffer;
   int version;
-  static int loaded = false;
+  static __STORAGE_MODIFIER int loaded = false;
 
   if (loaded)
     return;

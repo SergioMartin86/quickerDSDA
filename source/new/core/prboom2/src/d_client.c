@@ -84,7 +84,7 @@ void D_InitFakeNetGame (void)
 
 void FakeNetUpdate(void)
 {
-  static int lastmadetic;
+  static __STORAGE_MODIFIER int lastmadetic;
 
   if (isExtraDDisplay)
     return;

@@ -628,7 +628,7 @@ void SB_Drawer(dboolean statusbaron, dboolean refresh, dboolean fullmenu)
 // and player->bonuscount
 void SB_PaletteFlash(dboolean forceChange)
 {
-    static int sb_palette = 0;
+    static __STORAGE_MODIFIER int sb_palette = 0;
     int palette;
 
     if (forceChange)
@@ -1128,7 +1128,7 @@ static void DrRedINumber(signed int val, int x, int y)
 static void DrawAnimatedIcons(void)
 {
     int frame;
-    static dboolean hitCenterFrame;
+    static __STORAGE_MODIFIER dboolean hitCenterFrame;
 
     // Flight icons
     if (CPlayer->powers[pw_flight])

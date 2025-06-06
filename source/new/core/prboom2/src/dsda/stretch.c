@@ -37,10 +37,10 @@ __STORAGE_MODIFIER int render_stretch_hud;
 __STORAGE_MODIFIER int patches_scalex;
 __STORAGE_MODIFIER int patches_scaley;
 
-static cb_video_t video;
-static cb_video_t video_stretch;
-static cb_video_t video_full;
-static cb_video_t video_ex_text;
+static __STORAGE_MODIFIER cb_video_t video;
+static __STORAGE_MODIFIER cb_video_t video_stretch;
+static __STORAGE_MODIFIER cb_video_t video_full;
+static __STORAGE_MODIFIER cb_video_t video_ex_text;
 
 static __STORAGE_MODIFIER stretch_param_t *stretch_params;
 static __STORAGE_MODIFIER stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];

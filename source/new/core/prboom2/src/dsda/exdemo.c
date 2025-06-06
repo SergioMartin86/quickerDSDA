@@ -46,7 +46,7 @@ typedef struct {
   int is_signed;
 } exdemo_t;
 
-static exdemo_t exdemo;
+static __STORAGE_MODIFIER exdemo_t exdemo;
 
 #define DEMOEX_PORTNAME_LUMPNAME "PORTNAME"
 #define DEMOEX_PARAMS_LUMPNAME "CMDLINE"
