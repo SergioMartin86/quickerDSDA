@@ -77,7 +77,7 @@ screeninfo_t screens[NUM_SCREENS];
 /* jff 4/24/98 initialize this at runtime */
 const byte *colrngs[CR_LIMIT];
 
-int usegamma;
+__STORAGE_MODIFIER int usegamma;
 
 int V_BloodColor(int blood)
 {

@@ -62,7 +62,7 @@ __STORAGE_MODIFIER char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
 
 static __STORAGE_MODIFIER dboolean skipintermission;
 static __STORAGE_MODIFIER int interstate = 0;
-static int intertime = -1;
+static __STORAGE_MODIFIER int intertime = -1;
 static gametype_t gametype;
 static __STORAGE_MODIFIER int cnt;
 static __STORAGE_MODIFIER int slaughterboy;        // in DM, the player with the most kills

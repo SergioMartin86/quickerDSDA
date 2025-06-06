@@ -92,7 +92,7 @@ static const unsigned char *rndtable = doom_rndtable;
 
 rng_t rng;     // the random number state
 
-unsigned int rngseed = 1993;   // killough 3/26/98: The seed
+unsigned __STORAGE_MODIFIER int rngseed = 1993;   // killough 3/26/98: The seed
 
 int (P_Random)(pr_class_t pr_class)
 {

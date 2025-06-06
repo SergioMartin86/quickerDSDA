@@ -20,8 +20,8 @@
 
 #include "doomtype.h"
 
-extern int g_maxplayers;
-extern int g_viewheight;
+extern __STORAGE_MODIFIER int g_maxplayers;
+extern __STORAGE_MODIFIER int g_viewheight;
 extern __STORAGE_MODIFIER int g_numammo;
 
 extern __STORAGE_MODIFIER int g_mt_player;

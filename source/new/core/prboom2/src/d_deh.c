@@ -188,7 +188,7 @@ static char *deh_sfx_name(const char *name)
 }
 
 // haleyjd 9/22/99
-int HelperThing = -1;     // in P_SpawnMapThing to substitute helper thing
+__STORAGE_MODIFIER int HelperThing = -1;     // in P_SpawnMapThing to substitute helper thing
 
 // variables used in other routines
 __STORAGE_MODIFIER dboolean deh_pars = FALSE; // in wi_stuff to allow pars in modified games

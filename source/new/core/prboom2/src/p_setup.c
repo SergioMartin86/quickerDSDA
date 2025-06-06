@@ -177,8 +177,8 @@ __STORAGE_MODIFIER int blocklinks_count;
 // A 511x511 blockmap would still have a valid negative number
 // e.g. -1..510, so they would be set to -2
 // Non-extreme maps remain unaffected.
-int blockmapxneg = -257;
-int blockmapyneg = -257;
+__STORAGE_MODIFIER int blockmapxneg = -257;
+__STORAGE_MODIFIER int blockmapyneg = -257;
 
 __STORAGE_MODIFIER dboolean skipblstart;  // MaxW: Skip initial blocklist short
 
@@ -200,13 +200,13 @@ mapthing_t *deathmatchstarts;      // killough
 size_t     num_deathmatchstarts;   // killough
 
 mapthing_t *deathmatch_p;
-mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
+__STORAGE_MODIFIER mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
 // for thing tracking (xdre style)
-int numthings;
+__STORAGE_MODIFIER int numthings;
 mobj_t **mobj_ptrs;
 
-static int current_episode = -1;
+static __STORAGE_MODIFIER int current_episode = -1;
 static __STORAGE_MODIFIER int current_map = -1;
 static nodes_version_t current_nodesVersion = UNKNOWN_NODES;
 static __STORAGE_MODIFIER int samelevel = false;
@@ -2604,7 +2604,7 @@ static void AddBlockLine
   done[blockno] = 1;
 }
 
-blockmap_t original_blockmap;
+__STORAGE_MODIFIER blockmap_t original_blockmap;
 
 static void RememberOriginalBlockMap(void)
 {
@@ -3505,7 +3505,7 @@ static void P_UpdateUDMFLevelComponents(int lumpnum)
 void PO_LoadThings(int lump);
 void PO_LoadUDMFThings(int lump);
 
-map_loader_t udmf_map_loader = {
+__STORAGE_MODIFIER map_loader_t udmf_map_loader = {
   .load_vertexes = P_LoadUDMFVertexes,
   .load_sectors = P_LoadUDMFSectors,
   .load_things = P_LoadUDMFThings,
@@ -3516,7 +3516,7 @@ map_loader_t udmf_map_loader = {
   .po_load_things = PO_LoadUDMFThings,
 };
 
-map_loader_t legacy_map_loader = {
+__STORAGE_MODIFIER map_loader_t legacy_map_loader = {
   .load_vertexes = P_LoadVertexes,
   .load_sectors = P_LoadSectors,
   .load_things = P_LoadThings,
@@ -3527,7 +3527,7 @@ map_loader_t legacy_map_loader = {
   .po_load_things = PO_LoadThings,
 };
 
-map_loader_t map_loader;
+__STORAGE_MODIFIER map_loader_t map_loader;
 
 void P_UpdateMapLoader(int lumpnum)
 {

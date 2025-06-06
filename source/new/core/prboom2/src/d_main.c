@@ -312,7 +312,7 @@ static void D_Wipe(void)
 //
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
-gamestate_t    wipegamestate = GS_DEMOSCREEN;
+__STORAGE_MODIFIER gamestate_t wipegamestate = GS_DEMOSCREEN;
 extern __STORAGE_MODIFIER dboolean setsizeneeded;
 
 static void D_DrawPause(void)
@@ -1522,8 +1522,8 @@ static void D_AutoloadDehPWadDir()
   Z_Free(autoload_deh_pwad_queue);
 }
 
-int warpepisode = -1;
-int warpmap = -1;
+__STORAGE_MODIFIER int warpepisode = -1;
+__STORAGE_MODIFIER int warpmap = -1;
 
 static void HandleWarp(void)
 {

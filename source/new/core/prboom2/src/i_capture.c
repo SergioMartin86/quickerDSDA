@@ -53,9 +53,9 @@ typedef struct
   void *user;
 } pipeinfo_t;
 
-static pipeinfo_t soundpipe;
-static pipeinfo_t videopipe;
-static pipeinfo_t muxpipe;
+static __STORAGE_MODIFIER pipeinfo_t soundpipe;
+static __STORAGE_MODIFIER pipeinfo_t videopipe;
+static __STORAGE_MODIFIER pipeinfo_t muxpipe;
 
 __STORAGE_MODIFIER int cap_fps;
 __STORAGE_MODIFIER int cap_frac;

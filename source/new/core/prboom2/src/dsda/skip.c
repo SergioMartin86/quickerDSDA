@@ -205,8 +205,8 @@ void dsda_EvaluateSkipModeCheckDemoStatus(void) {
 }
 
 void dsda_HandleSkip(void) {
-  extern int warpmap;
-  extern int warpepisode;
+  extern __STORAGE_MODIFIER int warpmap;
+  extern __STORAGE_MODIFIER int warpepisode;
 
   dsda_arg_t* arg;
 

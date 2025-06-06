@@ -74,7 +74,7 @@ static __STORAGE_MODIFIER dboolean intermission;
 static __STORAGE_MODIFIER dboolean skipintermission;
 static __STORAGE_MODIFIER dboolean finalintermission;
 static __STORAGE_MODIFIER int interstate = 0;
-static int intertime = -1;
+static __STORAGE_MODIFIER int intertime = -1;
 static __STORAGE_MODIFIER int oldintertime = 0;
 static gametype_t gametype;
 

@@ -38,7 +38,7 @@
 
 #define MINZ        (FRACUNIT*4)
 
-extern int r_near_clip_plane;
+extern __STORAGE_MODIFIER int r_near_clip_plane;
 
 /* Constant arrays used for psprite clipping and initializing clipping. */
 
@@ -51,7 +51,7 @@ extern int *screenheightarray; /* change to MAX_*  */ // dropoff overflow
 extern int     *mfloorclip;    // dropoff overflow
 extern int     *mceilingclip;  // dropoff overflow
 extern __STORAGE_MODIFIER fixed_t spryscale;
-extern int64_t sprtopscreen;
+extern __STORAGE_MODIFIER int64_t sprtopscreen;
 extern __STORAGE_MODIFIER fixed_t pspriteiscale;
 /* proff 11/06/98: Added for high-res */
 extern __STORAGE_MODIFIER fixed_t pspritexscale;

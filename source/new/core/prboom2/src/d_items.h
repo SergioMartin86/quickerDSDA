@@ -67,16 +67,16 @@ typedef struct
   int         flags;
 } weaponinfo_t;
 
-extern weaponinfo_t doom_weaponinfo[NUMWEAPONS+2];
+extern __STORAGE_MODIFIER weaponinfo_t doom_weaponinfo[NUMWEAPONS+2];
 
 // heretic
 
-extern weaponinfo_t wpnlev1info[NUMWEAPONS];
-extern weaponinfo_t wpnlev2info[NUMWEAPONS];
+extern __STORAGE_MODIFIER weaponinfo_t wpnlev1info[NUMWEAPONS];
+extern __STORAGE_MODIFIER weaponinfo_t wpnlev2info[NUMWEAPONS];
 
 // hexen
 
-extern weaponinfo_t hexen_weaponinfo[HEXEN_NUMWEAPONS][NUMCLASSES];
+extern __STORAGE_MODIFIER weaponinfo_t hexen_weaponinfo[HEXEN_NUMWEAPONS][NUMCLASSES];
 
 // dynamically selected in global.c
 

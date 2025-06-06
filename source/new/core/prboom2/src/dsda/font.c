@@ -19,8 +19,8 @@
 
 #include "font.h"
 
-static patchnum_t hu_font[HU_FONTSIZE];
-static patchnum_t hu_font2[HU_FONTSIZE];
+static __STORAGE_MODIFIER patchnum_t hu_font[HU_FONTSIZE];
+static __STORAGE_MODIFIER patchnum_t hu_font2[HU_FONTSIZE];
 
 dsda_font_t hud_font;
 dsda_font_t exhud_font;

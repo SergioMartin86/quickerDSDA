@@ -36,7 +36,7 @@
 
 static int init_stage_reg_writes = 1;
 
-unsigned int opl_sample_rate = 22050;
+unsigned __STORAGE_MODIFIER int opl_sample_rate = 22050;
 
 #define MAX_SOUND_SLICE_TIME 100 /* ms */
 
@@ -52,14 +52,14 @@ typedef struct
 static opl_callback_queue_t *callback_queue;
 
 // Current time, in us since startup:
-static uint64_t current_time;
+static __STORAGE_MODIFIER uint64_t current_time;
 
 // If non-zero, playback is currently paused.
 static __STORAGE_MODIFIER int opl_paused;
 
 // Time offset (in us) due to the fact that callbacks
 // were previously paused.
-static uint64_t pause_offset;
+static __STORAGE_MODIFIER uint64_t pause_offset;
 
 // OPL software emulator structure.
 static opl3_chip opl_chip;

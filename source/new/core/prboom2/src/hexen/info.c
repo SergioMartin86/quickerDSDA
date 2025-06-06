@@ -281,7 +281,7 @@ void A_BatSpawnInit();
 void A_BatSpawn();
 void A_BatMove();
 
-state_t hexen_states[HEXEN_NUMSTATES] = {
+__STORAGE_MODIFIER state_t hexen_states[HEXEN_NUMSTATES] = {
     {HEXEN_SPR_MAN1, 0, -1, NULL, HEXEN_S_NULL, 0, 0},      // HEXEN_S_NULL
     {HEXEN_SPR_ACLO, 4, 1050, A_FreeTargMobj, HEXEN_S_NULL, 0, 0},  // HEXEN_S_FREETARGMOBJ
     {HEXEN_SPR_TLGL, 0, -1, NULL, HEXEN_S_NULL, 0, 0},      // HEXEN_S_MAPSPOT
@@ -3131,7 +3131,7 @@ state_t hexen_states[HEXEN_NUMSTATES] = {
 };
 
 
-raven_mobjinfo_t hexen_mobjinfo[HEXEN_NUMMOBJTYPES] = {
+__STORAGE_MODIFIER raven_mobjinfo_t hexen_mobjinfo[HEXEN_NUMMOBJTYPES] = {
 
     {                           // HEXEN_MT_MAPSPOT
      9001,                      // doomednum

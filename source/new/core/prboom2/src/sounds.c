@@ -456,7 +456,7 @@ sfxinfo_t doom_S_sfx[] = {
 
 #define DISAMBIGUATED_SFX(id, tag) { "", 0, &doom_S_sfx[id], 0, 0, 0, 0, tag }
 
-sfxinfo_t doom_disambiguated_sfx[] = {
+__STORAGE_MODIFIER sfxinfo_t doom_disambiguated_sfx[] = {
   DISAMBIGUATED_SFX(sfx_pistol, "weapons/pistol"),
   DISAMBIGUATED_SFX(sfx_pistol, "grunt/attack"),
   DISAMBIGUATED_SFX(sfx_pistol, "menu/choose"),

@@ -59,8 +59,8 @@
 __STORAGE_MODIFIER dboolean enableOutput;
 static __STORAGE_MODIFIER dboolean disable_message_box;
 
-int cons_stdout_mask = LO_INFO;
-int cons_stderr_mask = LO_WARN | LO_ERROR;
+__STORAGE_MODIFIER int cons_stdout_mask = LO_INFO;
+__STORAGE_MODIFIER int cons_stderr_mask = LO_WARN | LO_ERROR;
 
 /* cphipps - enlarged message buffer and made non-static
  * We still have to be careful here, this function can be called after exit

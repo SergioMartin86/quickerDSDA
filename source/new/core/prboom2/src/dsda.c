@@ -57,7 +57,7 @@ __STORAGE_MODIFIER dboolean dsda_any_map_completed;
 
 // other
 __STORAGE_MODIFIER int dsda_max_kill_requirement;
-static int dsda_session_attempts = 1;
+static __STORAGE_MODIFIER int dsda_session_attempts = 1;
 
 static __STORAGE_MODIFIER int turbo_scale;
 static __STORAGE_MODIFIER int start_in_build_mode;

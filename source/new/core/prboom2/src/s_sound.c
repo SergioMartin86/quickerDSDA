@@ -93,8 +93,8 @@ typedef struct
 } channel_t;
 
 // the set of channels available
-static channel_t channels[MAX_CHANNELS];
-static degenmobj_t sobjs[MAX_CHANNELS];
+static __STORAGE_MODIFIER channel_t channels[MAX_CHANNELS];
+static __STORAGE_MODIFIER degenmobj_t sobjs[MAX_CHANNELS];
 
 // Maximum volume of a sound effect.
 // Internal default is max out of 0-15.
@@ -104,7 +104,7 @@ __STORAGE_MODIFIER int snd_SfxVolume;
 static __STORAGE_MODIFIER int sfx_volume;
 
 // Maximum volume of music.
-int snd_MusicVolume = 15;
+__STORAGE_MODIFIER int snd_MusicVolume = 15;
 
 // whether songs are mus_paused
 static __STORAGE_MODIFIER dboolean mus_paused;
@@ -133,11 +133,11 @@ static int S_getChannel(void *origin, sfxinfo_t *sfxinfo, sfx_params_t *params);
 
 
 // heretic
-int max_snd_dist = 1600;
-int dist_adjust = 160;
+__STORAGE_MODIFIER int max_snd_dist = 1600;
+__STORAGE_MODIFIER int dist_adjust = 160;
 
 static byte* soundCurve;
-static int AmbChan = -1;
+static __STORAGE_MODIFIER int AmbChan = -1;
 
 static mobj_t* GetSoundListener(void);
 static void Heretic_S_StopSound(void *_origin);
@@ -512,7 +512,7 @@ void S_StopSoundLoops(void)
 }
 
 // [FG] disable sound cutoffs
-int full_sounds;
+__STORAGE_MODIFIER int full_sounds;
 
 void S_UnlinkSound(void *origin)
 {

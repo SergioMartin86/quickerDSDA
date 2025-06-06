@@ -140,7 +140,7 @@ typedef struct {
 
 extern rng_t rng;                      // The rng's state
 
-extern unsigned int rngseed;           // The starting seed (not part of state)
+extern __STORAGE_MODIFIER unsigned int rngseed;           // The starting seed (not part of state)
 
 // As M_Random, but used by the play simulation.
 int P_Random(pr_class_t);

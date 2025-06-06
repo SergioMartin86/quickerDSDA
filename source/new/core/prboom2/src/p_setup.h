@@ -53,8 +53,8 @@ extern mobj_t   **blocklinks;    /* for thing chains */
 extern __STORAGE_MODIFIER dboolean skipblstart; // MaxW: Skip initial blocklist short
 
 // MAES: extensions to support 512x512 blockmaps.
-extern int blockmapxneg;
-extern int blockmapyneg;
+extern __STORAGE_MODIFIER int blockmapxneg;
+extern __STORAGE_MODIFIER int blockmapyneg;
 
 typedef struct
 {
@@ -64,7 +64,7 @@ typedef struct
   fixed_t orgy;
 } blockmap_t;
 
-extern blockmap_t original_blockmap;
+extern __STORAGE_MODIFIER blockmap_t original_blockmap;
 
 void P_RestoreOriginalBlockMap(void);
 
@@ -80,7 +80,7 @@ typedef struct
   void (*po_load_things)(int lump);
 } map_loader_t;
 
-extern map_loader_t map_loader;
+extern __STORAGE_MODIFIER map_loader_t map_loader;
 
 
 #endif

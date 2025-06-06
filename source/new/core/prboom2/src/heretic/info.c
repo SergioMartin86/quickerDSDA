@@ -35,7 +35,7 @@ const char *heretic_sprnames[HERETIC_NUMSPRITES + 1] = {
     NULL
 };
 
-state_t heretic_states[HERETIC_NUMSTATES] = {
+__STORAGE_MODIFIER state_t heretic_states[HERETIC_NUMSTATES] = {
     {HERETIC_SPR_IMPX, 0, -1, NULL, HERETIC_S_NULL, 0, 0},      // HERETIC_S_NULL
     {HERETIC_SPR_ACLO, 4, 1050, A_FreeTargMobj, HERETIC_S_NULL, 0, 0},  // HERETIC_S_FREETARGMOBJ
     {HERETIC_SPR_PTN1, 0, 3, NULL, HERETIC_S_ITEM_PTN1_2, 0, 0},        // HERETIC_S_ITEM_PTN1_1
@@ -1247,7 +1247,7 @@ state_t heretic_states[HERETIC_NUMSTATES] = {
 };
 
 
-raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES] = {
+__STORAGE_MODIFIER raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES] = {
 
     {                           // MT_MISC0
      81,                        // doomednum

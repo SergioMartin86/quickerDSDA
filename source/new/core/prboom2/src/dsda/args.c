@@ -695,7 +695,7 @@ static arg_config_t arg_config[dsda_arg_count] = {
   },
 };
 
-dsda_arg_t arg_value[dsda_arg_count];
+__STORAGE_MODIFIER dsda_arg_t arg_value[dsda_arg_count];
 
 static void dsda_ParseIntArg(arg_config_t* config, int* value, const char* param) {
   if (sscanf(param, "%d", value) != 1) {

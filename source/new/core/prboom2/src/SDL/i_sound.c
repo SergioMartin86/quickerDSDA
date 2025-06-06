@@ -900,7 +900,7 @@ static __STORAGE_MODIFIER int music_player_was_init[NUM_MUS_PLAYERS];
 #define PLAYER_PORTMIDI   "portmidi midi player"
 
 // order in which players are to be tried
-char music_player_order[NUM_MUS_PLAYERS][200] =
+__STORAGE_MODIFIER char music_player_order[NUM_MUS_PLAYERS][200] =
 {
   PLAYER_VORBIS,
   PLAYER_MAD,
@@ -913,7 +913,7 @@ char music_player_order[NUM_MUS_PLAYERS][200] =
 const char *midiplayers[midi_player_last + 1] = {
   "fluidsynth", "opl", "portmidi", NULL };
 
-static int current_player = -1;
+static __STORAGE_MODIFIER int current_player = -1;
 static const void *music_handle = NULL;
 
 static void *mus2mid_conversion_data = NULL;

@@ -49,7 +49,7 @@
 
 #include "dsda/args.h"
 
-int overflows_enabled = true;
+__STORAGE_MODIFIER int overflows_enabled = true;
 
 overrun_param_t overflows[OVERFLOW_MAX];
 const char *overflow_cfgname[OVERFLOW_MAX] =

@@ -23,7 +23,7 @@
 
 #include "features.h"
 
-static uint64_t used_features;
+static __STORAGE_MODIFIER uint64_t used_features;
 
 static const char* feature_names[64] = {
   [uf_menu] = "Menu",

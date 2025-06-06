@@ -53,31 +53,31 @@ int P_PlayerHealthIncrease(int value);
 
 /* killough 5/2/98: moved from d_deh.c, g_game.c, m_misc.c, others: */
 
-extern int god_health;   /* Ty 03/09/98 - deh support, see also p_inter.c */
-extern int idfa_armor;
-extern int idfa_armor_class;
-extern int idkfa_armor;
-extern int idkfa_armor_class;  /* Ty - end */
+extern __STORAGE_MODIFIER int god_health;   /* Ty 03/09/98 - deh support, see also p_inter.c */
+extern __STORAGE_MODIFIER int idfa_armor;
+extern __STORAGE_MODIFIER int idfa_armor_class;
+extern __STORAGE_MODIFIER int idkfa_armor;
+extern __STORAGE_MODIFIER int idkfa_armor_class;  /* Ty - end */
 /* Ty 03/13/98 - externalized initial settings for respawned player */
-extern int initial_health;
-extern int initial_bullets;
-extern int maxhealth;
-extern int maxhealthbonus;
-extern int max_armor;
-extern int green_armor_class;
-extern int blue_armor_class;
-extern int max_soul;
-extern int soul_health;
-extern int mega_health;
-extern int bfgcells;
+extern __STORAGE_MODIFIER int initial_health;
+extern __STORAGE_MODIFIER int initial_bullets;
+extern __STORAGE_MODIFIER int maxhealth;
+extern __STORAGE_MODIFIER int maxhealthbonus;
+extern __STORAGE_MODIFIER int max_armor;
+extern __STORAGE_MODIFIER int green_armor_class;
+extern __STORAGE_MODIFIER int blue_armor_class;
+extern __STORAGE_MODIFIER int max_soul;
+extern __STORAGE_MODIFIER int soul_health;
+extern __STORAGE_MODIFIER int mega_health;
+extern __STORAGE_MODIFIER int bfgcells;
 extern __STORAGE_MODIFIER int monsters_infight; // e6y: Dehacked support - monsters infight
-extern int maxammo[], clipammo[];
+extern __STORAGE_MODIFIER int maxammo[], clipammo[];
 
 // heretic
 
 #define MAXCHICKENHEALTH 30
 
-extern int GetWeaponAmmo[NUMWEAPONS];
+extern __STORAGE_MODIFIER int GetWeaponAmmo[NUMWEAPONS];
 
 dboolean P_GiveBody(player_t * player, int num);
 void P_SetMessage(player_t * player, const char *message, dboolean ultmsg);

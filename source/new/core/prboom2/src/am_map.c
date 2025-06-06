@@ -202,7 +202,7 @@ static map_things_appearance_t map_things_appearance;
 #define CYMTOF_F(y)  ((float)f_y + (f_h - MTOF_F((y)-m_y)))
 
 #define R ((8*PLAYERRADIUS)/7)
-mline_t hexen_player_arrow[] = {
+__STORAGE_MODIFIER mline_t hexen_player_arrow[] = {
   { { -R+R/4, 0 }, { 0, 0} }, // center line.
   { { -R+R/4, R/8 }, { R, 0} }, // blade
   { { -R+R/4, -R/8 }, { R, 0 } },
@@ -223,7 +223,7 @@ mline_t hexen_player_arrow[] = {
 //   starting from the middle.
 //
 #define R ((8*PLAYERRADIUS)/7)
-mline_t doom_player_arrow[] =
+__STORAGE_MODIFIER mline_t doom_player_arrow[] =
 {
   { { -R+R/8, 0 }, { R, 0 } }, // -----
   { { R, 0 }, { R-R/2, R/4 } },  // ----->
@@ -240,7 +240,7 @@ static __STORAGE_MODIFIER int numplyrlines;
 static mline_t *player_arrow;
 
 #define R ((8*PLAYERRADIUS)/7)
-mline_t cheat_player_arrow[] =
+__STORAGE_MODIFIER mline_t cheat_player_arrow[] =
 { // killough 3/22/98: He's alive, Jim :)
   { { -R+R/8, 0 }, { R, 0 } }, // -----
   { { R, 0 }, { R-R/2, R/4 } },  // ----->
@@ -262,7 +262,7 @@ mline_t cheat_player_arrow[] =
 
 //jff 1/5/98 new symbol for keys on automap
 #define R (FRACUNIT)
-mline_t cross_mark[] =
+__STORAGE_MODIFIER mline_t cross_mark[] =
 {
   { { -R, 0 }, { R, 0} },
   { { 0, -R }, { 0, R } },
@@ -272,7 +272,7 @@ mline_t cross_mark[] =
 //jff 1/5/98 end of new symbol
 
 #define R (FRACUNIT)
-mline_t thintriangle_guy[] =
+__STORAGE_MODIFIER mline_t thintriangle_guy[] =
 {
 { { (fixed_t)(-.5*R), (fixed_t)(-.7*R) }, { (fixed_t)(    R), (fixed_t)(    0) } },
 { { (fixed_t)(    R), (fixed_t)(    0) }, { (fixed_t)(-.5*R), (fixed_t)( .7*R) } },
@@ -282,10 +282,10 @@ mline_t thintriangle_guy[] =
 #define NUMTHINTRIANGLEGUYLINES (sizeof(thintriangle_guy)/sizeof(mline_t))
 
 __STORAGE_MODIFIER int automap_active;
-int automap_overlay;
-int automap_rotate;
-int automap_follow;
-int automap_grid;
+__STORAGE_MODIFIER int automap_overlay;
+__STORAGE_MODIFIER int automap_rotate;
+__STORAGE_MODIFIER int automap_follow;
+__STORAGE_MODIFIER int automap_grid;
 
 // location of window on screen
 static __STORAGE_MODIFIER int f_x;
@@ -349,16 +349,16 @@ typedef struct
 } trailpoint_t;
 
 #define TRAIL_SIZE 350 // ten seconds
-static trailpoint_t player_trail[TRAIL_SIZE];
+static __STORAGE_MODIFIER trailpoint_t player_trail[TRAIL_SIZE];
 static __STORAGE_MODIFIER int trail_index;
 static __STORAGE_MODIFIER int trail_size;
 static __STORAGE_MODIFIER int trail_size_max;
 
-map_trail_mode_t map_trail_mode;
+__STORAGE_MODIFIER map_trail_mode_t map_trail_mode;
 
-am_frame_t am_frame;
+__STORAGE_MODIFIER am_frame_t am_frame;
 
-array_t map_lines;
+__STORAGE_MODIFIER array_t map_lines;
 
 static void AM_rotate(fixed_t* x,  fixed_t* y, angle_t a);
 

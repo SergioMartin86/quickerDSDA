@@ -283,34 +283,34 @@ static __STORAGE_MODIFIER dboolean st_armson;
 static __STORAGE_MODIFIER dboolean st_fragson;
 
 // 0-9, tall numbers
-static patchnum_t tallnum[10];
+static __STORAGE_MODIFIER patchnum_t tallnum[10];
 
 // tall % sign
-static patchnum_t tallpercent;
+static __STORAGE_MODIFIER patchnum_t tallpercent;
 
 // 0-9, short, yellow (,different!) numbers
-static patchnum_t shortnum[10];
+static __STORAGE_MODIFIER patchnum_t shortnum[10];
 
 // 3 key-cards, 3 skulls, 3 card/skull combos
 // jff 2/24/98 extend number of patches by three skull/card combos
-static patchnum_t keys[DOOM_NUMCARDS+3];
+static __STORAGE_MODIFIER patchnum_t keys[DOOM_NUMCARDS+3];
 
 // face status patches
-static patchnum_t faces[ST_NUMFACES];
+static __STORAGE_MODIFIER patchnum_t faces[ST_NUMFACES];
 
 // face background
-static patchnum_t faceback; // CPhipps - single background, translated for different players
+static __STORAGE_MODIFIER patchnum_t faceback; // CPhipps - single background, translated for different players
 
 //e6y: status bar background
-patchnum_t stbarbg;
-patchnum_t grnrock;
-patchnum_t brdr_b;
+__STORAGE_MODIFIER patchnum_t stbarbg;
+__STORAGE_MODIFIER patchnum_t grnrock;
+__STORAGE_MODIFIER patchnum_t brdr_b;
 
 // main bar right
-static patchnum_t armsbg;
+static __STORAGE_MODIFIER patchnum_t armsbg;
 
 // weapon ownership patches
-static patchnum_t arms[6][2];
+static __STORAGE_MODIFIER patchnum_t arms[6][2];
 
 // ready-weapon widget
 static st_number_t w_ready;
@@ -343,7 +343,7 @@ static st_number_t   w_maxammo[4];
 static __STORAGE_MODIFIER int st_fragscount;
 
 // used to use appopriately pained face
-static int      st_oldhealth = -1;
+static __STORAGE_MODIFIER int st_oldhealth = -1;
 
 // used for evil grin
 static __STORAGE_MODIFIER dboolean oldweaponsowned[NUMWEAPONS];
@@ -462,7 +462,7 @@ dboolean ST_Responder(event_t *ev)
 static int ST_calcPainOffset(void)
 {
   static int lastcalc;
-  static int oldhealth = -1;
+  static __STORAGE_MODIFIER int oldhealth = -1;
   int health = plyr->health > 100 ? 100 : plyr->health;
 
   if (health != oldhealth)
@@ -669,7 +669,7 @@ static void ST_updateFaceWidget(void)
 
 }
 
-int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
+__STORAGE_MODIFIER int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
 
 static void ST_updateWidgets(void)
 {
@@ -1194,7 +1194,7 @@ static void ST_createWidgets(void)
                 ST_MAXAMMO3WIDTH);
 }
 
-static dboolean st_stopped = true;
+static __STORAGE_MODIFIER dboolean st_stopped = true;
 
 void ST_Start(void)
 {

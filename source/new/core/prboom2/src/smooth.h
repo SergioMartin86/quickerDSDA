@@ -41,8 +41,8 @@
 
 #define SMOOTH_PLAYING_MAXFACTOR 16
 
-extern int demo_smoothturns;
-extern int demo_smoothturnsfactor;
+extern __STORAGE_MODIFIER int demo_smoothturns;
+extern __STORAGE_MODIFIER int demo_smoothturnsfactor;
 
 void R_SmoothPlaying_Reset(player_t *player);
 void R_SmoothPlaying_Add(int delta);

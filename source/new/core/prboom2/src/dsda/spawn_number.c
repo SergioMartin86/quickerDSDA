@@ -21,7 +21,7 @@
 
 #define SPAWN_NUMBER_MAX 155
 
-int doom_spawn_numbers[SPAWN_NUMBER_MAX] = {
+__STORAGE_MODIFIER int doom_spawn_numbers[SPAWN_NUMBER_MAX] = {
   [0] = MT_NULL,
   [1] = MT_SHOTGUY, // shotgun guy
   [2] = MT_CHAINGUY, // chaingun guy

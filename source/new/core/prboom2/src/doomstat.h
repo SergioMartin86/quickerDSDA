@@ -126,8 +126,8 @@ enum {
   COMPERR_NUM
 };
 
-extern int comp[MBF_COMP_TOTAL];
-extern int default_comperr[COMPERR_NUM];
+extern __STORAGE_MODIFIER int comp[MBF_COMP_TOTAL];
+extern __STORAGE_MODIFIER int default_comperr[COMPERR_NUM];
 
 // -------------------------------------------
 // Language.
@@ -185,16 +185,16 @@ extern __STORAGE_MODIFIER dboolean randomclass;
 //  Music volume has default, 0 - 15
 // These are multiplied by 8.
 extern __STORAGE_MODIFIER int snd_SfxVolume;      // maximum volume for sound
-extern int snd_MusicVolume;    // maximum volume for music
+extern __STORAGE_MODIFIER int snd_MusicVolume;    // maximum volume for music
 
 // CPhipps - screen parameters
 extern __STORAGE_MODIFIER int desired_screenwidth, desired_screenheight;
 
 extern __STORAGE_MODIFIER int automap_active;
-extern int automap_overlay;
-extern int automap_rotate;
-extern int automap_follow;
-extern int automap_grid;
+extern __STORAGE_MODIFIER int automap_overlay;
+extern __STORAGE_MODIFIER int automap_rotate;
+extern __STORAGE_MODIFIER int automap_follow;
+extern __STORAGE_MODIFIER int automap_grid;
 
 #define automap_on (automap_active && !automap_overlay)
 #define automap_off (!automap_active && automap_overlay > 0)
@@ -208,7 +208,7 @@ typedef enum {
   mnact_float, // doom-style large font menu, doesn't overlap anything
   mnact_full, // boom-style small font menu, may overlap status bar
 } menuactive_t;
-extern menuactive_t menuactive; // Type of menu overlaid, if any
+extern __STORAGE_MODIFIER menuactive_t menuactive; // Type of menu overlaid, if any
 
 extern  __STORAGE_MODIFIER dboolean nodrawers;
 
@@ -273,7 +273,7 @@ extern  __STORAGE_MODIFIER int upmove;
 // Alive? Disconnected?
 extern  __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
 
-extern pclass_t PlayerClass[MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER pclass_t PlayerClass[MAX_MAXPLAYERS];
 
 extern  mapthing_t *deathmatchstarts;     // killough
 extern  size_t     num_deathmatchstarts; // killough
@@ -282,7 +282,7 @@ extern  mapthing_t *deathmatch_p;
 
 // Player spawn spots.
 #define MAX_PLAYER_STARTS 8
-extern  mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
+extern  __STORAGE_MODIFIER mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
 // Intermission stats.
 // Parameters for world map / intermission.
@@ -297,7 +297,7 @@ extern  FILE   *debugfile;
 
 // wipegamestate can be set to -1
 //  to force a wipe on the next draw
-extern  gamestate_t     wipegamestate;
+extern  __STORAGE_MODIFIER gamestate_t wipegamestate;
 
 // debug flag to cancel adaptiveness
 extern  __STORAGE_MODIFIER dboolean singletics;
@@ -312,25 +312,25 @@ extern  __STORAGE_MODIFIER int maketic;
 // Networking and tick handling related.
 #define BACKUPTICS              12
 
-extern  ticcmd_t   local_cmds[];
+extern  __STORAGE_MODIFIER ticcmd_t local_cmds[];
 
 //-----------------------------------------------------------------------------
 
-extern int allow_pushers;         // MT_PUSH Things    // phares 3/10/98
+extern __STORAGE_MODIFIER int allow_pushers;         // MT_PUSH Things    // phares 3/10/98
 
-extern int variable_friction;  // ice & mud            // phares 3/10/98
+extern __STORAGE_MODIFIER int variable_friction;  // ice & mud            // phares 3/10/98
 
-extern int monsters_remember;                          // killough 3/1/98
+extern __STORAGE_MODIFIER int monsters_remember;                          // killough 3/1/98
 
 extern __STORAGE_MODIFIER int weapon_recoil;          // weapon recoil    // phares
 
-extern int player_bobbing;  // whether player bobs or not   // phares 2/25/98
+extern __STORAGE_MODIFIER int player_bobbing;  // whether player bobs or not   // phares 2/25/98
 
 extern __STORAGE_MODIFIER int dogs;     // killough 7/19/98: Marine's best friend :)
 extern __STORAGE_MODIFIER int dog_jumping;   // killough 10/98
 
 /* killough 8/8/98: distance friendly monsters tend to stay from player */
-extern int distfriend;
+extern __STORAGE_MODIFIER int distfriend;
 
 /* killough 9/8/98: whether monsters are allowed to strafe or retreat */
 extern __STORAGE_MODIFIER int monster_backing;
@@ -339,16 +339,16 @@ extern __STORAGE_MODIFIER int monster_backing;
 extern __STORAGE_MODIFIER int monster_avoid_hazards;
 
 /* killough 10/98: whether monsters are affected by friction */
-extern int monster_friction;
+extern __STORAGE_MODIFIER int monster_friction;
 
 /* killough 9/9/98: whether monsters help friends */
 extern __STORAGE_MODIFIER int help_friends;
 
 /* killough 7/19/98: whether monsters should fight against each other */
-extern int monster_infighting;
+extern __STORAGE_MODIFIER int monster_infighting;
 
 extern __STORAGE_MODIFIER int monkeys;
 
-extern int HelperThing;          // type of thing to use for helper
+extern __STORAGE_MODIFIER int HelperThing;          // type of thing to use for helper
 
 #endif

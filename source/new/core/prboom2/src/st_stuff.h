@@ -93,7 +93,7 @@ typedef enum
 extern __STORAGE_MODIFIER int st_palette;    // cph 2006/04/06 - make palette visible
 
 // e6y: makes sense for wide resolutions
-extern patchnum_t grnrock;
-extern patchnum_t brdr_b;
+extern __STORAGE_MODIFIER patchnum_t grnrock;
+extern __STORAGE_MODIFIER patchnum_t brdr_b;
 
 #endif

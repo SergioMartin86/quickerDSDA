@@ -1687,7 +1687,7 @@ void A_SkelMissile(mobj_t *actor)
   P_SetTarget(&mo->tracer, actor->target);
 }
 
-int     TRACEANGLE = 0xc000000;
+__STORAGE_MODIFIER int TRACEANGLE = 0xc000000;
 
 void A_Tracer(mobj_t *actor)
 {
@@ -5166,7 +5166,7 @@ dboolean Raven_P_LookForPlayers(mobj_t * actor, dboolean allaround)
 #include "hexen/a_action.h"
 #include "hexen/p_acs.h"
 
-extern fixed_t FloatBobOffsets[64];
+extern __STORAGE_MODIFIER fixed_t FloatBobOffsets[64];
 
 // Corpse queue for monsters - this should be saved out
 #define CORPSEQUEUESIZE	64

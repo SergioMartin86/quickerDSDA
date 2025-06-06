@@ -60,7 +60,7 @@ typedef enum overrun_list_s
   OVERFLOW_MAX //last
 } overrun_list_t;
 
-extern int overflows_enabled;
+extern __STORAGE_MODIFIER int overflows_enabled;
 extern overrun_param_t overflows[];
 extern const char *overflow_cfgname[OVERFLOW_MAX];
 

@@ -4652,18 +4652,18 @@ __STORAGE_MODIFIER int AmbSfxCount;
 __STORAGE_MODIFIER int AmbSfxTics;
 __STORAGE_MODIFIER int AmbSfxVolume;
 
-int AmbSndSeqInit[] = {         // Startup
+ int AmbSndSeqInit[] = {         // Startup
     afxcmd_end
 };
-int AmbSndSeq1[] = {            // Scream
+ int AmbSndSeq1[] = {            // Scream
     afxcmd_play, heretic_sfx_amb1,
     afxcmd_end
 };
-int AmbSndSeq2[] = {            // Squish
+ int AmbSndSeq2[] = {            // Squish
     afxcmd_play, heretic_sfx_amb2,
     afxcmd_end
 };
-int AmbSndSeq3[] = {            // Drops
+ int AmbSndSeq3[] = {            // Drops
     afxcmd_play, heretic_sfx_amb3,
     afxcmd_delay, 16,
     afxcmd_delayrand, 31,
@@ -4684,7 +4684,7 @@ int AmbSndSeq3[] = {            // Drops
     afxcmd_delayrand, 31,
     afxcmd_end
 };
-int AmbSndSeq4[] = {            // SlowFootSteps
+ int AmbSndSeq4[] = {            // SlowFootSteps
     afxcmd_play, heretic_sfx_amb4,
     afxcmd_delay, 15,
     afxcmd_playrelvol, heretic_sfx_amb11, -3,
@@ -4702,7 +4702,7 @@ int AmbSndSeq4[] = {            // SlowFootSteps
     afxcmd_playrelvol, heretic_sfx_amb11, -3,
     afxcmd_end
 };
-int AmbSndSeq5[] = {            // Heartbeat
+ int AmbSndSeq5[] = {            // Heartbeat
     afxcmd_play, heretic_sfx_amb5,
     afxcmd_delay, 35,
     afxcmd_play, heretic_sfx_amb5,

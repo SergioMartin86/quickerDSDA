@@ -313,7 +313,7 @@ __STORAGE_MODIFIER int acceleratestage;           // killough 3/28/98: made glob
 static __STORAGE_MODIFIER int me;
 
  // specifies current state
-static stateenum_t  state;
+static __STORAGE_MODIFIER stateenum_t state;
 
 // contains information passed into intermission
 static wbstartstruct_t* wbs;
@@ -349,7 +349,7 @@ static const char percent[] = {"WIPCNT"};
 static const char colon[] = {"WICOLON"};
 
 // 0-9 graphic
-static patchnum_t num[10];
+static __STORAGE_MODIFIER patchnum_t num[10];
 
 // minus sign
 static const char wiminus[] = {"WIMINUS"};

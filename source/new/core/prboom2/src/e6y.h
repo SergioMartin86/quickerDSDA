@@ -68,10 +68,10 @@ extern __STORAGE_MODIFIER char demo_len_st[80];
 
 extern __STORAGE_MODIFIER int mouse_handler;
 
-extern int gl_render_fov;
+extern __STORAGE_MODIFIER int gl_render_fov;
 extern __STORAGE_MODIFIER float gl_render_ratio;
 extern __STORAGE_MODIFIER float gl_render_fovratio;
-extern float gl_render_fovy;
+extern __STORAGE_MODIFIER float gl_render_fovy;
 extern __STORAGE_MODIFIER float gl_render_multiplier;
 void M_ChangeAspectRatio(void);
 void M_ChangeStretch(void);

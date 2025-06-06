@@ -71,7 +71,7 @@ typedef struct mapInfo_s {
   char songLump[10];
 } mapInfo_t;
 
-static int MapCount = 98;
+static __STORAGE_MODIFIER int MapCount = 98;
 
 static mapInfo_t MapInfo[99];
 
@@ -543,7 +543,7 @@ int dsda_HexenMapLightning(int* lightning) {
 }
 
 int dsda_HexenApplyFadeTable(void) {
-  extern dboolean LevelUseFullBright;
+  extern __STORAGE_MODIFIER dboolean LevelUseFullBright;
   extern const lighttable_t** colormaps;
 
   int fade_lump;

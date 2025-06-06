@@ -80,7 +80,7 @@ static __STORAGE_MODIFIER dboolean bf_mode;
 static __STORAGE_MODIFIER dboolean bf_nomonsters;
 static dsda_key_frame_t nomo_key_frame;
 static bf_target_t bf_target;
-static ticcmd_t bf_result[MAX_BF_DEPTH];
+static __STORAGE_MODIFIER ticcmd_t bf_result[MAX_BF_DEPTH];
 
 const char* dsda_bf_attribute_names[dsda_bf_attribute_max] = {
   [dsda_bf_x] = "x",

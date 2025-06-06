@@ -109,7 +109,7 @@ spritedef_t *sprites;
 
 #define MAX_SPRITE_FRAMES 30          /* Macroized -- killough 1/25/98 */
 
-static spriteframe_t sprtemp[MAX_SPRITE_FRAMES];
+static __STORAGE_MODIFIER spriteframe_t sprtemp[MAX_SPRITE_FRAMES];
 static __STORAGE_MODIFIER int maxframe;
 
 void R_InitSpritesRes(void)
@@ -447,7 +447,7 @@ static vissprite_t *R_NewVisSprite(void)
 int   *mfloorclip;   // dropoff overflow
 int   *mceilingclip; // dropoff overflow
 __STORAGE_MODIFIER fixed_t spryscale;
-int64_t sprtopscreen; // R_WiggleFix
+__STORAGE_MODIFIER int64_t sprtopscreen; // R_WiggleFix
 __STORAGE_MODIFIER int colheight; // Scaled software fuzz
 
 void R_DrawMaskedColumn(
@@ -628,7 +628,7 @@ static void R_DrawVisSprite(vissprite_t *vis)
     }
 }
 
-int r_near_clip_plane = MINZ;
+__STORAGE_MODIFIER int r_near_clip_plane = MINZ;
 
 void R_SetClipPlanes(void)
 {
@@ -648,7 +648,7 @@ void R_SetClipPlanes(void)
 // Generates a vissprite for a thing if it might be visible.
 //
 
-dboolean LevelUseFullBright = true;
+__STORAGE_MODIFIER dboolean LevelUseFullBright = true;
 
 static void R_ProjectSprite (mobj_t* thing, int lightlevel)
 {

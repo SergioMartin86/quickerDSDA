@@ -275,7 +275,7 @@ int dsda_AllowAnyMenuLoad(void) {
   return !demorecording || dsda_AllowCasualExCmdFeatures();
 }
 
-static int last_save_file_slot = -1;
+static __STORAGE_MODIFIER int last_save_file_slot = -1;
 
 void dsda_SetLastLoadSlot(int slot) {
   last_save_file_slot = slot;

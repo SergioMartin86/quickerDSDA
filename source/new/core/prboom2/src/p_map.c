@@ -2182,7 +2182,7 @@ mobj_t*   crosshair_target;
 static mobj_t*   shootthing;
 
 /* killough 8/2/98: for more intelligent autoaiming */
-static uint64_t aim_flags_mask;
+static __STORAGE_MODIFIER uint64_t aim_flags_mask;
 
 // Height if not aiming up or down
 __STORAGE_MODIFIER fixed_t shootz;

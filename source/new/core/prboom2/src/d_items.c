@@ -51,7 +51,7 @@
 //  atkstate, i.e. attack/fire/hit frame
 //  flashstate, muzzle flash
 //
-weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
+__STORAGE_MODIFIER weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
 {
   {
     // fist
@@ -210,7 +210,7 @@ weaponinfo_t doom_weaponinfo[NUMWEAPONS+2] =
 
 #include "heretic/def.h"
 
-weaponinfo_t wpnlev1info[NUMWEAPONS] = {
+__STORAGE_MODIFIER weaponinfo_t wpnlev1info[NUMWEAPONS] = {
   {                           // Staff
     am_noammo,                 // ammo
     HERETIC_S_STAFFUP,                 // upstate
@@ -321,7 +321,7 @@ weaponinfo_t wpnlev1info[NUMWEAPONS] = {
   }
 };
 
-weaponinfo_t wpnlev2info[NUMWEAPONS] = {
+__STORAGE_MODIFIER weaponinfo_t wpnlev2info[NUMWEAPONS] = {
   {                           // Staff
     am_noammo,                 // ammo
     HERETIC_S_STAFFUP2,                // upstate
@@ -434,7 +434,7 @@ weaponinfo_t wpnlev2info[NUMWEAPONS] = {
 
 // hexen
 
-weaponinfo_t hexen_weaponinfo[HEXEN_NUMWEAPONS][NUMCLASSES] = {
+__STORAGE_MODIFIER weaponinfo_t hexen_weaponinfo[HEXEN_NUMWEAPONS][NUMCLASSES] = {
   {                           // First Weapons
     [PCLASS_FIGHTER] = {       // Fighter First Weapon - Punch
       MANA_NONE,                // mana

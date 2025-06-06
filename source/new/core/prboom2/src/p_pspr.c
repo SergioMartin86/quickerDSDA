@@ -204,7 +204,7 @@ static void P_BringUpWeapon(player_t *player)
 // in DOOM2 to bring up the weapon, i.e. 6 = plasma gun. These    //    |
 // are NOT the wp_* constants.                                    //    V
 
-int weapon_preferences[2][NUMWEAPONS+1] = {
+__STORAGE_MODIFIER int weapon_preferences[2][NUMWEAPONS+1] = {
   {6, 9, 4, 3, 2, 8, 5, 7, 1, 0},  // !compatibility preferences
   {6, 9, 4, 3, 2, 8, 5, 7, 1, 0},  //  compatibility preferences
 };
@@ -2554,7 +2554,7 @@ void P_CloseWeapons(void)
 
 #include "heretic/sb_bar.h"
 
-extern fixed_t FloatBobOffsets[64];
+extern __STORAGE_MODIFIER fixed_t FloatBobOffsets[64];
 
 static int WeaponManaUse[NUMCLASSES][HEXEN_NUMWEAPONS] = {
     [PCLASS_FIGHTER] = {0, 2, 3, 14},

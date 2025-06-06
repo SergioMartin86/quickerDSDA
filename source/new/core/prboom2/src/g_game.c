@@ -174,7 +174,7 @@ __STORAGE_MODIFIER dboolean deathmatch;    // only if started as net death
 __STORAGE_MODIFIER dboolean netgame;       // only true if packets are broadcast
 __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
 __STORAGE_MODIFIER player_t players[MAX_MAXPLAYERS];
-pclass_t        PlayerClass[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER pclass_t PlayerClass[MAX_MAXPLAYERS];
 __STORAGE_MODIFIER int upmove;
 __STORAGE_MODIFIER int consoleplayer; // player taking events and displaying
 __STORAGE_MODIFIER int displayplayer; // view being displayed
@@ -207,10 +207,10 @@ __STORAGE_MODIFIER int shorttics;
 #define SLOWTURNTICS  6
 #define QUICKREVERSE (short)32768 // 180 degree reverse                    // phares
 
-fixed_t forwardmove[2] = {0x19, 0x32};
-fixed_t sidemove[2]    = {0x18, 0x28};
-fixed_t angleturn[3]   = {640, 1280, 320};  // + slow turn
-fixed_t flyspeed[2]    = {1*256, 3*256};
+__STORAGE_MODIFIER fixed_t forwardmove[2] = {0x19, 0x32};
+__STORAGE_MODIFIER fixed_t sidemove[2]    = {0x18, 0x28};
+__STORAGE_MODIFIER fixed_t angleturn[3]   = {640, 1280, 320};  // + slow turn
+__STORAGE_MODIFIER fixed_t flyspeed[2]    = {1*256, 3*256};
 
 static __STORAGE_MODIFIER int turnheld;       // for accelerative turning
 
@@ -1448,7 +1448,7 @@ void G_Ticker (void)
   int entry_leveltime;
   int pause_mask;
   dboolean advance_frame = false;
-  static gamestate_t prevgamestate;
+  static __STORAGE_MODIFIER gamestate_t prevgamestate;
 
   entry_leveltime = leveltime;
 
@@ -2106,7 +2106,7 @@ void G_DoReborn (int playernum)
 }
 
 // DOOM Par Times
-int pars[5][10] = {
+__STORAGE_MODIFIER int pars[5][10] = {
   {0},
   {0,30,75,120,90,165,180,180,30,165},
   {0,90,90,90,120,90,360,240,30,170},
@@ -2116,7 +2116,7 @@ int pars[5][10] = {
 };
 
 // DOOM II Par Times
-int cpars[34] = {
+__STORAGE_MODIFIER int cpars[34] = {
   30,90,120,120,90,150,120,120,270,90,  //  1-10
   210,150,150,150,210,150,420,150,210,150,  // 11-20
   240,150,180,150,150,300,330,420,300,180,  // 21-30

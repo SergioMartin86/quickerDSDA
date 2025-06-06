@@ -89,7 +89,7 @@ void MN_DrawHelp2(void);
 
 extern void M_ChangeMenu(menu_t *menu, menuactive_t mnact);
 extern __STORAGE_MODIFIER dboolean inhelpscreens;
-extern menu_t ExtHelpDef;
+extern __STORAGE_MODIFIER menu_t ExtHelpDef;
 extern void M_NewGame(int choice);
 extern void M_Options(int choice);
 extern void M_QuitDOOM(int choice);
@@ -229,7 +229,7 @@ enum
   rmain_end
 } rmain_e;
 
-menuitem_t RavenMainMenu[]=
+__STORAGE_MODIFIER menuitem_t RavenMainMenu[]=
 {
   {1,"M_NGAME", M_NewGame, 'n', "NEW GAME"},
   {1,"M_OPTION",M_Options, 'o', "OPTIONS"},
@@ -258,7 +258,7 @@ menuitem_t SaveLoadMenu[]=
   {1,"M_SAVEG", M_SaveGame,'s', "SAVE GAME"},
 };
 
-menu_t SaveLoadDef =
+__STORAGE_MODIFIER menu_t SaveLoadDef =
 {
   rsaveload_end,       // number of menu items
   &MainDef,           // previous menu screen

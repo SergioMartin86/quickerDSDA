@@ -91,20 +91,20 @@ static __STORAGE_MODIFIER int worldtop;
 static __STORAGE_MODIFIER int worldbottom;
 static __STORAGE_MODIFIER int worldhigh;
 static __STORAGE_MODIFIER int worldlow;
-static int64_t  pixhigh; // R_WiggleFix
-static int64_t  pixlow; // R_WiggleFix
+static __STORAGE_MODIFIER int64_t pixhigh; // R_WiggleFix
+static __STORAGE_MODIFIER int64_t pixlow; // R_WiggleFix
 static __STORAGE_MODIFIER fixed_t pixhighstep;
 static __STORAGE_MODIFIER fixed_t pixlowstep;
-static int64_t  topfrac; // R_WiggleFix
+static __STORAGE_MODIFIER int64_t topfrac; // R_WiggleFix
 static __STORAGE_MODIFIER fixed_t topstep;
-static int64_t  bottomfrac; // R_WiggleFix
+static __STORAGE_MODIFIER int64_t bottomfrac; // R_WiggleFix
 static __STORAGE_MODIFIER fixed_t bottomstep;
 static int      *maskedtexturecol; // dropoff overflow
 
-static int	max_rwscale = 64 * FRACUNIT;
-static int	HEIGHTBITS = 12;
+static __STORAGE_MODIFIER int max_rwscale = 64 * FRACUNIT;
+static __STORAGE_MODIFIER int HEIGHTBITS = 12;
 static int	HEIGHTUNIT = (1 << 12);
-static int	invhgtbits = 4;
+static __STORAGE_MODIFIER int invhgtbits = 4;
 
 /* cph - allow crappy fake contrast to be disabled */
 fake_contrast_mode_t fake_contrast_mode;

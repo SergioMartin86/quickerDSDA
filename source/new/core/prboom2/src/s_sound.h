@@ -86,7 +86,7 @@ void S_StopSound(void* origin);
 
 void S_StopSoundLoops(void);
 
-extern int full_sounds;
+extern __STORAGE_MODIFIER int full_sounds;
 void S_UnlinkSound(void *origin);
 
 // Start music using <music_id> from sounds.h

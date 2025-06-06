@@ -90,7 +90,7 @@ void I_uSleep(unsigned long usecs)
 }
 
 static __STORAGE_MODIFIER dboolean InDisplay = false;
-static int saved_gametic = -1;
+static __STORAGE_MODIFIER int saved_gametic = -1;
 __STORAGE_MODIFIER dboolean realframe = false;
 
 dboolean I_StartDisplay(void)

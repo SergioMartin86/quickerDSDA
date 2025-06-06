@@ -75,9 +75,9 @@
 // e6y
 // Now they are variables. Depends from render_doom_lightmaps variable.
 // Unify colour maping logic by cph is removed, because of bugs.
-int LIGHTLEVELS   = 32;
-int LIGHTSEGSHIFT = 3;
-int LIGHTBRIGHT   = 2;
+__STORAGE_MODIFIER int LIGHTLEVELS   = 32;
+__STORAGE_MODIFIER int LIGHTSEGSHIFT = 3;
+__STORAGE_MODIFIER int LIGHTBRIGHT   = 2;
 
 __STORAGE_MODIFIER int r_frame_count;
 
@@ -86,8 +86,8 @@ __STORAGE_MODIFIER int r_frame_count;
 
 #define HEXEN_PI 3.141592657
 
-int validcount = 1;         // increment every time a check is made
-int validcount2 = 1;
+__STORAGE_MODIFIER int validcount = 1;         // increment every time a check is made
+__STORAGE_MODIFIER int validcount2 = 1;
 const lighttable_t *fixedcolormap;
 __STORAGE_MODIFIER int centerx, centery;
 // e6y: wide-res
@@ -111,7 +111,7 @@ player_t *viewplayer;
 // e6y: Added for more precise flats drawing
 __STORAGE_MODIFIER fixed_t viewfocratio;
 
-int r_nearclip = 5;
+__STORAGE_MODIFIER int r_nearclip = 5;
 
 __STORAGE_MODIFIER int FieldOfView;
 __STORAGE_MODIFIER int viewport[4];

@@ -88,8 +88,8 @@ void dsda_AddSectorID(int id, int value) {
   dsda_AddToIDHash(&sector_id_hash, id, value);
 }
 
-static int empty_list[] = { -1 };
-static int missing_id_list[] = { -1, -1 };
+static __STORAGE_MODIFIER int empty_list[] = { -1 };
+static __STORAGE_MODIFIER int missing_id_list[] = { -1, -1 };
 
 const int* dsda_FindLinesFromID(int id) {
   return dsda_GetIDList(&line_id_hash, id)->data;

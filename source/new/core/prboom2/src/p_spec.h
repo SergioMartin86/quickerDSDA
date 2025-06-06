@@ -942,7 +942,7 @@ typedef struct {
 //////////////////////////////////////////////////////////////////
 
 // list of retriggerable buttons active
-extern button_t buttonlist[MAXBUTTONS];
+extern __STORAGE_MODIFIER button_t buttonlist[MAXBUTTONS];
 
 extern platlist_t *activeplats;        // killough 2/14/98
 

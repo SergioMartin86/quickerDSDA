@@ -2331,7 +2331,7 @@ int EV_FloorCrushStop(line_t * line, byte * args)
 #define WGLSTATE_STABLE 2
 #define WGLSTATE_REDUCE 3
 
-extern fixed_t FloatBobOffsets[64];
+extern __STORAGE_MODIFIER fixed_t FloatBobOffsets[64];
 
 static void T_PlaneWaggle(planeWaggle_t * waggle, fixed_t * planeheight, void ** planedata)
 {

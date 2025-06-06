@@ -173,7 +173,7 @@ void M_SetupNextMenu(menu_t *menudef);
 void M_DrawDelVerify(void);
 void M_ChangeMessages(void);
 
-extern __STORAGE_MODIFIER dboolean delete_verify;
+extern dboolean delete_verify;
 
 dboolean M_ConsoleOpen(void);
 

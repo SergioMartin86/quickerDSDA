@@ -97,7 +97,7 @@ static void dsda_DrawConsole(void) {
   HUlib_drawTextLine(&hu_console_message, false);
 }
 
-menu_t dsda_ConsoleDef = {
+__STORAGE_MODIFIER menu_t dsda_ConsoleDef = {
   0,
   NULL,
   NULL,

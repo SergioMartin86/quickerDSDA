@@ -26,26 +26,26 @@
 
 __STORAGE_MODIFIER int dsda_analysis;
 
-dboolean dsda_pacifist = true;
-dboolean dsda_reality = true;
-dboolean dsda_almost_reality = true;
+__STORAGE_MODIFIER dboolean dsda_pacifist = true;
+__STORAGE_MODIFIER dboolean dsda_reality = true;
+__STORAGE_MODIFIER dboolean dsda_almost_reality = true;
 __STORAGE_MODIFIER dboolean dsda_reborn = false;
 __STORAGE_MODIFIER int dsda_missed_monsters = 0;
 __STORAGE_MODIFIER int dsda_missed_secrets = 0;
 __STORAGE_MODIFIER int dsda_missed_weapons = 0;
-dboolean dsda_tyson_weapons = true;
-dboolean dsda_100k = true;
-dboolean dsda_100s = true;
+__STORAGE_MODIFIER dboolean dsda_tyson_weapons = true;
+__STORAGE_MODIFIER dboolean dsda_100k = true;
+__STORAGE_MODIFIER dboolean dsda_100s = true;
 __STORAGE_MODIFIER dboolean dsda_any_counted_monsters = false;
 __STORAGE_MODIFIER dboolean dsda_any_monsters = false;
 __STORAGE_MODIFIER dboolean dsda_any_secrets = false;
 __STORAGE_MODIFIER dboolean dsda_any_weapons = false;
-dboolean dsda_stroller = true;
+__STORAGE_MODIFIER dboolean dsda_stroller = true;
 __STORAGE_MODIFIER dboolean dsda_nomo = false;
 __STORAGE_MODIFIER dboolean dsda_respawn = false;
 __STORAGE_MODIFIER dboolean dsda_fast = false;
 __STORAGE_MODIFIER dboolean dsda_turbo = false;
-dboolean dsda_weapon_collector = true;
+__STORAGE_MODIFIER dboolean dsda_weapon_collector = true;
 
 __STORAGE_MODIFIER int dsda_kills_on_map = 0;
 __STORAGE_MODIFIER dboolean dsda_100k_on_map = false;

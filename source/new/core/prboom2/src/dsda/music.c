@@ -125,7 +125,7 @@ void dsda_FreeDehMusic(void) {
   free(music_state);
 }
 
-static int music_queue = -1;
+static __STORAGE_MODIFIER int music_queue = -1;
 
 void dsda_ArchiveMusic(void) {
   P_SAVE_X(musinfo.current_item);

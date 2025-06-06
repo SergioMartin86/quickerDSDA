@@ -29,7 +29,7 @@ static local_component_t* local;
 
 static void dsda_UpdateCurrentComponentText(char* str, size_t max_size) {
   extern dsda_render_stats_t dsda_render_stats;
-  extern int dsda_render_stats_fps;
+  extern __STORAGE_MODIFIER int dsda_render_stats_fps;
 
   snprintf(
     str, max_size,

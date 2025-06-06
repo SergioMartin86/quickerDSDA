@@ -79,14 +79,14 @@ typedef struct {
 #define NOT_STRICT 0, 0
 #define STRICT_INT(x) CONF_FEATURE | CONF_STRICT, x
 
-extern int dsda_input_profile;
-extern int weapon_preferences[2][NUMWEAPONS + 1];
-extern int demo_smoothturns;
-extern int demo_smoothturnsfactor;
-extern int sts_always_red;
-extern int sts_pct_always_gray;
-extern int sts_traditional_keys;
-extern int full_sounds;
+extern __STORAGE_MODIFIER int dsda_input_profile;
+extern __STORAGE_MODIFIER int weapon_preferences[2][NUMWEAPONS + 1];
+extern __STORAGE_MODIFIER int demo_smoothturns;
+extern __STORAGE_MODIFIER int demo_smoothturnsfactor;
+extern __STORAGE_MODIFIER int sts_always_red;
+extern __STORAGE_MODIFIER int sts_pct_always_gray;
+extern __STORAGE_MODIFIER int sts_traditional_keys;
+extern __STORAGE_MODIFIER int full_sounds;
 
 void I_Init2(void);
 void M_ChangeDemoSmoothTurns(void);
@@ -250,76 +250,76 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "max_player_corpse", dsda_config_max_player_corpse,
     dsda_config_int, -1, INT_MAX, { 32 }, NULL, STRICT_INT(32)
   },
-  [dsda_config_input_profile] = {
-    "input_profile", dsda_config_input_profile,
-    dsda_config_int, 0, DSDA_INPUT_PROFILE_COUNT - 1, { 0 }, &dsda_input_profile
-  },
-  [dsda_config_weapon_choice_1] = {
-    "weapon_choice_1", dsda_config_weapon_choice_1,
-    CONF_WEAPON(6), &weapon_preferences[0][0]
-  },
-  [dsda_config_weapon_choice_2] = {
-    "weapon_choice_2", dsda_config_weapon_choice_2,
-    CONF_WEAPON(9), &weapon_preferences[0][1]
-  },
-  [dsda_config_weapon_choice_3] = {
-    "weapon_choice_3", dsda_config_weapon_choice_3,
-    CONF_WEAPON(4), &weapon_preferences[0][2]
-  },
-  [dsda_config_weapon_choice_4] = {
-    "weapon_choice_4", dsda_config_weapon_choice_4,
-    CONF_WEAPON(3), &weapon_preferences[0][3]
-  },
-  [dsda_config_weapon_choice_5] = {
-    "weapon_choice_5", dsda_config_weapon_choice_5,
-    CONF_WEAPON(2), &weapon_preferences[0][4]
-  },
-  [dsda_config_weapon_choice_6] = {
-    "weapon_choice_6", dsda_config_weapon_choice_6,
-    CONF_WEAPON(8), &weapon_preferences[0][5]
-  },
-  [dsda_config_weapon_choice_7] = {
-    "weapon_choice_7", dsda_config_weapon_choice_7,
-    CONF_WEAPON(5), &weapon_preferences[0][6]
-  },
-  [dsda_config_weapon_choice_8] = {
-    "weapon_choice_8", dsda_config_weapon_choice_8,
-    CONF_WEAPON(7), &weapon_preferences[0][7]
-  },
-  [dsda_config_weapon_choice_9] = {
-    "weapon_choice_9", dsda_config_weapon_choice_9,
-    CONF_WEAPON(1), &weapon_preferences[0][8]
-  },
+  // [dsda_config_input_profile] = {
+  //   "input_profile", dsda_config_input_profile,
+  //   dsda_config_int, 0, DSDA_INPUT_PROFILE_COUNT - 1, { 0 }, &dsda_input_profile
+  // },
+  // [dsda_config_weapon_choice_1] = {
+  //   "weapon_choice_1", dsda_config_weapon_choice_1,
+  //   CONF_WEAPON(6), &weapon_preferences[0][0]
+  // },
+  // [dsda_config_weapon_choice_2] = {
+  //   "weapon_choice_2", dsda_config_weapon_choice_2,
+  //   CONF_WEAPON(9), &weapon_preferences[0][1]
+  // },
+  // [dsda_config_weapon_choice_3] = {
+  //   "weapon_choice_3", dsda_config_weapon_choice_3,
+  //   CONF_WEAPON(4), &weapon_preferences[0][2]
+  // },
+  // [dsda_config_weapon_choice_4] = {
+  //   "weapon_choice_4", dsda_config_weapon_choice_4,
+  //   CONF_WEAPON(3), &weapon_preferences[0][3]
+  // },
+  // [dsda_config_weapon_choice_5] = {
+  //   "weapon_choice_5", dsda_config_weapon_choice_5,
+  //   CONF_WEAPON(2), &weapon_preferences[0][4]
+  // },
+  // [dsda_config_weapon_choice_6] = {
+  //   "weapon_choice_6", dsda_config_weapon_choice_6,
+  //   CONF_WEAPON(8), &weapon_preferences[0][5]
+  // },
+  // [dsda_config_weapon_choice_7] = {
+  //   "weapon_choice_7", dsda_config_weapon_choice_7,
+  //   CONF_WEAPON(5), &weapon_preferences[0][6]
+  // },
+  // [dsda_config_weapon_choice_8] = {
+  //   "weapon_choice_8", dsda_config_weapon_choice_8,
+  //   CONF_WEAPON(7), &weapon_preferences[0][7]
+  // },
+  // [dsda_config_weapon_choice_9] = {
+  //   "weapon_choice_9", dsda_config_weapon_choice_9,
+  //   CONF_WEAPON(1), &weapon_preferences[0][8]
+  // },
   [dsda_config_flashing_hom] = {
     "flashing_hom", dsda_config_flashing_hom,
     CONF_BOOL(0)
   },
-  [dsda_config_demo_smoothturns] = {
-    "demo_smoothturns", dsda_config_demo_smoothturns,
-    CONF_BOOL(0), &demo_smoothturns,
-    NOT_STRICT, M_ChangeDemoSmoothTurns
-  },
-  [dsda_config_demo_smoothturnsfactor] = {
-    "demo_smoothturnsfactor", dsda_config_demo_smoothturnsfactor,
-    dsda_config_int, 1, SMOOTH_PLAYING_MAXFACTOR, { 6 }, &demo_smoothturnsfactor,
-    NOT_STRICT, M_ChangeDemoSmoothTurns
-  },
+  // [dsda_config_demo_smoothturns] = {
+  //   "demo_smoothturns", dsda_config_demo_smoothturns,
+  //   CONF_BOOL(0), &demo_smoothturns,
+  //   NOT_STRICT, M_ChangeDemoSmoothTurns
+  // },
+  // [dsda_config_demo_smoothturnsfactor] = {
+  //   "demo_smoothturnsfactor", dsda_config_demo_smoothturnsfactor,
+  //   dsda_config_int, 1, SMOOTH_PLAYING_MAXFACTOR, { 6 }, &demo_smoothturnsfactor,
+  //   NOT_STRICT, M_ChangeDemoSmoothTurns
+  // },
   [dsda_config_weapon_attack_alignment] = {
     "weapon_attack_alignment", dsda_config_weapon_attack_alignment,
     dsda_config_int, 0, 3, { 0 }, NULL, STRICT_INT(0)
   },
-  [dsda_config_sts_always_red] = {
-    "sts_always_red", dsda_config_sts_always_red,
-    CONF_BOOL(1), &sts_always_red
-  },
-  [dsda_config_sts_pct_always_gray] = {
-    "sts_pct_always_gray", dsda_config_sts_pct_always_gray,
-    CONF_BOOL(0), &sts_pct_always_gray
-  },
-  [dsda_config_sts_traditional_keys] = {
-    "sts_traditional_keys", dsda_config_sts_traditional_keys,
-    CONF_BOOL(0), &sts_traditional_keys
-  },
+  // [dsda_config_sts_always_red] = {
+  //   "sts_always_red", dsda_config_sts_always_red,
+  //   CONF_BOOL(1), &sts_always_red
+  // },
+  // [dsda_config_sts_pct_always_gray] = {
+  //   "sts_pct_always_gray", dsda_config_sts_pct_always_gray,
+  //   CONF_BOOL(0), &sts_pct_always_gray
+  // },
+  // [dsda_config_sts_traditional_keys] = {
+  //   "sts_traditional_keys", dsda_config_sts_traditional_keys,
+  //   CONF_BOOL(0), &sts_traditional_keys
+  // },
   [dsda_config_strict_mode] = {
     "dsda_strict_mode", dsda_config_strict_mode,
     CONF_BOOL(1), NULL, NOT_STRICT, dsda_UpdateStrictMode
@@ -476,18 +476,19 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "overrun_missedbackside_emulate", dsda_config_overrun_missedbackside_emulate,
     CONF_BOOL(0), &overflows[OVERFLOW_MISSEDBACKSIDE].emulate
   },
-  [dsda_config_comperr_passuse] = {
-    "comperr_passuse", dsda_config_comperr_passuse,
-    CONF_BOOL(0), &default_comperr[comperr_passuse]
-  },
-  [dsda_config_comperr_hangsolid] = {
-    "comperr_hangsolid", dsda_config_comperr_hangsolid,
-    CONF_BOOL(0), &default_comperr[comperr_hangsolid]
-  },
-  [dsda_config_comperr_blockmap] = {
-    "comperr_blockmap", dsda_config_comperr_blockmap,
-    CONF_BOOL(0), &default_comperr[comperr_blockmap]
-  },
+  // [dsda_config_comperr_passuse] = {
+  //   "comperr_passuse", dsda_config_comperr_passuse,
+  //   CONF_BOOL(0), 
+  //   &default_comperr[comperr_passuse]
+  // },
+  // [dsda_config_comperr_hangsolid] = {
+  //   "comperr_hangsolid", dsda_config_comperr_hangsolid,
+  //   CONF_BOOL(0), &default_comperr[comperr_hangsolid]
+  // },
+  // [dsda_config_comperr_blockmap] = {
+  //   "comperr_blockmap", dsda_config_comperr_blockmap,
+  //   CONF_BOOL(0), &default_comperr[comperr_blockmap]
+  // },
   [dsda_config_mapcolor_back] = {
     "mapcolor_back", dsda_config_mapcolor_back,
     CONF_COLOR(247), &mapcolor.back
@@ -605,10 +606,10 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "gl_render_multisampling", dsda_config_gl_render_multisampling,
     dsda_config_int, 0, 8, { 0 }, NULL, CONF_EVEN, 0, gld_MultisamplingInit
   },
-  [dsda_config_gl_render_fov] = {
-    "gl_render_fov", dsda_config_gl_render_fov,
-    dsda_config_int, 20, 160, { 90 }, &gl_render_fov, NOT_STRICT, M_ChangeFOV
-  },
+  // [dsda_config_gl_render_fov] = {
+  //   "gl_render_fov", dsda_config_gl_render_fov,
+  //   dsda_config_int, 20, 160, { 90 }, &gl_render_fov, NOT_STRICT, M_ChangeFOV
+  // },
   [dsda_config_gl_health_bar] = {
     "gl_health_bar", dsda_config_gl_health_bar,
     CONF_BOOL(0), NULL, STRICT_INT(0)
@@ -693,10 +694,10 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "pitched_sounds", dsda_config_pitched_sounds,
     CONF_BOOL(0), NULL, NOT_STRICT, I_InitSoundParams
   },
-  [dsda_config_full_sounds] = {
-    "full_sounds", dsda_config_full_sounds,
-    CONF_BOOL(0), &full_sounds
-  },
+  // [dsda_config_full_sounds] = {
+  //   "full_sounds", dsda_config_full_sounds,
+  //   CONF_BOOL(0), &full_sounds
+  // },
   [dsda_config_snd_samplerate] = {
     "snd_samplerate", dsda_config_snd_samplerate,
     dsda_config_int, 11025, 48000, { 44100 }, NULL, NOT_STRICT, I_InitSoundParams
@@ -1053,22 +1054,22 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "map_trail_size", dsda_config_map_trail_size,
     dsda_config_int, 0, 350, { 105 }, NULL, NOT_STRICT, AM_initPlayerTrail
   },
-  [dsda_config_automap_overlay] = {
-    "automap_overlay", dsda_config_automap_overlay,
-    dsda_config_int, 0, 2, { 0 }, &automap_overlay
-  },
-  [dsda_config_automap_rotate] = {
-    "automap_rotate", dsda_config_automap_rotate,
-    CONF_BOOL(0), &automap_rotate
-  },
-  [dsda_config_automap_follow] = {
-    "automap_follow", dsda_config_automap_follow,
-    CONF_BOOL(1), &automap_follow
-  },
-  [dsda_config_automap_grid] = {
-    "automap_grid", dsda_config_automap_grid,
-    CONF_BOOL(0), &automap_grid
-  },
+  // [dsda_config_automap_overlay] = {
+  //   "automap_overlay", dsda_config_automap_overlay,
+  //   dsda_config_int, 0, 2, { 0 }, &automap_overlay
+  // },
+  // [dsda_config_automap_rotate] = {
+  //   "automap_rotate", dsda_config_automap_rotate,
+  //   CONF_BOOL(0), &automap_rotate
+  // },
+  // [dsda_config_automap_follow] = {
+  //   "automap_follow", dsda_config_automap_follow,
+  //   CONF_BOOL(1), &automap_follow
+  // },
+  // [dsda_config_automap_grid] = {
+  //   "automap_grid", dsda_config_automap_grid,
+  //   CONF_BOOL(0), &automap_grid
+  // },
   [dsda_config_map_grid_size] = {
     "map_grid_size", dsda_config_map_grid_size,
     dsda_config_int, 8, 256, { 128 }, NULL, NOT_STRICT, AM_InitParams
@@ -1146,10 +1147,10 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "dsda_background_fps_limit", dsda_config_background_fps_limit,
     dsda_config_int, 0, 1000, { 35 }
   },
-  [dsda_config_usegamma] = {
-    "usegamma", dsda_config_usegamma,
-    dsda_config_int, 0, 4, { 0 }, &usegamma, NOT_STRICT, M_ChangeApplyPalette
-  },
+  // [dsda_config_usegamma] = {
+  //   "usegamma", dsda_config_usegamma,
+  //   dsda_config_int, 0, 4, { 0 }, &usegamma, NOT_STRICT, M_ChangeApplyPalette
+  // },
   [dsda_config_screenblocks] = {
     "screenblocks", dsda_config_screenblocks,
     dsda_config_int, 10, 11, { 10 }, NULL, CONF_FEATURE | NOT_STRICT, R_SetViewSize

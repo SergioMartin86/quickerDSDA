@@ -107,17 +107,17 @@ typedef enum {
 // when multiple screen sizes are supported
 
 // SCREENWIDTH and SCREENHEIGHT define the visible size
-extern int SCREENWIDTH;
-extern int SCREENHEIGHT;
+extern __STORAGE_MODIFIER int SCREENWIDTH;
+extern __STORAGE_MODIFIER int SCREENHEIGHT;
 // SCREENPITCH is the size of one line in the buffer and
 // can be bigger than the SCREENWIDTH depending on the size
 // of one pixel (8, 16 or 32 bit) and the padding at the
 // end of the line caused by hardware considerations
-extern int SCREENPITCH;
+extern __STORAGE_MODIFIER int SCREENPITCH;
 
 // e6y: wide-res
-extern int WIDE_SCREENWIDTH;
-extern int WIDE_SCREENHEIGHT;
+extern __STORAGE_MODIFIER int WIDE_SCREENWIDTH;
+extern __STORAGE_MODIFIER int WIDE_SCREENHEIGHT;
 extern __STORAGE_MODIFIER int SCREEN_320x200;
 
 // The maximum number of players, multiplayer/networking.

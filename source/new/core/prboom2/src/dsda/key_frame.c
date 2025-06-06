@@ -61,7 +61,7 @@ static dsda_key_frame_t temp_kf;
 static auto_kf_t* auto_key_frames;
 static auto_kf_t* last_auto_kf;
 static __STORAGE_MODIFIER int auto_kf_size;
-static int restore_key_frame_index = -1;
+static __STORAGE_MODIFIER int restore_key_frame_index = -1;
 
 static __STORAGE_MODIFIER int dsda_auto_key_frame_interval;
 static __STORAGE_MODIFIER int dsda_auto_key_frame_depth;

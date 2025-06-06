@@ -76,7 +76,7 @@ static int *switchlist;                           // killough
 static __STORAGE_MODIFIER int max_numswitches;                       // killough
 static __STORAGE_MODIFIER int numswitches;                           // killough
 
-button_t  buttonlist[MAXBUTTONS];
+__STORAGE_MODIFIER button_t buttonlist[MAXBUTTONS];
 
 const switchlist_t *alphSwitchList;         //jff 3/23/98 pointer to switch table
 

@@ -65,8 +65,8 @@ extern __STORAGE_MODIFIER int wide_centerx;
 
 // proff 11/06/98: Added for high-res
 extern __STORAGE_MODIFIER fixed_t projectiony;
-extern int      validcount;
-extern int      validcount2;
+extern __STORAGE_MODIFIER int validcount;
+extern __STORAGE_MODIFIER int validcount2;
 // e6y: Added for more precise flats drawing
 extern __STORAGE_MODIFIER fixed_t viewfocratio;
 
@@ -85,9 +85,9 @@ extern __STORAGE_MODIFIER fixed_t viewfocratio;
 // except for maybe memory usage savings.
 #define LIGHTLEVELS_MAX   32
 
-extern int LIGHTSEGSHIFT;
-extern int LIGHTBRIGHT;
-extern int LIGHTLEVELS;
+extern __STORAGE_MODIFIER int LIGHTSEGSHIFT;
+extern __STORAGE_MODIFIER int LIGHTBRIGHT;
+extern __STORAGE_MODIFIER int LIGHTLEVELS;
 
 #define MAXLIGHTSCALE     48
 #define LIGHTSCALESHIFT   12

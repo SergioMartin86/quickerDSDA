@@ -26,7 +26,7 @@ static __STORAGE_MODIFIER int frame_count;
 
 dsda_render_stats_t dsda_render_stats;
 dsda_render_stats_t dsda_render_stats_max;
-int dsda_render_stats_fps = 35;
+__STORAGE_MODIFIER int dsda_render_stats_fps = 35;
 
 static void dsda_UpdateMaxValues(dsda_render_stats_t* x, dsda_render_stats_t* y) {
   if (x->visplanes < y->visplanes)

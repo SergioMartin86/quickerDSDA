@@ -43,7 +43,7 @@ static cb_video_t video_full;
 static cb_video_t video_ex_text;
 
 static stretch_param_t* stretch_params;
-static stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];
+static __STORAGE_MODIFIER stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];
 
 static __STORAGE_MODIFIER int ex_text_screenwidth;
 static __STORAGE_MODIFIER int ex_text_screenheight;

@@ -66,6 +66,8 @@ for line in newSourceContent.splitlines():
     if ('void' in line): continue
     if ('(' in line): continue
     if ('__STORAGE_MODIFIER' in line): continue
+    if not any(dataType in line for dataType in dataTypes): continue
+    if not any(gvar in line for gvar in globalVariables): continue
 
     #if the line is a C comment, skip it
     if line.strip().startswith('//') or line.strip().startswith('/*'): continue

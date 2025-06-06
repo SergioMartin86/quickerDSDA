@@ -93,7 +93,7 @@ void I_ResampleStream (void *dest, unsigned nsamp, void (*proc) (void *dest, uns
 //
 //  MUSIC I/O
 //
-extern char music_player_order[][200];
+extern __STORAGE_MODIFIER char music_player_order[][200];
 
 void I_InitMusic(void);
 void I_ShutdownMusic(void);

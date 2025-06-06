@@ -6648,15 +6648,15 @@ typedef struct
 
 // all the stuff - dynamically selected in global.c
 
-extern state_t heretic_states[HERETIC_NUMSTATES];
+extern __STORAGE_MODIFIER state_t heretic_states[HERETIC_NUMSTATES];
 extern const char *heretic_sprnames[];
-extern raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES];
+extern __STORAGE_MODIFIER raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES];
 
-extern state_t hexen_states[HEXEN_NUMSTATES];
+extern __STORAGE_MODIFIER state_t hexen_states[HEXEN_NUMSTATES];
 extern const char *hexen_sprnames[];
-extern raven_mobjinfo_t hexen_mobjinfo[HEXEN_NUMMOBJTYPES];
+extern __STORAGE_MODIFIER raven_mobjinfo_t hexen_mobjinfo[HEXEN_NUMMOBJTYPES];
 
-extern state_t doom_states[DOOM_NUMSTATES];
+extern __STORAGE_MODIFIER state_t doom_states[DOOM_NUMSTATES];
 extern const char *doom_sprnames[];
 extern doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES];
 

@@ -64,7 +64,7 @@
 #include "dsda/settings.h"
 #include "dsda/time.h"
 
-ticcmd_t local_cmds[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER ticcmd_t local_cmds[MAX_MAXPLAYERS];
 __STORAGE_MODIFIER int maketic;
 __STORAGE_MODIFIER int solo_net = 0;
 

@@ -59,7 +59,7 @@ __STORAGE_MODIFIER dboolean inventory;
 __STORAGE_MODIFIER int curpos;
 __STORAGE_MODIFIER int inv_ptr;
 __STORAGE_MODIFIER int ArtifactFlash;
-int SB_state = -1;
+__STORAGE_MODIFIER int SB_state = -1;
 __STORAGE_MODIFIER int playerkeys = 0;
 
 // Private Data
@@ -92,7 +92,7 @@ __STORAGE_MODIFIER int FontBNumBase;
 __STORAGE_MODIFIER int spinbooklump;
 __STORAGE_MODIFIER int spinflylump;
 
-static char heretic_namearti[][10] = {
+static __STORAGE_MODIFIER char heretic_namearti[][10] = {
     {"ARTIBOX"},                // none
     {"ARTIINVU"},               // invulnerability
     {"ARTIINVS"},               // invisibility
@@ -133,7 +133,7 @@ static __STORAGE_MODIFIER int LumpPIECE1;
 static __STORAGE_MODIFIER int LumpPIECE2;
 static __STORAGE_MODIFIER int LumpPIECE3;
 
-static char hexen_namearti[][10] = {
+static __STORAGE_MODIFIER char hexen_namearti[][10] = {
     {"ARTIBOX"},                // none
     {"ARTIINVU"},               // invulnerability
     {"ARTIPTN2"},               // health
@@ -205,8 +205,8 @@ void SB_Start(void)
 //
 //---------------------------------------------------------------------------
 
-extern patchnum_t stbarbg;
-extern patchnum_t brdr_b;
+extern __STORAGE_MODIFIER patchnum_t stbarbg;
+extern __STORAGE_MODIFIER patchnum_t brdr_b;
 
 void SB_Init(void)
 {
@@ -513,7 +513,7 @@ static void ShadeChain(void)
 //
 //---------------------------------------------------------------------------
 
-char ammopic[][10] = {
+__STORAGE_MODIFIER char ammopic[][10] = {
     {"INAMGLD"},
     {"INAMBOW"},
     {"INAMBST"},
@@ -524,17 +524,17 @@ char ammopic[][10] = {
 
 static __STORAGE_MODIFIER int oldarti = 0;
 static __STORAGE_MODIFIER int oldartiCount = 0;
-static int oldfrags = -9999;
-static int oldammo = -1;
-static int oldarmor = -1;
-static int oldweapon = -1;
-static int oldhealth = -1;
-static int oldlife = -1;
-static int oldkeys = -1;
+static __STORAGE_MODIFIER int oldfrags = -9999;
+static __STORAGE_MODIFIER int oldammo = -1;
+static __STORAGE_MODIFIER int oldarmor = -1;
+static __STORAGE_MODIFIER int oldweapon = -1;
+static __STORAGE_MODIFIER int oldhealth = -1;
+static __STORAGE_MODIFIER int oldlife = -1;
+static __STORAGE_MODIFIER int oldkeys = -1;
 
-static int oldmana1 = -1;
-static int oldmana2 = -1;
-static int oldpieces = -1;
+static __STORAGE_MODIFIER int oldmana1 = -1;
+static __STORAGE_MODIFIER int oldmana2 = -1;
+static __STORAGE_MODIFIER int oldpieces = -1;
 
 void SB_Drawer(dboolean statusbaron, dboolean refresh, dboolean fullmenu)
 {

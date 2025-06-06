@@ -55,30 +55,30 @@ complevel_t compatibility_level;
 // it's required for demos recorded in "demo compatibility" mode by boom201 for example
 __STORAGE_MODIFIER int demover;
 
-int comp[MBF_COMP_TOTAL];    // killough 10/98
-int default_comperr[COMPERR_NUM];
+__STORAGE_MODIFIER int comp[MBF_COMP_TOTAL];    // killough 10/98
+__STORAGE_MODIFIER int default_comperr[COMPERR_NUM];
 
 __STORAGE_MODIFIER int demo_insurance;        // killough 1/16/98
 
-int  allow_pushers = 1;      // MT_PUSH Things              // phares 3/10/98
+__STORAGE_MODIFIER int allow_pushers = 1;      // MT_PUSH Things              // phares 3/10/98
 
-int  variable_friction = 1;      // ice & mud               // phares 3/10/98
+__STORAGE_MODIFIER int variable_friction = 1;      // ice & mud               // phares 3/10/98
 
 __STORAGE_MODIFIER int weapon_recoil = 0;              // weapon recoil                   // phares
 
-int player_bobbing = 1;  // whether player bobs or not          // phares 2/25/98
+__STORAGE_MODIFIER int player_bobbing = 1;  // whether player bobs or not          // phares 2/25/98
 
-int monsters_remember = 1;          // killough 3/1/98
+__STORAGE_MODIFIER int monsters_remember = 1;          // killough 3/1/98
 
-int monster_infighting=1;       // killough 7/19/98: monster<=>monster attacks
+__STORAGE_MODIFIER int monster_infighting=1;       // killough 7/19/98: monster<=>monster attacks
 
-int monster_friction=1;       // killough 10/98: monsters affected by friction
+__STORAGE_MODIFIER int monster_friction=1;       // killough 10/98: monsters affected by friction
 
 __STORAGE_MODIFIER int dogs;         // killough 7/19/98: Marine's best friend :)
 __STORAGE_MODIFIER int dog_jumping;   // killough 10/98
 
 // killough 8/8/98: distance friends tend to move towards players
-int distfriend = 128;
+__STORAGE_MODIFIER int distfriend = 128;
 
 // killough 9/8/98: whether monsters are allowed to strafe or retreat
 __STORAGE_MODIFIER int monster_backing;

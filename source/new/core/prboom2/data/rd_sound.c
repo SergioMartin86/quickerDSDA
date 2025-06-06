@@ -32,7 +32,7 @@ struct wav_header
   char fmt[4];
   unsigned int fmtlen;
   unsigned short fmttag;
-  unsigned short channels;
+  unsigned __STORAGE_MODIFIER short channels;
   unsigned int samplerate;
   unsigned int byterate;
   unsigned short blockalign;

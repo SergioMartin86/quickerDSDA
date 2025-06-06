@@ -48,8 +48,8 @@ extern const demostate_t hexen_demostates[][4];
 
 weaponinfo_t* weaponinfo;
 
-int g_maxplayers = 4;
-int g_viewheight = 41 * FRACUNIT;
+__STORAGE_MODIFIER int g_maxplayers = 4;
+__STORAGE_MODIFIER int g_viewheight = 41 * FRACUNIT;
 __STORAGE_MODIFIER int g_numammo;
 
 __STORAGE_MODIFIER int g_mt_player;
@@ -129,7 +129,7 @@ __STORAGE_MODIFIER int g_border_offset;
 __STORAGE_MODIFIER int g_mf_translucent;
 __STORAGE_MODIFIER int g_mf_shadow;
 
-const char* g_menu_flat;
+__STORAGE_MODIFIER const char* g_menu_flat;
 __STORAGE_MODIFIER int g_menu_save_page_size;
 __STORAGE_MODIFIER int g_menu_font_spacing;
 

@@ -103,8 +103,8 @@ extern __STORAGE_MODIFIER dboolean secretexit;
 
 // killough 5/2/98: moved from d_deh.c:
 // Par times (new item with BOOM) - from g_game.c
-extern int pars[5][10];  // hardcoded array size
-extern int cpars[];      // hardcoded array size
+extern __STORAGE_MODIFIER int pars[5][10];  // hardcoded array size
+extern __STORAGE_MODIFIER int cpars[];      // hardcoded array size
 // CPhipps - Make savedesciption visible in wider scope
 #define SAVEDESCLEN 32
 extern __STORAGE_MODIFIER char savedescription[SAVEDESCLEN];  // Description to save in savegame

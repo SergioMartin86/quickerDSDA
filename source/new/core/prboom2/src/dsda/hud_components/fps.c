@@ -26,7 +26,7 @@ typedef struct {
 static local_component_t* local;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {
-  extern int dsda_render_stats_fps;
+  extern __STORAGE_MODIFIER int dsda_render_stats_fps;
 
   snprintf(
     str,

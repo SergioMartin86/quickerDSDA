@@ -88,7 +88,7 @@ __STORAGE_MODIFIER int demo_tics_count;
 __STORAGE_MODIFIER char demo_len_st[80];
 
 __STORAGE_MODIFIER int mouse_handler;
-int gl_render_fov = 90;
+__STORAGE_MODIFIER int gl_render_fov = 90;
 
 camera_t walkcamera;
 
@@ -304,7 +304,7 @@ void CheckPitch(signed int *pitch)
 
 __STORAGE_MODIFIER float gl_render_ratio;
 __STORAGE_MODIFIER float gl_render_fovratio;
-float gl_render_fovy = FOV90;
+__STORAGE_MODIFIER float gl_render_fovy = FOV90;
 __STORAGE_MODIFIER float gl_render_multiplier;
 
 void M_ChangeAspectRatio(void)

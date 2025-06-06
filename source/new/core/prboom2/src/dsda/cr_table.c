@@ -49,9 +49,9 @@ cr_range_t cr_range[CR_HUD_LIMIT] = {
   [CR_WHITE]     = { 0x24, 0x24, 0x24, 0xFF, 0xFF, 0xFF },
 };
 
-static char ref_lump_doom[9] = "STCFN065";
-static char ref_lump_heretic[9] = "FONTA33";
-static char ref_lump_hexen[9] = "FONTA33";
+static __STORAGE_MODIFIER char ref_lump_doom[9] = "STCFN065";
+static __STORAGE_MODIFIER char ref_lump_heretic[9] = "FONTA33";
+static __STORAGE_MODIFIER char ref_lump_hexen[9] = "FONTA33";
 
 typedef struct {
   double light_lower_bound;
