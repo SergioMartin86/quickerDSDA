@@ -2024,7 +2024,7 @@ void P_RespawnSpecials (void)
 //  between levels.
 //
 
-extern byte playernumtotrans[MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER byte playernumtotrans[MAX_MAXPLAYERS];
 
 void P_SpawnPlayer (int n, const mapthing_t* mthing)
 {
@@ -2995,7 +2995,7 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
 
 #include "p_spec.h"
 
-mobjtype_t PuffType;
+__STORAGE_MODIFIER mobjtype_t PuffType;
 __STORAGE_MODIFIER mobj_t *MissileMobj;
 
 void P_BlasterMobjThinker(mobj_t * mobj)

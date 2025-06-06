@@ -121,7 +121,7 @@ static __STORAGE_MODIFIER int tmunstuck;     /* killough 8/1/98: whether to allo
 // but don't process them until the move is proven valid
 
 // 1/11/98 killough: removed limit on special lines crossed
-line_t **spechit;                // new code -- killough
+__STORAGE_MODIFIER line_t **spechit;                // new code -- killough
 static __STORAGE_MODIFIER int spechit_max;          // killough
 
 __STORAGE_MODIFIER int numspechit;
@@ -2300,7 +2300,7 @@ dboolean PTR_AimTraverse (intercept_t* in)
 }
 
 // heretic
-extern mobjtype_t PuffType;
+extern __STORAGE_MODIFIER mobjtype_t PuffType;
 
 //
 // PTR_ShootTraverse
@@ -2774,7 +2774,7 @@ void P_UseLines (player_t*  player)
 // RADIUS ATTACK
 //
 
-bomb_t bomb;
+__STORAGE_MODIFIER bomb_t bomb;
 
 //
 // PIT_RadiusAttack
@@ -3210,7 +3210,7 @@ inline static void P_PutSecnode(msecnode_t* node)
 //
 // Maintain a freelist of msecnode_t's to reduce memory allocs and frees.
 
-msecnode_t *headsecnode = NULL;
+__STORAGE_MODIFIER msecnode_t *headsecnode = NULL;
 
 //
 // P_FreeSecNodeList

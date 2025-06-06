@@ -77,7 +77,7 @@ typedef enum {
   ,source_deh
   ,source_err
 
-} wad_source_t;
+}  wad_source_t;
 
 // CPhipps - changed wad init
 // We _must_ have the wadfiles[] the same as those actually loaded, so there
@@ -92,7 +92,7 @@ typedef struct {
 
 extern __STORAGE_MODIFIER wadfile_info_t *wadfiles;
 
-extern size_t numwadfiles; // CPhipps - size of the wadfiles array
+extern __STORAGE_MODIFIER size_t numwadfiles; // CPhipps - size of the wadfiles array
 
 void W_Init(void); // CPhipps - uses the above array
 void W_InitCache(void);
@@ -133,7 +133,7 @@ typedef struct
 #define LUMP_STATIC 0x00000001 /* assigned gltexture should be static */
 #define LUMP_PRBOOM 0x00000002 /* from internal resource */
 
-extern lumpinfo_t *lumpinfo;
+extern __STORAGE_MODIFIER lumpinfo_t *lumpinfo;
 extern __STORAGE_MODIFIER int numlumps;
 
 int     W_FindNumFromName2(const char *name, int ns, int lump);

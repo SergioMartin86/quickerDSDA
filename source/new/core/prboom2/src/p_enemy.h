@@ -44,7 +44,7 @@ dboolean P_CheckBossDeath(mobj_t *mo);
 
 extern struct brain_s {         /* killough 3/26/98: global state of boss brain */
   int easy, targeton;
-} brain;
+} __STORAGE_MODIFIER brain;
 
 // ********************************************************************
 // Function addresses or Code Pointers

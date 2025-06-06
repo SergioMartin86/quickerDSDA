@@ -24,8 +24,8 @@
 
 #include "episode.h"
 
-dsda_episode_t* episodes;
-size_t num_episodes;
+__STORAGE_MODIFIER dsda_episode_t* episodes;
+__STORAGE_MODIFIER size_t num_episodes;
 
 static void dsda_DetermineEpisodeMap(dsda_episode_t* episode) {
   if (!dsda_NameToMap(episode->map_lump, &episode->start_episode, &episode->start_map))

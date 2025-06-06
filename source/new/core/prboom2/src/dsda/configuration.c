@@ -1191,11 +1191,11 @@ dsda_config_t dsda_config[dsda_config_count] = {
     "render_doom_lightmaps", dsda_config_render_doom_lightmaps,
     CONF_BOOL(0)
   },
-  [dsda_config_fake_contrast_mode] = {
-    "fake_contrast_mode", dsda_config_fake_contrast_mode,
-    dsda_config_int, FAKE_CONTRAST_MODE_OFF, FAKE_CONTRAST_MODE_SMOOTH,
-    { FAKE_CONTRAST_MODE_ON }, (int*) &fake_contrast_mode
-  },
+  // [dsda_config_fake_contrast_mode] = {
+  //   "fake_contrast_mode", dsda_config_fake_contrast_mode,
+  //   dsda_config_int, FAKE_CONTRAST_MODE_OFF, FAKE_CONTRAST_MODE_SMOOTH,
+  //   { FAKE_CONTRAST_MODE_ON }, (int*) &fake_contrast_mode
+  // },
   [dsda_config_render_stretch_hud] = {
     "render_stretch_hud", dsda_config_render_stretch_hud,
     dsda_config_int, patch_stretch_not_adjusted, patch_stretch_fit_to_width, { patch_stretch_doom_format },
@@ -1288,8 +1288,8 @@ static void dsda_PersistIntConfig(dsda_config_t* conf) {
 }
 
 static void dsda_PersistStringConfig(dsda_config_t* conf) {
-  if (conf->persistent_value.v_string)
-    Z_Free(conf->persistent_value.v_string);
+  // if (conf->persistent_value.v_string)
+    // Z_Free(conf->persistent_value.v_string);
 
   conf->persistent_value.v_string = Z_Strdup(conf->transient_value.v_string);
 }
@@ -1325,8 +1325,8 @@ static void dsda_InitIntConfig(dsda_config_t* conf, int value, dboolean persist)
 
 // No side effects
 static void dsda_InitStringConfig(dsda_config_t* conf, const char* value, dboolean persist) {
-  if (conf->transient_value.v_string)
-    Z_Free(conf->transient_value.v_string);
+  // if (conf->transient_value.v_string)
+  //   Z_Free(conf->transient_value.v_string);
 
   conf->transient_value.v_string = Z_Strdup(value);
   if (persist)

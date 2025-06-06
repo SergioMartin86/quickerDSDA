@@ -90,7 +90,7 @@ __STORAGE_MODIFIER char demo_len_st[80];
 __STORAGE_MODIFIER int mouse_handler;
 __STORAGE_MODIFIER int gl_render_fov = 90;
 
-camera_t walkcamera;
+__STORAGE_MODIFIER camera_t walkcamera;
 
 __STORAGE_MODIFIER angle_t viewpitch;
 __STORAGE_MODIFIER float skyscale;
@@ -406,7 +406,7 @@ __STORAGE_MODIFIER int stats_level;
 __STORAGE_MODIFIER int stroller;
 __STORAGE_MODIFIER int numlevels = 0;
 __STORAGE_MODIFIER int levels_max = 0;
-timetable_t *stats = NULL;
+__STORAGE_MODIFIER timetable_t *stats = NULL;
 
 void e6y_G_DoCompleted(void)
 {

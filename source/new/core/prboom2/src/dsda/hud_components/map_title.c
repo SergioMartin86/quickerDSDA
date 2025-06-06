@@ -26,7 +26,7 @@ typedef struct {
 static __STORAGE_MODIFIER local_component_t* local;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {
-  extern dsda_string_t hud_title;
+  extern __STORAGE_MODIFIER dsda_string_t hud_title;
 
   snprintf(
     str,

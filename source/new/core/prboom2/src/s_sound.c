@@ -312,6 +312,8 @@ void S_ResetAdjustments(void) {
 
 void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume, int loop_timeout)
 {
+  return; 
+  
   int cnum;
   sfx_params_t params;
   sfxinfo_t *sfx;

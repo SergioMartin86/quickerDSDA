@@ -138,7 +138,7 @@ typedef struct {
   int rndindex, prndindex;             // For compatibility support
 } rng_t;
 
-extern rng_t rng;                      // The rng's state
+extern __STORAGE_MODIFIER rng_t rng;                      // The rng's state
 
 extern __STORAGE_MODIFIER unsigned int rngseed;           // The starting seed (not part of state)
 

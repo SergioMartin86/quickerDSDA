@@ -19,7 +19,7 @@
 
 #include "pclass.h"
 
-dsda_pclass_t pclass[NUMCLASSES] = {
+__STORAGE_MODIFIER dsda_pclass_t pclass[NUMCLASSES] = {
   [PCLASS_NULL] = {
     .armor_increment = { 0 },
     .auto_armor_save = 0,

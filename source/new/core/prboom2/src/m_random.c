@@ -90,7 +90,7 @@ static const unsigned char hexen_rndtable[256] = {
 
 static const unsigned __STORAGE_MODIFIER char *rndtable = doom_rndtable;
 
-rng_t rng;     // the random number state
+__STORAGE_MODIFIER rng_t rng;     // the random number state
 
 unsigned __STORAGE_MODIFIER int rngseed = 1993;   // killough 3/26/98: The seed
 

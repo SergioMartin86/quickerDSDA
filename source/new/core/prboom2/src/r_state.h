@@ -87,7 +87,7 @@ extern __STORAGE_MODIFIER side_t *sides;
 extern __STORAGE_MODIFIER int *sslines_indexes;
 extern __STORAGE_MODIFIER ssline_t *sslines;
 
-extern byte             *map_subsectors;
+extern __STORAGE_MODIFIER byte             *map_subsectors;
 
 //
 // POV data.

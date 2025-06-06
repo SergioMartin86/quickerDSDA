@@ -49,6 +49,6 @@ typedef enum
   FAKE_CONTRAST_MODE_SMOOTH
 } fake_contrast_mode_t;
 
-extern fake_contrast_mode_t fake_contrast_mode;
+extern __STORAGE_MODIFIER fake_contrast_mode_t fake_contrast_mode;
 
 #endif

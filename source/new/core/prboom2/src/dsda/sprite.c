@@ -23,7 +23,7 @@
 
 #include "sprite.h"
 
-const char** sprnames;
+__STORAGE_MODIFIER const char** sprnames;
 __STORAGE_MODIFIER int num_sprites;
 static __STORAGE_MODIFIER int deh_spritenames_size;
 static __STORAGE_MODIFIER char** deh_spritenames;

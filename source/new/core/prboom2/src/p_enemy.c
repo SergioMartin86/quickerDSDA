@@ -343,11 +343,11 @@ static int P_IsUnderDamage(mobj_t *actor)
 // returns false if the move is blocked.
 //
 
-static fixed_t xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000};
-static fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
+static __STORAGE_MODIFIER fixed_t xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT,-47000,0,47000};
+static __STORAGE_MODIFIER fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
 
 // 1/11/98 killough: Limit removed on special lines crossed
-extern  line_t **spechit;          // New code -- killough
+extern  __STORAGE_MODIFIER line_t **spechit;          // New code -- killough
 extern  __STORAGE_MODIFIER int numspechit;
 
 static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
@@ -2791,11 +2791,11 @@ void A_CloseShotgun2(player_t *player, pspdef_t *psp)
 }
 
 // killough 2/7/98: Remove limit on icon landings:
-mobj_t **braintargets;
+__STORAGE_MODIFIER mobj_t **braintargets;
 __STORAGE_MODIFIER int numbraintargets_alloc;
 __STORAGE_MODIFIER int numbraintargets;
 
-struct brain_s brain;   // killough 3/26/98: global state of boss brain
+__STORAGE_MODIFIER struct brain_s brain;   // killough 3/26/98: global state of boss brain
 
 // killough 3/26/98: initialize icon landings at level startup,
 // rather than at boss wakeup, to prevent savegame-related crashes

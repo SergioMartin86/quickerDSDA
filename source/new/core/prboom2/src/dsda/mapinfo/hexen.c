@@ -542,7 +542,7 @@ int dsda_HexenMapLightning(int* lightning) {
 
 int dsda_HexenApplyFadeTable(void) {
   extern __STORAGE_MODIFIER dboolean LevelUseFullBright;
-  extern const lighttable_t** colormaps;
+  extern __STORAGE_MODIFIER const lighttable_t** colormaps;
 
   int fade_lump;
 

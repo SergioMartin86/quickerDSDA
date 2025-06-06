@@ -196,7 +196,7 @@ fixed_t PUREFUNC P_InterceptVector(const divline_t *v2, const divline_t *v1)
 // OPTIMIZE: keep this precalculated
 //
 
-line_opening_t line_opening;
+__STORAGE_MODIFIER line_opening_t line_opening;
 
 dboolean P_GetMidTexturePosition(const line_t *line, int sideno, fixed_t *top, fixed_t *bottom)
 {
@@ -622,7 +622,7 @@ dboolean P_BlockThingsIterator(int x, int y, dboolean func(mobj_t*))
 //
 
 // 1/11/98 killough: Intercept limit removed
-intercept_t *intercepts, *intercept_p;
+__STORAGE_MODIFIER intercept_t *intercepts, *intercept_p;
 
 // Check for limit and double size if necessary -- killough
 void check_intercept(void)
@@ -637,7 +637,7 @@ void check_intercept(void)
     }
 }
 
-divline_t trace;
+__STORAGE_MODIFIER divline_t trace;
 
 // PIT_AddLineIntercepts.
 // Looks for lines in the given block

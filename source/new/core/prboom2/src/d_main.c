@@ -1986,7 +1986,7 @@ void D_DoomMainSetup(void)
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "S_Init: Setting up sound.\n");
-  S_Init();
+  // S_Init();
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");

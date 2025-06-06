@@ -110,7 +110,7 @@ __STORAGE_MODIFIER side_t *sides;
 __STORAGE_MODIFIER int *sslines_indexes;
 __STORAGE_MODIFIER ssline_t *sslines;
 
-byte     *map_subsectors;
+__STORAGE_MODIFIER byte     *map_subsectors;
 
 typedef enum {
   UNKNOWN_NODES = -1,
@@ -3692,7 +3692,7 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   S_ParseMusInfo(lumpname);
 
   // Make sure all sounds are stopped before Z_FreeTag.
-  S_Start();
+  //S_Start();
 
   Z_FreeLevel();
 

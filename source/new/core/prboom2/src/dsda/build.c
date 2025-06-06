@@ -46,7 +46,7 @@ static __STORAGE_MODIFIER ticcmd_t overwritten_cmd;
 static __STORAGE_MODIFIER int overwritten_logictic;
 static __STORAGE_MODIFIER int build_cmd_tic = -1;
 static __STORAGE_MODIFIER dboolean replace_source = true;
-static build_cmd_queue_t cmd_queue;
+static __STORAGE_MODIFIER build_cmd_queue_t cmd_queue;
 
 static signed char forward50(void) {
   return dsda_Flag(dsda_arg_stroller) ?

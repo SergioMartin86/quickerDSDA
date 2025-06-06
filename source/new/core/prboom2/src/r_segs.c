@@ -70,7 +70,7 @@ static __STORAGE_MODIFIER fixed_t toptexheight, midtexheight, bottomtexheight; /
 __STORAGE_MODIFIER angle_t rw_normalangle; // angle to line origin
 __STORAGE_MODIFIER int rw_angle1;
 __STORAGE_MODIFIER fixed_t rw_distance;
-const lighttable_t    **walllights;
+const __STORAGE_MODIFIER lighttable_t    **walllights;
 
 //
 // regular wall
@@ -101,11 +101,11 @@ static __STORAGE_MODIFIER int *maskedtexturecol; // dropoff overflow
 
 static __STORAGE_MODIFIER int max_rwscale = 64 * FRACUNIT;
 static __STORAGE_MODIFIER int HEIGHTBITS = 12;
-static int	HEIGHTUNIT = (1 << 12);
+static __STORAGE_MODIFIER int	HEIGHTUNIT = (1 << 12);
 static __STORAGE_MODIFIER int invhgtbits = 4;
 
 /* cph - allow crappy fake contrast to be disabled */
-fake_contrast_mode_t fake_contrast_mode;
+__STORAGE_MODIFIER fake_contrast_mode_t fake_contrast_mode;
 
 //
 // R_FixWiggle()

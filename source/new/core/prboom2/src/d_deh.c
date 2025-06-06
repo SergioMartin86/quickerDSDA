@@ -1574,7 +1574,7 @@ uint64_t deh_stringToMobjFlags(char *strval)
 
 void deh_changeCompTranslucency(void)
 {
-  extern byte* edited_mobjinfo_bits;
+  extern __STORAGE_MODIFIER byte* edited_mobjinfo_bits;
   int i;
   int boom_translucent_sprites;
   int predefined_translucency[] = {
@@ -1601,7 +1601,7 @@ void deh_changeCompTranslucency(void)
 
 void deh_applyCompatibility(void)
 {
-  extern byte* edited_mobjinfo_bits;
+  extern __STORAGE_MODIFIER byte* edited_mobjinfo_bits;
   int comp_max = (compatibility_level == doom_12_compatibility ? 199 : 200);
 
   max_soul = (IsDehMaxSoul ? deh_max_soul : comp_max);

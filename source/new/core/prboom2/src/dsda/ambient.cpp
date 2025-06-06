@@ -40,8 +40,8 @@ typedef struct {
   int sfx_id;
 } named_sfx_t;
 
-std::unordered_map<std::string, named_sfx_t> name_to_sfx;
-std::unordered_map<int, ambient_sfx_t> id_to_ambient_sfx;
+thread_local std::unordered_map<std::string, named_sfx_t> name_to_sfx;
+thread_local std::unordered_map<int, ambient_sfx_t> id_to_ambient_sfx;
 
 static ambient_sfx_t* dsda_AmbientSFX(int id) {
   return id_to_ambient_sfx[id].sfx_id ? &id_to_ambient_sfx[id] : NULL;

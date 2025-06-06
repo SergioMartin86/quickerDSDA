@@ -132,7 +132,7 @@ static __STORAGE_MODIFIER int fuzzcellsize;
 // no color mapping
 #define RDC_NOCOLMAP     16
 
-draw_vars_t drawvars = {
+__STORAGE_MODIFIER draw_vars_t drawvars = {
   NULL, // topleft
   0, // pitch
 };
@@ -236,7 +236,7 @@ void R_ResetColumnBuffer(void)
 //  be used. It has also been used with Wolfenstein 3D.
 //
 
-byte *translationtables;
+__STORAGE_MODIFIER byte *translationtables;
 
 #define R_DRAWCOLUMN_PIPELINE_TYPE RDC_PIPELINE_STANDARD
 #define R_DRAWCOLUMN_PIPELINE_BASE RDC_STANDARD
@@ -360,7 +360,7 @@ void R_SetDefaultDrawColumnVars(draw_column_vars_t *dcvars) {
 // Could be read from a lump instead.
 //
 
-byte playernumtotrans[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER byte playernumtotrans[MAX_MAXPLAYERS];
 
 // HERETIC_TODO: player colors
 const byte player_colors[] = { 0x70, 0x60, 0x40, 0x20 };

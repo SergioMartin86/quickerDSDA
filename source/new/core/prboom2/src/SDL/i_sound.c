@@ -913,9 +913,9 @@ const char *midiplayers[midi_player_last + 1] = {
   "fluidsynth", "opl", "portmidi", NULL };
 
 static __STORAGE_MODIFIER int current_player = -1;
-static const void *music_handle = NULL;
+static __STORAGE_MODIFIER const void *music_handle = NULL;
 
-static void *mus2mid_conversion_data = NULL;
+static __STORAGE_MODIFIER void *mus2mid_conversion_data = NULL;
 
 void I_ShutdownMusic(void)
 {

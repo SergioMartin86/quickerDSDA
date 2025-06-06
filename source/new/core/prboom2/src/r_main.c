@@ -88,7 +88,7 @@ __STORAGE_MODIFIER int r_frame_count;
 
 __STORAGE_MODIFIER int validcount = 1;         // increment every time a check is made
 __STORAGE_MODIFIER int validcount2 = 1;
-const lighttable_t *fixedcolormap;
+const __STORAGE_MODIFIER lighttable_t *fixedcolormap;
 __STORAGE_MODIFIER int centerx, centery;
 // e6y: wide-res
 __STORAGE_MODIFIER int wide_centerx;
@@ -118,7 +118,7 @@ __STORAGE_MODIFIER int viewport[4];
 __STORAGE_MODIFIER float modelMatrix[16];
 __STORAGE_MODIFIER float projMatrix[16];
 
-extern const lighttable_t **walllights;
+extern __STORAGE_MODIFIER const lighttable_t **walllights;
 
 //
 // precalculated math tables
@@ -144,12 +144,12 @@ __STORAGE_MODIFIER angle_t *xtoviewangle;   // killough 2/8/98
 // killough 4/4/98: support dynamic number of them as well
 
 __STORAGE_MODIFIER int numcolormaps;
-const lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
-const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
-const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
-const lighttable_t *(*zlight)[MAXLIGHTZ];
-const lighttable_t *fullcolormap;
-const lighttable_t **colormaps;
+const __STORAGE_MODIFIER lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
+const __STORAGE_MODIFIER lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
+const __STORAGE_MODIFIER lighttable_t *(*scalelight)[MAXLIGHTSCALE];
+const __STORAGE_MODIFIER lighttable_t *(*zlight)[MAXLIGHTZ];
+const __STORAGE_MODIFIER lighttable_t *fullcolormap;
+const __STORAGE_MODIFIER lighttable_t **colormaps;
 
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 

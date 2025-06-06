@@ -23,7 +23,7 @@
 
 #include "dsda/utility.h"
 
-extern bomb_t bomb;
+extern __STORAGE_MODIFIER bomb_t bomb;
 
 typedef struct {
   int health;
@@ -38,7 +38,7 @@ typedef struct {
 
 #define HEALTH_GROUP_HASH_MAX 128
 
-static health_group_entry_t* health_group_hash[HEALTH_GROUP_HASH_MAX];
+static __STORAGE_MODIFIER health_group_entry_t* health_group_hash[HEALTH_GROUP_HASH_MAX];
 
 static health_group_t* dsda_HealthGroup(int id) {
   int i;

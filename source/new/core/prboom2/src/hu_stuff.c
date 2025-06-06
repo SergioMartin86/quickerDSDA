@@ -93,7 +93,7 @@ void HU_InitThresholds(void)
   hud_ammo_yellow = dsda_IntConfig(dsda_config_hud_ammo_yellow);
 }
 
-dsda_string_t hud_title;
+__STORAGE_MODIFIER dsda_string_t hud_title;
 
 static void HU_FetchTitle(void)
 {

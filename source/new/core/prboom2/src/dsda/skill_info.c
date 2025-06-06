@@ -25,7 +25,7 @@
 
 #include "skill_info.h"
 
-skill_info_t skill_info;
+__STORAGE_MODIFIER skill_info_t skill_info;
 
 const skill_info_t doom_skill_infos[5] = {
   {

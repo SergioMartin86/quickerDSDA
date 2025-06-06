@@ -76,13 +76,13 @@ extern __STORAGE_MODIFIER float gl_render_multiplier;
 void M_ChangeAspectRatio(void);
 void M_ChangeStretch(void);
 
-extern camera_t walkcamera;
+extern __STORAGE_MODIFIER camera_t walkcamera;
 
-extern int PitchSign;
+extern __STORAGE_MODIFIER int PitchSign;
 extern __STORAGE_MODIFIER angle_t viewpitch;
 extern __STORAGE_MODIFIER float skyscale;
 extern __STORAGE_MODIFIER float screen_skybox_zplane;
-extern float maxNoPitch[];
+extern __STORAGE_MODIFIER float maxNoPitch[];
 extern __STORAGE_MODIFIER float tan_pitch;
 extern __STORAGE_MODIFIER float skyUpAngle;
 extern __STORAGE_MODIFIER float skyUpShift;

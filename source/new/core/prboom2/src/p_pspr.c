@@ -77,7 +77,7 @@ extern void P_Thrust(player_t *, angle_t, fixed_t);
 
 // The following array holds the recoil values         // phares
 
-static const int recoil_values[] = {    // phares
+static __STORAGE_MODIFIER const int recoil_values[] = {    // phares
   10, // wp_fist
   10, // wp_pistol
   30, // wp_shotgun
@@ -1599,7 +1599,7 @@ void A_BeakRaise(player_t * player, pspdef_t * psp)
                  wpnlev1info[player->readyweapon].readystate);
 }
 
-extern mobjtype_t PuffType;
+extern __STORAGE_MODIFIER mobjtype_t PuffType;
 
 void A_BeakAttackPL1(player_t * player, pspdef_t * psp)
 {

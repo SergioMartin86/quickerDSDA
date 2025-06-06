@@ -47,7 +47,7 @@
 #include "hexen/p_acs.h"
 #include "hexen/sn_sonix.h"
 
-platlist_t *activeplats;       // killough 2/14/98: made global again
+__STORAGE_MODIFIER platlist_t *activeplats;       // killough 2/14/98: made global again
 
 //
 // T_PlatRaise()

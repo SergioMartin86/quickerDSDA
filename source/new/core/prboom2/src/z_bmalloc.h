@@ -41,9 +41,9 @@ struct block_memory_alloc_s {
   const char *desc;
 };
 
-#define DECLARE_BLOCK_MEMORY_ALLOC_ZONE(name) extern struct block_memory_alloc_s name
+#define DECLARE_BLOCK_MEMORY_ALLOC_ZONE(name) extern __STORAGE_MODIFIER struct block_memory_alloc_s name
 #define IMPLEMENT_BLOCK_MEMORY_ALLOC_ZONE(name, size, num, desc) \
-struct block_memory_alloc_s name = { NULL, size, num, desc}
+__STORAGE_MODIFIER struct block_memory_alloc_s name = { NULL, size, num, desc}
 #define NULL_BLOCK_MEMORY_ALLOC_ZONE(name) name.firstpool = NULL
 
 void* Z_BMalloc(struct block_memory_alloc_s *pzone);

@@ -62,7 +62,7 @@
 //
 
 // Location of each lump on disk.
-lumpinfo_t *lumpinfo;
+__STORAGE_MODIFIER lumpinfo_t *lumpinfo;
 __STORAGE_MODIFIER int numlumps;         // killough
 
 void ExtractFileBase (const char *path, char *dest)
@@ -468,7 +468,7 @@ int W_ListNumFromName(const char *name, int lump)
 //
 __STORAGE_MODIFIER wadfile_info_t *wadfiles=NULL;
 
-size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit)
+__STORAGE_MODIFIER size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit)
 
 void W_Init(void)
 {

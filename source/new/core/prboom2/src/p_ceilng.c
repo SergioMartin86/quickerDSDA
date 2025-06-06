@@ -47,7 +47,7 @@
 #include "dsda/map_format.h"
 
 // the list of ceilings moving currently, including crushers
-ceilinglist_t *activeceilings;
+__STORAGE_MODIFIER ceilinglist_t *activeceilings;
 
 /////////////////////////////////////////////////////////////////
 //

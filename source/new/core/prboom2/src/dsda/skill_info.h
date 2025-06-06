@@ -51,7 +51,7 @@ typedef struct {
   skill_info_flags_t flags;
 } skill_info_t;
 
-extern skill_info_t skill_info;
+extern __STORAGE_MODIFIER skill_info_t skill_info;
 
 extern __STORAGE_MODIFIER int num_skills;
 

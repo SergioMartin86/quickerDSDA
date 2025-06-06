@@ -25,10 +25,10 @@
 
 #include "mobjinfo.h"
 
-mobjinfo_t* mobjinfo;
+__STORAGE_MODIFIER mobjinfo_t* mobjinfo;
 __STORAGE_MODIFIER int num_mobj_types;
 __STORAGE_MODIFIER int mobj_types_zero;
-byte* edited_mobjinfo_bits;
+__STORAGE_MODIFIER byte* edited_mobjinfo_bits;
 
 static void dsda_ResetMobjInfo(int from, int to) {
   int i;

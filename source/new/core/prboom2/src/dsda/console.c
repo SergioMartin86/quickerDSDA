@@ -625,7 +625,7 @@ static dboolean console_GameQuit(const char* command, const char* args) {
 }
 
 static dboolean console_GameDescribe(const char* command, const char* args) {
-  extern dsda_string_t hud_title;
+  extern __STORAGE_MODIFIER dsda_string_t hud_title;
 
   dsda_string_t str;
 

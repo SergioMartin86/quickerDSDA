@@ -83,16 +83,16 @@ typedef struct clipnode_s
   angle_t start, end;
 } clipnode_t;
 
-clipnode_t *freelist;
-clipnode_t *clipnodes;
-clipnode_t *cliphead;
+__STORAGE_MODIFIER clipnode_t *freelist;
+__STORAGE_MODIFIER clipnode_t *clipnodes;
+__STORAGE_MODIFIER clipnode_t *cliphead;
 
-static clipnode_t * gld_clipnode_GetNew(void);
-static clipnode_t * gld_clipnode_NewRange(angle_t start, angle_t end);
-static dboolean gld_clipper_IsRangeVisible(angle_t startAngle, angle_t endAngle);
-static void gld_clipper_AddClipRange(angle_t start, angle_t end);
-static void gld_clipper_RemoveRange(clipnode_t * range);
-static void gld_clipnode_Free(clipnode_t *node);
+static __STORAGE_MODIFIERclipnode_t * gld_clipnode_GetNew(void);
+static __STORAGE_MODIFIERclipnode_t * gld_clipnode_NewRange(angle_t start, angle_t end);
+static __STORAGE_MODIFIERdboolean gld_clipper_IsRangeVisible(angle_t startAngle, angle_t endAngle);
+static __STORAGE_MODIFIERvoid gld_clipper_AddClipRange(angle_t start, angle_t end);
+static __STORAGE_MODIFIERvoid gld_clipper_RemoveRange(clipnode_t * range);
+static __STORAGE_MODIFIERvoid gld_clipnode_Free(clipnode_t *node);
 
 static clipnode_t * gld_clipnode_GetNew(void)
 {

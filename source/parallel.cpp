@@ -156,6 +156,8 @@ int main(int argc, char *argv[])
     // Initializing emulator instance
     e.initialize();
     
+    JAFFAR_BARRIER;
+    
     // Disable rendering
     e.disableRendering();
 

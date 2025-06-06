@@ -95,12 +95,12 @@ extern __STORAGE_MODIFIER int LIGHTLEVELS;
 #define LIGHTZSHIFT       20
 
 // killough 3/20/98: Allow colormaps to be dynamic (e.g. underwater)
-extern const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
-extern const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
-extern const lighttable_t *(*zlight)[MAXLIGHTZ];
-extern const lighttable_t *fullcolormap;
+extern __STORAGE_MODIFIER const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
+extern __STORAGE_MODIFIER const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
+extern __STORAGE_MODIFIER const lighttable_t *(*zlight)[MAXLIGHTZ];
+extern __STORAGE_MODIFIER const lighttable_t *fullcolormap;
 extern __STORAGE_MODIFIER int numcolormaps;    // killough 4/4/98: dynamic number of maps
-extern const lighttable_t **colormaps;
+extern __STORAGE_MODIFIER const lighttable_t **colormaps;
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
 //e6y: for Boom colormaps in OpenGL mode
@@ -109,7 +109,7 @@ extern __STORAGE_MODIFIER int boom_cm;         // current colormap
 extern __STORAGE_MODIFIER int frame_fixedcolormap;
 
 extern __STORAGE_MODIFIER int extralight;
-extern const lighttable_t *fixedcolormap;
+extern __STORAGE_MODIFIER const lighttable_t *fixedcolormap;
 
 // Number of diminishing brightness levels.
 // There a 0-31, i.e. 32 LUT in the COLORMAP lump.
