@@ -53,8 +53,8 @@ for line in newSourceContent.splitlines():
     for var in globalVariables:
         for dataType in dataTypes:
             if continueRunning:
-                pattern = f'\\b{dataType}\\s+{var}\\b'
-                newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} {var}', line)
+                pattern = f'\\b{dataType}\\s+\*{var}\\b'
+                newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} *{var}', line)
 
                 # If the line was modified, update the source content
                 if newLine != line:
