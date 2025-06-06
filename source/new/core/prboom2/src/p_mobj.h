@@ -533,7 +533,7 @@ void P_RemoveMonsters(void);
 #define AMMO_MACE_WIMPY 20
 #define AMMO_MACE_HEFTY 100
 
-extern mobj_t* MissileMobj;
+extern __STORAGE_MODIFIER mobj_t *MissileMobj;
 
 void P_BlasterMobjThinker(mobj_t * mobj);
 mobj_t *P_SpawnMissileAngle(mobj_t * source, mobjtype_t type, angle_t angle, fixed_t momz);

@@ -60,8 +60,8 @@
 
 #include "heretic/def.h"
 
-static mobj_t    *tmthing;
-static mobj_t    *tsthing; // hexen
+static __STORAGE_MODIFIER mobj_t *tmthing;
+static __STORAGE_MODIFIER mobj_t *tsthing; // hexen
 static __STORAGE_MODIFIER fixed_t tmx;
 static __STORAGE_MODIFIER fixed_t tmy;
 static __STORAGE_MODIFIER int pe_x; // Pain Elemental position for Lost Soul checks // phares
@@ -107,14 +107,14 @@ __STORAGE_MODIFIER int tmflags;
 
 // hexen
 __STORAGE_MODIFIER int tmfloorpic;
-mobj_t *BlockingMobj;
+__STORAGE_MODIFIER mobj_t *BlockingMobj;
 
 // keep track of the line that lowers the ceiling,
 // so missiles don't explode against sky hack walls
 
-line_t        *ceilingline;
-line_t        *blockline;    /* killough 8/11/98: blocking linedef */
-line_t        *floorline;    /* killough 8/1/98: Highest touched floor */
+__STORAGE_MODIFIER line_t *ceilingline;
+__STORAGE_MODIFIER line_t *blockline;    /* killough 8/11/98: blocking linedef */
+__STORAGE_MODIFIER line_t *floorline;    /* killough 8/1/98: Highest touched floor */
 static __STORAGE_MODIFIER int tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
 
 // keep track of special lines as they are hit,
@@ -1886,8 +1886,8 @@ dboolean P_ThingHeightClip (mobj_t* thing)
 
 /* killough 8/2/98: make variables static */
 static __STORAGE_MODIFIER fixed_t bestslidefrac;
-static line_t*   bestslideline;
-static mobj_t*   slidemo;
+static __STORAGE_MODIFIER line_t *bestslideline;
+static __STORAGE_MODIFIER mobj_t *slidemo;
 static __STORAGE_MODIFIER fixed_t tmxmove;
 static __STORAGE_MODIFIER fixed_t tmymove;
 
@@ -2178,8 +2178,8 @@ void P_SlideMove(mobj_t *mo)
 // P_LineAttack
 //
 mobj_t*   linetarget; // who got hit (or NULL)
-mobj_t*   crosshair_target;
-static mobj_t*   shootthing;
+__STORAGE_MODIFIER mobj_t *crosshair_target;
+static __STORAGE_MODIFIER mobj_t *shootthing;
 
 /* killough 8/2/98: for more intelligent autoaiming */
 static __STORAGE_MODIFIER uint64_t aim_flags_mask;
@@ -2618,7 +2618,7 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope,
 // USE LINES
 //
 
-mobj_t*   usething;
+__STORAGE_MODIFIER mobj_t *usething;
 
 dboolean PTR_UseTraverse (intercept_t* in)
 {
@@ -3506,7 +3506,7 @@ void P_MapEnd(void) {
 
 // heretic
 
-mobj_t *onmobj; // generic global onmobj...used for landing on pods/players
+__STORAGE_MODIFIER mobj_t *onmobj; // generic global onmobj...used for landing on pods/players
 
 dboolean P_TestMobjLocation(mobj_t * mobj)
 {
@@ -3715,14 +3715,14 @@ void P_AppendSpecHit(line_t * ld)
       NULL,          // line_t *line;
 
       &spechit,      // line_t **spechit;
-      &numspechit,   // int *numspechit;
+      &numspechit,   // __STORAGE_MODIFIER int *numspechit;
 
-      tmbbox,        // fixed_t *tmbbox[4];
-      &tmfloorz,     // fixed_t *tmfloorz;
-      &tmceilingz,   // fixed_t *tmceilingz;
+      tmbbox,        // __STORAGE_MODIFIER fixed_t *tmbbox[4];
+      &tmfloorz,     // __STORAGE_MODIFIER fixed_t *tmfloorz;
+      &tmceilingz,   // __STORAGE_MODIFIER fixed_t *tmceilingz;
 
-      &crushchange,  // int *crushchange;
-      &nofit,        // dboolean *nofit;
+      &crushchange,  // __STORAGE_MODIFIER int *crushchange;
+      &nofit,        // __STORAGE_MODIFIER dboolean *nofit;
     };
     spechit_overrun_param.line = ld;
     SpechitOverrun(&spechit_overrun_param);
@@ -4035,7 +4035,7 @@ static dboolean Hexen_P_TryMove(mobj_t* thing, fixed_t x, fixed_t y)
 
 #define USE_PUZZLE_ITEM_SPECIAL 129
 
-static mobj_t *PuzzleItemUser;
+static __STORAGE_MODIFIER mobj_t *PuzzleItemUser;
 static __STORAGE_MODIFIER int PuzzleItemType;
 static __STORAGE_MODIFIER dboolean PuzzleActivated;
 

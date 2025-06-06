@@ -50,8 +50,8 @@
 
 #define BASEYCENTER 100
 
-static int *clipbot = NULL; // killough 2/8/98: // dropoff overflow
-static int *cliptop = NULL; // change to MAX_*  // dropoff overflow
+static __STORAGE_MODIFIER int *clipbot = NULL; // killough 2/8/98: // dropoff overflow
+static __STORAGE_MODIFIER int *cliptop = NULL; // change to MAX_*  // dropoff overflow
 
 //
 // Sprite rotation 0 is facing the viewer,
@@ -96,8 +96,8 @@ static __STORAGE_MODIFIER int drawsegs_xrange_count = 0;
 //  used for psprite clipping and initializing clipping
 
 // e6y: resolution limitation is removed
-int *negonearray;        // killough 2/8/98: // dropoff overflow
-int *screenheightarray;  // change to MAX_* // dropoff overflow
+__STORAGE_MODIFIER int *negonearray;        // killough 2/8/98: // dropoff overflow
+__STORAGE_MODIFIER int *screenheightarray;  // change to MAX_* // dropoff overflow
 
 //
 // INITIALIZATION FUNCTIONS
@@ -105,7 +105,7 @@ int *screenheightarray;  // change to MAX_* // dropoff overflow
 
 // variables used to look up and range check thing_t sprites patches
 
-spritedef_t *sprites;
+__STORAGE_MODIFIER spritedef_t *sprites;
 
 #define MAX_SPRITE_FRAMES 30          /* Macroized -- killough 1/25/98 */
 
@@ -391,7 +391,7 @@ static void R_InitSpriteDefs(const char * const * namelist)
 // GAME FUNCTIONS
 //
 
-static vissprite_t *vissprites, **vissprite_ptrs;  // killough
+static __STORAGE_MODIFIER vissprite_t *vissprites, **vissprite_ptrs;  // killough
 static __STORAGE_MODIFIER int num_vissprite, num_vissprite_alloc, num_vissprite_ptrs;
 
 //
@@ -444,8 +444,8 @@ static vissprite_t *R_NewVisSprite(void)
 //  in posts/runs of opaque pixels.
 //
 
-int   *mfloorclip;   // dropoff overflow
-int   *mceilingclip; // dropoff overflow
+__STORAGE_MODIFIER int *mfloorclip;   // dropoff overflow
+__STORAGE_MODIFIER int *mceilingclip; // dropoff overflow
 __STORAGE_MODIFIER fixed_t spryscale;
 __STORAGE_MODIFIER int64_t sprtopscreen; // R_WiggleFix
 __STORAGE_MODIFIER int colheight; // Scaled software fuzz

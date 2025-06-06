@@ -1000,9 +1000,9 @@ extern musicinfo_t heretic_S_music[];
 extern sfxinfo_t doom_S_sfx[];
 extern musicinfo_t doom_S_music[];
 
-extern sfxinfo_t* S_sfx;
+extern __STORAGE_MODIFIER sfxinfo_t *S_sfx;
 extern __STORAGE_MODIFIER int num_sfx;
-extern musicinfo_t* S_music;
+extern __STORAGE_MODIFIER musicinfo_t *S_music;
 extern __STORAGE_MODIFIER int num_music;
 
 #endif

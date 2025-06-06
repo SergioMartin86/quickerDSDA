@@ -26,7 +26,7 @@
 
 #include "music.h"
 
-musicinfo_t* S_music;
+__STORAGE_MODIFIER musicinfo_t *S_music;
 __STORAGE_MODIFIER int num_music;
 __STORAGE_MODIFIER int mus_musinfo;
 static __STORAGE_MODIFIER int deh_musicnames_size;

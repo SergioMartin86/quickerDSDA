@@ -2632,7 +2632,7 @@ void P_AutoUseHealth(player_t * player, int saveHealth)
 #define TXT_WRAITHVERGE_PIECE  "SEGMENT OF WRAITHVERGE"
 #define TXT_BLOODSCOURGE_PIECE "SEGMENT OF BLOODSCOURGE"
 
-const char *TextKeyMessages[] = {
+const __STORAGE_MODIFIER char *TextKeyMessages[] = {
     TXT_KEY_STEEL,
     TXT_KEY_CAVE,
     TXT_KEY_AXE,

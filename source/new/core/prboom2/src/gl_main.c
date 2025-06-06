@@ -1249,12 +1249,12 @@ static void gld_CalculateWallV(GLWall *wall, seg_t *seg, int peg,
 
 void gld_AddWall(seg_t *seg)
 {
-  extern sector_t *poly_frontsector;
+  extern __STORAGE_MODIFIER sector_t *poly_frontsector;
   extern __STORAGE_MODIFIER dboolean poly_add_line;
   GLWall wall;
   GLTexture *temptex;
-  sector_t *frontsector;
-  sector_t *backsector;
+  __STORAGE_MODIFIER sector_t *frontsector;
+  __STORAGE_MODIFIER sector_t *backsector;
   sector_t ftempsec; // needed for R_FakeFlat
   sector_t btempsec; // needed for R_FakeFlat
   float lineheight, linelength;

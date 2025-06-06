@@ -66,7 +66,7 @@ __STORAGE_MODIFIER int playerkeys = 0;
 
 static __STORAGE_MODIFIER int HealthMarker;
 static __STORAGE_MODIFIER int ChainWiggle;
-static player_t *CPlayer;
+static __STORAGE_MODIFIER player_t *CPlayer;
 
 __STORAGE_MODIFIER int LumpLTFACE;
 __STORAGE_MODIFIER int LumpRTFACE;
@@ -170,7 +170,7 @@ static __STORAGE_MODIFIER char hexen_namearti[][10] = {
 };
 static __STORAGE_MODIFIER int hexen_lumparti[33];
 
-static int *lumparti;
+static __STORAGE_MODIFIER int *lumparti;
 
 // game config
 static __STORAGE_MODIFIER int sb_ticker_delta_cap;

@@ -110,7 +110,7 @@ __STORAGE_MODIFIER int snd_MusicVolume = 15;
 static __STORAGE_MODIFIER dboolean mus_paused;
 
 // music currently being played
-musicinfo_t *mus_playing;
+__STORAGE_MODIFIER musicinfo_t *mus_playing;
 
 // music currently should play
 static __STORAGE_MODIFIER int musicnum_current;

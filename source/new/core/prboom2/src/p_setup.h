@@ -42,8 +42,8 @@ void P_Init(void);               /* Called by startup code. */
 extern const byte *rejectmatrix;   /* for fast sight rejection -  cph - const* */
 
 /* killough 3/1/98: change blockmap from "short" to "long" offsets: */
-extern int      *blockmaplump;   /* offsets in blockmap are from here */
-extern int      *blockmap;
+extern __STORAGE_MODIFIER int *blockmaplump;   /* offsets in blockmap are from here */
+extern __STORAGE_MODIFIER int *blockmap;
 extern __STORAGE_MODIFIER int bmapwidth;
 extern __STORAGE_MODIFIER int bmapheight;      /* in mapblocks */
 extern __STORAGE_MODIFIER fixed_t bmaporgx;

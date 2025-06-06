@@ -273,7 +273,7 @@ static int NUMANIMS[NUMEPISODES] =
   sizeof(epsd2animinfo)/sizeof(wi_anim_t)
 };
 
-static wi_anim_t *anims[NUMEPISODES] =
+static __STORAGE_MODIFIER wi_anim_t *anims[NUMEPISODES] =
 {
   epsd0animinfo,
   epsd1animinfo,
@@ -339,10 +339,10 @@ static __STORAGE_MODIFIER int cnt_pause;
 //
 
 // You Are Here graphic
-static const char* yah[3] = { "WIURH0", "WIURH1", 0 };
+static const __STORAGE_MODIFIER char *yah[3] = { "WIURH0", "WIURH1", 0 };
 
 // splat
-static const char* splat[2] = {"WISPLAT", 0};
+static const __STORAGE_MODIFIER char *splat[2] = {"WISPLAT", 0};
 
 // %, : graphics
 static const char percent[] = {"WIPCNT"};
@@ -386,7 +386,7 @@ static const char bstar[] = {"STFDEAD0"};
 // "red P[1..g_maxplayers]"
 static const char facebackp[] = {"STPB0"};
 
-static const char *exitpic, *enterpic;
+static const __STORAGE_MODIFIER char *exitpic, *enterpic;
 
 //
 // CODE
@@ -519,9 +519,9 @@ static void WI_DrawString(int cx, int cy, const char* ch)
 // Args:    none
 // Returns: void
 //
-const char *lf_levelname;
-const char *lf_levelpic;
-const char *lf_author;
+const __STORAGE_MODIFIER char *lf_levelname;
+const __STORAGE_MODIFIER char *lf_levelpic;
+const __STORAGE_MODIFIER char *lf_author;
 
 void WI_drawLF(void)
 {
@@ -576,9 +576,9 @@ void WI_drawLF(void)
 // Args:    none
 // Returns: void
 //
-const char *el_levelname;
-const char *el_levelpic;
-const char *el_author;
+const __STORAGE_MODIFIER char *el_levelname;
+const __STORAGE_MODIFIER char *el_levelpic;
+const __STORAGE_MODIFIER char *el_author;
 
 void WI_drawEL(void)
 {
@@ -1205,7 +1205,7 @@ int WI_fragSum(int playernum)
 static __STORAGE_MODIFIER int dm_state;
 // CPhipps - short, dynamically allocated
 static short int  **dm_frags;  // frags matrix
-static short int   *dm_totals;  // totals by player
+static short __STORAGE_MODIFIER int *dm_totals;  // totals by player
 
 // ====================================================================
 // WI_initDeathmatchStats
@@ -1451,10 +1451,10 @@ void WI_drawDeathmatchStats(void)
 // Note: The term "Netgame" means a coop game
 //
 
-static int *cnt_kills;
-static int *cnt_items;
-static int *cnt_secret;
-static int *cnt_frags;
+static __STORAGE_MODIFIER int *cnt_kills;
+static __STORAGE_MODIFIER int *cnt_items;
+static __STORAGE_MODIFIER int *cnt_secret;
+static __STORAGE_MODIFIER int *cnt_frags;
 static __STORAGE_MODIFIER int dofrags;
 static __STORAGE_MODIFIER int ng_state;
 

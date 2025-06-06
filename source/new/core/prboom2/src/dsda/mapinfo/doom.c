@@ -347,9 +347,9 @@ int dsda_DoomInterMusic(int* music_index, int* music_lump) {
 
 extern __STORAGE_MODIFIER int finalestage;
 extern __STORAGE_MODIFIER int finalecount;
-extern const char* finaletext;
-extern const char* finaleflat;
-extern const char* finalepatch;
+extern const __STORAGE_MODIFIER char *finaletext;
+extern const __STORAGE_MODIFIER char *finaleflat;
+extern const __STORAGE_MODIFIER char *finalepatch;
 extern __STORAGE_MODIFIER int acceleratestage;
 extern __STORAGE_MODIFIER int midstage;
 
@@ -658,9 +658,9 @@ int dsda_DoomBorderTexture(const char** border_texture) {
 }
 
 int dsda_DoomPrepareEntering(void) {
-  extern const char *el_levelname;
-  extern const char *el_levelpic;
-  extern const char *el_author;
+  extern const __STORAGE_MODIFIER char *el_levelname;
+  extern const __STORAGE_MODIFIER char *el_levelpic;
+  extern const __STORAGE_MODIFIER char *el_author;
 
   if (!next_map)
     return false;
@@ -680,9 +680,9 @@ int dsda_DoomPrepareEntering(void) {
 }
 
 int dsda_DoomPrepareFinished(void) {
-  extern const char *lf_levelname;
-  extern const char *lf_levelpic;
-  extern const char *lf_author;
+  extern const __STORAGE_MODIFIER char *lf_levelname;
+  extern const __STORAGE_MODIFIER char *lf_levelpic;
+  extern const __STORAGE_MODIFIER char *lf_author;
 
   if (!last_map)
     return false;

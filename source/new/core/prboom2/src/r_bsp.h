@@ -34,11 +34,11 @@
 #ifndef __R_BSP__
 #define __R_BSP__
 
-extern seg_t    *curline;
-extern side_t   *sidedef;
-extern line_t   *linedef;
-extern sector_t *frontsector;
-extern sector_t *backsector;
+extern __STORAGE_MODIFIER seg_t *curline;
+extern __STORAGE_MODIFIER side_t *sidedef;
+extern __STORAGE_MODIFIER line_t *linedef;
+extern __STORAGE_MODIFIER sector_t *frontsector;
+extern __STORAGE_MODIFIER sector_t *backsector;
 
 /* old code -- killough:
  * extern drawseg_t drawsegs[MAXDRAWSEGS];

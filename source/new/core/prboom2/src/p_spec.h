@@ -1325,9 +1325,9 @@ void P_SpawnLineSpecials(void);
 extern __STORAGE_MODIFIER int AmbSfxTics;
 extern __STORAGE_MODIFIER int AmbSfxVolume;
 extern __STORAGE_MODIFIER int AmbSfxPtrIndex;
-extern int *AmbSfxPtr;
-extern int *LevelAmbientSfx[MAX_AMBIENT_SFX];
-extern int *TerrainTypes;
+extern __STORAGE_MODIFIER int *AmbSfxPtr;
+extern __STORAGE_MODIFIER int *LevelAmbientSfx[MAX_AMBIENT_SFX];
+extern __STORAGE_MODIFIER int *TerrainTypes;
 
 void P_InitAmbientSound(void);
 void P_AmbientSound(void);

@@ -72,7 +72,7 @@ const switchlist_t hexen_alphSwitchList[] = {
 
 // killough 2/8/98: Remove switch limit
 
-static int *switchlist;                           // killough
+static __STORAGE_MODIFIER int *switchlist;                           // killough
 static __STORAGE_MODIFIER int max_numswitches;                       // killough
 static __STORAGE_MODIFIER int numswitches;                           // killough
 

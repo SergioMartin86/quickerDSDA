@@ -43,13 +43,13 @@ extern __STORAGE_MODIFIER int r_near_clip_plane;
 /* Constant arrays used for psprite clipping and initializing clipping. */
 
 // e6y: resolution limitation is removed
-extern int *negonearray;       /* killough 2/8/98: */ // dropoff overflow
-extern int *screenheightarray; /* change to MAX_*  */ // dropoff overflow
+extern __STORAGE_MODIFIER int *negonearray;       /* killough 2/8/98: */ // dropoff overflow
+extern __STORAGE_MODIFIER int *screenheightarray; /* change to MAX_*  */ // dropoff overflow
 
 /* Vars for R_DrawMaskedColumn */
 
-extern int     *mfloorclip;    // dropoff overflow
-extern int     *mceilingclip;  // dropoff overflow
+extern __STORAGE_MODIFIER int *mfloorclip;    // dropoff overflow
+extern __STORAGE_MODIFIER int *mceilingclip;  // dropoff overflow
 extern __STORAGE_MODIFIER fixed_t spryscale;
 extern __STORAGE_MODIFIER int64_t sprtopscreen;
 extern __STORAGE_MODIFIER fixed_t pspriteiscale;

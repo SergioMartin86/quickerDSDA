@@ -52,7 +52,7 @@
 __STORAGE_MODIFIER int overflows_enabled = true;
 
 overrun_param_t overflows[OVERFLOW_MAX];
-const char *overflow_cfgname[OVERFLOW_MAX] =
+__STORAGE_MODIFIER const char *overflow_cfgname[OVERFLOW_MAX] =
 {
   "overrun_spechit_emulate",
   "overrun_reject_emulate",
@@ -484,7 +484,7 @@ unsigned char mem_dump_win98[DOS_MEM_DUMP_SIZE] = {
 unsigned char mem_dump_dosbox[DOS_MEM_DUMP_SIZE] = {
   0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00};
 
-unsigned char *dos_mem_dump = mem_dump_dos622;
+unsigned __STORAGE_MODIFIER char *dos_mem_dump = mem_dump_dos622;
 
 static int GetMemoryValue(unsigned int offset, void *value, int size)
 {

@@ -61,9 +61,9 @@
 //  0 = text, 1 = art screen, 2 = character cast
 __STORAGE_MODIFIER int finalestage;
 __STORAGE_MODIFIER int finalecount;
-const char*   finaletext;
-const char*   finaleflat;
-const char*   finalepatch;
+const __STORAGE_MODIFIER char *finaletext;
+const __STORAGE_MODIFIER char *finaleflat;
+const __STORAGE_MODIFIER char *finalepatch;
 
 // defines for the end mission display text                     // phares
 
@@ -458,12 +458,12 @@ static const castinfo_t *castorder = castorder_d2;
 
 static __STORAGE_MODIFIER int castnum;
 static __STORAGE_MODIFIER int casttics;
-static state_t* caststate;
+static __STORAGE_MODIFIER state_t *caststate;
 static __STORAGE_MODIFIER dboolean castdeath;
 static __STORAGE_MODIFIER int castframes;
 static __STORAGE_MODIFIER int castonmelee;
 static __STORAGE_MODIFIER dboolean castattacking;
-static const char *castbackground;
+static const __STORAGE_MODIFIER char *castbackground;
 
 //
 // F_StartCast
@@ -723,8 +723,8 @@ void F_CastDrawer (void)
 static const char* pfub1 = "PFUB1";
 static const char* pfub2 = "PFUB2";
 
-static const char* scrollpic1;
-static const char* scrollpic2;
+static const __STORAGE_MODIFIER char *scrollpic1;
+static const __STORAGE_MODIFIER char *scrollpic2;
 
 static void F_StartScrollMusic(const char* music, dboolean loop_music)
 {

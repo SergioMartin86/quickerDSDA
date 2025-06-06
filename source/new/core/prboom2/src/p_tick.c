@@ -139,7 +139,7 @@ void P_AddThinker(thinker_t* thinker)
 // Make currentthinker external, so that P_RemoveThinkerDelayed
 // can adjust currentthinker when thinkers self-remove.
 
-static thinker_t *currentthinker;
+static __STORAGE_MODIFIER thinker_t *currentthinker;
 
 //
 // P_RemoveThinkerDelayed()

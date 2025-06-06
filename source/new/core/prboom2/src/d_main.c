@@ -625,7 +625,7 @@ static void D_DoomLoop(void)
 
 static __STORAGE_MODIFIER int demosequence;         // killough 5/2/98: made static
 static __STORAGE_MODIFIER int pagetic;
-static const char *pagename; // CPhipps - const
+static __STORAGE_MODIFIER const char *pagename; // CPhipps - const
 __STORAGE_MODIFIER dboolean bfgedition = 0;
 
 //
@@ -1236,7 +1236,7 @@ static void DoLooseFiles(void)
   }
 }
 
-const char *port_wad_file;
+__STORAGE_MODIFIER const char *port_wad_file;
 
 // CPhipps - misc screen stuff
 __STORAGE_MODIFIER int desired_screenwidth, desired_screenheight;
@@ -1244,7 +1244,7 @@ __STORAGE_MODIFIER int desired_screenwidth, desired_screenheight;
 // Calculate the path to the directory for autoloaded WADs/DEHs.
 // Creates the directory as necessary.
 
-static char *autoload_path = NULL;
+static __STORAGE_MODIFIER char *autoload_path = NULL;
 
 static char *GetAutoloadDir(const char *iwadname, dboolean createdir)
 {
@@ -1564,7 +1564,7 @@ static void HandlePlayback(void)
   dsda_LoadExDemo(file);
 }
 
-const char* doomverstr = "Unknown";
+__STORAGE_MODIFIER const char *doomverstr = "Unknown";
 
 static void EvaluateDoomVerStr(void)
 {

@@ -22,7 +22,7 @@
 
 #include "msecnode.h"
 
-extern sector_t *sectors;
+extern __STORAGE_MODIFIER sector_t *sectors;
 extern __STORAGE_MODIFIER int numsectors;
 
 msecnode_t* P_GetSecnode(void);

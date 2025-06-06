@@ -467,7 +467,7 @@ int W_ListNumFromName(const char *name, int lump)
 //
 // CPhipps - modified to use the new wadfiles array
 //
-wadfile_info_t *wadfiles=NULL;
+__STORAGE_MODIFIER wadfile_info_t *wadfiles=NULL;
 
 size_t numwadfiles = 0; // CPhipps - size of the wadfiles array (dynamic, no limit)
 

@@ -2678,7 +2678,7 @@ void AdjustPlayerAngle(mobj_t * pmo)
     R_SmoothPlaying_Reset(pmo->player);
 }
 
-mobj_t *PuffSpawned;
+__STORAGE_MODIFIER mobj_t *PuffSpawned;
 
 void A_SnoutAttack(player_t * player, pspdef_t * psp)
 {

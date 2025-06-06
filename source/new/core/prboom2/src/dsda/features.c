@@ -25,7 +25,7 @@
 
 static __STORAGE_MODIFIER uint64_t used_features;
 
-static const char* feature_names[64] = {
+static __STORAGE_MODIFIER const char *feature_names[64] = {
   [uf_menu] = "Menu",
   [uf_exhud] = "Extended HUD",
   [uf_advhud] = "Advanced HUD",

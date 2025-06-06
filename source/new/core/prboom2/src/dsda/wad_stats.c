@@ -31,7 +31,7 @@
 
 static const char* filename = "stats.txt";
 static const int current_version = 1;
-static map_stats_t* current_map_stats;
+static __STORAGE_MODIFIER map_stats_t *current_map_stats;
 
 wad_stats_t wad_stats;
 

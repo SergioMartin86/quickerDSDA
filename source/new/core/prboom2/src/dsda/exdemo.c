@@ -75,7 +75,7 @@ static const filelump_t* DemoEx_LumpForName(const char* name, const wadinfo_t* h
 
 static char* DemoEx_LumpAsString(const char* name, const wadinfo_t* header) {
   char* str;
-  const char* lump_data;
+  const char *lump_data;
   const byte* buffer;
   const filelump_t* lump_info;
 

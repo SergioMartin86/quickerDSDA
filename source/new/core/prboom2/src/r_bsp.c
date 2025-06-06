@@ -58,12 +58,12 @@
 
 __STORAGE_MODIFIER int currentsubsectornum;
 
-seg_t     *curline;
-side_t    *sidedef;
-line_t    *linedef;
-sector_t  *frontsector;
-sector_t  *backsector;
-sector_t  *poly_frontsector;
+__STORAGE_MODIFIER seg_t *curline;
+__STORAGE_MODIFIER side_t *sidedef;
+__STORAGE_MODIFIER line_t *linedef;
+__STORAGE_MODIFIER sector_t *frontsector;
+__STORAGE_MODIFIER sector_t *backsector;
+__STORAGE_MODIFIER sector_t *poly_frontsector;
 __STORAGE_MODIFIER dboolean poly_add_line;
 drawseg_t *ds_p;
 

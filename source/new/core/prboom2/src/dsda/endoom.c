@@ -29,7 +29,7 @@
 
 #include "endoom.h"
 
-static const char* cp437_to_utf8[256] = {
+static const __STORAGE_MODIFIER char *cp437_to_utf8[256] = {
   " ",
   "\xe2\x98\xba",
   "\xe2\x98\xbb",

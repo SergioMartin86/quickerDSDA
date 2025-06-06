@@ -237,7 +237,7 @@ __STORAGE_MODIFIER mline_t doom_player_arrow[] =
 #define NUMPLYRLINES (sizeof(doom_player_arrow)/sizeof(mline_t))
 
 static __STORAGE_MODIFIER int numplyrlines;
-static mline_t *player_arrow;
+static __STORAGE_MODIFIER mline_t *player_arrow;
 
 #define R ((8*PLAYERRADIUS)/7)
 __STORAGE_MODIFIER mline_t cheat_player_arrow[] =
@@ -333,7 +333,7 @@ fixed_t scale_mtof = (fixed_t)INITSCALEMTOF;
 __STORAGE_MODIFIER fixed_t scale_ftom;
 static fixed_t prev_scale_mtof = (fixed_t)INITSCALEMTOF;
 
-static player_t *plr;           // the player represented by an arrow
+static __STORAGE_MODIFIER player_t *plr;           // the player represented by an arrow
 
 // killough 2/22/98: Remove limit on automap marks,
 // and make variables external for use in savegames.

@@ -77,7 +77,7 @@ static mapInfo_t MapInfo[99];
 
 static mapInfo_t *CurrentMap = MapInfo;
 
-static const char *MapCmdNames[] = {
+static __STORAGE_MODIFIER const char *MapCmdNames[] = {
   "SKY1",
   "SKY2",
   "DOUBLESKY",

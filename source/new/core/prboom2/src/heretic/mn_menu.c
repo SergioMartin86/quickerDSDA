@@ -396,7 +396,7 @@ void MN_Ticker(void)
     MenuTime++;
 }
 
-extern menu_t* currentMenu;
+extern menu_t *currentMenu;
 extern __STORAGE_MODIFIER short itemOn;
 
 void MN_DrawMessage(const char* messageString)

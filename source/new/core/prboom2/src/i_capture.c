@@ -40,7 +40,7 @@
 #include "dsda/configuration.h"
 
 __STORAGE_MODIFIER int capturing_video = 0;
-static const char *vid_fname;
+static __STORAGE_MODIFIER const char *vid_fname;
 
 typedef struct
 { // information on a running pipe

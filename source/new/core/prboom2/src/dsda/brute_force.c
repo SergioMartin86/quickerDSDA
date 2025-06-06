@@ -82,7 +82,7 @@ static dsda_key_frame_t nomo_key_frame;
 static bf_target_t bf_target;
 static __STORAGE_MODIFIER ticcmd_t bf_result[MAX_BF_DEPTH];
 
-const char* dsda_bf_attribute_names[dsda_bf_attribute_max] = {
+__STORAGE_MODIFIER const char *dsda_bf_attribute_names[dsda_bf_attribute_max] = {
   [dsda_bf_x] = "x",
   [dsda_bf_y] = "y",
   [dsda_bf_z] = "z",
@@ -102,13 +102,13 @@ const char* dsda_bf_attribute_names[dsda_bf_attribute_max] = {
   [dsda_bf_bmapwidth] = "bmw",
 };
 
-const char* dsda_bf_misc_names[dsda_bf_misc_max] = {
+__STORAGE_MODIFIER const char *dsda_bf_misc_names[dsda_bf_misc_max] = {
   "line skip",
   "line activation",
   "have item",
 };
 
-const char* dsda_bf_operator_names[dsda_bf_operator_max] = {
+__STORAGE_MODIFIER const char *dsda_bf_operator_names[dsda_bf_operator_max] = {
   [dsda_bf_less_than] = "<",
   [dsda_bf_less_than_or_equal_to] = "<=",
   [dsda_bf_greater_than] = ">",
@@ -117,13 +117,13 @@ const char* dsda_bf_operator_names[dsda_bf_operator_max] = {
   [dsda_bf_not_equal_to] = "!="
 };
 
-const char* dsda_bf_limit_names[dsda_bf_limit_max] = {
+__STORAGE_MODIFIER const char *dsda_bf_limit_names[dsda_bf_limit_max] = {
   "acap",
   "max",
   "min",
 };
 
-const char* dsda_bf_item_names[dsda_bf_item_max] = {
+__STORAGE_MODIFIER const char *dsda_bf_item_names[dsda_bf_item_max] = {
   [dsda_bf_red_key_card] = "rkc",
   [dsda_bf_yellow_key_card] = "ykc",
   [dsda_bf_blue_key_card] = "bkc",
@@ -233,7 +233,7 @@ static void dsda_PrintBFProgress(void) {
 #define BF_FAILURE 0
 #define BF_SUCCESS 1
 
-static const char* bf_result_text[2] = { "FAILURE", "SUCCESS" };
+static __STORAGE_MODIFIER const char *bf_result_text[2] = { "FAILURE", "SUCCESS" };
 static __STORAGE_MODIFIER dboolean brute_force_ended;
 
 dboolean dsda_BruteForceEnded(void) {

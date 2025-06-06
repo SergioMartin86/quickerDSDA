@@ -45,13 +45,13 @@
 //
 
 // needed for texture pegging
-extern fixed_t *textureheight;
+extern __STORAGE_MODIFIER fixed_t *textureheight;
 
 extern __STORAGE_MODIFIER int firstflat, numflats;
 
 // for global animation
-extern int *flattranslation;
-extern int *texturetranslation;
+extern __STORAGE_MODIFIER int *flattranslation;
+extern __STORAGE_MODIFIER int *texturetranslation;
 
 // Sprite....
 extern __STORAGE_MODIFIER int firstspritelump;
@@ -61,31 +61,31 @@ extern __STORAGE_MODIFIER int numspritelumps;
 //
 // Lookup tables for map data.
 //
-extern spritedef_t      *sprites;
+extern __STORAGE_MODIFIER spritedef_t *sprites;
 
 extern __STORAGE_MODIFIER int numvertexes;
-extern vertex_t         *vertexes;
+extern __STORAGE_MODIFIER vertex_t *vertexes;
 
 extern __STORAGE_MODIFIER int numsegs;
-extern seg_t            *segs;
+extern __STORAGE_MODIFIER seg_t *segs;
 
 extern __STORAGE_MODIFIER int numsectors;
-extern sector_t         *sectors;
+extern __STORAGE_MODIFIER sector_t *sectors;
 
 extern __STORAGE_MODIFIER int numsubsectors;
-extern subsector_t      *subsectors;
+extern __STORAGE_MODIFIER subsector_t *subsectors;
 
 extern __STORAGE_MODIFIER int numnodes;
-extern node_t           *nodes;
+extern __STORAGE_MODIFIER node_t *nodes;
 
 extern __STORAGE_MODIFIER int numlines;
-extern line_t           *lines;
+extern __STORAGE_MODIFIER line_t *lines;
 
 extern __STORAGE_MODIFIER int numsides;
-extern side_t           *sides;
+extern __STORAGE_MODIFIER side_t *sides;
 
-extern int              *sslines_indexes;
-extern ssline_t         *sslines;
+extern __STORAGE_MODIFIER int *sslines_indexes;
+extern __STORAGE_MODIFIER ssline_t *sslines;
 
 extern byte             *map_subsectors;
 
@@ -96,12 +96,12 @@ extern __STORAGE_MODIFIER fixed_t viewx;
 extern __STORAGE_MODIFIER fixed_t viewy;
 extern __STORAGE_MODIFIER fixed_t viewz;
 extern __STORAGE_MODIFIER angle_t viewangle;
-extern player_t         *viewplayer;
+extern __STORAGE_MODIFIER player_t *viewplayer;
 extern __STORAGE_MODIFIER angle_t clipangle;
 extern __STORAGE_MODIFIER int viewangletox[FINEANGLES/2];
 
 // e6y: resolution limitation is removed
-extern angle_t          *xtoviewangle;  // killough 2/8/98
+extern __STORAGE_MODIFIER angle_t *xtoviewangle;  // killough 2/8/98
 
 extern __STORAGE_MODIFIER int FieldOfView;
 

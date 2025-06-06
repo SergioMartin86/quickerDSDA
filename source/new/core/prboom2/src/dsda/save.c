@@ -36,8 +36,8 @@
 
 #include "save.h"
 
-static char* dsda_base_save_dir;
-static char* dsda_wad_save_dir;
+static __STORAGE_MODIFIER char *dsda_base_save_dir;
+static __STORAGE_MODIFIER char *dsda_wad_save_dir;
 
 extern __STORAGE_MODIFIER int dsda_max_kill_requirement;
 extern __STORAGE_MODIFIER int player_damage_last_tic;
@@ -207,7 +207,7 @@ char* dsda_SaveDir(void) {
   return dsda_base_save_dir;
 }
 
-extern const char* savegamename;
+extern const char *savegamename;
 
 char* dsda_SaveGameName(int slot, dboolean via_cmd) {
   int length;
@@ -231,7 +231,7 @@ char* dsda_SaveGameName(int slot, dboolean via_cmd) {
   return name;
 }
 
-static int* demo_save_slots;
+static __STORAGE_MODIFIER int *demo_save_slots;
 static __STORAGE_MODIFIER int allocated_save_slot_count;
 static __STORAGE_MODIFIER int demo_save_slot_count;
 

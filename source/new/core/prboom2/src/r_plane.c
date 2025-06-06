@@ -84,7 +84,7 @@ visplane_t *floorplane, *ceilingplane;
   ((unsigned)((picnum)*3+(lightlevel)+(height)*7) & (MAXVISPLANES-1))
 
 size_t maxopenings;
-int *openings,*lastopening; // dropoff overflow
+__STORAGE_MODIFIER int *openings,*lastopening; // dropoff overflow
 
 // Clip values are the solid pixel bounding the range.
 //  floorclip starts out SCREENHEIGHT
@@ -92,13 +92,13 @@ int *openings,*lastopening; // dropoff overflow
 
 // dropoff overflow
 // e6y: resolution limitation is removed
-int *floorclip = NULL;
-int *ceilingclip = NULL;
+__STORAGE_MODIFIER int *floorclip = NULL;
+__STORAGE_MODIFIER int *ceilingclip = NULL;
 
 // spanstart holds the start of a plane span; initialized to 0 at start
 
 // e6y: resolution limitation is removed
-static int *spanstart = NULL;                // killough 2/8/98
+static __STORAGE_MODIFIER int *spanstart = NULL;                // killough 2/8/98
 
 //
 // texture mapping
@@ -106,11 +106,11 @@ static int *spanstart = NULL;                // killough 2/8/98
 
 // killough 2/8/98: make variables static
 
-static fixed_t *cachedheight = NULL;
+static __STORAGE_MODIFIER fixed_t *cachedheight = NULL;
 
 // e6y: resolution limitation is removed
-fixed_t *yslope = NULL;
-fixed_t *distscale = NULL;
+__STORAGE_MODIFIER fixed_t *yslope = NULL;
+__STORAGE_MODIFIER fixed_t *distscale = NULL;
 
 void R_InitPlanesRes(void)
 {

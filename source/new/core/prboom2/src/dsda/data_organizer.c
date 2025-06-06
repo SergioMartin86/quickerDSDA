@@ -35,9 +35,9 @@
 
 #define DATA_DIR_LIMIT 9
 static const char* dsda_data_root = "dsda_doom_data";
-static char* dsda_data_dir_strings[DATA_DIR_LIMIT];
-static char* dsda_base_data_dir;
-static char* dsda_wad_data_dir;
+static __STORAGE_MODIFIER char *dsda_data_dir_strings[DATA_DIR_LIMIT];
+static __STORAGE_MODIFIER char *dsda_base_data_dir;
+static __STORAGE_MODIFIER char *dsda_wad_data_dir;
 
 char* dsda_DetectDirectory(const char* env_key, int arg_id) {
   dsda_arg_t* arg;

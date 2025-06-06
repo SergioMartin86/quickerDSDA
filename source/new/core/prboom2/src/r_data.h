@@ -67,7 +67,7 @@ typedef struct
 } texture_t;
 
 extern __STORAGE_MODIFIER int numtextures;
-extern texture_t **textures;
+extern __STORAGE_MODIFIER texture_t **textures;
 
 
 const byte *R_GetTextureColumn(const rpatch_t *texpatch, int col);

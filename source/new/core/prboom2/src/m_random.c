@@ -88,7 +88,7 @@ static const unsigned char hexen_rndtable[256] = {
     23, 25, 48, 218, 120, 147, 208, 36, 226, 223, 193, 238, 157, 204, 146, 31
 };
 
-static const unsigned char *rndtable = doom_rndtable;
+static const unsigned __STORAGE_MODIFIER char *rndtable = doom_rndtable;
 
 rng_t rng;     // the random number state
 

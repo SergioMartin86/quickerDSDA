@@ -99,7 +99,7 @@ static __STORAGE_MODIFIER int64_t topfrac; // R_WiggleFix
 static __STORAGE_MODIFIER fixed_t topstep;
 static __STORAGE_MODIFIER int64_t bottomfrac; // R_WiggleFix
 static __STORAGE_MODIFIER fixed_t bottomstep;
-static int      *maskedtexturecol; // dropoff overflow
+static __STORAGE_MODIFIER int *maskedtexturecol; // dropoff overflow
 
 static __STORAGE_MODIFIER int max_rwscale = 64 * FRACUNIT;
 static __STORAGE_MODIFIER int HEIGHTBITS = 12;
@@ -739,7 +739,7 @@ void R_StoreWallRange(const int start, const int stop)
   rw_stopx = stop+1;
 
   {     // killough 1/6/98, 2/1/98: remove limit on openings
-    extern int *openings; // dropoff overflow
+    extern __STORAGE_MODIFIER int *openings; // dropoff overflow
     extern size_t maxopenings;
     size_t pos = lastopening - openings;
     size_t need = (rw_stopx - start)*sizeof(*lastopening) + pos;

@@ -119,13 +119,13 @@ extern __STORAGE_MODIFIER dboolean floatok;
 extern __STORAGE_MODIFIER dboolean felldown;   // killough 11/98: indicates object pushed off ledge
 extern __STORAGE_MODIFIER fixed_t tmfloorz;
 extern __STORAGE_MODIFIER fixed_t tmceilingz;
-extern line_t *ceilingline;
-extern line_t *floorline;      // killough 8/23/98
+extern __STORAGE_MODIFIER line_t *ceilingline;
+extern __STORAGE_MODIFIER line_t *floorline;      // killough 8/23/98
 extern mobj_t *linetarget;     // who got hit (or NULL)
-extern mobj_t *crosshair_target;
+extern __STORAGE_MODIFIER mobj_t *crosshair_target;
 extern msecnode_t *sector_list;                             // phares 3/16/98
 extern __STORAGE_MODIFIER fixed_t tmbbox[4];         // phares 3/20/98
-extern line_t *blockline;   // killough 8/11/98
+extern __STORAGE_MODIFIER line_t *blockline;   // killough 8/11/98
 
 // heretic
 
@@ -138,7 +138,7 @@ void P_AppendSpecHit(line_t * ld);
 // hexen
 
 extern __STORAGE_MODIFIER int tmfloorpic;
-extern mobj_t *BlockingMobj;
+extern __STORAGE_MODIFIER mobj_t *BlockingMobj;
 
 void P_BounceWall(mobj_t * mo);
 dboolean P_UsePuzzleItem(player_t * player, int itemType);

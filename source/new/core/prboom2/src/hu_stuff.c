@@ -65,7 +65,7 @@
 #include "dsda/settings.h"
 #include "dsda/stretch.h"
 
-static player_t*  plr;
+static __STORAGE_MODIFIER player_t *plr;
 
 typedef struct custom_message_s
 {
@@ -125,7 +125,7 @@ typedef struct crosshair_s
 
 static crosshair_t crosshair;
 
-static const char *crosshair_nam[HU_CROSSHAIRS] =
+static __STORAGE_MODIFIER const char *crosshair_nam[HU_CROSSHAIRS] =
   { NULL, "CROSS1", "CROSS2", "CROSS3", "CROSS4", "CROSS5", "CROSS6", "CROSS7" };
 
 static __STORAGE_MODIFIER int hudadd_crosshair;
@@ -377,7 +377,7 @@ void HU_Drawer(void)
   V_EndUIDraw();
 }
 
-char* secret_message;
+__STORAGE_MODIFIER char *secret_message;
 
 static void HU_UpdateSecretMessage(const char* message)
 {

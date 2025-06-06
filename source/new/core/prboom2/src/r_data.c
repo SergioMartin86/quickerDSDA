@@ -96,10 +96,10 @@ __STORAGE_MODIFIER int firstcolormaplump, lastcolormaplump;      // killough 4/1
 __STORAGE_MODIFIER int firstflat, lastflat, numflats;
 __STORAGE_MODIFIER int firstspritelump, lastspritelump, numspritelumps;
 __STORAGE_MODIFIER int numtextures;
-texture_t **textures; // proff - 04/05/2000 removed static for OpenGL
-fixed_t   *textureheight; //needed for texture pegging (and TFE fix - killough)
-int       *flattranslation;             // for global animation
-int       *texturetranslation;
+__STORAGE_MODIFIER texture_t **textures; // proff - 04/05/2000 removed static for OpenGL
+__STORAGE_MODIFIER fixed_t   *textureheight; //needed for texture pegging (and TFE fix - killough)
+__STORAGE_MODIFIER int *flattranslation;             // for global animation
+__STORAGE_MODIFIER int *texturetranslation;
 
 //
 // R_GetTextureColumn

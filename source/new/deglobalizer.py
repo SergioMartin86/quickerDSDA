@@ -27,7 +27,7 @@ for line in globalsContent.splitlines():
 # print("Global Variables:", globalVariables)
 
 # Set of possible C variable data types
-dataTypes = {'int', 'float', 'double', 'char', 'short', 'long', 'unsigned', 'signed',
+dataTypes = {'int', 'float', 'double', 'char', 'const char','short', 'long', 'unsigned', 'signed',
               'dboolean', 'fixed_t', 'gamestate_t', 'weaponinfo_t', 'player_t', 'mobj_t',
                 'sector_t', 'line_t', 'thinker_t', 'mapthing_t', 'angle_t', 'fixedangle_t',
                   'acsInfo_t', 'rcolumn_t', 'rpatch_t', 'rpost_t', 'count_t',
@@ -62,8 +62,8 @@ for line in newSourceContent.splitlines():
     #if the line is empty, skip it
     if not line.strip(): continue
     if ('\\' in line): continue
-    if ('const' in line): continue
-    if ('void' in line): continue
+    #if ('const' in line): continue
+    #if ('void' in line): continue
     if ('(' in line): continue
     if ('__STORAGE_MODIFIER' in line): continue
     if not any(dataType in line for dataType in dataTypes): continue
@@ -82,12 +82,12 @@ for line in newSourceContent.splitlines():
             if continueRunning:
 
                 # For non-pointers
-                pattern = f'\\b{dataType}\\s+{var}\\b'
-                newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} {var}', line)
+                #pattern = f'\\b{dataType}\\s+{var}\\b'
+                #newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} {var}', line)
 
-                # For pointers
-                #pattern = f'\\b{dataType}\\s*\\*\\s*{var}\\b'
-                #newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} *{var}', line)
+                #For pointers
+                pattern = f'\\b{dataType}\\s*\\*\\s*{var}\\b'
+                newLine = re.sub(pattern, f'__STORAGE_MODIFIER {dataType} *{var}', line)
 
                 # If the line was modified, update the source content
                 if newLine != line:

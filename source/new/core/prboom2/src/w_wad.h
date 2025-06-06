@@ -90,7 +90,7 @@ typedef struct {
   size_t size;
 } wadfile_info_t;
 
-extern wadfile_info_t *wadfiles;
+extern __STORAGE_MODIFIER wadfile_info_t *wadfiles;
 
 extern size_t numwadfiles; // CPhipps - size of the wadfiles array
 

@@ -35,7 +35,7 @@ static char* dsda_TextFileName(void) {
   int name_length;
   char* name;
   char* playdemo;
-  const char* playback_name;
+  const char *playback_name;
 
   playback_name = dsda_PlaybackName();
 

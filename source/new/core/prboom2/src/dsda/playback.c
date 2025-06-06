@@ -37,13 +37,13 @@ static __STORAGE_MODIFIER int playback_length;
 static __STORAGE_MODIFIER int playback_behaviour;
 static __STORAGE_MODIFIER int playback_tics;
 
-static dsda_arg_t* playdemo_arg;
-static dsda_arg_t* playlump_arg;
-static dsda_arg_t* fastdemo_arg;
-static dsda_arg_t* timedemo_arg;
-static dsda_arg_t* recordfromto_arg;
-static char* playback_name;
-static char* playback_filename;
+static __STORAGE_MODIFIER dsda_arg_t *playdemo_arg;
+static __STORAGE_MODIFIER dsda_arg_t *playlump_arg;
+static __STORAGE_MODIFIER dsda_arg_t *fastdemo_arg;
+static __STORAGE_MODIFIER dsda_arg_t *timedemo_arg;
+static __STORAGE_MODIFIER dsda_arg_t *recordfromto_arg;
+static __STORAGE_MODIFIER char *playback_name;
+static __STORAGE_MODIFIER char *playback_filename;
 
 __STORAGE_MODIFIER dboolean demoplayback;
 __STORAGE_MODIFIER dboolean userdemo;

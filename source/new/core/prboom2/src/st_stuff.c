@@ -257,7 +257,7 @@ __STORAGE_MODIFIER int ST_SCALED_OFFSETX;
 // killough 2/8/98: weapon info position macros UNUSED, removed here
 
 // main player in game
-static player_t *plyr;
+static __STORAGE_MODIFIER player_t *plyr;
 
 // ST_Start() has just been called
 static __STORAGE_MODIFIER dboolean st_firsttime;
@@ -360,7 +360,7 @@ static __STORAGE_MODIFIER int keyboxes[3];
 // a random number per tick
 static __STORAGE_MODIFIER int st_randomnumber;
 
-extern char     *mapnames[];
+extern __STORAGE_MODIFIER char *mapnames[];
 
 static __STORAGE_MODIFIER int cr_health_bad;
 static __STORAGE_MODIFIER int cr_health_warning;

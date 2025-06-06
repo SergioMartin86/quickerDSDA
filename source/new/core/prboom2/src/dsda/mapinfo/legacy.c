@@ -454,7 +454,7 @@ int dsda_LegacyHUTitle(dsda_string_t* str) {
   extern char** mapnames2[];
   extern char** mapnamesp[];
   extern char** mapnamest[];
-  extern const char* LevelNames[];
+  extern __STORAGE_MODIFIER const char *LevelNames[];
 
   dsda_InitString(str, NULL);
 
@@ -705,9 +705,9 @@ int dsda_LegacyBorderTexture(const char** border_texture) {
 }
 
 int dsda_LegacyPrepareEntering(void) {
-  extern const char *el_levelname;
-  extern const char *el_levelpic;
-  extern const char *el_author;
+  extern __STORAGE_MODIFIER const char *el_levelname;
+  extern __STORAGE_MODIFIER const char *el_levelpic;
+  extern __STORAGE_MODIFIER const char *el_author;
 
   el_levelname = NULL;
   el_levelpic = NULL;
@@ -717,9 +717,9 @@ int dsda_LegacyPrepareEntering(void) {
 }
 
 int dsda_LegacyPrepareFinished(void) {
-  extern const char *lf_levelname;
-  extern const char *lf_levelpic;
-  extern const char *lf_author;
+  extern __STORAGE_MODIFIER const char *lf_levelname;
+  extern __STORAGE_MODIFIER const char *lf_levelpic;
+  extern __STORAGE_MODIFIER const char *lf_author;
 
   lf_levelname = NULL;
   lf_levelpic = NULL;

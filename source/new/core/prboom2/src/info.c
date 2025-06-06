@@ -53,7 +53,7 @@ void A_Stop();
 // Sprite names
 // ********************************************************************
 
-const char *doom_sprnames[] = {
+__STORAGE_MODIFIER const char *doom_sprnames[] = {
   "TROO","SHTG","PUNG","PISG","PISF","SHTF","SHT2","CHGG","CHGF","MISG",
   "MISF","SAWG","PLSG","PLSF","BFGG","BFGF","BLUD","PUFF","BAL1","BAL2",
   "PLSS","PLSE","MISL","BFS1","BFE1","BFE2","TFOG","IFOG","PLAY","POSS",

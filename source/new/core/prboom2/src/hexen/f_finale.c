@@ -38,9 +38,9 @@ static char *GetFinaleText(int sequence);
 static __STORAGE_MODIFIER int FinaleStage;
 static __STORAGE_MODIFIER int FinaleCount;
 static __STORAGE_MODIFIER int FinaleEndCount;
-static const char* FinaleLumpName;
+static const __STORAGE_MODIFIER char *FinaleLumpName;
 static __STORAGE_MODIFIER int FontABaseLump;
-static char *FinaleText;
+static __STORAGE_MODIFIER char *FinaleText;
 
 // static fixed_t *Palette;
 // static fixed_t *PaletteDelta;

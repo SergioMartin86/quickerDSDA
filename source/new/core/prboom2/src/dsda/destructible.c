@@ -121,8 +121,8 @@ void dsda_DamageLinedef(line_t* line, mobj_t* source, int damage) {
 static dboolean dsda_RadiusAttackLine(line_t *line) {
   fixed_t dist;
   mobj_t target;
-  sector_t* frontsector;
-  sector_t* backsector;
+  sector_t *frontsector;
+  sector_t *backsector;
   int bombside;
   dboolean sighted;
   const fixed_t fudge = (FRACUNIT >> 4);

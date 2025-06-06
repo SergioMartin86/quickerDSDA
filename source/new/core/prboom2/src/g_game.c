@@ -2380,7 +2380,7 @@ static void G_LoadGameErr(const char *msg)
   M_ForcedLoadGame(msg);             // Print message asking for 'Y' to force
 }
 
-const char * comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
+const __STORAGE_MODIFIER char *comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
 { "Doom v1.2", "Doom v1.666", "Doom/Doom2 v1.9", "Ultimate Doom/Doom95", "Final Doom",
   "early DosDoom", "TASDoom", "\"boom compatibility\"", "boom v2.01", "boom v2.02", "lxdoom v1.3.2+",
   "MBF", "PrBoom 2.03beta", "PrBoom v2.1.0-2.1.1", "PrBoom v2.1.2-v2.2.6",
@@ -3541,7 +3541,7 @@ void G_BeginRecording (void)
 // G_PlayDemo
 //
 
-static const char *defdemoname;
+static const __STORAGE_MODIFIER char *defdemoname;
 
 void G_DeferedPlayDemo (const char* name)
 {

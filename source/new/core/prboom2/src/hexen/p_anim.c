@@ -57,7 +57,7 @@ extern __STORAGE_MODIFIER fixed_t Sky1ColumnOffset;
 extern __STORAGE_MODIFIER fixed_t Sky2ColumnOffset;
 extern __STORAGE_MODIFIER dboolean DoubleSky;
 extern __STORAGE_MODIFIER short numlinespecials;
-extern line_t *linespeciallist[];
+extern __STORAGE_MODIFIER line_t *linespeciallist[];
 
 __STORAGE_MODIFIER fixed_t Sky1ScrollDelta;
 __STORAGE_MODIFIER fixed_t Sky2ScrollDelta;
@@ -68,7 +68,7 @@ static __STORAGE_MODIFIER int AnimDefCount;
 static __STORAGE_MODIFIER dboolean LevelHasLightning;
 __STORAGE_MODIFIER int NextLightningFlash;
 __STORAGE_MODIFIER int LightningFlash;
-static int *LightningLightLevels;
+static __STORAGE_MODIFIER int *LightningLightLevels;
 
 void P_AnimateCompatibleSurfaces(void)
 {

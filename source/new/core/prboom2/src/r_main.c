@@ -107,7 +107,7 @@ __STORAGE_MODIFIER fixed_t viewx, viewy, viewz;
 __STORAGE_MODIFIER angle_t viewangle;
 __STORAGE_MODIFIER fixed_t viewcos, viewsin;
 __STORAGE_MODIFIER fixed_t viewtancos, viewtansin;
-player_t *viewplayer;
+__STORAGE_MODIFIER player_t *viewplayer;
 // e6y: Added for more precise flats drawing
 __STORAGE_MODIFIER fixed_t viewfocratio;
 
@@ -138,7 +138,7 @@ __STORAGE_MODIFIER int viewangletox[FINEANGLES/2];
 // from clipangle to -clipangle.
 
 // e6y: resolution limitation is removed
-angle_t *xtoviewangle;   // killough 2/8/98
+__STORAGE_MODIFIER angle_t *xtoviewangle;   // killough 2/8/98
 
 // killough 3/20/98: Support dynamic colormaps, e.g. deep water
 // killough 4/4/98: support dynamic number of them as well

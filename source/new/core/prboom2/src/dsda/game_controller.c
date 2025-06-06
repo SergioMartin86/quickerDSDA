@@ -34,7 +34,7 @@ typedef struct {
 
 static __STORAGE_MODIFIER int swap_analogs;
 
-static const char* button_names[] = {
+static __STORAGE_MODIFIER const char *button_names[] = {
   [DSDA_CONTROLLER_BUTTON_A] = "pad a",
   [DSDA_CONTROLLER_BUTTON_B] = "pad b",
   [DSDA_CONTROLLER_BUTTON_X] = "pad x",

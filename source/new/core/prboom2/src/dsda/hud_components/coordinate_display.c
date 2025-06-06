@@ -42,9 +42,9 @@ typedef struct {
 
 static local_component_t* local;
 
-static const char* dsda_coordinate_color;
-static const char* dsda_velocity_color;
-static const char* dsda_distance_color;
+static __STORAGE_MODIFIER const char *dsda_coordinate_color;
+static __STORAGE_MODIFIER const char *dsda_velocity_color;
+static __STORAGE_MODIFIER const char *dsda_distance_color;
 
 static double dsda_CalculateVelocity(void) {
   double vx, vy;

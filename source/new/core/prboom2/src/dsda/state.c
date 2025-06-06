@@ -20,7 +20,7 @@
 
 #include "state.h"
 
-state_t* states;
+__STORAGE_MODIFIER state_t *states;
 __STORAGE_MODIFIER int num_states;
 byte* defined_codeptr_args;
 statenum_t* seenstate_tab;

@@ -25,7 +25,7 @@
 
 #include "sfx.h"
 
-sfxinfo_t* S_sfx;
+__STORAGE_MODIFIER sfxinfo_t *S_sfx;
 __STORAGE_MODIFIER int num_sfx;
 static __STORAGE_MODIFIER int deh_soundnames_size;
 static char** deh_soundnames;

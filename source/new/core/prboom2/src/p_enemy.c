@@ -59,7 +59,7 @@
 #include "dsda/mapinfo.h"
 #include "dsda/skill_info.h"
 
-static mobj_t *current_actor;
+static __STORAGE_MODIFIER mobj_t *current_actor;
 
 typedef enum {
   DI_EAST,
@@ -1797,8 +1797,8 @@ void A_SkelFist(mobj_t *actor)
 // Detect a corpse that could be raised.
 //
 
-mobj_t* corpsehit;
-mobj_t* vileobj;
+__STORAGE_MODIFIER mobj_t *corpsehit;
+__STORAGE_MODIFIER mobj_t *vileobj;
 __STORAGE_MODIFIER fixed_t viletryx;
 __STORAGE_MODIFIER fixed_t viletryy;
 __STORAGE_MODIFIER int viletryradius;
@@ -5170,7 +5170,7 @@ extern __STORAGE_MODIFIER fixed_t FloatBobOffsets[64];
 
 // Corpse queue for monsters - this should be saved out
 #define CORPSEQUEUESIZE	64
-mobj_t *corpseQueue[CORPSEQUEUESIZE];
+__STORAGE_MODIFIER mobj_t *corpseQueue[CORPSEQUEUESIZE];
 __STORAGE_MODIFIER int corpseQueueSlot;
 
 // throw another corpse on the queue

@@ -25,7 +25,7 @@ typedef struct {
 
 static local_component_t* local;
 
-static char* free_text;
+static __STORAGE_MODIFIER char *free_text;
 
 void dsda_UpdateFreeText(void) {
   int i, j;

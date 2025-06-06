@@ -104,9 +104,9 @@ typedef struct
 //---------------------------------------------------------------------------
 // Re-engineered patch support
 //---------------------------------------------------------------------------
-static rpatch_t *patches = 0;
+static __STORAGE_MODIFIER rpatch_t *patches = 0;
 
-static rpatch_t *texture_composites = 0;
+static __STORAGE_MODIFIER rpatch_t *texture_composites = 0;
 
 // indices of two duplicate PLAYPAL entries, second is -1 if none found
 static __STORAGE_MODIFIER int playpal_transparent, playpal_duplicate;

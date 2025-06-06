@@ -569,7 +569,7 @@ cfg_input_def_t input_defs[] = {
 static int input_def_count = sizeof(input_defs) / sizeof(input_defs[0]);
 static int def_count = sizeof(cfg_defs) / sizeof(cfg_defs[0]);
 
-static char* defaultfile; // CPhipps - static, const
+static __STORAGE_MODIFIER char *defaultfile; // CPhipps - static, const
 
 static __STORAGE_MODIFIER dboolean forget_config_file;
 

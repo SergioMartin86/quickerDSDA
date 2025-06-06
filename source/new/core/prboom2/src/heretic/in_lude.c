@@ -105,9 +105,9 @@ static signed __STORAGE_MODIFIER int totalFrags[MAX_MAXPLAYERS];
 static __STORAGE_MODIFIER fixed_t dSlideX[MAX_MAXPLAYERS];
 static __STORAGE_MODIFIER fixed_t dSlideY[MAX_MAXPLAYERS];
 
-static const char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
+static __STORAGE_MODIFIER const char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
 
-extern const char *LevelNames[];
+extern __STORAGE_MODIFIER const char *LevelNames[];
 
 typedef struct
 {

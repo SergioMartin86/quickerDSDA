@@ -130,7 +130,7 @@ static __STORAGE_MODIFIER int pitched_sounds;
 __STORAGE_MODIFIER int snd_samplerate; // samples per second
 static __STORAGE_MODIFIER int snd_samplecount;
 
-static const char *snd_midiplayer;
+static __STORAGE_MODIFIER const char *snd_midiplayer;
 
 void I_InitSoundParams(void)
 {

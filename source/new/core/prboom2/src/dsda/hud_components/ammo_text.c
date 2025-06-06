@@ -32,7 +32,7 @@ typedef struct {
   const int count;
 } ammo_component_config_t;
 
-static const char* doom_ammo_name[4] = {
+static const char *doom_ammo_name[4] = {
   "BULL",
   "SHEL",
   "RCKT",
@@ -41,7 +41,7 @@ static const char* doom_ammo_name[4] = {
 
 static const int doom_ammo_type[4] = { 0, 1, 3, 2 };
 
-static const char* heretic_ammo_name[6] = {
+static const char *heretic_ammo_name[6] = {
   "CRYS",
   "BOLT",
   "CLAW",
@@ -52,7 +52,7 @@ static const char* heretic_ammo_name[6] = {
 
 static const int heretic_ammo_type[6] = { 0, 1, 2, 3, 4, 5 };
 
-static const char* hexen_ammo_name[2] = {
+static const char *hexen_ammo_name[2] = {
   "BLUE",
   "GREN",
 };

@@ -107,8 +107,8 @@ typedef struct
 
 #define MAXANIMS 32                   // no longer a strict limit -- killough
 
-static anim_t*  lastanim;
-static anim_t*  anims;                // new structure w/o limits -- killough
+static __STORAGE_MODIFIER anim_t *lastanim;
+static __STORAGE_MODIFIER anim_t *anims;                // new structure w/o limits -- killough
 static size_t maxanims;
 
 TAnimItemParam *anim_flats = NULL;
@@ -137,7 +137,7 @@ static const animdef_t heretic_animdefs[] = {
 // heretic
 #define MAXLINEANIMS 64*256
 __STORAGE_MODIFIER short numlinespecials;
-line_t *linespeciallist[MAXLINEANIMS];
+__STORAGE_MODIFIER line_t *linespeciallist[MAXLINEANIMS];
 
 //e6y
 void MarkAnimatedTextures(void)
@@ -4315,7 +4315,7 @@ static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affec
 //
 // killough 10/98: allow to affect things besides players
 
-pusher_t* tmpusher; // pusher structure for blockmap searches
+__STORAGE_MODIFIER pusher_t *tmpusher; // pusher structure for blockmap searches
 
 static dboolean PIT_PushThing(mobj_t* thing)
 {
@@ -4645,8 +4645,8 @@ typedef enum
     afxcmd_end                  // ()
 } afxcmd_t;
 
-int *LevelAmbientSfx[MAX_AMBIENT_SFX];
-int *AmbSfxPtr;
+__STORAGE_MODIFIER int *LevelAmbientSfx[MAX_AMBIENT_SFX];
+__STORAGE_MODIFIER int *AmbSfxPtr;
 __STORAGE_MODIFIER int AmbSfxPtrIndex;
 __STORAGE_MODIFIER int AmbSfxCount;
 __STORAGE_MODIFIER int AmbSfxTics;
@@ -4763,7 +4763,7 @@ int AmbSndSeq10[] = {           // FastFootsteps
     afxcmd_end
 };
 
-int *AmbientSfx[] = {
+__STORAGE_MODIFIER int *AmbientSfx[] = {
     AmbSndSeq1,                 // Scream
     AmbSndSeq2,                 // Squish
     AmbSndSeq3,                 // Drops
@@ -4776,7 +4776,7 @@ int *AmbientSfx[] = {
     AmbSndSeq10                 // FastFootsteps
 };
 
-int *TerrainTypes;
+__STORAGE_MODIFIER int *TerrainTypes;
 struct
 {
     const char *name;
@@ -5345,7 +5345,7 @@ __STORAGE_MODIFIER char LockedBuffer[80];
 
 static dboolean CheckedLockedDoor(mobj_t * mo, byte lock)
 {
-    extern char *TextKeyMessages[11];
+    extern __STORAGE_MODIFIER char *TextKeyMessages[11];
 
     if (!mo->player)
     {

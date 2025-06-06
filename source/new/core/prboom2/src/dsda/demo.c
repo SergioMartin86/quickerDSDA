@@ -46,7 +46,7 @@
 
 #define INITIAL_DEMO_BUFFER_SIZE 0x20000
 
-static char* dsda_demo_name_base;
+static __STORAGE_MODIFIER char *dsda_demo_name_base;
 static byte* dsda_demo_write_buffer;
 static byte* dsda_demo_write_buffer_p;
 static __STORAGE_MODIFIER int dsda_demo_write_buffer_length;

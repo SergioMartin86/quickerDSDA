@@ -34,8 +34,8 @@ static __STORAGE_MODIFIER int finalecount;
 #define TEXTSPEED       3
 #define TEXTWAIT        250
 
-static const char *finaletext;
-static const char *finaleflat;
+static __STORAGE_MODIFIER const char *finaletext;
+static __STORAGE_MODIFIER const char *finaleflat;
 
 static __STORAGE_MODIFIER int FontABaseLump;
 

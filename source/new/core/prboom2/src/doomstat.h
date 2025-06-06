@@ -56,7 +56,7 @@ extern  __STORAGE_MODIFIER dboolean fastparm; // checkparm of -fast
 
 extern GameMode_t gamemode;
 extern GameMission_t  gamemission;
-extern const char *doomverstr;
+extern const __STORAGE_MODIFIER char *doomverstr;
 
 extern char *VANILLA_MAP_LUMP_NAME(int e, int m);
 
@@ -275,10 +275,10 @@ extern  __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
 
 extern __STORAGE_MODIFIER pclass_t PlayerClass[MAX_MAXPLAYERS];
 
-extern  mapthing_t *deathmatchstarts;     // killough
+extern  __STORAGE_MODIFIER mapthing_t *deathmatchstarts;     // killough
 extern  size_t     num_deathmatchstarts; // killough
 
-extern  mapthing_t *deathmatch_p;
+extern  __STORAGE_MODIFIER mapthing_t *deathmatch_p;
 
 // Player spawn spots.
 #define MAX_PLAYER_STARTS 8

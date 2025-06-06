@@ -182,7 +182,7 @@ static void ThingCount(int type, int tid);
 __STORAGE_MODIFIER int ACScriptCount;
 const byte *ActionCodeBase;
 static __STORAGE_MODIFIER int ActionCodeSize;
-acsInfo_t *ACSInfo;
+__STORAGE_MODIFIER acsInfo_t *ACSInfo;
 __STORAGE_MODIFIER int MapVars[MAX_ACS_MAP_VARS];
 __STORAGE_MODIFIER int WorldVars[MAX_ACS_WORLD_VARS];
 acsstore_t ACSStore[MAX_ACS_STORE + 1]; // +1 for termination marker
@@ -569,7 +569,7 @@ dboolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
     int lock;
     byte newArgs[5];
 
-    extern char *TextKeyMessages[11];
+    extern __STORAGE_MODIFIER char *TextKeyMessages[11];
     extern __STORAGE_MODIFIER char LockedBuffer[80];
 
     lock = args[4];

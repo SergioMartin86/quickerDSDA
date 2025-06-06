@@ -2998,7 +2998,7 @@ mobj_t* P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type)
 #include "p_spec.h"
 
 mobjtype_t PuffType;
-mobj_t *MissileMobj;
+__STORAGE_MODIFIER mobj_t *MissileMobj;
 
 void P_BlasterMobjThinker(mobj_t * mobj)
 {
@@ -3477,7 +3477,7 @@ void P_FloorBounceMissile(mobj_t * mo)
     }
 }
 
-extern mobj_t *PuffSpawned;
+extern __STORAGE_MODIFIER mobj_t *PuffSpawned;
 
 void Raven_P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z)
 {
@@ -3544,7 +3544,7 @@ void P_RipperBlood(mobj_t * mo, mobj_t * bleeder)
 extern __STORAGE_MODIFIER mobj_t LavaInflictor;
 
 static __STORAGE_MODIFIER int TIDList[MAX_TID_COUNT + 1];  // +1 for termination marker
-static mobj_t *TIDMobj[MAX_TID_COUNT];
+static __STORAGE_MODIFIER mobj_t *TIDMobj[MAX_TID_COUNT];
 
 mobj_t *P_SpawnMissileAngleSpeed(mobj_t * source, mobjtype_t type,
                                  angle_t angle, fixed_t momz, fixed_t speed)

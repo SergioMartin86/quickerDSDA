@@ -87,28 +87,28 @@
 //
 
 __STORAGE_MODIFIER int numvertexes;
-vertex_t *vertexes;
+__STORAGE_MODIFIER vertex_t *vertexes;
 
 __STORAGE_MODIFIER int numsegs;
-seg_t    *segs;
+__STORAGE_MODIFIER seg_t *segs;
 
 __STORAGE_MODIFIER int numsectors;
-sector_t *sectors;
+__STORAGE_MODIFIER sector_t *sectors;
 
 __STORAGE_MODIFIER int numsubsectors;
-subsector_t *subsectors;
+__STORAGE_MODIFIER subsector_t *subsectors;
 
 __STORAGE_MODIFIER int numnodes;
-node_t   *nodes;
+__STORAGE_MODIFIER node_t *nodes;
 
 __STORAGE_MODIFIER int numlines;
-line_t   *lines;
+__STORAGE_MODIFIER line_t *lines;
 
 __STORAGE_MODIFIER int numsides;
-side_t   *sides;
+__STORAGE_MODIFIER side_t *sides;
 
-int      *sslines_indexes;
-ssline_t *sslines;
+__STORAGE_MODIFIER int *sslines_indexes;
+__STORAGE_MODIFIER ssline_t *sslines;
 
 byte     *map_subsectors;
 
@@ -157,10 +157,10 @@ typedef struct
 __STORAGE_MODIFIER int bmapwidth, bmapheight;  // size in mapblocks
 
 // killough 3/1/98: remove blockmap limit internally:
-int       *blockmap;              // was short -- killough
+__STORAGE_MODIFIER int *blockmap;              // was short -- killough
 
 // offsets in blockmap are from here
-int       *blockmaplump;          // was short -- killough
+__STORAGE_MODIFIER int *blockmaplump;          // was short -- killough
 
 __STORAGE_MODIFIER fixed_t bmaporgx, bmaporgy;     // origin of block map
 
@@ -196,10 +196,10 @@ const byte *rejectmatrix; // cph - const*
 // Maintain single and multi player starting spots.
 
 // 1/11/98 killough: Remove limit on deathmatch starts
-mapthing_t *deathmatchstarts;      // killough
+__STORAGE_MODIFIER mapthing_t *deathmatchstarts;      // killough
 size_t     num_deathmatchstarts;   // killough
 
-mapthing_t *deathmatch_p;
+__STORAGE_MODIFIER mapthing_t *deathmatch_p;
 __STORAGE_MODIFIER mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
 // for thing tracking (xdre style)

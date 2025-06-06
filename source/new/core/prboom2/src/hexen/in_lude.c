@@ -71,7 +71,7 @@ static __STORAGE_MODIFIER int FontABaseLump;
 static signed __STORAGE_MODIFIER int totalFrags[MAX_MAXPLAYERS];
 
 static __STORAGE_MODIFIER int HubCount;
-static char *HubText;
+static __STORAGE_MODIFIER char *HubText;
 
 extern __STORAGE_MODIFIER dboolean BorderNeedRefresh;
 
@@ -104,7 +104,7 @@ static void Stop(void)
     BorderNeedRefresh = true;
 }
 
-static const char *ClusMsgLumpNames[] = {
+static const __STORAGE_MODIFIER char *ClusMsgLumpNames[] = {
     "clus1msg",
     "clus2msg",
     "clus3msg",
