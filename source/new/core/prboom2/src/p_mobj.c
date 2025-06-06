@@ -1834,10 +1834,10 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
 }
 
 
-static mapthing_t itemrespawnque[ITEMQUESIZE];
-static int        itemrespawntime[ITEMQUESIZE];
-int        iquehead;
-int        iquetail;
+static __STORAGE_MODIFIER mapthing_t itemrespawnque[ITEMQUESIZE];
+static __STORAGE_MODIFIER int itemrespawntime[ITEMQUESIZE];
+__STORAGE_MODIFIER int iquehead;
+__STORAGE_MODIFIER int iquetail;
 
 
 //
@@ -2709,7 +2709,7 @@ spawnit:
 // P_SpawnPuff
 //
 
-extern fixed_t attackrange;
+extern __STORAGE_MODIFIER fixed_t attackrange;
 
 void P_SpawnPuff(fixed_t x,fixed_t y,fixed_t z)
 {
@@ -3541,9 +3541,9 @@ void P_RipperBlood(mobj_t * mo, mobj_t * bleeder)
 
 #define MAX_TID_COUNT 200
 
-extern mobj_t LavaInflictor;
+extern __STORAGE_MODIFIER mobj_t LavaInflictor;
 
-static int TIDList[MAX_TID_COUNT + 1];  // +1 for termination marker
+static __STORAGE_MODIFIER int TIDList[MAX_TID_COUNT + 1];  // +1 for termination marker
 static mobj_t *TIDMobj[MAX_TID_COUNT];
 
 mobj_t *P_SpawnMissileAngleSpeed(mobj_t * source, mobjtype_t type,

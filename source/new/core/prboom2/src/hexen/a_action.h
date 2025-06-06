@@ -19,7 +19,7 @@
 
 #include "p_mobj.h"
 
-extern int localQuakeHappening[MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER int localQuakeHappening[MAX_MAXPLAYERS];
 
 dboolean A_LocalQuake(byte * args, mobj_t * victim);
 void P_SpawnDirt(mobj_t * actor, fixed_t radius);

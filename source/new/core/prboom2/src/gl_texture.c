@@ -200,7 +200,7 @@ static void gld_GetTextureTexID(GLTexture *gltexture, int cm)
 // e6y
 // The common function for adding textures and patches
 // Used by gld_AddNewGLTexture and gld_AddNewGLPatchTexture
-static GLTexture *gld_AddNewGLTexItem(int num, int count, GLTexture ***items)
+static GLTexture *gld_AddNewGLTexItem(__STORAGE_MODIFIER int num, int count, GLTexture ***items)
 {
   if (num<0)
     return NULL;
@@ -1522,7 +1522,7 @@ void gld_Precache(void)
   for (i = numsides; --i >= 0;)
   {
     int j, k;
-    int bottomtexture, toptexture, midtexture;
+    __STORAGE_MODIFIER int bottomtexture, toptexture, midtexture;
     anim_t *textureanims[3];
 
     bottomtexture = sides[i].bottomtexture;

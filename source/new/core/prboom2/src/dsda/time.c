@@ -102,8 +102,8 @@ static void dsda_Throttle(int timer, unsigned long long target_time) {
 }
 
 void dsda_LimitFPS(void) {
-  extern int movement_smooth;
-  extern int window_focused;
+  extern __STORAGE_MODIFIER int movement_smooth;
+  extern __STORAGE_MODIFIER int window_focused;
 
   int allow_limit;
   int fps_limit;
@@ -141,7 +141,7 @@ static unsigned long long dsda_ScaledTime(void) {
   return dsda_RealTime() * dsda_GameSpeed() / 100;
 }
 
-extern int ms_to_next_tick;
+extern __STORAGE_MODIFIER int ms_to_next_tick;
 
 // During a fast demo, each call yields a new tick
 static int dsda_GetTickFastDemo(void)

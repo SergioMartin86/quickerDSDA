@@ -22,7 +22,7 @@
 
 static dsda_render_stats_t frame_stats;
 static dsda_render_stats_t interval_stats;
-static int frame_count;
+static __STORAGE_MODIFIER int frame_count;
 
 dsda_render_stats_t dsda_render_stats;
 dsda_render_stats_t dsda_render_stats_max;

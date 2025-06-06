@@ -28,8 +28,8 @@
 
 #include "heretic/f_finale.h"
 
-static int finalestage;                // 0 = text, 1 = art screen
-static int finalecount;
+static __STORAGE_MODIFIER int finalestage;                // 0 = text, 1 = art screen
+static __STORAGE_MODIFIER int finalecount;
 
 #define TEXTSPEED       3
 #define TEXTWAIT        250
@@ -37,7 +37,7 @@ static int finalecount;
 static const char *finaletext;
 static const char *finaleflat;
 
-static int FontABaseLump;
+static __STORAGE_MODIFIER int FontABaseLump;
 
 /*
 =======================

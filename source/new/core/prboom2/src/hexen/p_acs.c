@@ -179,21 +179,21 @@ static int CmdEndPrintBold(void);
 
 static void ThingCount(int type, int tid);
 
-int ACScriptCount;
+__STORAGE_MODIFIER int ACScriptCount;
 const byte *ActionCodeBase;
-static int ActionCodeSize;
+static __STORAGE_MODIFIER int ActionCodeSize;
 acsInfo_t *ACSInfo;
-int MapVars[MAX_ACS_MAP_VARS];
-int WorldVars[MAX_ACS_WORLD_VARS];
+__STORAGE_MODIFIER int MapVars[MAX_ACS_MAP_VARS];
+__STORAGE_MODIFIER int WorldVars[MAX_ACS_WORLD_VARS];
 acsstore_t ACSStore[MAX_ACS_STORE + 1]; // +1 for termination marker
 
-static char EvalContext[64];
+static __STORAGE_MODIFIER char EvalContext[64];
 static acs_t *ACScript;
-static unsigned int PCodeOffset;
-static int SpecArgs[8];
-static int ACStringCount;
+static unsigned __STORAGE_MODIFIER int PCodeOffset;
+static __STORAGE_MODIFIER int SpecArgs[8];
+static __STORAGE_MODIFIER int ACStringCount;
 static const char **ACStrings;
-static char PrintBuffer[PRINT_BUFFER_SIZE];
+static __STORAGE_MODIFIER char PrintBuffer[PRINT_BUFFER_SIZE];
 static acs_t *NewScript;
 
 static int (*PCodeCmds[]) (void) =
@@ -479,7 +479,7 @@ void P_CheckACSStore(void)
     }
 }
 
-static char ErrorMsg[128];
+static __STORAGE_MODIFIER char ErrorMsg[128];
 
 dboolean P_StartACS(int number, int map, byte * args, mobj_t * activator,
                    line_t * line, int side)
@@ -570,7 +570,7 @@ dboolean P_StartLockedACS(line_t * line, byte * args, mobj_t * mo, int side)
     byte newArgs[5];
 
     extern char *TextKeyMessages[11];
-    extern char LockedBuffer[80];
+    extern __STORAGE_MODIFIER char LockedBuffer[80];
 
     lock = args[4];
     if (!mo->player)

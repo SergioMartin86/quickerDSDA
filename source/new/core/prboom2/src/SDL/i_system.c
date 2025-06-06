@@ -89,9 +89,9 @@ void I_uSleep(unsigned long usecs)
 {
 }
 
-static dboolean InDisplay = false;
+static __STORAGE_MODIFIER dboolean InDisplay = false;
 static int saved_gametic = -1;
-dboolean realframe = false;
+__STORAGE_MODIFIER dboolean realframe = false;
 
 dboolean I_StartDisplay(void)
 {
@@ -114,7 +114,7 @@ void I_EndDisplay(void)
   DSDA_REMOVE_CONTEXT(sf_display);
 }
 
-int interpolation_method;
+__STORAGE_MODIFIER int interpolation_method;
 fixed_t I_GetTimeFrac (void)
 {
   fixed_t frac;

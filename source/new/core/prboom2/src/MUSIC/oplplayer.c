@@ -47,7 +47,7 @@
 
 #include "dsda/configuration.h"
 
-static int opl_opl3mode;
+static __STORAGE_MODIFIER int opl_opl3mode;
 
 // #define OPL_MIDI_DEBUG
 
@@ -324,11 +324,11 @@ typedef enum {
 } opl_driver_ver_t;
 
 static opl_driver_ver_t opl_drv_ver = opl_doom_1_9;
-static dboolean music_initialized = false;
+static __STORAGE_MODIFIER dboolean music_initialized = false;
 
 //static dboolean musicpaused = false;
-static int start_music_volume;
-static int current_music_volume;
+static __STORAGE_MODIFIER int start_music_volume;
+static __STORAGE_MODIFIER int current_music_volume;
 
 // GENMIDI lump instrument data:
 
@@ -342,10 +342,10 @@ static char (*percussion_names)[32];
 static opl_voice_t voices[OPL_NUM_VOICES * 2];
 static opl_voice_t *voice_free_list[OPL_NUM_VOICES * 2];
 static opl_voice_t *voice_alloced_list[OPL_NUM_VOICES * 2];
-static int voice_free_num;
-static int voice_alloced_num;
-static int opl_opl3mode;
-static int num_opl_voices;
+static __STORAGE_MODIFIER int voice_free_num;
+static __STORAGE_MODIFIER int voice_alloced_num;
+static __STORAGE_MODIFIER int opl_opl3mode;
+static __STORAGE_MODIFIER int num_opl_voices;
 
 // Data for each channel.
 
@@ -354,20 +354,20 @@ static opl_channel_data_t channels[MIDI_CHANNELS_PER_TRACK];
 // Track data for playing tracks:
 
 static opl_track_data_t *tracks;
-static unsigned int num_tracks = 0;
-static unsigned int running_tracks = 0;
-static dboolean song_looping;
+static unsigned __STORAGE_MODIFIER int num_tracks = 0;
+static unsigned __STORAGE_MODIFIER int running_tracks = 0;
+static __STORAGE_MODIFIER dboolean song_looping;
 
 // Tempo control variables
 
-static unsigned int ticks_per_beat;
-static unsigned int us_per_beat;
+static unsigned __STORAGE_MODIFIER int ticks_per_beat;
+static unsigned __STORAGE_MODIFIER int us_per_beat;
 
 // If true, OPL sound channels are reversed to their correct arrangement
 // (as intended by the MIDI standard) rather than the backwards one
 // used by DMX due to a bug.
 
-static dboolean opl_stereo_correct = false;
+static __STORAGE_MODIFIER dboolean opl_stereo_correct = false;
 
 // Load instrument table from GENMIDI lump:
 

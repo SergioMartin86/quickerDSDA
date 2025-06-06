@@ -46,9 +46,9 @@
 // Command line parameters.
 //
 
-extern  dboolean nomonsters; // checkparm of -nomonsters
-extern  dboolean respawnparm;  // checkparm of -respawn
-extern  dboolean fastparm; // checkparm of -fast
+extern  __STORAGE_MODIFIER dboolean nomonsters; // checkparm of -nomonsters
+extern  __STORAGE_MODIFIER dboolean respawnparm;  // checkparm of -respawn
+extern  __STORAGE_MODIFIER dboolean fastparm; // checkparm of -fast
 
 // -----------------------------------------------------
 // Game Mode - identify IWAD as shareware, retail etc.
@@ -61,7 +61,7 @@ extern const char *doomverstr;
 extern char *VANILLA_MAP_LUMP_NAME(int e, int m);
 
 // Set if homebrew PWAD stuff has been added.
-extern  dboolean modifiedgame;
+extern  __STORAGE_MODIFIER dboolean modifiedgame;
 
 // CPhipps - new compatibility handling
 extern complevel_t compatibility_level;
@@ -72,7 +72,7 @@ extern complevel_t compatibility_level;
 #define mbf_features (compatibility_level>=mbf_compatibility)
 #define mbf21 (compatibility_level == mbf21_compatibility)
 
-extern int demo_insurance;      // killough 4/5/98
+extern __STORAGE_MODIFIER int demo_insurance;      // killough 4/5/98
 
 // -------------------------------------------
 // killough 10/98: compatibility vector
@@ -138,15 +138,15 @@ extern  Language_t   language;
 //
 
 // Defaults for menu, methinks.
-extern  int   startskill;
-extern  int             startepisode;
+extern  __STORAGE_MODIFIER int startskill;
+extern  __STORAGE_MODIFIER int startepisode;
 
-extern  dboolean   autostart;
+extern  __STORAGE_MODIFIER dboolean autostart;
 
 // Selected by user.
-extern  int   gameskill;
-extern  int   gameepisode;
-extern  int   gamemap;
+extern  __STORAGE_MODIFIER int gameskill;
+extern  __STORAGE_MODIFIER int gameepisode;
+extern  __STORAGE_MODIFIER int gamemap;
 
 typedef struct
 {
@@ -162,16 +162,16 @@ extern leave_data_t leave_data;
 #define LEAVE_VICTORY -1
 
 // Netgame? Only true if >1 player.
-extern  dboolean netgame;
+extern  __STORAGE_MODIFIER dboolean netgame;
 
 // Flag: true only if started as net deathmatch.
 // An enum might handle altdeath/cooperative better.
-extern  dboolean deathmatch;
+extern  __STORAGE_MODIFIER dboolean deathmatch;
 
-extern int solo_net;
-extern dboolean coop_spawns;
+extern __STORAGE_MODIFIER int solo_net;
+extern __STORAGE_MODIFIER dboolean coop_spawns;
 
-extern dboolean randomclass;
+extern __STORAGE_MODIFIER dboolean randomclass;
 
 // ------------------------------------------
 // Internal parameters for sound rendering.
@@ -184,13 +184,13 @@ extern dboolean randomclass;
 //  Sound FX volume has default, 0 - 15
 //  Music volume has default, 0 - 15
 // These are multiplied by 8.
-extern int snd_SfxVolume;      // maximum volume for sound
+extern __STORAGE_MODIFIER int snd_SfxVolume;      // maximum volume for sound
 extern int snd_MusicVolume;    // maximum volume for music
 
 // CPhipps - screen parameters
-extern int desired_screenwidth, desired_screenheight;
+extern __STORAGE_MODIFIER int desired_screenwidth, desired_screenheight;
 
-extern int automap_active;
+extern __STORAGE_MODIFIER int automap_active;
 extern int automap_overlay;
 extern int automap_rotate;
 extern int automap_follow;
@@ -210,47 +210,47 @@ typedef enum {
 } menuactive_t;
 extern menuactive_t menuactive; // Type of menu overlaid, if any
 
-extern  dboolean nodrawers;
+extern  __STORAGE_MODIFIER dboolean nodrawers;
 
 // Player taking events, and displaying.
-extern  int consoleplayer;
-extern  int displayplayer;
+extern  __STORAGE_MODIFIER int consoleplayer;
+extern  __STORAGE_MODIFIER int displayplayer;
 
 // -------------------------------------
 // Scores, rating.
 // Statistics on a given map, for intermission.
 //
-extern  int totalkills, totallive;
-extern  int totalitems;
-extern  int totalsecret;
+extern  __STORAGE_MODIFIER int totalkills, totallive;
+extern  __STORAGE_MODIFIER int totalitems;
+extern  __STORAGE_MODIFIER int totalsecret;
 
-extern  int boom_basetic;
-extern  int true_basetic;
-extern  int leveltime;       // level time in tics
-extern  int totalleveltimes; // sum of intermission times in tics at second resolution
-extern  int levels_completed;
+extern  __STORAGE_MODIFIER int boom_basetic;
+extern  __STORAGE_MODIFIER int true_basetic;
+extern  __STORAGE_MODIFIER int leveltime;       // level time in tics
+extern  __STORAGE_MODIFIER int totalleveltimes; // sum of intermission times in tics at second resolution
+extern  __STORAGE_MODIFIER int levels_completed;
 
 // --------------------------------------
 // DEMO playback/recording related stuff.
 
-extern  dboolean demoplayback;
-extern  dboolean demorecording;
-extern  int demover;
+extern  __STORAGE_MODIFIER dboolean demoplayback;
+extern  __STORAGE_MODIFIER dboolean demorecording;
+extern  __STORAGE_MODIFIER int demover;
 
 #define allow_incompatibility (!demorecording && !demoplayback)
 #define comperr(i) (default_comperr[i] && allow_incompatibility)
 
-extern  dboolean userdemo;
+extern  __STORAGE_MODIFIER dboolean userdemo;
 #define userplayback (demoplayback && userdemo)
 #define reelplayback (demoplayback && !userdemo)
 
 // Print timing information after quitting.  killough
-extern  dboolean   timingdemo;
+extern  __STORAGE_MODIFIER dboolean timingdemo;
 // Run tick clock at fastest speed possible while playing demo.  killough
-extern  dboolean   fastdemo;
+extern  __STORAGE_MODIFIER dboolean fastdemo;
 
-extern  gamestate_t  gamestate;
-extern  dboolean     in_game;
+extern  __STORAGE_MODIFIER gamestate_t gamestate;
+extern  __STORAGE_MODIFIER dboolean in_game;
 
 //-----------------------------
 // Internal parameters, fixed.
@@ -258,20 +258,20 @@ extern  dboolean     in_game;
 //  according to user inputs. Partly load from
 //  WAD, partly set at startup time.
 
-extern  int   gametic;
+extern  __STORAGE_MODIFIER int gametic;
 
 #define boom_logictic (gametic - boom_basetic)
 #define true_logictic (gametic - true_basetic)
 
 //e6y
-extern  dboolean realframe;
+extern  __STORAGE_MODIFIER dboolean realframe;
 
 // Bookkeeping on players - state.
-extern  player_t  players[MAX_MAXPLAYERS];
-extern  int       upmove;
+extern  __STORAGE_MODIFIER player_t players[MAX_MAXPLAYERS];
+extern  __STORAGE_MODIFIER int upmove;
 
 // Alive? Disconnected?
-extern  dboolean   playeringame[MAX_MAXPLAYERS];
+extern  __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
 
 extern pclass_t PlayerClass[MAX_MAXPLAYERS];
 
@@ -300,14 +300,14 @@ extern  FILE   *debugfile;
 extern  gamestate_t     wipegamestate;
 
 // debug flag to cancel adaptiveness
-extern  dboolean         singletics;
+extern  __STORAGE_MODIFIER dboolean singletics;
 
 // Needed to store the number of the dummy sky flat.
 // Used for rendering, as well as tracking projectiles etc.
 
-extern int    skyflatnum;
+extern __STORAGE_MODIFIER int skyflatnum;
 
-extern  int        maketic;
+extern  __STORAGE_MODIFIER int maketic;
 
 // Networking and tick handling related.
 #define BACKUPTICS              12
@@ -322,32 +322,32 @@ extern int variable_friction;  // ice & mud            // phares 3/10/98
 
 extern int monsters_remember;                          // killough 3/1/98
 
-extern int weapon_recoil;          // weapon recoil    // phares
+extern __STORAGE_MODIFIER int weapon_recoil;          // weapon recoil    // phares
 
 extern int player_bobbing;  // whether player bobs or not   // phares 2/25/98
 
-extern int dogs;     // killough 7/19/98: Marine's best friend :)
-extern int dog_jumping;   // killough 10/98
+extern __STORAGE_MODIFIER int dogs;     // killough 7/19/98: Marine's best friend :)
+extern __STORAGE_MODIFIER int dog_jumping;   // killough 10/98
 
 /* killough 8/8/98: distance friendly monsters tend to stay from player */
 extern int distfriend;
 
 /* killough 9/8/98: whether monsters are allowed to strafe or retreat */
-extern int monster_backing;
+extern __STORAGE_MODIFIER int monster_backing;
 
 /* killough 9/9/98: whether monsters intelligently avoid hazards */
-extern int monster_avoid_hazards;
+extern __STORAGE_MODIFIER int monster_avoid_hazards;
 
 /* killough 10/98: whether monsters are affected by friction */
 extern int monster_friction;
 
 /* killough 9/9/98: whether monsters help friends */
-extern int help_friends;
+extern __STORAGE_MODIFIER int help_friends;
 
 /* killough 7/19/98: whether monsters should fight against each other */
 extern int monster_infighting;
 
-extern int monkeys;
+extern __STORAGE_MODIFIER int monkeys;
 
 extern int HelperThing;          // type of thing to use for helper
 

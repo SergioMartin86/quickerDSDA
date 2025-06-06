@@ -25,7 +25,7 @@
 #include "dsda/global.h"
 
 // TODO: move here
-extern int localQuakeHappening[MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER int localQuakeHappening[MAX_MAXPLAYERS];
 
 // The unit of quake distance is 64 (2^6)
 #define DISTBITS 6

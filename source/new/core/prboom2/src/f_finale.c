@@ -59,8 +59,8 @@
 
 // Stage of animation:
 //  0 = text, 1 = art screen, 2 = character cast
-int finalestage;
-int finalecount;
+__STORAGE_MODIFIER int finalestage;
+__STORAGE_MODIFIER int finalecount;
 const char*   finaletext;
 const char*   finaleflat;
 const char*   finalepatch;
@@ -77,8 +77,8 @@ dboolean F_CastResponder (event_t *ev);
 void    F_CastDrawer (void);
 
 void WI_checkForAccelerate(void);    // killough 3/28/98: used to
-extern int acceleratestage;          // accelerate intermission screens
-int midstage;                 // whether we're in "mid-stage"
+extern __STORAGE_MODIFIER int acceleratestage;          // accelerate intermission screens
+__STORAGE_MODIFIER int midstage;                 // whether we're in "mid-stage"
 
 //
 // F_StartFinale
@@ -456,13 +456,13 @@ static const castinfo_t castorder_d1[] = {
 
 static const castinfo_t *castorder = castorder_d2;
 
-static int castnum;
-static int casttics;
+static __STORAGE_MODIFIER int castnum;
+static __STORAGE_MODIFIER int casttics;
 static state_t* caststate;
-static dboolean castdeath;
-static int castframes;
-static int castonmelee;
-static dboolean castattacking;
+static __STORAGE_MODIFIER dboolean castdeath;
+static __STORAGE_MODIFIER int castframes;
+static __STORAGE_MODIFIER int castonmelee;
+static __STORAGE_MODIFIER dboolean castattacking;
 static const char *castbackground;
 
 //
@@ -740,7 +740,7 @@ static void F_StartScrollMusic(const char* music, dboolean loop_music)
   }
 }
 
-static dboolean end_patches_exist;
+static __STORAGE_MODIFIER dboolean end_patches_exist;
 
 void F_StartScroll (const char* right, const char* left, const char* music, dboolean loop_music)
 {

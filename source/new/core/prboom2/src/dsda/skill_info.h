@@ -53,7 +53,7 @@ typedef struct {
 
 extern skill_info_t skill_info;
 
-extern int num_skills;
+extern __STORAGE_MODIFIER int num_skills;
 
 void dsda_InitSkills(void);
 void dsda_RefreshGameSkill(void);

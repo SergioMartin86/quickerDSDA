@@ -36,8 +36,8 @@
 
 #include "settings.h"
 
-int dsda_tas;
-int dsda_skip_next_wipe;
+__STORAGE_MODIFIER int dsda_tas;
+__STORAGE_MODIFIER int dsda_skip_next_wipe;
 
 void dsda_InitSettings(void) {
   void G_UpdateMouseSensitivity(void);
@@ -265,7 +265,7 @@ int dsda_ShowAliveMonsters(void) {
   return dsda_IntConfig(dsda_config_show_alive_monsters);
 }
 
-int dsda_reveal_map;
+__STORAGE_MODIFIER int dsda_reveal_map;
 
 int dsda_RevealAutomap(void) {
   if (dsda_StrictMode()) return 0;
@@ -308,8 +308,8 @@ dboolean dsda_SkipWipe(void) {
   return !dsda_RenderWipeScreen() || hexen;
 }
 
-static dboolean game_controller_used;
-static dboolean mouse_used;
+static __STORAGE_MODIFIER dboolean game_controller_used;
+static __STORAGE_MODIFIER dboolean mouse_used;
 
 dboolean dsda_AllowGameController(void) {
   return !dsda_StrictMode() || !mouse_used;

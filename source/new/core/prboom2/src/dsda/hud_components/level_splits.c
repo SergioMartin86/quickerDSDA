@@ -28,7 +28,7 @@ typedef struct {
 
 static local_component_t* local;
 
-extern int leveltime, totalleveltimes;
+extern __STORAGE_MODIFIER int leveltime, totalleveltimes;
 
 static int dsda_SplitComparisonDelta(dsda_split_time_t* split_time) {
   return split_time->ref != -1 ? split_time->ref_delta : split_time->best_delta;

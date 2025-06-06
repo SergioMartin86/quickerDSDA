@@ -45,9 +45,9 @@
 #include "dsda.h"
 #include "dsda/pause.h"
 
-int leveltime;
+__STORAGE_MODIFIER int leveltime;
 
-static dboolean newthinkerpresent;
+static __STORAGE_MODIFIER dboolean newthinkerpresent;
 
 //
 // THINKERS
@@ -59,8 +59,8 @@ static dboolean newthinkerpresent;
 
 // killough 8/29/98: we maintain several separate threads, each containing
 // a special class of thinkers, to allow more efficient searches.
-thinker_t thinkerclasscap[th_all+1];
-int init_thinkers_count = 0;
+__STORAGE_MODIFIER thinker_t thinkerclasscap[th_all+1];
+__STORAGE_MODIFIER int init_thinkers_count = 0;
 
 //
 // P_InitThinkers

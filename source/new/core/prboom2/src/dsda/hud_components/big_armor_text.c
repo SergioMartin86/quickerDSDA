@@ -25,7 +25,7 @@ typedef struct {
 
 static local_component_t* local;
 
-static int patch_delta_x;
+static __STORAGE_MODIFIER int patch_delta_x;
 
 static void dsda_DrawComponent(void) {
   player_t* player;

@@ -29,7 +29,7 @@
 
 #include "text_file.h"
 
-extern int dsda_last_leveltime, dsda_last_gamemap, dsda_startmap;
+extern __STORAGE_MODIFIER int dsda_last_leveltime, dsda_last_gamemap, dsda_startmap;
 
 static char* dsda_TextFileName(void) {
   int name_length;
@@ -62,7 +62,7 @@ static char* dsda_TextFileName(void) {
 }
 
 static int dsda_IL(void) {
-  extern int dsda_startmap;
+  extern __STORAGE_MODIFIER int dsda_startmap;
 
   return dsda_startmap == dsda_last_gamemap;
 }

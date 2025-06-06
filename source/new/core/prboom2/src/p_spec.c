@@ -136,7 +136,7 @@ static const animdef_t heretic_animdefs[] = {
 
 // heretic
 #define MAXLINEANIMS 64*256
-short numlinespecials;
+__STORAGE_MODIFIER short numlinespecials;
 line_t *linespeciallist[MAXLINEANIMS];
 
 //e6y
@@ -3024,10 +3024,10 @@ dboolean P_MobjInZDoomSector(mobj_t *mobj)
 //  levelFragLimit, levelFragLimitCount
 //
 
-static dboolean  levelTimer;
-static int      levelTimeCount;
-dboolean         levelFragLimit;      // Ty 03/18/98 Added -frags support
-int             levelFragLimitCount; // Ty 03/18/98 Added -frags support
+static __STORAGE_MODIFIER dboolean levelTimer;
+static __STORAGE_MODIFIER int levelTimeCount;
+__STORAGE_MODIFIER dboolean levelFragLimit;      // Ty 03/18/98 Added -frags support
+__STORAGE_MODIFIER int levelFragLimitCount; // Ty 03/18/98 Added -frags support
 
 void P_UpdateSpecials (void)
 {
@@ -3806,8 +3806,8 @@ void P_SpawnCompatibleScroller(line_t *l, int i)
   }
 }
 
-static int copyscroller_count = 0;
-static int copyscroller_max = 0;
+static __STORAGE_MODIFIER int copyscroller_count = 0;
+static __STORAGE_MODIFIER int copyscroller_max = 0;
 static line_t **copyscrollers;
 
 static void P_AddCopyScroller(line_t *l)
@@ -4647,10 +4647,10 @@ typedef enum
 
 int *LevelAmbientSfx[MAX_AMBIENT_SFX];
 int *AmbSfxPtr;
-int AmbSfxPtrIndex;
-int AmbSfxCount;
-int AmbSfxTics;
-int AmbSfxVolume;
+__STORAGE_MODIFIER int AmbSfxPtrIndex;
+__STORAGE_MODIFIER int AmbSfxCount;
+__STORAGE_MODIFIER int AmbSfxTics;
+__STORAGE_MODIFIER int AmbSfxVolume;
 
 int AmbSndSeqInit[] = {         // Startup
     afxcmd_end
@@ -4800,7 +4800,7 @@ struct
   }
 };
 
-mobj_t LavaInflictor;
+__STORAGE_MODIFIER mobj_t LavaInflictor;
 
 void P_AddAmbientSfx(int sequence)
 {
@@ -5285,7 +5285,7 @@ static struct
     line_t *line;
     int lineTag;
 } TaggedLines[MAX_TAGGED_LINES];
-static int TaggedLineCount;
+static __STORAGE_MODIFIER int TaggedLineCount;
 
 void P_PlayerOnSpecialFlat(player_t * player, int floorType)
 {
@@ -5341,7 +5341,7 @@ dboolean EV_SectorSoundChange(byte * args)
     return rtn;
 }
 
-char LockedBuffer[80];
+__STORAGE_MODIFIER char LockedBuffer[80];
 
 static dboolean CheckedLockedDoor(mobj_t * mo, byte lock)
 {

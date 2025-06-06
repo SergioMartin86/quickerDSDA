@@ -77,7 +77,7 @@ typedef struct console_entry_s {
 
 static console_entry_t* console_history_head;
 static console_entry_t* console_entry;
-static int console_entry_index;
+static __STORAGE_MODIFIER int console_entry_index;
 static char console_message[CONSOLE_ENTRY_SIZE + 2] = { ' ', ' ' };
 static char* console_message_entry = console_message + 2;
 static hu_textline_t hu_console_prompt;
@@ -85,7 +85,7 @@ static hu_textline_t hu_console_message;
 
 static char** dsda_console_script_lines[CONSOLE_SCRIPT_COUNT];
 
-static int console_height;
+static __STORAGE_MODIFIER int console_height;
 
 int dsda_ConsoleHeight(void) {
   return console_height;
@@ -362,7 +362,7 @@ static dboolean console_PlayerSetAmmo(const char* command, const char* args) {
 }
 
 static dboolean console_PlayerGiveKey(const char* command, const char* args) {
-  extern int playerkeys;
+  extern __STORAGE_MODIFIER int playerkeys;
 
   int key;
 
@@ -380,7 +380,7 @@ static dboolean console_PlayerGiveKey(const char* command, const char* args) {
 }
 
 static dboolean console_PlayerRemoveKey(const char* command, const char* args) {
-  extern int playerkeys;
+  extern __STORAGE_MODIFIER int playerkeys;
 
   int key;
 

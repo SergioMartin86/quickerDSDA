@@ -27,7 +27,7 @@
 
 #include "sndinfo.h"
 
-static char song_lump[99][10];
+static __STORAGE_MODIFIER char song_lump[99][10];
 
 static void ReadMapSongLumpName(int map, char* lump_name) {
   if (map < 1 || map > 98)

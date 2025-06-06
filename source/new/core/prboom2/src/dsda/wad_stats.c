@@ -200,7 +200,7 @@ static void dsda_LoadWadStats(void) {
   }
 }
 
-static dboolean forget_wad_stats;
+static __STORAGE_MODIFIER dboolean forget_wad_stats;
 
 void M_ForgetWadStats(void)
 {

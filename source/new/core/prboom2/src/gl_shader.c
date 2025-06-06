@@ -446,7 +446,7 @@ static void glsl_ShaderPush(shader_t* shader, ...)
 {
   shader_frame_t* frame = glsl_ShaderFramePush();
   va_list ap;
-  int num;
+  __STORAGE_MODIFIER int num;
 
   frame->shader = shader;
 
@@ -499,7 +499,7 @@ static void glsl_ShaderPop(shader_t* shader)
     GLEXT_glUseProgramObjectARB(0);
 }
 
-static void glsl_ShaderUniform(shader_t* shader, int num, ...)
+static void glsl_ShaderUniform(shader_t* shader, __STORAGE_MODIFIER int num, ...)
 {
   shader_frame_t* frame;
   va_list ap;

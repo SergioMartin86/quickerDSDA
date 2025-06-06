@@ -116,10 +116,10 @@ void S_UpdateSounds(void);
 
 // machine-independent sound params
 extern int default_numChannels;
-extern int numChannels;
+extern __STORAGE_MODIFIER int numChannels;
 
 //jff 3/17/98 holds last IDMUS number, or -1
-extern int idmusnum;
+extern __STORAGE_MODIFIER int idmusnum;
 
 // heretic
 

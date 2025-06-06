@@ -571,7 +571,7 @@ static int def_count = sizeof(cfg_defs) / sizeof(cfg_defs[0]);
 
 static char* defaultfile; // CPhipps - static, const
 
-static dboolean forget_config_file;
+static __STORAGE_MODIFIER dboolean forget_config_file;
 
 void M_ForgetCurrentConfig(void)
 {

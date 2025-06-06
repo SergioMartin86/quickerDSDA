@@ -91,11 +91,11 @@ typedef struct
 // of one or more mappatch_t structures that arrange graphic patches.
 
 // killough 4/17/98: make firstcolormaplump,lastcolormaplump external
-int firstcolormaplump, lastcolormaplump;      // killough 4/17/98
+__STORAGE_MODIFIER int firstcolormaplump, lastcolormaplump;      // killough 4/17/98
 
-int       firstflat, lastflat, numflats;
-int       firstspritelump, lastspritelump, numspritelumps;
-int       numtextures;
+__STORAGE_MODIFIER int firstflat, lastflat, numflats;
+__STORAGE_MODIFIER int firstspritelump, lastspritelump, numspritelumps;
+__STORAGE_MODIFIER int numtextures;
 texture_t **textures; // proff - 04/05/2000 removed static for OpenGL
 fixed_t   *textureheight; //needed for texture pegging (and TFE fix - killough)
 int       *flattranslation;             // for global animation

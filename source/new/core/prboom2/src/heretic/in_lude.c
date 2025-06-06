@@ -42,7 +42,7 @@
 
 #include "in_lude.h"
 
-extern dboolean BorderNeedRefresh;
+extern __STORAGE_MODIFIER dboolean BorderNeedRefresh;
 
 typedef enum
 {
@@ -68,42 +68,42 @@ static void IN_DrTextB(const char *text, int x, int y);
 // contains information passed into intermission
 static wbstartstruct_t* wbs;
 
-static int prevmap;
-static int nextmap;
-static dboolean intermission;
-static dboolean skipintermission;
-static dboolean finalintermission;
-static int interstate = 0;
+static __STORAGE_MODIFIER int prevmap;
+static __STORAGE_MODIFIER int nextmap;
+static __STORAGE_MODIFIER dboolean intermission;
+static __STORAGE_MODIFIER dboolean skipintermission;
+static __STORAGE_MODIFIER dboolean finalintermission;
+static __STORAGE_MODIFIER int interstate = 0;
 static int intertime = -1;
-static int oldintertime = 0;
+static __STORAGE_MODIFIER int oldintertime = 0;
 static gametype_t gametype;
 
-static int cnt;
+static __STORAGE_MODIFIER int cnt;
 
-static int hours;
-static int minutes;
-static int seconds;
+static __STORAGE_MODIFIER int hours;
+static __STORAGE_MODIFIER int minutes;
+static __STORAGE_MODIFIER int seconds;
 
 // [crispy] Show total time on intermission
-static int totalHours;
-static int totalMinutes;
-static int totalSeconds;
+static __STORAGE_MODIFIER int totalHours;
+static __STORAGE_MODIFIER int totalMinutes;
+static __STORAGE_MODIFIER int totalSeconds;
 
-static int slaughterboy;        // in DM, the player with the most kills
+static __STORAGE_MODIFIER int slaughterboy;        // in DM, the player with the most kills
 
-static int killPercent[MAX_MAXPLAYERS];
-static int bonusPercent[MAX_MAXPLAYERS];
-static int secretPercent[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER int killPercent[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER int bonusPercent[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER int secretPercent[MAX_MAXPLAYERS];
 
-static int FontBNumbers[10];
+static __STORAGE_MODIFIER int FontBNumbers[10];
 
-static int FontBLump;
-static int patchFaceOkayBase;
-static int patchFaceDeadBase;
+static __STORAGE_MODIFIER int FontBLump;
+static __STORAGE_MODIFIER int patchFaceOkayBase;
+static __STORAGE_MODIFIER int patchFaceDeadBase;
 
-static signed int totalFrags[MAX_MAXPLAYERS];
-static fixed_t dSlideX[MAX_MAXPLAYERS];
-static fixed_t dSlideY[MAX_MAXPLAYERS];
+static signed __STORAGE_MODIFIER int totalFrags[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER fixed_t dSlideX[MAX_MAXPLAYERS];
+static __STORAGE_MODIFIER fixed_t dSlideY[MAX_MAXPLAYERS];
 
 static const char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
 

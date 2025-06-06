@@ -64,11 +64,11 @@
 #include "dsda/map_format.h"
 #include "dsda/render_stats.h"
 
-int Sky1Texture;
-int Sky2Texture;
-fixed_t Sky1ColumnOffset;
-fixed_t Sky2ColumnOffset;
-dboolean DoubleSky;
+__STORAGE_MODIFIER int Sky1Texture;
+__STORAGE_MODIFIER int Sky2Texture;
+__STORAGE_MODIFIER fixed_t Sky1ColumnOffset;
+__STORAGE_MODIFIER fixed_t Sky2ColumnOffset;
+__STORAGE_MODIFIER dboolean DoubleSky;
 
 #define MAXVISPLANES 256    /* must be a power of 2 */
 

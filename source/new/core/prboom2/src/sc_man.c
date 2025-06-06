@@ -46,22 +46,22 @@ static void OpenScriptByNum(int lump);
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 char *sc_String;
-int sc_Number;
-int sc_Line;
-dboolean sc_End;
-dboolean sc_Crossed;
+__STORAGE_MODIFIER int sc_Number;
+__STORAGE_MODIFIER int sc_Line;
+__STORAGE_MODIFIER dboolean sc_End;
+__STORAGE_MODIFIER dboolean sc_Crossed;
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
-static char ScriptName[16];
-static int ScriptLump;
+static __STORAGE_MODIFIER char ScriptName[16];
+static __STORAGE_MODIFIER int ScriptLump;
 static const char *ScriptBuffer;
 static const char *ScriptPtr;
 static const char *ScriptEndPtr;
-static char StringBuffer[MAX_STRING_SIZE];
-static dboolean ScriptOpen = false;
-static int ScriptSize;
-static dboolean AlreadyGot = false;
+static __STORAGE_MODIFIER char StringBuffer[MAX_STRING_SIZE];
+static __STORAGE_MODIFIER dboolean ScriptOpen = false;
+static __STORAGE_MODIFIER int ScriptSize;
+static __STORAGE_MODIFIER dboolean AlreadyGot = false;
 
 // CODE --------------------------------------------------------------------
 

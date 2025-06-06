@@ -246,7 +246,7 @@ int dsda_HexenResolveCLEV(int* clev, int* episode, int* map) {
   return true;
 }
 
-dboolean partial_reset = false;
+__STORAGE_MODIFIER dboolean partial_reset = false;
 
 int dsda_HexenResolveINIT(int* init) {
   if (!hexen)
@@ -353,7 +353,7 @@ int dsda_HexenSkyTexture(int* sky) {
 }
 
 int dsda_HexenPrepareInitNew(void) {
-  extern int RebornPosition;
+  extern __STORAGE_MODIFIER int RebornPosition;
 
   if (!hexen)
     return false;
@@ -604,8 +604,8 @@ int dsda_HexenAirControl(fixed_t* air_control) {
 }
 
 int dsda_HexenInitSky(void) {
-  extern fixed_t Sky1ScrollDelta;
-  extern fixed_t Sky2ScrollDelta;
+  extern __STORAGE_MODIFIER fixed_t Sky1ScrollDelta;
+  extern __STORAGE_MODIFIER fixed_t Sky2ScrollDelta;
 
   if (!hexen)
     return false;

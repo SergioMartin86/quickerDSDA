@@ -32,7 +32,7 @@
 #include "opl3.h"
 
 #include "dsda/configuration.h"
-static int mus_opl_gain;
+static __STORAGE_MODIFIER int mus_opl_gain;
 
 #define RSM_FRAC    10
 

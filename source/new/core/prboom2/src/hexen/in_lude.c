@@ -57,23 +57,23 @@ static void DrNumber(int val, int x, int y, int wrapThresh);
 static void DrNumberBold(int val, int x, int y, int wrapThresh);
 static void DrawHubText(void);
 
-static dboolean intermission;
-char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
+static __STORAGE_MODIFIER dboolean intermission;
+__STORAGE_MODIFIER char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
 
-static dboolean skipintermission;
-static int interstate = 0;
+static __STORAGE_MODIFIER dboolean skipintermission;
+static __STORAGE_MODIFIER int interstate = 0;
 static int intertime = -1;
 static gametype_t gametype;
-static int cnt;
-static int slaughterboy;        // in DM, the player with the most kills
-static int FontABaseLump;
+static __STORAGE_MODIFIER int cnt;
+static __STORAGE_MODIFIER int slaughterboy;        // in DM, the player with the most kills
+static __STORAGE_MODIFIER int FontABaseLump;
 
-static signed int totalFrags[MAX_MAXPLAYERS];
+static signed __STORAGE_MODIFIER int totalFrags[MAX_MAXPLAYERS];
 
-static int HubCount;
+static __STORAGE_MODIFIER int HubCount;
 static char *HubText;
 
-extern dboolean BorderNeedRefresh;
+extern __STORAGE_MODIFIER dboolean BorderNeedRefresh;
 
 void Hexen_IN_Start(wbstartstruct_t* wbstartstruct)
 {

@@ -47,41 +47,41 @@
 // needed for texture pegging
 extern fixed_t *textureheight;
 
-extern int firstflat, numflats;
+extern __STORAGE_MODIFIER int firstflat, numflats;
 
 // for global animation
 extern int *flattranslation;
 extern int *texturetranslation;
 
 // Sprite....
-extern int firstspritelump;
-extern int lastspritelump;
-extern int numspritelumps;
+extern __STORAGE_MODIFIER int firstspritelump;
+extern __STORAGE_MODIFIER int lastspritelump;
+extern __STORAGE_MODIFIER int numspritelumps;
 
 //
 // Lookup tables for map data.
 //
 extern spritedef_t      *sprites;
 
-extern int              numvertexes;
+extern __STORAGE_MODIFIER int numvertexes;
 extern vertex_t         *vertexes;
 
-extern int              numsegs;
+extern __STORAGE_MODIFIER int numsegs;
 extern seg_t            *segs;
 
-extern int              numsectors;
+extern __STORAGE_MODIFIER int numsectors;
 extern sector_t         *sectors;
 
-extern int              numsubsectors;
+extern __STORAGE_MODIFIER int numsubsectors;
 extern subsector_t      *subsectors;
 
-extern int              numnodes;
+extern __STORAGE_MODIFIER int numnodes;
 extern node_t           *nodes;
 
-extern int              numlines;
+extern __STORAGE_MODIFIER int numlines;
 extern line_t           *lines;
 
-extern int              numsides;
+extern __STORAGE_MODIFIER int numsides;
 extern side_t           *sides;
 
 extern int              *sslines_indexes;
@@ -92,24 +92,24 @@ extern byte             *map_subsectors;
 //
 // POV data.
 //
-extern fixed_t          viewx;
-extern fixed_t          viewy;
-extern fixed_t          viewz;
-extern angle_t          viewangle;
+extern __STORAGE_MODIFIER fixed_t viewx;
+extern __STORAGE_MODIFIER fixed_t viewy;
+extern __STORAGE_MODIFIER fixed_t viewz;
+extern __STORAGE_MODIFIER angle_t viewangle;
 extern player_t         *viewplayer;
-extern angle_t          clipangle;
-extern int              viewangletox[FINEANGLES/2];
+extern __STORAGE_MODIFIER angle_t clipangle;
+extern __STORAGE_MODIFIER int viewangletox[FINEANGLES/2];
 
 // e6y: resolution limitation is removed
 extern angle_t          *xtoviewangle;  // killough 2/8/98
 
-extern int              FieldOfView;
+extern __STORAGE_MODIFIER int FieldOfView;
 
-extern fixed_t          rw_distance;
-extern angle_t          rw_normalangle;
+extern __STORAGE_MODIFIER fixed_t rw_distance;
+extern __STORAGE_MODIFIER angle_t rw_normalangle;
 
 // angle to line origin
-extern int              rw_angle1;
+extern __STORAGE_MODIFIER int rw_angle1;
 
 extern visplane_t       *floorplane;
 extern visplane_t       *ceilingplane;

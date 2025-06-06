@@ -53,7 +53,7 @@
 #include "hexen/in_lude.h"
 
 // Ty 03/17/98: flag that new par times have been loaded in d_deh
-extern dboolean deh_pars;
+extern __STORAGE_MODIFIER dboolean deh_pars;
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -307,10 +307,10 @@ static wi_anim_t *anims[NUMEPISODES] =
 
 
 // used to accelerate or skip a stage
-int   acceleratestage;           // killough 3/28/98: made global
+__STORAGE_MODIFIER int acceleratestage;           // killough 3/28/98: made global
 
 // wbs->pnum
-static int    me;
+static __STORAGE_MODIFIER int me;
 
  // specifies current state
 static stateenum_t  state;
@@ -321,18 +321,18 @@ static wbstartstruct_t* wbs;
 static wbplayerstruct_t* plrs;  // wbs->plyr[]
 
 // used for general timing
-static int    cnt;
+static __STORAGE_MODIFIER int cnt;
 
 // used for timing of background animation
-static int    bcnt;
+static __STORAGE_MODIFIER int bcnt;
 
 // signals to refresh everything for one frame
-static int    firstrefresh;
+static __STORAGE_MODIFIER int firstrefresh;
 
-static int    cnt_time;
-static int    cnt_total_time;
-static int    cnt_par;
-static int    cnt_pause;
+static __STORAGE_MODIFIER int cnt_time;
+static __STORAGE_MODIFIER int cnt_total_time;
+static __STORAGE_MODIFIER int cnt_par;
+static __STORAGE_MODIFIER int cnt_pause;
 
 //
 //  GRAPHICS
@@ -1027,7 +1027,7 @@ void WI_updateNoState(void)
     G_WorldDone();
 }
 
-static dboolean    snl_pointeron = false;
+static __STORAGE_MODIFIER dboolean snl_pointeron = false;
 
 
 // ====================================================================
@@ -1202,7 +1202,7 @@ int WI_fragSum(int playernum)
   return frags;
 }
 
-static int          dm_state;
+static __STORAGE_MODIFIER int dm_state;
 // CPhipps - short, dynamically allocated
 static short int  **dm_frags;  // frags matrix
 static short int   *dm_totals;  // totals by player
@@ -1455,8 +1455,8 @@ static int *cnt_kills;
 static int *cnt_items;
 static int *cnt_secret;
 static int *cnt_frags;
-static int    dofrags;
-static int    ng_state;
+static __STORAGE_MODIFIER int dofrags;
+static __STORAGE_MODIFIER int ng_state;
 
 // ====================================================================
 // CPhipps - WI_endNetgameStats
@@ -1741,7 +1741,7 @@ void WI_drawNetgameStats(void)
     WI_drawTimeStats(plrs[me].stime / TICRATE, wbs->totaltimes / TICRATE, wbs->partime / TICRATE);
 }
 
-static int  sp_state;
+static __STORAGE_MODIFIER int sp_state;
 
 // ====================================================================
 // WI_initStats

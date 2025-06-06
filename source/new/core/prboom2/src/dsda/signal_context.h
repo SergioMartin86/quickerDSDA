@@ -31,7 +31,7 @@ typedef enum {
   sf_hud                 = 0x1000,
 } signal_context_t;
 
-extern int signal_context;
+extern __STORAGE_MODIFIER int signal_context;
 
 #define DSDA_ADD_CONTEXT(x) signal_context |= x
 #define DSDA_REMOVE_CONTEXT(x) signal_context &= ~x;

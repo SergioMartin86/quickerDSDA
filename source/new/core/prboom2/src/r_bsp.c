@@ -56,7 +56,7 @@
 // Same, but for ceiling
 #define CEILING_BLEED_THRESHOLD 400
 
-int currentsubsectornum;
+__STORAGE_MODIFIER int currentsubsectornum;
 
 seg_t     *curline;
 side_t    *sidedef;
@@ -64,7 +64,7 @@ line_t    *linedef;
 sector_t  *frontsector;
 sector_t  *backsector;
 sector_t  *poly_frontsector;
-dboolean   poly_add_line;
+__STORAGE_MODIFIER dboolean poly_add_line;
 drawseg_t *ds_p;
 
 // killough 4/7/98: indicates doors closed wrt automap bugfix:
@@ -72,7 +72,7 @@ drawseg_t *ds_p;
 
 // killough: New code which removes 2s linedef limit
 drawseg_t *drawsegs;
-unsigned  maxdrawsegs;
+__STORAGE_MODIFIER unsigned maxdrawsegs;
 // drawseg_t drawsegs[MAXDRAWSEGS];       // old code -- killough
 
 //
@@ -379,7 +379,7 @@ static dboolean CheckClip(seg_t * seg, sector_t * frontsector, sector_t * backse
 // and adds any visible pieces to the line list.
 //
 
-static dboolean ignore_gl_range_clipping;
+static __STORAGE_MODIFIER dboolean ignore_gl_range_clipping;
 
 static void R_AddLine (seg_t *line)
 {

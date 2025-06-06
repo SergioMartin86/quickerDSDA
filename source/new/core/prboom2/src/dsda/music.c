@@ -27,9 +27,9 @@
 #include "music.h"
 
 musicinfo_t* S_music;
-int num_music;
-int mus_musinfo;
-static int deh_musicnames_size;
+__STORAGE_MODIFIER int num_music;
+__STORAGE_MODIFIER int mus_musinfo;
+static __STORAGE_MODIFIER int deh_musicnames_size;
 static char** deh_musicnames;
 static byte* music_state;
 
@@ -88,7 +88,7 @@ int dsda_GetOriginalMusicIndex(const char* key) {
 
 void dsda_InitializeMusic(musicinfo_t* source, int count) {
   int i;
-  extern int raven;
+  extern __STORAGE_MODIFIER int raven;
 
   num_music = count;
   deh_musicnames_size = num_music + 1;

@@ -71,7 +71,7 @@ GLuint CaptureScreenAsTexID(void)
   return id;
 }
 
-int gld_wipe_doMelt(int ticks, int *y_lookup)
+int gld_wipe_doMelt(__STORAGE_MODIFIER int ticks, int *y_lookup)
 {
   int i, scaled_i, scaled_i2;
   int total_w, total_h;
@@ -129,7 +129,7 @@ int gld_wipe_doMelt(int ticks, int *y_lookup)
   return 0;
 }
 
-int gld_wipe_exitMelt(int ticks)
+int gld_wipe_exitMelt(__STORAGE_MODIFIER int ticks)
 {
   if (wipe_scr_start_tex != 0)
   {

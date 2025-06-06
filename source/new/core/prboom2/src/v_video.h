@@ -51,10 +51,10 @@
 // user preferences. The integer ratio is hardly used anymore, so further
 // simplification may be in order.
 void SetRatio(int width, int height);
-extern dboolean tallscreen;
-extern unsigned int ratio_multiplier, ratio_scale;
-extern float gl_ratio;
-extern int psprite_offset; // Needed for "tallscreen" modes
+extern __STORAGE_MODIFIER dboolean tallscreen;
+extern unsigned __STORAGE_MODIFIER int ratio_multiplier, ratio_scale;
+extern __STORAGE_MODIFIER float gl_ratio;
+extern __STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
 
 #define CENTERY     (SCREENHEIGHT/2)
 
@@ -107,7 +107,7 @@ typedef struct {
 
 #define NUM_SCREENS 6
 extern screeninfo_t screens[NUM_SCREENS];
-extern int          usegamma;
+extern int usegamma;
 
 // Varying bit-depth support -POPE
 //

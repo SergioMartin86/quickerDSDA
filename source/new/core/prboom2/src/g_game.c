@@ -116,7 +116,7 @@
 #include "dsda/utility.h"
 
 // Allows use of HELP2 screen for PWADs under DOOM 1
-int pwad_help2_check;
+__STORAGE_MODIFIER int pwad_help2_check;
 
 struct
 {
@@ -148,48 +148,48 @@ struct
 #define NEWFORMATSIG "\xff\xff\xff\xff"
 
 static const byte *demobuffer;   /* cph - only used for playback */
-static int demolength; // check for overrun (missing DEMOMARKER)
+static __STORAGE_MODIFIER int demolength; // check for overrun (missing DEMOMARKER)
 
-dboolean        preventLevelExit;
-dboolean        preventGameEnd;
+__STORAGE_MODIFIER dboolean preventLevelExit;
+__STORAGE_MODIFIER dboolean preventGameEnd;
 
-dboolean        reachedLevelExit;
-dboolean        reachedGameEnd;
+__STORAGE_MODIFIER dboolean reachedLevelExit;
+__STORAGE_MODIFIER dboolean reachedGameEnd;
 
 gameaction_t    gameaction;
-gamestate_t     gamestate;
-dboolean        in_game;
-int             gameskill;
-int             gameepisode;
-int             gamemap;
+__STORAGE_MODIFIER gamestate_t gamestate;
+__STORAGE_MODIFIER dboolean in_game;
+__STORAGE_MODIFIER int gameskill;
+__STORAGE_MODIFIER int gameepisode;
+__STORAGE_MODIFIER int gamemap;
 // CPhipps - moved *_loadgame vars here
-static dboolean forced_loadgame = false;
-static dboolean load_via_cmd = false;
+static __STORAGE_MODIFIER dboolean forced_loadgame = false;
+static __STORAGE_MODIFIER dboolean load_via_cmd = false;
 
-dboolean         timingdemo;    // if true, exit with report on completion
-dboolean         fastdemo;      // if true, run at full speed -- killough
-dboolean         nodrawers;     // for comparative timing purposes
-int             starttime;     // for comparative timing purposes
-dboolean         deathmatch;    // only if started as net death
-dboolean         netgame;       // only true if packets are broadcast
-dboolean         playeringame[MAX_MAXPLAYERS];
-player_t        players[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER dboolean timingdemo;    // if true, exit with report on completion
+__STORAGE_MODIFIER dboolean fastdemo;      // if true, run at full speed -- killough
+__STORAGE_MODIFIER dboolean nodrawers;     // for comparative timing purposes
+__STORAGE_MODIFIER int starttime;     // for comparative timing purposes
+__STORAGE_MODIFIER dboolean deathmatch;    // only if started as net death
+__STORAGE_MODIFIER dboolean netgame;       // only true if packets are broadcast
+__STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER player_t players[MAX_MAXPLAYERS];
 pclass_t        PlayerClass[MAX_MAXPLAYERS];
-int             upmove;
-int             consoleplayer; // player taking events and displaying
-int             displayplayer; // view being displayed
-int             gametic;
-int             boom_basetic;       /* killough 9/29/98: for demo sync */
-int             true_basetic;
-int             totalkills, totallive, totalitems, totalsecret;    // for intermission
-dboolean         demorecording;
+__STORAGE_MODIFIER int upmove;
+__STORAGE_MODIFIER int consoleplayer; // player taking events and displaying
+__STORAGE_MODIFIER int displayplayer; // view being displayed
+__STORAGE_MODIFIER int gametic;
+__STORAGE_MODIFIER int boom_basetic;       /* killough 9/29/98: for demo sync */
+__STORAGE_MODIFIER int true_basetic;
+__STORAGE_MODIFIER int totalkills, totallive, totalitems, totalsecret;    // for intermission
+__STORAGE_MODIFIER dboolean demorecording;
 wbstartstruct_t wminfo;               // parms for world map / intermission
-dboolean         haswolflevels = false;// jff 4/18/98 wolf levels present
-int             totalleveltimes;      // CPhipps - total time for all completed levels
-int             levels_completed;
-int             longtics;
+__STORAGE_MODIFIER dboolean haswolflevels = false;// jff 4/18/98 wolf levels present
+__STORAGE_MODIFIER int totalleveltimes;      // CPhipps - total time for all completed levels
+__STORAGE_MODIFIER int levels_completed;
+__STORAGE_MODIFIER int longtics;
 
-dboolean coop_spawns;
+__STORAGE_MODIFIER dboolean coop_spawns;
 
 // e6y
 // There is a new command-line switch "-shorttics".
@@ -197,7 +197,7 @@ dboolean coop_spawns;
 // (e.g. glides, where this makes a significant difference)
 // with the same mouse behaviour as when recording,
 // but without having to be recording every time.
-int shorttics;
+__STORAGE_MODIFIER int shorttics;
 
 //
 // controls (have defaults)
@@ -212,11 +212,11 @@ fixed_t sidemove[2]    = {0x18, 0x28};
 fixed_t angleturn[3]   = {640, 1280, 320};  // + slow turn
 fixed_t flyspeed[2]    = {1*256, 3*256};
 
-static int     turnheld;       // for accelerative turning
+static __STORAGE_MODIFIER int turnheld;       // for accelerative turning
 
 // Set to -1 or +1 to switch to the previous or next weapon.
 
-static int next_weapon = 0;
+static __STORAGE_MODIFIER int next_weapon = 0;
 
 // Used for prev/next weapon keys.
 
@@ -254,29 +254,29 @@ static const struct
 // };
 
 // mouse values are used once
-static int   mousex;
-static int   mousey;
-static int   dclicktime;
-static int   dclickstate;
-static int   dclicks;
-static int   dclicktime2;
-static int   dclickstate2;
-static int   dclicks2;
+static __STORAGE_MODIFIER int mousex;
+static __STORAGE_MODIFIER int mousey;
+static __STORAGE_MODIFIER int dclicktime;
+static __STORAGE_MODIFIER int dclickstate;
+static __STORAGE_MODIFIER int dclicks;
+static __STORAGE_MODIFIER int dclicktime2;
+static __STORAGE_MODIFIER int dclickstate2;
+static __STORAGE_MODIFIER int dclicks2;
 
-static int left_analog_x;
-static int left_analog_y;
+static __STORAGE_MODIFIER int left_analog_x;
+static __STORAGE_MODIFIER int left_analog_y;
 
 // Game events info
 static buttoncode_t special_event; // Event triggered by local player, to send
-static int   savegameslot;         // Slot to load if gameaction == ga_loadgame
-char         savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
+static __STORAGE_MODIFIER int savegameslot;         // Slot to load if gameaction == ga_loadgame
+__STORAGE_MODIFIER char savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
 
 // heretic
 #include "p_user.h"
 #include "heretic/def.h"
 
-int inventoryTics;
-int lookheld;
+__STORAGE_MODIFIER int inventoryTics;
+__STORAGE_MODIFIER int lookheld;
 
 static dboolean InventoryMoveLeft(void);
 static dboolean InventoryMoveRight(void);
@@ -290,7 +290,7 @@ static dboolean InventoryMoveRight(void);
 #include "hexen/sv_save.h"
 
 // Position indicator for cooperative net-play reborn
-int RebornPosition;
+__STORAGE_MODIFIER int RebornPosition;
 
 leave_data_t leave_data;
 
@@ -306,7 +306,7 @@ typedef enum
   NUMDOUBLECARRY
 } double_carry_t;
 
-static double double_carry[NUMDOUBLECARRY];
+static __STORAGE_MODIFIER double double_carry[NUMDOUBLECARRY];
 
 static int G_CarryDouble(double_carry_t c, double value)
 {
@@ -457,10 +457,10 @@ static int G_NextWeapon(int direction)
   return weapon_order_table[i].weapon_num;
 }
 
-static double mouse_sensitivity_horiz;
-static double mouse_sensitivity_vert;
-static double mouse_sensitivity_mlook;
-static double mouse_strafe_divisor;
+static __STORAGE_MODIFIER double mouse_sensitivity_horiz;
+static __STORAGE_MODIFIER double mouse_sensitivity_vert;
+static __STORAGE_MODIFIER double mouse_sensitivity_mlook;
+static __STORAGE_MODIFIER double mouse_strafe_divisor;
 
 void G_UpdateMouseSensitivity(void)
 {
@@ -652,7 +652,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
     if (hexen)
     {
-      extern int mn_SuicideConsole;
+      extern __STORAGE_MODIFIER int mn_SuicideConsole;
 
       if (dsda_InputActive(dsda_input_jump))
       {
@@ -838,7 +838,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
   }
 
   {
-    extern dboolean boom_weapon_state_injection;
+    extern __STORAGE_MODIFIER dboolean boom_weapon_state_injection;
     static dboolean done_autoswitch = false;
 
     if (!players[consoleplayer].attackdown)
@@ -2123,7 +2123,7 @@ int cpars[34] = {
   120,30,30,30          // 31-34
 };
 
-dboolean secretexit;
+__STORAGE_MODIFIER dboolean secretexit;
 
 void G_ExitLevel(int position)
 {
@@ -2286,7 +2286,7 @@ void G_DoWorldDone (void)
   dsda_EvaluateSkipModeDoWorldDone();
 }
 
-extern dboolean setsizeneeded;
+extern __STORAGE_MODIFIER dboolean setsizeneeded;
 
 //CPhipps - savename variable redundant
 
@@ -2419,7 +2419,7 @@ void RecalculateDrawnSubsectors(void)
 
 void G_AfterLoad(void)
 {
-  extern int BorderNeedRefresh;
+  extern __STORAGE_MODIFIER int BorderNeedRefresh;
 
   dsda_ResetTrackers();
 
@@ -2605,9 +2605,9 @@ static void G_DoSaveGame(dboolean via_cmd)
   Z_Free(name);
 }
 
-static int     d_skill;
-static int     d_episode;
-static int     d_map;
+static __STORAGE_MODIFIER int d_skill;
+static __STORAGE_MODIFIER int d_episode;
+static __STORAGE_MODIFIER int d_map;
 
 void G_DeferedInitNew(int skill, int episode, int map)
 {
@@ -3058,7 +3058,7 @@ void G_InitNew(int skill, int episode, int map, dboolean prepare)
   }
 
   {
-    extern int dsda_startmap;
+    extern __STORAGE_MODIFIER int dsda_startmap;
 
     dsda_startmap = map;
   }

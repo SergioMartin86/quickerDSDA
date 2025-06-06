@@ -33,9 +33,9 @@
 
 static const byte* playback_origin_p;
 static const byte* playback_p;
-static int playback_length;
-static int playback_behaviour;
-static int playback_tics;
+static __STORAGE_MODIFIER int playback_length;
+static __STORAGE_MODIFIER int playback_behaviour;
+static __STORAGE_MODIFIER int playback_tics;
 
 static dsda_arg_t* playdemo_arg;
 static dsda_arg_t* playlump_arg;
@@ -45,8 +45,8 @@ static dsda_arg_t* recordfromto_arg;
 static char* playback_name;
 static char* playback_filename;
 
-dboolean demoplayback;
-dboolean userdemo;
+__STORAGE_MODIFIER dboolean demoplayback;
+__STORAGE_MODIFIER dboolean userdemo;
 
 void dsda_RestartPlayback(void) {
   G_StartDemoPlayback(playback_origin_p, playback_length, playback_behaviour);

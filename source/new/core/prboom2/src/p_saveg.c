@@ -66,7 +66,7 @@
 
 byte *save_p;
 byte *savebuffer;
-static int savegamesize;
+static __STORAGE_MODIFIER int savegamesize;
 
 // Check for overrun and realloc if necessary -- Lee Killough 1/22/98
 void CheckSaveGame(size_t size)
@@ -357,7 +357,7 @@ void P_UnArchiveWorld (void)
 // phares 9/13/98: Moved this code outside of P_ArchiveThinkers so the
 // thinker indices could be used by the code that saves sector info.
 
-static int number_of_thinkers;
+static __STORAGE_MODIFIER int number_of_thinkers;
 
 static dboolean P_IsMobjThinker(thinker_t* thinker)
 {
@@ -568,9 +568,9 @@ void P_UnArchiveThinkerSubclasses(mobj_t** mobj_p, int mobj_count)
 }
 
 extern mobj_t** blocklinks;
-extern int      blocklinks_count;
-extern int      bmapwidth;
-extern int      bmapheight;
+extern __STORAGE_MODIFIER int blocklinks_count;
+extern __STORAGE_MODIFIER int bmapwidth;
+extern __STORAGE_MODIFIER int bmapheight;
 
 void P_ArchiveBlockLinks(void)
 {

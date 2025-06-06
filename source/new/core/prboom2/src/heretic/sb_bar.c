@@ -55,42 +55,42 @@ static void Hexen_DrawMainBar(void);
 
 // Public Data
 
-dboolean inventory;
-int curpos;
-int inv_ptr;
-int ArtifactFlash;
+__STORAGE_MODIFIER dboolean inventory;
+__STORAGE_MODIFIER int curpos;
+__STORAGE_MODIFIER int inv_ptr;
+__STORAGE_MODIFIER int ArtifactFlash;
 int SB_state = -1;
-int playerkeys = 0;
+__STORAGE_MODIFIER int playerkeys = 0;
 
 // Private Data
 
-static int HealthMarker;
-static int ChainWiggle;
+static __STORAGE_MODIFIER int HealthMarker;
+static __STORAGE_MODIFIER int ChainWiggle;
 static player_t *CPlayer;
 
-int LumpLTFACE;
-int LumpRTFACE;
-int LumpBARBACK;
-int LumpCHAIN;
-int LumpSTATBAR;
-int LumpLIFEGEM;
-int LumpLTFCTOP;
-int LumpRTFCTOP;
-int LumpSELECTBOX;
-int LumpINVLFGEM1;
-int LumpINVLFGEM2;
-int LumpINVRTGEM1;
-int LumpINVRTGEM2;
-int LumpINumbers[10];
-int LumpNEGATIVE;
-int LumpSmNumbers[10];
-int LumpBLACKSQ;
-int LumpINVBAR;
-int LumpARMCLEAR;
-int LumpCHAINBACK;
-int FontBNumBase;
-int spinbooklump;
-int spinflylump;
+__STORAGE_MODIFIER int LumpLTFACE;
+__STORAGE_MODIFIER int LumpRTFACE;
+__STORAGE_MODIFIER int LumpBARBACK;
+__STORAGE_MODIFIER int LumpCHAIN;
+__STORAGE_MODIFIER int LumpSTATBAR;
+__STORAGE_MODIFIER int LumpLIFEGEM;
+__STORAGE_MODIFIER int LumpLTFCTOP;
+__STORAGE_MODIFIER int LumpRTFCTOP;
+__STORAGE_MODIFIER int LumpSELECTBOX;
+__STORAGE_MODIFIER int LumpINVLFGEM1;
+__STORAGE_MODIFIER int LumpINVLFGEM2;
+__STORAGE_MODIFIER int LumpINVRTGEM1;
+__STORAGE_MODIFIER int LumpINVRTGEM2;
+__STORAGE_MODIFIER int LumpINumbers[10];
+__STORAGE_MODIFIER int LumpNEGATIVE;
+__STORAGE_MODIFIER int LumpSmNumbers[10];
+__STORAGE_MODIFIER int LumpBLACKSQ;
+__STORAGE_MODIFIER int LumpINVBAR;
+__STORAGE_MODIFIER int LumpARMCLEAR;
+__STORAGE_MODIFIER int LumpCHAINBACK;
+__STORAGE_MODIFIER int FontBNumBase;
+__STORAGE_MODIFIER int spinbooklump;
+__STORAGE_MODIFIER int spinflylump;
 
 static char heretic_namearti[][10] = {
     {"ARTIBOX"},                // none
@@ -105,33 +105,33 @@ static char heretic_namearti[][10] = {
     {"ARTISOAR"},               // fly
     {"ARTIATLP"}                // teleport
 };
-static int heretic_lumparti[11];
+static __STORAGE_MODIFIER int heretic_lumparti[11];
 
-static int SpinMinotaurLump;
-static int SpinSpeedLump;
-static int SpinDefenseLump;
+static __STORAGE_MODIFIER int SpinMinotaurLump;
+static __STORAGE_MODIFIER int SpinSpeedLump;
+static __STORAGE_MODIFIER int SpinDefenseLump;
 
-static int LumpH2BAR;
-static int LumpH2TOP;
-static int LumpLFEDGE;
-static int LumpRTEDGE;
-static int LumpARTICLEAR;
-static int LumpMANACLEAR;
-static int LumpKILLS;
-static int LumpMANAVIAL1;
-static int LumpMANAVIAL2;
-static int LumpMANAVIALDIM1;
-static int LumpMANAVIALDIM2;
-static int LumpMANADIM1;
-static int LumpMANADIM2;
-static int LumpMANABRIGHT1;
-static int LumpMANABRIGHT2;
-static int LumpKEYBAR;
-static int LumpWEAPONSLOT;
-static int LumpWEAPONFULL;
-static int LumpPIECE1;
-static int LumpPIECE2;
-static int LumpPIECE3;
+static __STORAGE_MODIFIER int LumpH2BAR;
+static __STORAGE_MODIFIER int LumpH2TOP;
+static __STORAGE_MODIFIER int LumpLFEDGE;
+static __STORAGE_MODIFIER int LumpRTEDGE;
+static __STORAGE_MODIFIER int LumpARTICLEAR;
+static __STORAGE_MODIFIER int LumpMANACLEAR;
+static __STORAGE_MODIFIER int LumpKILLS;
+static __STORAGE_MODIFIER int LumpMANAVIAL1;
+static __STORAGE_MODIFIER int LumpMANAVIAL2;
+static __STORAGE_MODIFIER int LumpMANAVIALDIM1;
+static __STORAGE_MODIFIER int LumpMANAVIALDIM2;
+static __STORAGE_MODIFIER int LumpMANADIM1;
+static __STORAGE_MODIFIER int LumpMANADIM2;
+static __STORAGE_MODIFIER int LumpMANABRIGHT1;
+static __STORAGE_MODIFIER int LumpMANABRIGHT2;
+static __STORAGE_MODIFIER int LumpKEYBAR;
+static __STORAGE_MODIFIER int LumpWEAPONSLOT;
+static __STORAGE_MODIFIER int LumpWEAPONFULL;
+static __STORAGE_MODIFIER int LumpPIECE1;
+static __STORAGE_MODIFIER int LumpPIECE2;
+static __STORAGE_MODIFIER int LumpPIECE3;
 
 static char hexen_namearti[][10] = {
     {"ARTIBOX"},                // none
@@ -168,31 +168,31 @@ static char hexen_namearti[][10] = {
     {"ARTIGER3"},               // hexen_arti_puzzgear3
     {"ARTIGER4"},               // hexen_arti_puzzgear4
 };
-static int hexen_lumparti[33];
+static __STORAGE_MODIFIER int hexen_lumparti[33];
 
 static int *lumparti;
 
 // game config
-static int sb_ticker_delta_cap;
-static int sb_icon_y;
-static int sb_inv_bar_x;
-static int sb_inv_bar_y;
-static int sb_inv_arti_y;
-static int sb_inv_arti_count_x;
-static int sb_inv_arti_count_y;
-static int sb_inv_select_y;
-static int sb_inv_gem_x;
-static int sb_inv_gem_y;
-static int sb_full_arti_x;
-static int sb_full_arti_y;
-static int sb_full_arti_count_x;
-static int sb_full_inv_arti_x;
-static int sb_full_inv_arti_y;
-static int sb_full_inv_arti_count_x;
-static int sb_full_inv_arti_count_y;
-static int sb_full_inv_select_y;
-static int sb_full_inv_gem_xl;
-static int sb_full_inv_gem_xr;
+static __STORAGE_MODIFIER int sb_ticker_delta_cap;
+static __STORAGE_MODIFIER int sb_icon_y;
+static __STORAGE_MODIFIER int sb_inv_bar_x;
+static __STORAGE_MODIFIER int sb_inv_bar_y;
+static __STORAGE_MODIFIER int sb_inv_arti_y;
+static __STORAGE_MODIFIER int sb_inv_arti_count_x;
+static __STORAGE_MODIFIER int sb_inv_arti_count_y;
+static __STORAGE_MODIFIER int sb_inv_select_y;
+static __STORAGE_MODIFIER int sb_inv_gem_x;
+static __STORAGE_MODIFIER int sb_inv_gem_y;
+static __STORAGE_MODIFIER int sb_full_arti_x;
+static __STORAGE_MODIFIER int sb_full_arti_y;
+static __STORAGE_MODIFIER int sb_full_arti_count_x;
+static __STORAGE_MODIFIER int sb_full_inv_arti_x;
+static __STORAGE_MODIFIER int sb_full_inv_arti_y;
+static __STORAGE_MODIFIER int sb_full_inv_arti_count_x;
+static __STORAGE_MODIFIER int sb_full_inv_arti_count_y;
+static __STORAGE_MODIFIER int sb_full_inv_select_y;
+static __STORAGE_MODIFIER int sb_full_inv_gem_xl;
+static __STORAGE_MODIFIER int sb_full_inv_gem_xr;
 
 void SB_Start(void)
 {
@@ -522,8 +522,8 @@ char ammopic[][10] = {
     {"INAMLOB"}
 };
 
-static int oldarti = 0;
-static int oldartiCount = 0;
+static __STORAGE_MODIFIER int oldarti = 0;
+static __STORAGE_MODIFIER int oldartiCount = 0;
 static int oldfrags = -9999;
 static int oldammo = -1;
 static int oldarmor = -1;

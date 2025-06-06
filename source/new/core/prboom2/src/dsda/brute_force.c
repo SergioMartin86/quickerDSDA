@@ -70,14 +70,14 @@ typedef struct {
 } bf_target_t;
 
 static bf_t brute_force[MAX_BF_DEPTH];
-static int bf_depth;
-static int bf_logictic;
-static int bf_condition_count;
+static __STORAGE_MODIFIER int bf_depth;
+static __STORAGE_MODIFIER int bf_logictic;
+static __STORAGE_MODIFIER int bf_condition_count;
 static bf_condition_t bf_condition[MAX_BF_CONDITIONS];
-static long long bf_volume;
-static long long bf_volume_max;
-static dboolean bf_mode;
-static dboolean bf_nomonsters;
+static long __STORAGE_MODIFIER long bf_volume;
+static long __STORAGE_MODIFIER long bf_volume_max;
+static __STORAGE_MODIFIER dboolean bf_mode;
+static __STORAGE_MODIFIER dboolean bf_nomonsters;
 static dsda_key_frame_t nomo_key_frame;
 static bf_target_t bf_target;
 static ticcmd_t bf_result[MAX_BF_DEPTH];
@@ -234,7 +234,7 @@ static void dsda_PrintBFProgress(void) {
 #define BF_SUCCESS 1
 
 static const char* bf_result_text[2] = { "FAILURE", "SUCCESS" };
-static dboolean brute_force_ended;
+static __STORAGE_MODIFIER dboolean brute_force_ended;
 
 dboolean dsda_BruteForceEnded(void) {
   return brute_force_ended;
@@ -260,7 +260,7 @@ static void dsda_EndBF(int result) {
 }
 
 static fixed_t dsda_BFAttribute(int attribute) {
-  extern int bmapwidth;
+  extern __STORAGE_MODIFIER int bmapwidth;
 
   player_t* player;
 
@@ -281,7 +281,7 @@ static fixed_t dsda_BFAttribute(int attribute) {
       return P_PlayerSpeed(player);
     case dsda_bf_damage:
       {
-        extern int player_damage_last_tic;
+        extern __STORAGE_MODIFIER int player_damage_last_tic;
 
         return player_damage_last_tic;
       }

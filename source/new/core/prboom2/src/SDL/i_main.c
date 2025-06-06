@@ -104,7 +104,7 @@ void I_Init2(void)
   force_singletics_to = gametic + BACKUPTICS;
 }
 
-int signal_context;
+__STORAGE_MODIFIER int signal_context;
 
 static volatile sig_atomic_t interrupted = 0;
 
@@ -157,7 +157,7 @@ struct atexit_listentry_s
 };
 
 static atexit_listentry_t *exit_funcs[exit_priority_max];
-static int exit_priority;
+static __STORAGE_MODIFIER int exit_priority;
 
 void I_AtExit(atexit_func_t func, dboolean run_on_error,
               const char* name, exit_priority_t priority)

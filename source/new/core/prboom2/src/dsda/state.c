@@ -21,7 +21,7 @@
 #include "state.h"
 
 state_t* states;
-int num_states;
+__STORAGE_MODIFIER int num_states;
 byte* defined_codeptr_args;
 statenum_t* seenstate_tab;
 
@@ -90,7 +90,7 @@ dsda_deh_state_t dsda_GetDehState(int index) {
 
 void dsda_InitializeStates(state_t* source, int count) {
   int i;
-  extern int raven;
+  extern __STORAGE_MODIFIER int raven;
 
   num_states = count;
 

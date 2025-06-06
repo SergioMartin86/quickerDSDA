@@ -115,16 +115,16 @@ void	P_MapStart(void);
 void	P_MapEnd(void);
 
 // If "floatok" true, move would be ok if within "tmfloorz - tmceilingz".
-extern dboolean floatok;
-extern dboolean felldown;   // killough 11/98: indicates object pushed off ledge
-extern fixed_t tmfloorz;
-extern fixed_t tmceilingz;
+extern __STORAGE_MODIFIER dboolean floatok;
+extern __STORAGE_MODIFIER dboolean felldown;   // killough 11/98: indicates object pushed off ledge
+extern __STORAGE_MODIFIER fixed_t tmfloorz;
+extern __STORAGE_MODIFIER fixed_t tmceilingz;
 extern line_t *ceilingline;
 extern line_t *floorline;      // killough 8/23/98
 extern mobj_t *linetarget;     // who got hit (or NULL)
 extern mobj_t *crosshair_target;
 extern msecnode_t *sector_list;                             // phares 3/16/98
-extern fixed_t tmbbox[4];         // phares 3/20/98
+extern __STORAGE_MODIFIER fixed_t tmbbox[4];         // phares 3/20/98
 extern line_t *blockline;   // killough 8/11/98
 
 // heretic
@@ -137,7 +137,7 @@ void P_AppendSpecHit(line_t * ld);
 
 // hexen
 
-extern int tmfloorpic;
+extern __STORAGE_MODIFIER int tmfloorpic;
 extern mobj_t *BlockingMobj;
 
 void P_BounceWall(mobj_t * mo);

@@ -50,94 +50,94 @@ weaponinfo_t* weaponinfo;
 
 int g_maxplayers = 4;
 int g_viewheight = 41 * FRACUNIT;
-int g_numammo;
+__STORAGE_MODIFIER int g_numammo;
 
-int g_mt_player;
-int g_mt_tfog;
-int g_mt_blood;
-int g_skullpop_mt;
-int g_s_bloodyskullx1;
-int g_s_bloodyskullx2;
-int g_s_play_fdth20;
+__STORAGE_MODIFIER int g_mt_player;
+__STORAGE_MODIFIER int g_mt_tfog;
+__STORAGE_MODIFIER int g_mt_blood;
+__STORAGE_MODIFIER int g_skullpop_mt;
+__STORAGE_MODIFIER int g_s_bloodyskullx1;
+__STORAGE_MODIFIER int g_s_bloodyskullx2;
+__STORAGE_MODIFIER int g_s_play_fdth20;
 
-int g_wp_fist;
-int g_wp_chainsaw;
-int g_wp_pistol;
+__STORAGE_MODIFIER int g_wp_fist;
+__STORAGE_MODIFIER int g_wp_chainsaw;
+__STORAGE_MODIFIER int g_wp_pistol;
 
-int g_telefog_height;
-int g_thrust_factor;
-int g_fuzzy_aim_shift;
-int g_jump;
+__STORAGE_MODIFIER int g_telefog_height;
+__STORAGE_MODIFIER int g_thrust_factor;
+__STORAGE_MODIFIER int g_fuzzy_aim_shift;
+__STORAGE_MODIFIER int g_jump;
 
-int g_s_null;
+__STORAGE_MODIFIER int g_s_null;
 
-int g_mt_bloodsplatter;
-int g_bloodsplatter_shift;
-int g_bloodsplatter_weight;
-int g_mons_look_range;
-int g_hide_state;
-int g_lava_type;
+__STORAGE_MODIFIER int g_mt_bloodsplatter;
+__STORAGE_MODIFIER int g_bloodsplatter_shift;
+__STORAGE_MODIFIER int g_bloodsplatter_weight;
+__STORAGE_MODIFIER int g_mons_look_range;
+__STORAGE_MODIFIER int g_hide_state;
+__STORAGE_MODIFIER int g_lava_type;
 
-int g_mntr_charge_speed;
-int g_mntr_atk1_sfx;
-int g_mntr_decide_range;
-int g_mntr_charge_rng;
-int g_mntr_fire_rng;
-int g_mntr_charge_state;
-int g_mntr_fire_state;
-int g_mntr_charge_puff;
-int g_mntr_atk2_sfx;
-int g_mntr_atk2_dice;
-int g_mntr_atk2_missile;
-int g_mntr_atk3_sfx;
-int g_mntr_atk3_dice;
-int g_mntr_atk3_missile;
-int g_mntr_atk3_state;
-int g_mntr_fire;
+__STORAGE_MODIFIER int g_mntr_charge_speed;
+__STORAGE_MODIFIER int g_mntr_atk1_sfx;
+__STORAGE_MODIFIER int g_mntr_decide_range;
+__STORAGE_MODIFIER int g_mntr_charge_rng;
+__STORAGE_MODIFIER int g_mntr_fire_rng;
+__STORAGE_MODIFIER int g_mntr_charge_state;
+__STORAGE_MODIFIER int g_mntr_fire_state;
+__STORAGE_MODIFIER int g_mntr_charge_puff;
+__STORAGE_MODIFIER int g_mntr_atk2_sfx;
+__STORAGE_MODIFIER int g_mntr_atk2_dice;
+__STORAGE_MODIFIER int g_mntr_atk2_missile;
+__STORAGE_MODIFIER int g_mntr_atk3_sfx;
+__STORAGE_MODIFIER int g_mntr_atk3_dice;
+__STORAGE_MODIFIER int g_mntr_atk3_missile;
+__STORAGE_MODIFIER int g_mntr_atk3_state;
+__STORAGE_MODIFIER int g_mntr_fire;
 
-int g_arti_health;
-int g_arti_superhealth;
-int g_arti_fly;
-int g_arti_limit;
+__STORAGE_MODIFIER int g_arti_health;
+__STORAGE_MODIFIER int g_arti_superhealth;
+__STORAGE_MODIFIER int g_arti_fly;
+__STORAGE_MODIFIER int g_arti_limit;
 
-int g_sfx_sawup;
-int g_sfx_telept;
-int g_sfx_stnmov;
-int g_sfx_stnmov_plats;
-int g_sfx_swtchn;
-int g_sfx_swtchx;
-int g_sfx_dorcls;
-int g_sfx_doropn;
-int g_sfx_dorlnd;
-int g_sfx_pstart;
-int g_sfx_pstop;
-int g_sfx_itemup;
-int g_sfx_pistol;
-int g_sfx_oof;
-int g_sfx_menu;
-int g_sfx_respawn;
-int g_sfx_secret;
-int g_sfx_revive;
-int g_sfx_console;
+__STORAGE_MODIFIER int g_sfx_sawup;
+__STORAGE_MODIFIER int g_sfx_telept;
+__STORAGE_MODIFIER int g_sfx_stnmov;
+__STORAGE_MODIFIER int g_sfx_stnmov_plats;
+__STORAGE_MODIFIER int g_sfx_swtchn;
+__STORAGE_MODIFIER int g_sfx_swtchx;
+__STORAGE_MODIFIER int g_sfx_dorcls;
+__STORAGE_MODIFIER int g_sfx_doropn;
+__STORAGE_MODIFIER int g_sfx_dorlnd;
+__STORAGE_MODIFIER int g_sfx_pstart;
+__STORAGE_MODIFIER int g_sfx_pstop;
+__STORAGE_MODIFIER int g_sfx_itemup;
+__STORAGE_MODIFIER int g_sfx_pistol;
+__STORAGE_MODIFIER int g_sfx_oof;
+__STORAGE_MODIFIER int g_sfx_menu;
+__STORAGE_MODIFIER int g_sfx_respawn;
+__STORAGE_MODIFIER int g_sfx_secret;
+__STORAGE_MODIFIER int g_sfx_revive;
+__STORAGE_MODIFIER int g_sfx_console;
 
-int g_door_normal;
-int g_door_raise_in_5_mins;
-int g_door_open;
+__STORAGE_MODIFIER int g_door_normal;
+__STORAGE_MODIFIER int g_door_raise_in_5_mins;
+__STORAGE_MODIFIER int g_door_open;
 
-int g_st_height;
-int g_border_offset;
-int g_mf_translucent;
-int g_mf_shadow;
+__STORAGE_MODIFIER int g_st_height;
+__STORAGE_MODIFIER int g_border_offset;
+__STORAGE_MODIFIER int g_mf_translucent;
+__STORAGE_MODIFIER int g_mf_shadow;
 
 const char* g_menu_flat;
-int g_menu_save_page_size;
-int g_menu_font_spacing;
+__STORAGE_MODIFIER int g_menu_save_page_size;
+__STORAGE_MODIFIER int g_menu_font_spacing;
 
 const char* g_skyflatname;
 
-dboolean hexen = false;
-dboolean heretic = false;
-dboolean raven = false;
+__STORAGE_MODIFIER dboolean hexen = false;
+__STORAGE_MODIFIER dboolean heretic = false;
+__STORAGE_MODIFIER dboolean raven = false;
 
 static void dsda_InitDoom(void) {
   int i;

@@ -41,19 +41,19 @@
 /* CPhipps - removed wadfiles[] stuff to w_wad.h */
 
 //jff 1/24/98 make command line copies of play modes available
-extern dboolean clnomonsters; // checkparm of -nomonsters
-extern dboolean clrespawnparm;  // checkparm of -respawn
-extern dboolean clfastparm; // checkparm of -fast
+extern __STORAGE_MODIFIER dboolean clnomonsters; // checkparm of -nomonsters
+extern __STORAGE_MODIFIER dboolean clrespawnparm;  // checkparm of -respawn
+extern __STORAGE_MODIFIER dboolean clfastparm; // checkparm of -fast
 //jff end of external declaration of command line playmode
 
-extern dboolean nosfxparm;
-extern dboolean nomusicparm;
+extern __STORAGE_MODIFIER dboolean nosfxparm;
+extern __STORAGE_MODIFIER dboolean nomusicparm;
 
 // Called by IO functions when input is detected.
 void D_PostEvent(event_t* ev);
 
 // Demo stuff
-extern dboolean advancedemo;
+extern __STORAGE_MODIFIER dboolean advancedemo;
 void D_AdvanceDemo(void);
 void D_DoAdvanceDemo (void);
 

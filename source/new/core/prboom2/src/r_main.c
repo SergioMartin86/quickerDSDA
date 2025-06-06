@@ -79,7 +79,7 @@ int LIGHTLEVELS   = 32;
 int LIGHTSEGSHIFT = 3;
 int LIGHTBRIGHT   = 2;
 
-int r_frame_count;
+__STORAGE_MODIFIER int r_frame_count;
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW 2048
@@ -89,34 +89,34 @@ int r_frame_count;
 int validcount = 1;         // increment every time a check is made
 int validcount2 = 1;
 const lighttable_t *fixedcolormap;
-int      centerx, centery;
+__STORAGE_MODIFIER int centerx, centery;
 // e6y: wide-res
-int wide_centerx;
+__STORAGE_MODIFIER int wide_centerx;
 
-fixed_t  focallength;
-fixed_t  focallengthy;
-fixed_t  globaluclip, globaldclip;
-fixed_t  centerxfrac, centeryfrac;
-fixed_t  yaspectmul;
-fixed_t  viewheightfrac; //e6y: for correct cliping of things
-fixed_t  projection;
+__STORAGE_MODIFIER fixed_t focallength;
+__STORAGE_MODIFIER fixed_t focallengthy;
+__STORAGE_MODIFIER fixed_t globaluclip, globaldclip;
+__STORAGE_MODIFIER fixed_t centerxfrac, centeryfrac;
+__STORAGE_MODIFIER fixed_t yaspectmul;
+__STORAGE_MODIFIER fixed_t viewheightfrac; //e6y: for correct cliping of things
+__STORAGE_MODIFIER fixed_t projection;
 // proff 11/06/98: Added for high-res
-fixed_t  projectiony;
-fixed_t  skyiscale;
-fixed_t  viewx, viewy, viewz;
-angle_t  viewangle;
-fixed_t  viewcos, viewsin;
-fixed_t  viewtancos, viewtansin;
+__STORAGE_MODIFIER fixed_t projectiony;
+__STORAGE_MODIFIER fixed_t skyiscale;
+__STORAGE_MODIFIER fixed_t viewx, viewy, viewz;
+__STORAGE_MODIFIER angle_t viewangle;
+__STORAGE_MODIFIER fixed_t viewcos, viewsin;
+__STORAGE_MODIFIER fixed_t viewtancos, viewtansin;
 player_t *viewplayer;
 // e6y: Added for more precise flats drawing
-fixed_t viewfocratio;
+__STORAGE_MODIFIER fixed_t viewfocratio;
 
 int r_nearclip = 5;
 
-int FieldOfView;
-int viewport[4];
-float modelMatrix[16];
-float projMatrix[16];
+__STORAGE_MODIFIER int FieldOfView;
+__STORAGE_MODIFIER int viewport[4];
+__STORAGE_MODIFIER float modelMatrix[16];
+__STORAGE_MODIFIER float projMatrix[16];
 
 extern const lighttable_t **walllights;
 
@@ -124,14 +124,14 @@ extern const lighttable_t **walllights;
 // precalculated math tables
 //
 
-angle_t clipangle;
+__STORAGE_MODIFIER angle_t clipangle;
 
 // The viewangletox[viewangle + FINEANGLES/4] lookup
 // maps the visible view angles to screen X coordinates,
 // flattening the arc to a flat projection plane.
 // There will be many angles mapped to the same X.
 
-int viewangletox[FINEANGLES/2];
+__STORAGE_MODIFIER int viewangletox[FINEANGLES/2];
 
 // The xtoviewangleangle[] table maps a screen pixel
 // to the lowest viewangle that maps back to x ranges
@@ -143,7 +143,7 @@ angle_t *xtoviewangle;   // killough 2/8/98
 // killough 3/20/98: Support dynamic colormaps, e.g. deep water
 // killough 4/4/98: support dynamic number of them as well
 
-int numcolormaps;
+__STORAGE_MODIFIER int numcolormaps;
 const lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
 const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
 const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
@@ -154,11 +154,11 @@ const lighttable_t **colormaps;
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
 //e6y: for Boom colormaps in OpenGL mode
-dboolean use_boom_cm;
-int boom_cm;         // current colormap
-int frame_fixedcolormap = 0;
+__STORAGE_MODIFIER dboolean use_boom_cm;
+__STORAGE_MODIFIER int boom_cm;         // current colormap
+__STORAGE_MODIFIER int frame_fixedcolormap = 0;
 
-int extralight;                           // bumped light from gun blasts
+__STORAGE_MODIFIER int extralight;                           // bumped light from gun blasts
 
 //
 // R_PointOnSide
@@ -487,8 +487,8 @@ static void R_InitLightTables (void)
 // The change will take effect next refresh.
 //
 
-dboolean setsizeneeded;
-static int setblocks;
+__STORAGE_MODIFIER dboolean setsizeneeded;
+static __STORAGE_MODIFIER int setblocks;
 
 void R_SetViewSize(void)
 {

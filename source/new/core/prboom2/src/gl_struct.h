@@ -34,7 +34,7 @@
 #ifndef _GL_STRUCT_H
 #define _GL_STRUCT_H
 
-extern dboolean use_gl_nodes;
+extern __STORAGE_MODIFIER dboolean use_gl_nodes;
 
 typedef enum {
   skytype_auto,

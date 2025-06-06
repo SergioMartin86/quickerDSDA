@@ -38,12 +38,12 @@ typedef struct {
   int original_depth;
 } build_cmd_queue_t;
 
-static dboolean allow_turbo;
-static dboolean build_mode;
-static dboolean advance_frame;
+static __STORAGE_MODIFIER dboolean allow_turbo;
+static __STORAGE_MODIFIER dboolean build_mode;
+static __STORAGE_MODIFIER dboolean advance_frame;
 static ticcmd_t build_cmd;
 static ticcmd_t overwritten_cmd;
-static int overwritten_logictic;
+static __STORAGE_MODIFIER int overwritten_logictic;
 static int build_cmd_tic = -1;
 static dboolean replace_source = true;
 static build_cmd_queue_t cmd_queue;

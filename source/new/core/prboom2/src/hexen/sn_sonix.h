@@ -33,7 +33,7 @@ struct seqnode_s
   seqnode_t *next;
 };
 
-extern int ActiveSequences;
+extern __STORAGE_MODIFIER int ActiveSequences;
 extern seqnode_t *SequenceListHead;
 
 void SN_InitSequenceScript(void);

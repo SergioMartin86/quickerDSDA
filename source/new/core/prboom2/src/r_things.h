@@ -50,16 +50,16 @@ extern int *screenheightarray; /* change to MAX_*  */ // dropoff overflow
 
 extern int     *mfloorclip;    // dropoff overflow
 extern int     *mceilingclip;  // dropoff overflow
-extern fixed_t spryscale;
+extern __STORAGE_MODIFIER fixed_t spryscale;
 extern int64_t sprtopscreen;
-extern fixed_t pspriteiscale;
+extern __STORAGE_MODIFIER fixed_t pspriteiscale;
 /* proff 11/06/98: Added for high-res */
-extern fixed_t pspritexscale;
-extern fixed_t pspriteyscale;
-extern fixed_t pspriteiyscale;
+extern __STORAGE_MODIFIER fixed_t pspritexscale;
+extern __STORAGE_MODIFIER fixed_t pspriteyscale;
+extern __STORAGE_MODIFIER fixed_t pspriteiyscale;
 //e6y: added for GL
-extern float pspritexscale_f;
-extern float pspriteyscale_f;
+extern __STORAGE_MODIFIER float pspritexscale_f;
+extern __STORAGE_MODIFIER float pspriteyscale_f;
 
 void R_DrawMaskedColumn(const rpatch_t *patch,
                         R_DrawColumn_f colfunc,

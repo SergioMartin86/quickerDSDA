@@ -86,25 +86,25 @@
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
 //
 
-int      numvertexes;
+__STORAGE_MODIFIER int numvertexes;
 vertex_t *vertexes;
 
-int      numsegs;
+__STORAGE_MODIFIER int numsegs;
 seg_t    *segs;
 
-int      numsectors;
+__STORAGE_MODIFIER int numsectors;
 sector_t *sectors;
 
-int      numsubsectors;
+__STORAGE_MODIFIER int numsubsectors;
 subsector_t *subsectors;
 
-int      numnodes;
+__STORAGE_MODIFIER int numnodes;
 node_t   *nodes;
 
-int      numlines;
+__STORAGE_MODIFIER int numlines;
 line_t   *lines;
 
-int      numsides;
+__STORAGE_MODIFIER int numsides;
 side_t   *sides;
 
 int      *sslines_indexes;
@@ -126,11 +126,11 @@ typedef enum {
   ZDOOM_ZGL3_NODES,
 } nodes_version_t;
 
-int firstglvertex = 0;
+__STORAGE_MODIFIER int firstglvertex = 0;
 static nodes_version_t nodesVersion = DEFAULT_BSP_NODES;
-dboolean use_gl_nodes = false;
-dboolean has_behavior;
-dboolean udmf_map;
+__STORAGE_MODIFIER dboolean use_gl_nodes = false;
+__STORAGE_MODIFIER dboolean has_behavior;
+__STORAGE_MODIFIER dboolean udmf_map;
 
 // figgi 08/21/00 -- glSegs
 typedef struct
@@ -154,7 +154,7 @@ typedef struct
 //
 // Blockmap size.
 
-int       bmapwidth, bmapheight;  // size in mapblocks
+__STORAGE_MODIFIER int bmapwidth, bmapheight;  // size in mapblocks
 
 // killough 3/1/98: remove blockmap limit internally:
 int       *blockmap;              // was short -- killough
@@ -162,10 +162,10 @@ int       *blockmap;              // was short -- killough
 // offsets in blockmap are from here
 int       *blockmaplump;          // was short -- killough
 
-fixed_t   bmaporgx, bmaporgy;     // origin of block map
+__STORAGE_MODIFIER fixed_t bmaporgx, bmaporgy;     // origin of block map
 
 mobj_t    **blocklinks;           // for thing chains
-int       blocklinks_count;
+__STORAGE_MODIFIER int blocklinks_count;
 
 // MAES: extensions to support 512x512 blockmaps.
 // They represent the maximum negative number which represents
@@ -180,7 +180,7 @@ int       blocklinks_count;
 int blockmapxneg = -257;
 int blockmapyneg = -257;
 
-dboolean skipblstart;  // MaxW: Skip initial blocklist short
+__STORAGE_MODIFIER dboolean skipblstart;  // MaxW: Skip initial blocklist short
 
 //
 // REJECT
@@ -207,10 +207,10 @@ int numthings;
 mobj_t **mobj_ptrs;
 
 static int current_episode = -1;
-static int current_map = -1;
+static __STORAGE_MODIFIER int current_map = -1;
 static nodes_version_t current_nodesVersion = UNKNOWN_NODES;
-static int samelevel = false;
-static int inconsistent_nodes;
+static __STORAGE_MODIFIER int samelevel = false;
+static __STORAGE_MODIFIER int inconsistent_nodes;
 
 typedef struct
 {
@@ -1536,7 +1536,7 @@ static void P_LoadZNodes(int lump, int glnodes)
     Z_Free(output);
 }
 
-static int no_overlapped_sprites;
+static __STORAGE_MODIFIER int no_overlapped_sprites;
 #define GETXY(mobj) ((mobj)->x + ((mobj)->y >> 16))
 static int C_DECL dicmp_sprite_by_pos(const void *a, const void *b)
 {
@@ -3646,7 +3646,7 @@ void P_InitSubsectorsLines(void)
   }
 }
 
-static dboolean must_rebuild_blockmap;
+static __STORAGE_MODIFIER dboolean must_rebuild_blockmap;
 
 void P_MustRebuildBlockmap(void)
 {

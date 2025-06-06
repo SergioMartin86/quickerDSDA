@@ -29,11 +29,11 @@ typedef struct {
 
 static local_component_t* local;
 
-static int health_lump;
-static int strength_lump;
-static int patch_delta_x;
-static int patch_vertical_spacing;
-static int patch_spacing;
+static __STORAGE_MODIFIER int health_lump;
+static __STORAGE_MODIFIER int strength_lump;
+static __STORAGE_MODIFIER int patch_delta_x;
+static __STORAGE_MODIFIER int patch_vertical_spacing;
+static __STORAGE_MODIFIER int patch_spacing;
 
 static void dsda_DrawComponent(void) {
   player_t* player;

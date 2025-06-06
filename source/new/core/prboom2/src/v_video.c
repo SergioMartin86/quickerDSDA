@@ -65,10 +65,10 @@
 // SetRatio sets the following global variables based on window geometry and
 // user preferences. The integer ratio is hardly used anymore, so further
 // simplification may be in order.
-dboolean tallscreen;
-unsigned int ratio_multiplier, ratio_scale;
-float gl_ratio;
-int psprite_offset; // Needed for "tallscreen" modes
+__STORAGE_MODIFIER dboolean tallscreen;
+unsigned __STORAGE_MODIFIER int ratio_multiplier, ratio_scale;
+__STORAGE_MODIFIER float gl_ratio;
+__STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
 
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT];
@@ -98,7 +98,7 @@ int V_BloodColor(int blood)
 // so it can be considered GPL as used here, rather than BSD. But,
 // I don't care either way. It is effectively dual-licensed I suppose.
 
-unsigned int Col2RGB8[65][256];
+unsigned __STORAGE_MODIFIER int Col2RGB8[65][256];
 byte RGB32k[32][32][32];
 
 #define MAKECOLOR(a) (((a)<<3)|((a)>>2))
@@ -660,7 +660,7 @@ static void FUNC_V_DrawNumPatchPrecise(float x, float y, int scrn, int lump,
   V_DrawMemPatch((int)x, (int)y, scrn, R_PatchByNum(lump), cm, flags);
 }
 
-int currentPaletteIndex = 0;
+__STORAGE_MODIFIER int currentPaletteIndex = 0;
 
 void V_TouchPalette(void)
 {

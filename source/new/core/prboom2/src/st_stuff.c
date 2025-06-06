@@ -62,9 +62,9 @@
 // STATUS BAR DATA
 //
 
-int ST_SCALED_HEIGHT;
-int ST_SCALED_WIDTH;
-int ST_SCALED_OFFSETX;
+__STORAGE_MODIFIER int ST_SCALED_HEIGHT;
+__STORAGE_MODIFIER int ST_SCALED_WIDTH;
+__STORAGE_MODIFIER int ST_SCALED_OFFSETX;
 
 // Palette indices.
 // For damage/bonus red-/gold-shifts
@@ -260,7 +260,7 @@ int ST_SCALED_OFFSETX;
 static player_t *plyr;
 
 // ST_Start() has just been called
-static dboolean st_firsttime;
+static __STORAGE_MODIFIER dboolean st_firsttime;
 
 // used to execute ST_Init() only once
 static int veryfirsttime = 1;
@@ -268,19 +268,19 @@ static int veryfirsttime = 1;
 // CPhipps - no longer do direct PLAYPAL handling here
 
 // used for timing
-static unsigned int st_clock;
+static unsigned __STORAGE_MODIFIER int st_clock;
 
 // whether left-side main status bar is active
-static dboolean st_statusbaron;
+static __STORAGE_MODIFIER dboolean st_statusbaron;
 
 // !deathmatch
-static dboolean st_notdeathmatch;
+static __STORAGE_MODIFIER dboolean st_notdeathmatch;
 
 // !deathmatch && st_statusbaron
-static dboolean st_armson;
+static __STORAGE_MODIFIER dboolean st_armson;
 
 // !deathmatch
-static dboolean st_fragson;
+static __STORAGE_MODIFIER dboolean st_fragson;
 
 // 0-9, tall numbers
 static patchnum_t tallnum[10];
@@ -340,39 +340,39 @@ static st_number_t   w_ammo[4];
 static st_number_t   w_maxammo[4];
 
  // number of frags so far in deathmatch
-static int      st_fragscount;
+static __STORAGE_MODIFIER int st_fragscount;
 
 // used to use appopriately pained face
 static int      st_oldhealth = -1;
 
 // used for evil grin
-static dboolean  oldweaponsowned[NUMWEAPONS];
+static __STORAGE_MODIFIER dboolean oldweaponsowned[NUMWEAPONS];
 
  // count until face changes
-static int      st_facecount = 0;
+static __STORAGE_MODIFIER int st_facecount = 0;
 
 // current face index, used by w_faces
-static int      st_faceindex = 0;
+static __STORAGE_MODIFIER int st_faceindex = 0;
 
 // holds key-type for each key box on bar
-static int      keyboxes[3];
+static __STORAGE_MODIFIER int keyboxes[3];
 
 // a random number per tick
-static int      st_randomnumber;
+static __STORAGE_MODIFIER int st_randomnumber;
 
 extern char     *mapnames[];
 
-static int cr_health_bad;
-static int cr_health_warning;
-static int cr_health_ok;
-static int cr_health_super;
-static int cr_armor_zero;
-static int cr_armor_one;
-static int cr_armor_two;
-static int cr_ammo_bad;
-static int cr_ammo_warning;
-static int cr_ammo_ok;
-static int cr_ammo_full;
+static __STORAGE_MODIFIER int cr_health_bad;
+static __STORAGE_MODIFIER int cr_health_warning;
+static __STORAGE_MODIFIER int cr_health_ok;
+static __STORAGE_MODIFIER int cr_health_super;
+static __STORAGE_MODIFIER int cr_armor_zero;
+static __STORAGE_MODIFIER int cr_armor_one;
+static __STORAGE_MODIFIER int cr_armor_two;
+static __STORAGE_MODIFIER int cr_ammo_bad;
+static __STORAGE_MODIFIER int cr_ammo_warning;
+static __STORAGE_MODIFIER int cr_ammo_ok;
+static __STORAGE_MODIFIER int cr_ammo_full;
 
 //
 // STATUS BAR CODE
@@ -669,7 +669,7 @@ static void ST_updateFaceWidget(void)
 
 }
 
-int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
+__STORAGE_MODIFIER int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
 
 static void ST_updateWidgets(void)
 {
@@ -743,7 +743,7 @@ void ST_Ticker(void)
   st_oldhealth = plyr->health;
 }
 
-int st_palette = 0;
+__STORAGE_MODIFIER int st_palette = 0;
 
 static void ST_doPaletteStuff(void)
 {

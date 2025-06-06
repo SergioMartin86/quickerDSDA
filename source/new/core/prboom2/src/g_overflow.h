@@ -86,7 +86,7 @@ typedef struct
     void *addr2;
 } intercepts_overrun_t;
 
-extern intercepts_overrun_t intercepts_overrun[];
+//extern intercepts_overrun_t intercepts_overrun[];
 void InterceptsOverrun(int num_intercepts, intercept_t *intercept);
 
 //
@@ -117,7 +117,7 @@ typedef struct spechit_overrun_param_s
   dboolean *nofit;
 } spechit_overrun_param_t;
 
-extern unsigned int spechit_baseaddr;
+extern unsigned __STORAGE_MODIFIER int spechit_baseaddr;
 
 void SpechitOverrun(spechit_overrun_param_t *params);
 

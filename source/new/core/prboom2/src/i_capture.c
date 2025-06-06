@@ -39,7 +39,7 @@
 
 #include "dsda/configuration.h"
 
-int capturing_video = 0;
+__STORAGE_MODIFIER int capturing_video = 0;
 static const char *vid_fname;
 
 typedef struct
@@ -57,9 +57,9 @@ static pipeinfo_t soundpipe;
 static pipeinfo_t videopipe;
 static pipeinfo_t muxpipe;
 
-int cap_fps;
-int cap_frac;
-int cap_wipescreen;
+__STORAGE_MODIFIER int cap_fps;
+__STORAGE_MODIFIER int cap_frac;
+__STORAGE_MODIFIER int cap_wipescreen;
 
 // parses a command with simple printf-style replacements.
 

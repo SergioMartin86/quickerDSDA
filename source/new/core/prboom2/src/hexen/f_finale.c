@@ -35,11 +35,11 @@ static void DeInitializeFade(void);
 static void FadePic(void);
 static char *GetFinaleText(int sequence);
 
-static int FinaleStage;
-static int FinaleCount;
-static int FinaleEndCount;
+static __STORAGE_MODIFIER int FinaleStage;
+static __STORAGE_MODIFIER int FinaleCount;
+static __STORAGE_MODIFIER int FinaleEndCount;
 static const char* FinaleLumpName;
-static int FontABaseLump;
+static __STORAGE_MODIFIER int FontABaseLump;
 static char *FinaleText;
 
 // static fixed_t *Palette;
@@ -278,7 +278,7 @@ void Hexen_F_Drawer(void)
     }
 }
 
-extern char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
+extern __STORAGE_MODIFIER char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
 
 static char *GetFinaleText(int sequence)
 {

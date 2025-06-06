@@ -144,7 +144,7 @@ void gld_MultisamplingSet(void)
 {
   if (gl_render_multisampling)
   {
-    extern int map_use_multisampling;
+    extern __STORAGE_MODIFIER int map_use_multisampling;
 
     int use_multisampling = map_use_multisampling || automap_off;
 
@@ -1250,7 +1250,7 @@ static void gld_CalculateWallV(GLWall *wall, seg_t *seg, int peg,
 void gld_AddWall(seg_t *seg)
 {
   extern sector_t *poly_frontsector;
-  extern dboolean poly_add_line;
+  extern __STORAGE_MODIFIER dboolean poly_add_line;
   GLWall wall;
   GLTexture *temptex;
   sector_t *frontsector;
@@ -1334,7 +1334,7 @@ void gld_AddWall(seg_t *seg)
   else /* twosided */
   {
     sector_t *fs, *bs;
-    int toptexture, midtexture, bottomtexture;
+    __STORAGE_MODIFIER int toptexture, midtexture, bottomtexture;
     fixed_t floor_height,ceiling_height;
     fixed_t max_floor, min_floor;
     fixed_t max_ceiling, min_ceiling;
@@ -2071,7 +2071,7 @@ static void gld_AddHealthBar(mobj_t* thing, GLSprite *sprite)
     {
       float sx2 = (float)thing->radius / 2.0f / MAP_SCALE;
       float sx1 = sx2 - (float)health_percent * (float)thing->radius / 100.0f / MAP_SCALE;
-      float sx3 = -sx2;
+      __STORAGE_MODIFIER float s.3 = -sx2;
 
       hbar.x1 = +(sx1 * cos_inv_yaw) + sprite->x;
       hbar.x2 = +(sx2 * cos_inv_yaw) + sprite->x;

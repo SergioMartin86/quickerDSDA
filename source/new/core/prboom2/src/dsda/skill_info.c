@@ -126,7 +126,7 @@ const skill_info_t hexen_skill_infos[5] = {
   },
 };
 
-int num_skills;
+__STORAGE_MODIFIER int num_skills;
 skill_info_t* skill_infos;
 
 static void dsda_CopyFactor(fixed_t* dest, const char* source) {

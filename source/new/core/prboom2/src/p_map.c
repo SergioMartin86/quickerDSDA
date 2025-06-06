@@ -62,12 +62,12 @@
 
 static mobj_t    *tmthing;
 static mobj_t    *tsthing; // hexen
-static fixed_t   tmx;
-static fixed_t   tmy;
-static int pe_x; // Pain Elemental position for Lost Soul checks // phares
-static int pe_y; // Pain Elemental position for Lost Soul checks // phares
-static int ls_x; // Lost Soul position for Lost Soul checks      // phares
-static int ls_y; // Lost Soul position for Lost Soul checks      // phares
+static __STORAGE_MODIFIER fixed_t tmx;
+static __STORAGE_MODIFIER fixed_t tmy;
+static __STORAGE_MODIFIER int pe_x; // Pain Elemental position for Lost Soul checks // phares
+static __STORAGE_MODIFIER int pe_y; // Pain Elemental position for Lost Soul checks // phares
+static __STORAGE_MODIFIER int ls_x; // Lost Soul position for Lost Soul checks      // phares
+static __STORAGE_MODIFIER int ls_y; // Lost Soul position for Lost Soul checks      // phares
 
 //
 // SECTOR HEIGHT CHANGING
@@ -83,30 +83,30 @@ static int ls_y; // Lost Soul position for Lost Soul checks      // phares
 //  to undo the changes.
 //
 
-static int crushchange;
-static dboolean nofit;
+static __STORAGE_MODIFIER int crushchange;
+static __STORAGE_MODIFIER dboolean nofit;
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
 
-dboolean   floatok;
+__STORAGE_MODIFIER dboolean floatok;
 
 /* killough 11/98: if "felldown" true, object was pushed down ledge */
-dboolean   felldown;
+__STORAGE_MODIFIER dboolean felldown;
 
 // The tm* items are used to hold information globally, usually for
 // line or object intersection checking
 
-fixed_t   tmbbox[4];  // bounding box for line intersection checks
-fixed_t   tmfloorz;   // floor you'd hit if free to fall
-fixed_t   tmceilingz; // ceiling of sector you're in
-fixed_t   tmdropoffz; // dropoff on other side of line you're crossing
+__STORAGE_MODIFIER fixed_t tmbbox[4];  // bounding box for line intersection checks
+__STORAGE_MODIFIER fixed_t tmfloorz;   // floor you'd hit if free to fall
+__STORAGE_MODIFIER fixed_t tmceilingz; // ceiling of sector you're in
+__STORAGE_MODIFIER fixed_t tmdropoffz; // dropoff on other side of line you're crossing
 
 // heretic
-int tmflags;
+__STORAGE_MODIFIER int tmflags;
 
 // hexen
-int tmfloorpic;
+__STORAGE_MODIFIER int tmfloorpic;
 mobj_t *BlockingMobj;
 
 // keep track of the line that lowers the ceiling,
@@ -115,16 +115,16 @@ mobj_t *BlockingMobj;
 line_t        *ceilingline;
 line_t        *blockline;    /* killough 8/11/98: blocking linedef */
 line_t        *floorline;    /* killough 8/1/98: Highest touched floor */
-static int    tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
+static __STORAGE_MODIFIER int tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
 
 // keep track of special lines as they are hit,
 // but don't process them until the move is proven valid
 
 // 1/11/98 killough: removed limit on special lines crossed
 line_t **spechit;                // new code -- killough
-static int spechit_max;          // killough
+static __STORAGE_MODIFIER int spechit_max;          // killough
 
-int numspechit;
+__STORAGE_MODIFIER int numspechit;
 
 // Temporary holder for thing_sectorlist threads
 msecnode_t* sector_list = NULL;                             // phares 3/16/98
@@ -137,7 +137,7 @@ msecnode_t* sector_list = NULL;                             // phares 3/16/98
 // PIT_StompThing
 //
 
-static dboolean telefrag;   /* killough 8/9/98: whether to telefrag at exit */
+static __STORAGE_MODIFIER dboolean telefrag;   /* killough 8/9/98: whether to telefrag at exit */
 
 dboolean PIT_StompThing (mobj_t* thing)
 {
@@ -1885,11 +1885,11 @@ dboolean P_ThingHeightClip (mobj_t* thing)
 //
 
 /* killough 8/2/98: make variables static */
-static fixed_t   bestslidefrac;
+static __STORAGE_MODIFIER fixed_t bestslidefrac;
 static line_t*   bestslideline;
 static mobj_t*   slidemo;
-static fixed_t   tmxmove;
-static fixed_t   tmymove;
+static __STORAGE_MODIFIER fixed_t tmxmove;
+static __STORAGE_MODIFIER fixed_t tmymove;
 
 //
 // P_HitSlideLine
@@ -1929,7 +1929,7 @@ void P_HitSlideLine (line_t* ld)
   }
   else
   {
-    extern dboolean onground;
+    extern __STORAGE_MODIFIER dboolean onground;
     icyfloor = !compatibility &&
                variable_friction &&
                slidemo->player &&
@@ -2185,18 +2185,18 @@ static mobj_t*   shootthing;
 static uint64_t aim_flags_mask;
 
 // Height if not aiming up or down
-fixed_t   shootz;
+__STORAGE_MODIFIER fixed_t shootz;
 
-int       la_damage;
-fixed_t   attackrange;
+__STORAGE_MODIFIER int la_damage;
+__STORAGE_MODIFIER fixed_t attackrange;
 
-static fixed_t   aimslope;
+static __STORAGE_MODIFIER fixed_t aimslope;
 
 // slopes to top and bottom of target
 // killough 4/20/98: make static instead of using ones in p_sight.c
 
-static fixed_t  topslope;
-static fixed_t  bottomslope;
+static __STORAGE_MODIFIER fixed_t topslope;
+static __STORAGE_MODIFIER fixed_t bottomslope;
 
 
 //
@@ -2508,7 +2508,7 @@ dboolean PTR_ShootTraverse (intercept_t* in)
 
     if (hexen && PuffType == HEXEN_MT_FLAMEPUFF2)
     {                       // Cleric FlameStrike does fire damage
-      extern mobj_t LavaInflictor;
+      extern __STORAGE_MODIFIER mobj_t LavaInflictor;
 
       P_DamageMobj(th, &LavaInflictor, shootthing, la_damage);
     }
@@ -3711,7 +3711,7 @@ void P_AppendSpecHit(line_t * ld)
   // e6y: Spechits overrun emulation code
   if (numspechit > 8 && demo_compatibility)
   {
-    static spechit_overrun_param_t spechit_overrun_param = {
+    spechit_overrun_param_t spechit_overrun_param = {
       NULL,          // line_t *line;
 
       &spechit,      // line_t **spechit;
@@ -4036,8 +4036,8 @@ static dboolean Hexen_P_TryMove(mobj_t* thing, fixed_t x, fixed_t y)
 #define USE_PUZZLE_ITEM_SPECIAL 129
 
 static mobj_t *PuzzleItemUser;
-static int PuzzleItemType;
-static dboolean PuzzleActivated;
+static __STORAGE_MODIFIER int PuzzleItemType;
+static __STORAGE_MODIFIER dboolean PuzzleActivated;
 
 #include "hexen/p_acs.h"
 

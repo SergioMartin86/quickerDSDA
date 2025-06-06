@@ -44,13 +44,13 @@ extern const byte *rejectmatrix;   /* for fast sight rejection -  cph - const* *
 /* killough 3/1/98: change blockmap from "short" to "long" offsets: */
 extern int      *blockmaplump;   /* offsets in blockmap are from here */
 extern int      *blockmap;
-extern int      bmapwidth;
-extern int      bmapheight;      /* in mapblocks */
-extern fixed_t  bmaporgx;
-extern fixed_t  bmaporgy;        /* origin of block map */
+extern __STORAGE_MODIFIER int bmapwidth;
+extern __STORAGE_MODIFIER int bmapheight;      /* in mapblocks */
+extern __STORAGE_MODIFIER fixed_t bmaporgx;
+extern __STORAGE_MODIFIER fixed_t bmaporgy;        /* origin of block map */
 extern mobj_t   **blocklinks;    /* for thing chains */
 
-extern dboolean skipblstart; // MaxW: Skip initial blocklist short
+extern __STORAGE_MODIFIER dboolean skipblstart; // MaxW: Skip initial blocklist short
 
 // MAES: extensions to support 512x512 blockmaps.
 extern int blockmapxneg;

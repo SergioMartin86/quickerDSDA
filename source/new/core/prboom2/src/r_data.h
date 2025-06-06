@@ -66,7 +66,7 @@ typedef struct
   texpatch_t patches[1]; // back-to-front into the cached texture.
 } texture_t;
 
-extern int numtextures;
+extern __STORAGE_MODIFIER int numtextures;
 extern texture_t **textures;
 
 

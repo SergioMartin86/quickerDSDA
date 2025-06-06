@@ -48,8 +48,8 @@
 
 #include "dsda/gl/render_scale.h"
 
-int renderW;
-int renderH;
+__STORAGE_MODIFIER int renderW;
+__STORAGE_MODIFIER int renderH;
 
 void I_UpdateRenderSize(void)
 {

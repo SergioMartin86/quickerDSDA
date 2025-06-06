@@ -339,7 +339,7 @@ void gld_InitVertexData()
   pos = numvertexes * sizeof(vertexsplit_info_t);
   for(i = 0; i < numvertexes; i++)
   {
-    int cnt = vt_sectorlists_size[i];
+    __STORAGE_MODIFIER int cnt = vt_sectorlists_size[i];
     vertexsplit_info_t *vi = &gl_vertexsplit[i];
 
     vi->validcount = -1;

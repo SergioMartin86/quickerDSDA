@@ -57,7 +57,7 @@
 #include "m_swap.h"
 #include "doomtype.h"
 
-extern dboolean bfgedition;
+extern __STORAGE_MODIFIER dboolean bfgedition;
 
 // Game mode handling - identify IWAD version
 //  to handle IWAD dependend animations etc.
@@ -118,7 +118,7 @@ extern int SCREENPITCH;
 // e6y: wide-res
 extern int WIDE_SCREENWIDTH;
 extern int WIDE_SCREENHEIGHT;
-extern int SCREEN_320x200;
+extern __STORAGE_MODIFIER int SCREEN_320x200;
 
 // The maximum number of players, multiplayer/networking.
 #define MAX_MAXPLAYERS   8
@@ -410,7 +410,7 @@ typedef enum {
 #define ORIG_FRICTION_FACTOR   2048        // original value
 #define FRICTION_FLY           0xeb00
 
-extern dboolean raven;
+extern __STORAGE_MODIFIER dboolean raven;
 
 // heretic
 
@@ -449,7 +449,7 @@ typedef enum {
 
 // TODO_HEXEN: BLINKTHRESHOLD is (4*35)
 
-extern dboolean heretic;
+extern __STORAGE_MODIFIER dboolean heretic;
 
 //hexen
 
@@ -547,6 +547,6 @@ typedef enum
 #define TXT_ARTIPUZZGEAR       "CLOCK GEAR"
 #define TXT_USEPUZZLEFAILED    "YOU CANNOT USE THIS HERE"
 
-extern dboolean hexen;
+extern __STORAGE_MODIFIER dboolean hexen;
 
 #endif          // __DOOMDEF__

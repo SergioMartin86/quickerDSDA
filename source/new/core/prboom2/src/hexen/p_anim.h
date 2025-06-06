@@ -31,8 +31,8 @@ typedef struct
 
 extern animDef_t AnimDefs[MAX_ANIM_DEFS];
 
-extern int NextLightningFlash;
-extern int LightningFlash;
+extern __STORAGE_MODIFIER int NextLightningFlash;
+extern __STORAGE_MODIFIER int LightningFlash;
 
 void P_AnimateSurfaces(void);
 void P_ForceLightning(void);

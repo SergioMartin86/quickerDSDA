@@ -67,7 +67,7 @@
 #define TRUE 1
 #define FALSE 0
 
-static dboolean bfgcells_modified = false;
+static __STORAGE_MODIFIER dboolean bfgcells_modified = false;
 
 static FILE *deh_log_file;
 
@@ -191,7 +191,7 @@ static char *deh_sfx_name(const char *name)
 int HelperThing = -1;     // in P_SpawnMapThing to substitute helper thing
 
 // variables used in other routines
-dboolean deh_pars = FALSE; // in wi_stuff to allow pars in modified games
+__STORAGE_MODIFIER dboolean deh_pars = FALSE; // in wi_stuff to allow pars in modified games
 
 // #include "d_deh.h" -- we don't do that here but we declare the
 // variables.  This externalizes everything that there is a string
@@ -1087,7 +1087,7 @@ static const deh_block deh_blocks[] = { // CPhipps - static const
 };
 
 // flag to skip included deh-style text, used with INCLUDE NOTEXT directive
-static dboolean includenotext = false;
+static __STORAGE_MODIFIER dboolean includenotext = false;
 
 // MOBJINFO - Dehacked block name = "Thing"
 // Usage: Thing nn (name)
@@ -1533,13 +1533,13 @@ static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
   {NULL,              "A_NULL"},  // Ty 05/16/98
 };
 
-int deh_maxhealth;
-int deh_max_soul;
-int deh_mega_health;
+__STORAGE_MODIFIER int deh_maxhealth;
+__STORAGE_MODIFIER int deh_max_soul;
+__STORAGE_MODIFIER int deh_mega_health;
 
-dboolean IsDehMaxHealth = false;
-dboolean IsDehMaxSoul = false;
-dboolean IsDehMegaHealth = false;
+__STORAGE_MODIFIER dboolean IsDehMaxHealth = false;
+__STORAGE_MODIFIER dboolean IsDehMaxSoul = false;
+__STORAGE_MODIFIER dboolean IsDehMegaHealth = false;
 
 static uint64_t deh_stringToFlags(char *strval, const struct deh_flag_s *flags)
 {
@@ -1641,7 +1641,7 @@ void deh_applyCompatibility(void)
 // killough 10/98:
 // substantially modified to allow input from wad lumps instead of .deh files.
 
-static int processed_dehacked;
+static __STORAGE_MODIFIER int processed_dehacked;
 
 void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum)
 {

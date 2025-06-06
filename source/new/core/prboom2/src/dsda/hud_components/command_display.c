@@ -43,8 +43,8 @@ typedef struct dsda_command_display_s {
   struct dsda_command_display_s* prev;
 } dsda_command_display_t;
 
-int dsda_command_history_size;
-int dsda_hide_empty_commands;
+__STORAGE_MODIFIER int dsda_command_history_size;
+__STORAGE_MODIFIER int dsda_hide_empty_commands;
 
 typedef struct {
   dsda_text_t component[MAX_HISTORY];

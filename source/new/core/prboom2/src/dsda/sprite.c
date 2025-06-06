@@ -24,8 +24,8 @@
 #include "sprite.h"
 
 const char** sprnames;
-int num_sprites;
-static int deh_spritenames_size;
+__STORAGE_MODIFIER int num_sprites;
+static __STORAGE_MODIFIER int deh_spritenames_size;
 static char** deh_spritenames;
 static byte* sprnames_state;
 
@@ -91,7 +91,7 @@ int dsda_GetOriginalSpriteIndex(const char* key) {
 
 void dsda_InitializeSprites(const char** source, int count) {
   int i;
-  extern int raven;
+  extern __STORAGE_MODIFIER int raven;
 
   num_sprites = count;
   deh_spritenames_size = num_sprites + 1;

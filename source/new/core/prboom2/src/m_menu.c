@@ -165,21 +165,21 @@ extern dboolean  message_dontfuckwithme;
 // the overlay screens (automap colors, reset button message) should be
 // displayed
 
-dboolean setup_active      = false; // in one of the setup screens
-dboolean set_keybnd_active = false; // in key binding setup screens
-dboolean set_weapon_active = false; // in weapons setup screen
-dboolean set_status_active = false; // in status bar/hud setup screen
-dboolean set_auto_active   = false; // in automap setup screen
-dboolean setup_select      = false; // changing an item
-dboolean setup_gather      = false; // gathering keys for value
-dboolean colorbox_active   = false; // color palette being shown
-dboolean set_general_active = false;
-dboolean level_table_active = false;
+__STORAGE_MODIFIER dboolean setup_active      = false; // in one of the setup screens
+__STORAGE_MODIFIER dboolean set_keybnd_active = false; // in key binding setup screens
+__STORAGE_MODIFIER dboolean set_weapon_active = false; // in weapons setup screen
+__STORAGE_MODIFIER dboolean set_status_active = false; // in status bar/hud setup screen
+__STORAGE_MODIFIER dboolean set_auto_active   = false; // in automap setup screen
+__STORAGE_MODIFIER dboolean setup_select      = false; // changing an item
+__STORAGE_MODIFIER dboolean setup_gather      = false; // gathering keys for value
+__STORAGE_MODIFIER dboolean colorbox_active   = false; // color palette being shown
+__STORAGE_MODIFIER dboolean set_general_active = false;
+__STORAGE_MODIFIER dboolean level_table_active = false;
 
 
 extern const char* g_menu_flat;
-extern int g_menu_save_page_size;
-extern int g_menu_font_spacing;
+extern __STORAGE_MODIFIER int g_menu_save_page_size;
+extern __STORAGE_MODIFIER int g_menu_font_spacing;
 
 //
 // defaulted values
@@ -189,17 +189,17 @@ int hide_setup=1; // killough 5/15/98
 
 #define QUICKSAVESLOT 255
 
-int messageToPrint;  // 1 = message to be printed
+__STORAGE_MODIFIER int messageToPrint;  // 1 = message to be printed
 
 // CPhipps - static const
 static const char* messageString; // ...and here is the message string!
 
 // message x & y
-int     messx;
-int     messy;
-int     messageLastMenuActive;
+__STORAGE_MODIFIER int messx;
+__STORAGE_MODIFIER int messy;
+__STORAGE_MODIFIER int messageLastMenuActive;
 
-dboolean messageNeedsInput; // timed message = no input from user
+__STORAGE_MODIFIER dboolean messageNeedsInput; // timed message = no input from user
 
 void (*messageRoutine)(int response);
 
@@ -211,26 +211,26 @@ static void M_DrawBackground(const char *flat, int scrn)
 
 // we are going to be entering a savegame string
 
-int saveStringEnter;
-int saveSlot;        // which slot to save in
-int saveCharIndex;   // which char we're editing
+__STORAGE_MODIFIER int saveStringEnter;
+__STORAGE_MODIFIER int saveSlot;        // which slot to save in
+__STORAGE_MODIFIER int saveCharIndex;   // which char we're editing
 // old save description before edit
-char saveOldString[SAVESTRINGSIZE];
+__STORAGE_MODIFIER char saveOldString[SAVESTRINGSIZE];
 
-dboolean inhelpscreens; // indicates we are in or just left a help screen
+__STORAGE_MODIFIER dboolean inhelpscreens; // indicates we are in or just left a help screen
 
-dboolean BorderNeedRefresh;
+__STORAGE_MODIFIER dboolean BorderNeedRefresh;
 
 menuactive_t menuactive;    // The menus are up
 
 #define SKULLXOFF  -32
 #define LINEHEIGHT  16
 
-char savegamestrings[10][SAVESTRINGSIZE];
+__STORAGE_MODIFIER char savegamestrings[10][SAVESTRINGSIZE];
 
-short itemOn;           // menu item skull is on (for Big Font menus)
-short skullAnimCounter; // skull animation counter
-short whichSkull;       // which skull to draw (he blinks)
+__STORAGE_MODIFIER short itemOn;           // menu item skull is on (for Big Font menus)
+__STORAGE_MODIFIER short skullAnimCounter; // skull animation counter
+__STORAGE_MODIFIER short whichSkull;       // which skull to draw (he blinks)
 
 // graphic name of skulls
 
@@ -374,16 +374,16 @@ const char shiftxform[] =
   '{', '|', '}', '~', 127
 };
 
-static int cr_title;
-static int cr_label;
-static int cr_label_highlight;
-static int cr_label_edit;
-static int cr_value;
-static int cr_value_highlight;
-static int cr_value_edit;
-static int cr_info_highlight;
-static int cr_info_edit;
-static int cr_warning;
+static __STORAGE_MODIFIER int cr_title;
+static __STORAGE_MODIFIER int cr_label;
+static __STORAGE_MODIFIER int cr_label_highlight;
+static __STORAGE_MODIFIER int cr_label_edit;
+static __STORAGE_MODIFIER int cr_value;
+static __STORAGE_MODIFIER int cr_value_highlight;
+static __STORAGE_MODIFIER int cr_value_edit;
+static __STORAGE_MODIFIER int cr_info_highlight;
+static __STORAGE_MODIFIER int cr_info_edit;
+static __STORAGE_MODIFIER int cr_warning;
 
 static void M_LoadTextColors(void)
 {
@@ -614,7 +614,7 @@ menu_t EpiDef =
 //    M_Episode
 //
 
-static int chosen_episode;
+static __STORAGE_MODIFIER int chosen_episode;
 
 void M_DrawEpisode(void)
 {
@@ -694,7 +694,7 @@ void M_NewGame(int choice)
     M_SetupNextMenu(&EpiDef);
 }
 
-static int chosen_skill;
+static __STORAGE_MODIFIER int chosen_skill;
 
 static void M_FinishGameSelection(void)
 {
@@ -770,11 +770,11 @@ enum
   load_end
 } load_e;
 
-static int save_page = 0;
+static __STORAGE_MODIFIER int save_page = 0;
 static const int save_page_limit = 16;
 
 #define SAVE_PAGE_STRING_SIZE 16
-char save_page_string[SAVE_PAGE_STRING_SIZE];
+__STORAGE_MODIFIER char save_page_string[SAVE_PAGE_STRING_SIZE];
 
 // The definitions of the Load Game screen
 
@@ -804,7 +804,7 @@ menu_t LoadDef =
 
 // [FG] delete a savegame
 
-dboolean delete_verify = false;
+__STORAGE_MODIFIER dboolean delete_verify = false;
 
 static void M_DeleteGame(int slot)
 {
@@ -1534,7 +1534,7 @@ void M_SizeDisplay(int choice)
 //
 // current_setup_menu is a pointer to the current setup menu table.
 
-static int set_menu_itemon; // which setup item is selected?   // phares 3/98
+static __STORAGE_MODIFIER int set_menu_itemon; // which setup item is selected?   // phares 3/98
 static setup_menu_t* current_setup_menu; // points to current setup menu table
 
 // save the setup menu's itemon value in the S_END element's x coordinate
@@ -1583,7 +1583,7 @@ static void M_UpdateSetupMenu(setup_menu_t *new_setup_menu)
 
 #define MENU_BUFFER_SIZE 128
 
-static char menu_buffer[MENU_BUFFER_SIZE];
+static __STORAGE_MODIFIER char menu_buffer[MENU_BUFFER_SIZE];
 
 /////////////////////////////
 //
@@ -1692,9 +1692,9 @@ menu_t LevelTableDef =
 // killough 10/98: reduced, for more general uses
 #define MAXENTRYWIDTH         272
 
-static int entry_index;
-static char entry_string_index[ENTRY_STRING_BFR_SIZE]; // points to new strings while editing
-static int choice_value;
+static __STORAGE_MODIFIER int entry_index;
+static __STORAGE_MODIFIER char entry_string_index[ENTRY_STRING_BFR_SIZE]; // points to new strings while editing
+static __STORAGE_MODIFIER int choice_value;
 
 /////////////////////////////
 //
@@ -1743,8 +1743,8 @@ static void M_DrawItem(const setup_menu_t* s, int y)
 // of what is gathered is determined by the low/high settings for the item.
 
 #define MAXGATHER 5
-int  gather_count;
-char gather_buffer[MAXGATHER+1];  // killough 10/98: make input character-based
+__STORAGE_MODIFIER int gather_count;
+__STORAGE_MODIFIER char gather_buffer[MAXGATHER+1];  // killough 10/98: make input character-based
 
 /////////////////////////////
 //
@@ -2873,8 +2873,8 @@ void M_Automap(int choice)
 // Data used by the color palette that is displayed for the player to
 // select colors.
 
-int color_palette_x; // X position of the cursor on the color palette
-int color_palette_y; // Y position of the cursor on the color palette
+__STORAGE_MODIFIER int color_palette_x; // X position of the cursor on the color palette
+__STORAGE_MODIFIER int color_palette_y; // Y position of the cursor on the color palette
 byte palette_background[16*(CHIP_SIZE+1)+8];
 
 // M_DrawColPal() draws the color palette when the user needs to select a
@@ -3378,7 +3378,7 @@ static void M_CalculateWadStatsSummary(void)
   }
 }
 
-static int level_table_cursor_position[LEVEL_TABLE_PAGES];
+static __STORAGE_MODIFIER int level_table_cursor_position[LEVEL_TABLE_PAGES];
 
 static void M_ResetLevelTable(void)
 {
@@ -3416,7 +3416,7 @@ static void M_PrintTime(dsda_string_t* m_text, int tics)
                     (float) (tics % (60 * 35)) / 35);
 }
 
-static int wad_stats_summary_page;
+static __STORAGE_MODIFIER int wad_stats_summary_page;
 
 static void M_BuildLevelTable(void)
 {
@@ -3776,7 +3776,7 @@ void M_DrawLevelTable(void)
 // General routines used by the Setup screens.
 //
 
-static dboolean shiftdown = false; // phares 4/10/98: SHIFT key down or not
+static __STORAGE_MODIFIER dboolean shiftdown = false; // phares 4/10/98: SHIFT key down or not
 
 // phares 4/17/98:
 // M_SelectDone() gets called when you have finished entering your
@@ -3813,8 +3813,8 @@ static void M_SelectDone(setup_menu_t* ptr)
 // phares 3/30/98:
 // Extended Help Screen variables
 
-int extended_help_count;   // number of user-defined help screens found
-int extended_help_index;   // index of current extended help screen
+__STORAGE_MODIFIER int extended_help_count;   // number of user-defined help screens found
+__STORAGE_MODIFIER int extended_help_index;   // index of current extended help screen
 
 menuitem_t ExtHelpMenu[] =
 {

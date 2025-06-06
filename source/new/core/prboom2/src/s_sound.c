@@ -98,28 +98,28 @@ static degenmobj_t sobjs[MAX_CHANNELS];
 
 // Maximum volume of a sound effect.
 // Internal default is max out of 0-15.
-int snd_SfxVolume;
+__STORAGE_MODIFIER int snd_SfxVolume;
 
 // Derived value (not saved, accounts for muted sfx)
-static int sfx_volume;
+static __STORAGE_MODIFIER int sfx_volume;
 
 // Maximum volume of music.
 int snd_MusicVolume = 15;
 
 // whether songs are mus_paused
-static dboolean mus_paused;
+static __STORAGE_MODIFIER dboolean mus_paused;
 
 // music currently being played
 musicinfo_t *mus_playing;
 
 // music currently should play
-static int musicnum_current;
+static __STORAGE_MODIFIER int musicnum_current;
 
 // number of channels available
-int numChannels;
+__STORAGE_MODIFIER int numChannels;
 
 //jff 3/17/98 to keep track of last IDMUS specified music num
-int idmusnum;
+__STORAGE_MODIFIER int idmusnum;
 
 //
 // Internals.
@@ -294,8 +294,8 @@ void S_Start(void)
   }
 }
 
-static float adjust_attenuation;
-static float adjust_volume;
+static __STORAGE_MODIFIER float adjust_attenuation;
+static __STORAGE_MODIFIER float adjust_volume;
 
 void S_AdjustAttenuation(float attenuation) {
   adjust_attenuation = attenuation;

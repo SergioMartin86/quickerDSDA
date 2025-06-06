@@ -19,7 +19,7 @@
 
 #include "base.h"
 
-static char digit_lump[9];
+static __STORAGE_MODIFIER char digit_lump[9];
 static const char* digit_lump_format;
 
 int dsda_HudComponentY(int y_offset, int vpt, double ratio) {

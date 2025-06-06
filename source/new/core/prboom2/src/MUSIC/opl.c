@@ -55,7 +55,7 @@ static opl_callback_queue_t *callback_queue;
 static uint64_t current_time;
 
 // If non-zero, playback is currently paused.
-static int opl_paused;
+static __STORAGE_MODIFIER int opl_paused;
 
 // Time offset (in us) due to the fact that callbacks
 // were previously paused.
@@ -63,10 +63,10 @@ static uint64_t pause_offset;
 
 // OPL software emulator structure.
 static opl3_chip opl_chip;
-static int opl_opl3mode;
+static __STORAGE_MODIFIER int opl_opl3mode;
 
 // Register number that was written.
-static int register_num = 0;
+static __STORAGE_MODIFIER int register_num = 0;
 
 // Timers; DBOPL does not do timer stuff itself.
 static opl_timer_t timer1 = { 12500, 0, 0, 0 };

@@ -1594,17 +1594,17 @@ struct
     int height;
 } StairQueue[STAIR_QUEUE_SIZE];
 
-static int QueueHead;
-static int QueueTail;
+static __STORAGE_MODIFIER int QueueHead;
+static __STORAGE_MODIFIER int QueueTail;
 
-static int StepDelta;
-static int Direction;
-static int Speed;
-static int Texture;
-static int StartDelay;
-static int StartDelayDelta;
-static int TextureChange;
-static int StartHeight;
+static __STORAGE_MODIFIER int StepDelta;
+static __STORAGE_MODIFIER int Direction;
+static __STORAGE_MODIFIER int Speed;
+static __STORAGE_MODIFIER int Texture;
+static __STORAGE_MODIFIER int StartDelay;
+static __STORAGE_MODIFIER int StartDelayDelta;
+static __STORAGE_MODIFIER int TextureChange;
+static __STORAGE_MODIFIER int StartHeight;
 
 static void QueueStairSector(sector_t * sec, int type, int height)
 {

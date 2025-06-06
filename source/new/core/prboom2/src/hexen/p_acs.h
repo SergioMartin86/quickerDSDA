@@ -83,11 +83,11 @@ void P_ACSInitNewGame(void);
 void P_CheckACSStore(void);
 void CheckACSPresent(int number);
 
-extern int ACScriptCount;
+extern __STORAGE_MODIFIER int ACScriptCount;
 extern const byte *ActionCodeBase;
 extern acsInfo_t *ACSInfo;
-extern int MapVars[MAX_ACS_MAP_VARS];
-extern int WorldVars[MAX_ACS_WORLD_VARS];
+extern __STORAGE_MODIFIER int MapVars[MAX_ACS_MAP_VARS];
+extern __STORAGE_MODIFIER int WorldVars[MAX_ACS_WORLD_VARS];
 extern acsstore_t ACSStore[MAX_ACS_STORE + 1];  // +1 for termination marker
 
 #endif

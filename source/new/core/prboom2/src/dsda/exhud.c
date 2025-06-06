@@ -367,7 +367,7 @@ static dsda_hud_container_t containers[] = {
 static dsda_hud_container_t* container;
 static exhud_component_t* components;
 
-int dsda_show_render_stats;
+__STORAGE_MODIFIER int dsda_show_render_stats;
 
 int dsda_ExHudVerticalOffset(void) {
   if (container && container->status_bar)
@@ -684,7 +684,7 @@ static void dsda_DrawComponents(exhud_component_t* draw_components) {
       draw_components[i].draw(draw_components[i].data);
 }
 
-int global_patch_top_offset;
+__STORAGE_MODIFIER int global_patch_top_offset;
 
 void dsda_DrawExHud(void) {
   global_patch_top_offset = M_ConsoleOpen() ? dsda_ConsoleHeight() : 0;

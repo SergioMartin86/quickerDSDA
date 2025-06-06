@@ -52,8 +52,8 @@
 
 #include "hexen/a_action.h"
 
-int movement_smooth;
-dboolean isExtraDDisplay = false;
+__STORAGE_MODIFIER int movement_smooth;
+__STORAGE_MODIFIER dboolean isExtraDDisplay = false;
 
 typedef enum
 {
@@ -70,7 +70,7 @@ typedef struct
   void *address;
 } interpolation_t;
 
-static int numinterpolations = 0;
+static __STORAGE_MODIFIER int numinterpolations = 0;
 
 tic_vars_t tic_vars;
 
@@ -91,9 +91,9 @@ static fixed2_t *oldipos;
 static fixed2_t *bakipos;
 static interpolation_t *curipos;
 
-static dboolean NoInterpolateView;
-static dboolean didInterp;
-dboolean WasRenderedInTryRunTics;
+static __STORAGE_MODIFIER dboolean NoInterpolateView;
+static __STORAGE_MODIFIER dboolean didInterp;
+__STORAGE_MODIFIER dboolean WasRenderedInTryRunTics;
 
 dboolean R_ViewInterpolation(void) {
   return !dsda_Paused() && movement_smooth;
@@ -339,7 +339,7 @@ void R_UpdateInterpolations()
     R_CopyInterpToOld (i);
 }
 
-int interpolations_max = 0;
+__STORAGE_MODIFIER int interpolations_max = 0;
 
 static void R_SetInterpolation(interpolation_type_e type, void *posptr)
 {

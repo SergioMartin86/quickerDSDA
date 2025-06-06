@@ -113,7 +113,7 @@ static struct
 
 static int *SequenceData[SS_MAX_SCRIPTS];
 
-int ActiveSequences;
+__STORAGE_MODIFIER int ActiveSequences;
 seqnode_t *SequenceListHead;
 
 static void VerifySequencePtr(int *base, int *ptr)

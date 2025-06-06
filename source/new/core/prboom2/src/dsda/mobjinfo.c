@@ -26,8 +26,8 @@
 #include "mobjinfo.h"
 
 mobjinfo_t* mobjinfo;
-int num_mobj_types;
-int mobj_types_zero;
+__STORAGE_MODIFIER int num_mobj_types;
+__STORAGE_MODIFIER int mobj_types_zero;
 byte* edited_mobjinfo_bits;
 
 static void dsda_ResetMobjInfo(int from, int to) {
@@ -90,7 +90,7 @@ dsda_deh_mobjinfo_t dsda_GetDehMobjInfo(int index) {
 }
 
 void dsda_InitializeMobjInfo(int zero, int max, int count) {
-  extern dboolean raven;
+  extern __STORAGE_MODIFIER dboolean raven;
 
   num_mobj_types = count;
   mobj_types_zero = zero;

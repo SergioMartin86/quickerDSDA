@@ -265,7 +265,7 @@ void P_LineOpening_3dMidtex(const line_t *line, const mobj_t *actor)
 
 void P_LineOpening(const line_t *linedef, const mobj_t *actor)
 {
-  extern int tmfloorpic;
+  extern __STORAGE_MODIFIER int tmfloorpic;
 
   if (linedef->sidenum[1] == NO_INDEX)      // single sided line
   {
@@ -1134,53 +1134,7 @@ int P_GetSafeBlockY(int coord)
   return coord;
 }
 
-// e6y
-//
-// Intercepts memory table.  This is where various variables are located
-// in memory in Vanilla Doom.  When the intercepts table overflows, we
-// need to write to them.
-//
-// Almost all of the values to overwrite are 32-bit integers, except for
-// playerstarts, which is effectively an array of 16-bit integers and
-// must be treated differently.
 
-extern fixed_t bulletslope;
-
-intercepts_overrun_t intercepts_overrun[] =
-{
-  {4,   NULL,                          NULL},
-  {4,   NULL, /* &earlyout, */         NULL},
-  {4,   NULL, /* &intercept_p, */      NULL},
-  {4,   &line_opening.lowfloor,        NULL},
-  {4,   &line_opening.bottom,          NULL},
-  {4,   &line_opening.top,             NULL},
-  {4,   &line_opening.range,           NULL},
-  {4,   NULL,                          NULL},
-  {120, NULL, /* &activeplats, */      NULL},
-  {8,   NULL,                          NULL},
-  {4,   &bulletslope,                  NULL},
-  {4,   NULL, /* &swingx, */           NULL},
-  {4,   NULL, /* &swingy, */           NULL},
-  {4,   NULL,                          NULL},
-  {4,  &playerstarts[0][0].x,       &playerstarts[0][0].y},
-  {4,  &playerstarts[0][0].angle,   &playerstarts[0][0].type},
-  {4,  &playerstarts[0][0].options, &playerstarts[0][1].x},
-  {4,  &playerstarts[0][1].y,       &playerstarts[0][1].angle},
-  {4,  &playerstarts[0][1].type,    &playerstarts[0][1].options},
-  {4,  &playerstarts[0][2].x,       &playerstarts[0][2].y},
-  {4,  &playerstarts[0][2].angle,   &playerstarts[0][2].type},
-  {4,  &playerstarts[0][2].options, &playerstarts[0][3].x},
-  {4,  &playerstarts[0][3].y,       &playerstarts[0][3].angle},
-  {4,  &playerstarts[0][3].type,    &playerstarts[0][3].options},
-  {4,   NULL, /* &blocklinks, */       NULL},
-  {4,   &bmapwidth,                    NULL},
-  {4,   NULL, /* &blockmap, */         NULL},
-  {4,   &bmaporgx,                     NULL},
-  {4,   &bmaporgy,                     NULL},
-  {4,   NULL, /* &blockmaplump, */     NULL},
-  {4,   &bmapheight,                   NULL},
-  {0,   NULL,                          NULL},
-};
 
 // hexen
 

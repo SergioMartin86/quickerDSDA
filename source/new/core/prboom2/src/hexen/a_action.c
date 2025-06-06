@@ -602,7 +602,7 @@ dboolean A_LocalQuake(byte * args, mobj_t * actor)
     return (success);
 }
 
-int localQuakeHappening[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER int localQuakeHappening[MAX_MAXPLAYERS];
 
 void A_Quake(mobj_t * actor)
 {

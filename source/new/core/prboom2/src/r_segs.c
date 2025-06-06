@@ -59,46 +59,46 @@
 // killough 1/6/98: replaced globals with statics where appropriate
 
 // True if any of the segs textures might be visible.
-static dboolean  segtextured;
-static dboolean  markfloor;      // False if the back side is the same plane.
-static dboolean  markceiling;
-static dboolean  maskedtexture;
-static int      toptexture;
-static int      bottomtexture;
-static int      midtexture;
+static __STORAGE_MODIFIER dboolean segtextured;
+static __STORAGE_MODIFIER dboolean markfloor;      // False if the back side is the same plane.
+static __STORAGE_MODIFIER dboolean markceiling;
+static __STORAGE_MODIFIER dboolean maskedtexture;
+static __STORAGE_MODIFIER int toptexture;
+static __STORAGE_MODIFIER int bottomtexture;
+static __STORAGE_MODIFIER int midtexture;
 
-static fixed_t  toptexheight, midtexheight, bottomtexheight; // cph
+static __STORAGE_MODIFIER fixed_t toptexheight, midtexheight, bottomtexheight; // cph
 
-angle_t         rw_normalangle; // angle to line origin
-int             rw_angle1;
-fixed_t         rw_distance;
+__STORAGE_MODIFIER angle_t rw_normalangle; // angle to line origin
+__STORAGE_MODIFIER int rw_angle1;
+__STORAGE_MODIFIER fixed_t rw_distance;
 const lighttable_t    **walllights;
 
 //
 // regular wall
 //
-static int      rw_x;
-static int      rw_stopx;
-static angle_t  rw_centerangle;
-static fixed_t  rw_offset;
-static fixed_t  rw_scale;
-static fixed_t  rw_scalestep;
-static fixed_t  rw_midtexturemid;
-static fixed_t  rw_toptexturemid;
-static fixed_t  rw_bottomtexturemid;
-static int      rw_lightlevel;
-static int      worldtop;
-static int      worldbottom;
-static int      worldhigh;
-static int      worldlow;
+static __STORAGE_MODIFIER int rw_x;
+static __STORAGE_MODIFIER int rw_stopx;
+static __STORAGE_MODIFIER angle_t rw_centerangle;
+static __STORAGE_MODIFIER fixed_t rw_offset;
+static __STORAGE_MODIFIER fixed_t rw_scale;
+static __STORAGE_MODIFIER fixed_t rw_scalestep;
+static __STORAGE_MODIFIER fixed_t rw_midtexturemid;
+static __STORAGE_MODIFIER fixed_t rw_toptexturemid;
+static __STORAGE_MODIFIER fixed_t rw_bottomtexturemid;
+static __STORAGE_MODIFIER int rw_lightlevel;
+static __STORAGE_MODIFIER int worldtop;
+static __STORAGE_MODIFIER int worldbottom;
+static __STORAGE_MODIFIER int worldhigh;
+static __STORAGE_MODIFIER int worldlow;
 static int64_t  pixhigh; // R_WiggleFix
 static int64_t  pixlow; // R_WiggleFix
-static fixed_t  pixhighstep;
-static fixed_t  pixlowstep;
+static __STORAGE_MODIFIER fixed_t pixhighstep;
+static __STORAGE_MODIFIER fixed_t pixlowstep;
 static int64_t  topfrac; // R_WiggleFix
-static fixed_t  topstep;
+static __STORAGE_MODIFIER fixed_t topstep;
 static int64_t  bottomfrac; // R_WiggleFix
-static fixed_t  bottomstep;
+static __STORAGE_MODIFIER fixed_t bottomstep;
 static int      *maskedtexturecol; // dropoff overflow
 
 static int	max_rwscale = 64 * FRACUNIT;
@@ -483,7 +483,7 @@ void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
 // CALLED: CORE LOOPING ROUTINE.
 //
 
-static int didsolidcol; /* True if at least one column was marked solid */
+static __STORAGE_MODIFIER int didsolidcol; /* True if at least one column was marked solid */
 
 static void R_RenderSegLoop (void)
 {

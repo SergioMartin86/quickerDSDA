@@ -56,8 +56,8 @@
 
 #include "dsda/args.h"
 
-dboolean enableOutput;
-static dboolean disable_message_box;
+__STORAGE_MODIFIER dboolean enableOutput;
+static __STORAGE_MODIFIER dboolean disable_message_box;
 
 int cons_stdout_mask = LO_INFO;
 int cons_stderr_mask = LO_WARN | LO_ERROR;

@@ -45,30 +45,30 @@
 #define TELEFRAG_DAMAGE 10000
 
 // command-line toggles
-int dsda_track_pacifist;
-int dsda_track_100k;
-int dsda_track_reality;
+__STORAGE_MODIFIER int dsda_track_pacifist;
+__STORAGE_MODIFIER int dsda_track_100k;
+__STORAGE_MODIFIER int dsda_track_reality;
 
-int dsda_last_leveltime;
-int dsda_last_gamemap;
-int dsda_startmap;
-int dsda_movie_target;
-dboolean dsda_any_map_completed;
+__STORAGE_MODIFIER int dsda_last_leveltime;
+__STORAGE_MODIFIER int dsda_last_gamemap;
+__STORAGE_MODIFIER int dsda_startmap;
+__STORAGE_MODIFIER int dsda_movie_target;
+__STORAGE_MODIFIER dboolean dsda_any_map_completed;
 
 // other
-int dsda_max_kill_requirement;
+__STORAGE_MODIFIER int dsda_max_kill_requirement;
 static int dsda_session_attempts = 1;
 
-static int turbo_scale;
-static int start_in_build_mode;
+static __STORAGE_MODIFIER int turbo_scale;
+static __STORAGE_MODIFIER int start_in_build_mode;
 
-static int line_activation[2][LINE_ACTIVATION_INDEX_MAX + 1];
-static int line_activation_frame;
-static int line_activation_index;
+static __STORAGE_MODIFIER int line_activation[2][LINE_ACTIVATION_INDEX_MAX + 1];
+static __STORAGE_MODIFIER int line_activation_frame;
+static __STORAGE_MODIFIER int line_activation_index;
 
-static int dsda_time_keys;
-static int dsda_time_use;
-static int dsda_time_secrets;
+static __STORAGE_MODIFIER int dsda_time_keys;
+static __STORAGE_MODIFIER int dsda_time_use;
+static __STORAGE_MODIFIER int dsda_time_secrets;
 
 dboolean dsda_IsWeapon(mobj_t* thing);
 void dsda_DisplayNotification(const char* msg);
@@ -126,7 +126,7 @@ int dsda_TurboScale(void) {
   return turbo_scale;
 }
 
-static dboolean frozen_mode;
+static __STORAGE_MODIFIER dboolean frozen_mode;
 
 dboolean dsda_FrozenMode(void) {
   return frozen_mode;
@@ -186,7 +186,7 @@ void dsda_ReadCommandLine(void) {
   dsda_InitCommandHistory();
 }
 
-static int dsda_shown_attempt = 0;
+static __STORAGE_MODIFIER int dsda_shown_attempt = 0;
 
 int dsda_SessionAttempts(void) {
   return dsda_session_attempts;
@@ -230,7 +230,7 @@ void dsda_DecomposeILTime(dsda_level_time_t* level_time) {
 }
 
 void dsda_DecomposeMovieTime(dsda_movie_time_t* total_time) {
-  extern int totalleveltimes;
+  extern __STORAGE_MODIFIER int totalleveltimes;
 
   total_time->h = totalleveltimes / 35 / 60 / 60;
   total_time->m = (totalleveltimes % (60 * 60 * 35)) / 35 / 60;
@@ -266,8 +266,8 @@ void dsda_WatchCard(card_t card) {
     }
 }
 
-static int player_damage_leveltime;
-int player_damage_last_tic;
+static __STORAGE_MODIFIER int player_damage_leveltime;
+__STORAGE_MODIFIER int player_damage_last_tic;
 
 void dsda_WatchDamage(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage) {
   if (
@@ -583,7 +583,7 @@ void dsda_WatchNewGame(void) {
 }
 
 void dsda_WatchLevelReload(int* reloaded) {
-  extern int startmap;
+  extern __STORAGE_MODIFIER int startmap;
 
   if (!demorecording || *reloaded) return;
 

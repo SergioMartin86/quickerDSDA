@@ -34,13 +34,13 @@
 
 static dsda_split_t* dsda_splits;
 static size_t dsda_splits_count;
-static int attempts;
-static int current_split;
+static __STORAGE_MODIFIER int attempts;
+static __STORAGE_MODIFIER int current_split;
 static char* dsda_split_tracker_dir;
 static char* dsda_split_tracker_path;
 
-extern int gameskill, gamemap, gameepisode, leveltime, totalleveltimes;
-extern int respawnparm, fastparm, nomonsters;
+extern __STORAGE_MODIFIER int gameskill, gamemap, gameepisode, leveltime, totalleveltimes;
+extern __STORAGE_MODIFIER int respawnparm, fastparm, nomonsters;
 
 static char* dsda_SplitTrackerDir(void) {
   if (!dsda_split_tracker_dir)

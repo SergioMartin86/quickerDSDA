@@ -345,13 +345,13 @@ int dsda_DoomInterMusic(int* music_index, int* music_lump) {
   return true;
 }
 
-extern int finalestage;
-extern int finalecount;
+extern __STORAGE_MODIFIER int finalestage;
+extern __STORAGE_MODIFIER int finalecount;
 extern const char* finaletext;
 extern const char* finaleflat;
 extern const char* finalepatch;
-extern int acceleratestage;
-extern int midstage;
+extern __STORAGE_MODIFIER int acceleratestage;
+extern __STORAGE_MODIFIER int midstage;
 
 // TODO: use end_game everywhere and collapse all the finale implementations
 

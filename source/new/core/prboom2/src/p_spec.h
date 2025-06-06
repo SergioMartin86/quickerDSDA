@@ -1322,9 +1322,9 @@ void P_SpawnLineSpecials(void);
 
 #define MAX_AMBIENT_SFX 8
 
-extern int AmbSfxTics;
-extern int AmbSfxVolume;
-extern int AmbSfxPtrIndex;
+extern __STORAGE_MODIFIER int AmbSfxTics;
+extern __STORAGE_MODIFIER int AmbSfxVolume;
+extern __STORAGE_MODIFIER int AmbSfxPtrIndex;
 extern int *AmbSfxPtr;
 extern int *LevelAmbientSfx[MAX_AMBIENT_SFX];
 extern int *TerrainTypes;

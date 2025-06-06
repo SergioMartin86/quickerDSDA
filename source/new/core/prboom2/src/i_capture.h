@@ -31,12 +31,12 @@
 #ifndef __I_CAPTURE__
 #define __I_CAPTURE__
 
-extern int cap_fps;
-extern int cap_frac;
-extern int cap_wipescreen;
+extern __STORAGE_MODIFIER int cap_fps;
+extern __STORAGE_MODIFIER int cap_frac;
+extern __STORAGE_MODIFIER int cap_wipescreen;
 
 // true if we're capturing video
-extern int capturing_video;
+extern __STORAGE_MODIFIER int capturing_video;
 
 // init and open sound, video pipes
 // fn is filename passed from command line, typically final output file

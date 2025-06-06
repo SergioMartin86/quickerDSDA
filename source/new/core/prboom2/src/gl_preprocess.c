@@ -233,7 +233,7 @@ static vertex_t *gld_FlatEdgeClipper(int *numpoints, vertex_t *points, int numcl
   return points;
 }
 
-static void gld_FlatConvexCarver(int ssidx, int num, divline_t *list)
+static void gld_FlatConvexCarver(int ssidx, __STORAGE_MODIFIER int num, divline_t *list)
 {
   subsector_t *ssec=&subsectors[ssidx];
   int numclippers = num+ssec->numlines;
@@ -483,7 +483,7 @@ static void CALLBACK ntessEnd( void )
 // There is no more HOM at the starting area on MAP16 @ Eternal.wad
 // I hope nothing was broken
 
-static void gld_PrecalculateSector(int num)
+static void gld_PrecalculateSector(__STORAGE_MODIFIER int num)
 {
   int i;
   dboolean *lineadded=NULL;

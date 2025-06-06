@@ -6661,12 +6661,12 @@ extern const char *doom_sprnames[];
 extern doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES];
 
 extern state_t* states;
-extern int num_states;
+extern __STORAGE_MODIFIER int num_states;
 extern const char** sprnames;
-extern int num_sprites;
+extern __STORAGE_MODIFIER int num_sprites;
 extern mobjinfo_t* mobjinfo;
-extern int num_mobj_types;
-extern int mobj_types_zero;
+extern __STORAGE_MODIFIER int num_mobj_types;
+extern __STORAGE_MODIFIER int mobj_types_zero;
 extern int mobj_types_max;
 
 // zdoom

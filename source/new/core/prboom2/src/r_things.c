@@ -61,17 +61,17 @@ static int *cliptop = NULL; // change to MAX_*  // dropoff overflow
 // There was a lot of stuff grabbed wrong, so I changed it...
 //
 
-fixed_t pspriteiscale;
+__STORAGE_MODIFIER fixed_t pspriteiscale;
 // proff 11/06/98: Added for high-res
-fixed_t pspritexscale;
-fixed_t pspriteyscale;
-fixed_t pspriteiyscale;
+__STORAGE_MODIFIER fixed_t pspritexscale;
+__STORAGE_MODIFIER fixed_t pspriteyscale;
+__STORAGE_MODIFIER fixed_t pspriteiyscale;
 
 static const lighttable_t **spritelights;        // killough 1/25/98 made static
 
 //e6y: added for GL
-float pspriteyscale_f;
-float pspritexscale_f;
+__STORAGE_MODIFIER float pspriteyscale_f;
+__STORAGE_MODIFIER float pspritexscale_f;
 
 typedef struct drawseg_xrange_item_s
 {
@@ -89,8 +89,8 @@ typedef struct drawsegs_xrange_s
 static drawsegs_xrange_t drawsegs_xranges[DS_RANGES_COUNT];
 
 static drawseg_xrange_item_t *drawsegs_xrange;
-static unsigned int drawsegs_xrange_size = 0;
-static int drawsegs_xrange_count = 0;
+static unsigned __STORAGE_MODIFIER int drawsegs_xrange_size = 0;
+static __STORAGE_MODIFIER int drawsegs_xrange_count = 0;
 
 // constant arrays
 //  used for psprite clipping and initializing clipping
@@ -110,7 +110,7 @@ spritedef_t *sprites;
 #define MAX_SPRITE_FRAMES 30          /* Macroized -- killough 1/25/98 */
 
 static spriteframe_t sprtemp[MAX_SPRITE_FRAMES];
-static int maxframe;
+static __STORAGE_MODIFIER int maxframe;
 
 void R_InitSpritesRes(void)
 {
@@ -392,7 +392,7 @@ static void R_InitSpriteDefs(const char * const * namelist)
 //
 
 static vissprite_t *vissprites, **vissprite_ptrs;  // killough
-static int num_vissprite, num_vissprite_alloc, num_vissprite_ptrs;
+static __STORAGE_MODIFIER int num_vissprite, num_vissprite_alloc, num_vissprite_ptrs;
 
 //
 // R_InitSprites
@@ -446,9 +446,9 @@ static vissprite_t *R_NewVisSprite(void)
 
 int   *mfloorclip;   // dropoff overflow
 int   *mceilingclip; // dropoff overflow
-fixed_t spryscale;
+__STORAGE_MODIFIER fixed_t spryscale;
 int64_t sprtopscreen; // R_WiggleFix
-int colheight; // Scaled software fuzz
+__STORAGE_MODIFIER int colheight; // Scaled software fuzz
 
 void R_DrawMaskedColumn(
   const rpatch_t *patch,

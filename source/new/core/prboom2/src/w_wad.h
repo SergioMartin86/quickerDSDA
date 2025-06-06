@@ -134,7 +134,7 @@ typedef struct
 #define LUMP_PRBOOM 0x00000002 /* from internal resource */
 
 extern lumpinfo_t *lumpinfo;
-extern int        numlumps;
+extern __STORAGE_MODIFIER int numlumps;
 
 int     W_FindNumFromName2(const char *name, int ns, int lump);
 

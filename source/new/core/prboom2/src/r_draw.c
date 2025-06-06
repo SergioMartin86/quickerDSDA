@@ -57,8 +57,8 @@
 //
 
 byte *viewimage;
-int  viewwidth;
-int  viewheight;
+__STORAGE_MODIFIER int viewwidth;
+__STORAGE_MODIFIER int viewheight;
 
 // Color tables for different players,
 //  translate a limited part to another
@@ -85,15 +85,15 @@ typedef enum
    COL_FLEXADD
 } columntype_e;
 
-static int    temp_x = 0;
-static int    tempyl[4], tempyh[4];
+static __STORAGE_MODIFIER int temp_x = 0;
+static __STORAGE_MODIFIER int tempyl[4], tempyh[4];
 
 // e6y: resolution limitation is removed
 static byte           *tempbuf;
 
-static int    startx = 0;
-static int    temptype = COL_NONE;
-static int    commontop, commonbot;
+static __STORAGE_MODIFIER int startx = 0;
+static __STORAGE_MODIFIER int temptype = COL_NONE;
+static __STORAGE_MODIFIER int commontop, commonbot;
 static const byte *temptranmap = NULL;
 // SoM 7-28-04: Fix the fuzz problem.
 static const byte   *tempfuzzmap;
@@ -117,12 +117,12 @@ static const int fuzzoffset_org[FUZZTABLE] = {
   FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF
 };
 
-static int fuzzoffset[FUZZTABLE];
+static __STORAGE_MODIFIER int fuzzoffset[FUZZTABLE];
 
-static int fuzzpos = 0;
+static __STORAGE_MODIFIER int fuzzpos = 0;
 
 // Fuzz cell size for scaled software fuzz
-static int fuzzcellsize;
+static __STORAGE_MODIFIER int fuzzcellsize;
 
 // render pipelines
 #define RDC_STANDARD      1

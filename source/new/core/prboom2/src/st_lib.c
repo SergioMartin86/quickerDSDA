@@ -98,7 +98,7 @@ static void STlib_drawNum
 {
 
   int   numdigits = n->width;
-  int   num = *n->num;
+  int num = *n->num;
 
   int   w = n->p[0].width;
   int   h = n->p[0].height;

@@ -23,7 +23,7 @@
 
 #include "dsda/args.h"
 
-int dsda_argc;
+__STORAGE_MODIFIER int dsda_argc;
 char** dsda_argv;
 
 typedef enum {

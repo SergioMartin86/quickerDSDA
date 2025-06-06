@@ -348,7 +348,7 @@ static fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
 
 // 1/11/98 killough: Limit removed on special lines crossed
 extern  line_t **spechit;          // New code -- killough
-extern  int    numspechit;
+extern  __STORAGE_MODIFIER int numspechit;
 
 static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
 {
@@ -638,7 +638,7 @@ static void P_DoNewChaseDir(mobj_t *actor, fixed_t deltax, fixed_t deltay)
 // monsters to free themselves without making them tend to
 // hang over dropoffs.
 
-static fixed_t dropoff_deltax, dropoff_deltay, floorz;
+static __STORAGE_MODIFIER fixed_t dropoff_deltax, dropoff_deltay, floorz;
 
 static dboolean PIT_AvoidDropoff(line_t *line)
 {
@@ -805,7 +805,7 @@ static dboolean P_IsVisible(mobj_t *actor, mobj_t *mo, dboolean allaround)
 // Finds monster targets for other monsters
 //
 
-static int current_allaround;
+static __STORAGE_MODIFIER int current_allaround;
 
 static dboolean PIT_FindTarget(mobj_t *mo)
 {
@@ -1799,9 +1799,9 @@ void A_SkelFist(mobj_t *actor)
 
 mobj_t* corpsehit;
 mobj_t* vileobj;
-fixed_t viletryx;
-fixed_t viletryy;
-int viletryradius;
+__STORAGE_MODIFIER fixed_t viletryx;
+__STORAGE_MODIFIER fixed_t viletryy;
+__STORAGE_MODIFIER int viletryradius;
 
 static dboolean PIT_VileCheck(mobj_t *thing)
 {
@@ -2792,8 +2792,8 @@ void A_CloseShotgun2(player_t *player, pspdef_t *psp)
 
 // killough 2/7/98: Remove limit on icon landings:
 mobj_t **braintargets;
-int    numbraintargets_alloc;
-int    numbraintargets;
+__STORAGE_MODIFIER int numbraintargets_alloc;
+__STORAGE_MODIFIER int numbraintargets;
 
 struct brain_s brain;   // killough 3/26/98: global state of boss brain
 
@@ -3680,8 +3680,8 @@ typedef struct
     angle_t angle;
 } BossSpot_t;
 
-static int BossSpotCount;
-static BossSpot_t BossSpots[MAX_BOSS_SPOTS];
+static __STORAGE_MODIFIER int BossSpotCount;
+static __STORAGE_MODIFIER BossSpot_t BossSpots[MAX_BOSS_SPOTS];
 
 void P_InitMonsters(void)
 {
@@ -4900,7 +4900,7 @@ void A_FreeTargMobj(mobj_t * mo)
     }
 }
 
-static int bodyqueslot, bodyquesize;
+static __STORAGE_MODIFIER int bodyqueslot, bodyquesize;
 static mobj_t** bodyque;
 
 void A_ResetPlayerCorpseQueue(void)
@@ -5171,7 +5171,7 @@ extern fixed_t FloatBobOffsets[64];
 // Corpse queue for monsters - this should be saved out
 #define CORPSEQUEUESIZE	64
 mobj_t *corpseQueue[CORPSEQUEUESIZE];
-int corpseQueueSlot;
+__STORAGE_MODIFIER int corpseQueueSlot;
 
 // throw another corpse on the queue
 void A_QueueCorpse(mobj_t * actor)

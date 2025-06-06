@@ -86,7 +86,7 @@
 #include "dsda/time.h"
 #include "dsda/gl/render_scale.h"
 
-dboolean window_focused;
+__STORAGE_MODIFIER dboolean window_focused;
 
 // Window resize state.
 static void ActivateMouse(void);
@@ -100,9 +100,9 @@ extern const int gl_colorbuffer_bits;
 extern const int gl_depthbuffer_bits;
 
 extern void M_QuitDOOM(int choice);
-int desired_fullscreen;
-int exclusive_fullscreen;
-unsigned int windowid = 0;
+__STORAGE_MODIFIER int desired_fullscreen;
+__STORAGE_MODIFIER int exclusive_fullscreen;
+unsigned __STORAGE_MODIFIER int windowid = 0;
 
 
 dboolean I_WindowFocused(void)
@@ -223,8 +223,8 @@ void I_ShutdownGraphics(void)
 {
 }
 
-static dboolean queue_frame_capture;
-static dboolean queue_screenshot;
+static __STORAGE_MODIFIER dboolean queue_frame_capture;
+static __STORAGE_MODIFIER dboolean queue_screenshot;
 
 void I_QueueFrameCapture(void)
 {
@@ -254,7 +254,7 @@ void I_HandleCapture(void)
 //
 // I_FinishUpdate
 //
-static int newpal = 0;
+static __STORAGE_MODIFIER int newpal = 0;
 #define NO_PALETTE_CHANGE 1000
 
 void I_FinishUpdate (void)

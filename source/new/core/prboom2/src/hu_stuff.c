@@ -78,11 +78,11 @@ static custom_message_t custom_message[MAX_MAXPLAYERS];
 static custom_message_t *custom_message_p;
 
 //jff 2/16/98 status color change levels
-int hud_ammo_red;      // ammo percent less than which status is red
-int hud_ammo_yellow;   // ammo percent less is yellow more green
-int hud_health_red;    // health amount less than which status is red
-int hud_health_yellow; // health amount less than which status is yellow
-int hud_health_green;  // health amount above is blue, below is green
+__STORAGE_MODIFIER int hud_ammo_red;      // ammo percent less than which status is red
+__STORAGE_MODIFIER int hud_ammo_yellow;   // ammo percent less is yellow more green
+__STORAGE_MODIFIER int hud_health_red;    // health amount less than which status is red
+__STORAGE_MODIFIER int hud_health_yellow; // health amount less than which status is yellow
+__STORAGE_MODIFIER int hud_health_green;  // health amount above is blue, below is green
 
 void HU_InitThresholds(void)
 {
@@ -128,11 +128,11 @@ static crosshair_t crosshair;
 static const char *crosshair_nam[HU_CROSSHAIRS] =
   { NULL, "CROSS1", "CROSS2", "CROSS3", "CROSS4", "CROSS5", "CROSS6", "CROSS7" };
 
-static int hudadd_crosshair;
-static int hudadd_crosshair_scale;
-static int hudadd_crosshair_health;
-static int hudadd_crosshair_target;
-static int hudadd_crosshair_lock_target;
+static __STORAGE_MODIFIER int hudadd_crosshair;
+static __STORAGE_MODIFIER int hudadd_crosshair_scale;
+static __STORAGE_MODIFIER int hudadd_crosshair_health;
+static __STORAGE_MODIFIER int hudadd_crosshair_target;
+static __STORAGE_MODIFIER int hudadd_crosshair_lock_target;
 
 void HU_InitCrosshair(void)
 {

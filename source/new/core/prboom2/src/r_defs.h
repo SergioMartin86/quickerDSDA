@@ -617,12 +617,12 @@ typedef struct polyblock_s
 #define PO_LINE_EXPLICIT 5
 
 extern polyobj_t *polyobjs;     // list of all poly-objects on the level
-extern int po_NumPolyobjs;
+extern __STORAGE_MODIFIER int po_NumPolyobjs;
 
-extern int Sky1Texture;
-extern int Sky2Texture;
-extern fixed_t Sky1ColumnOffset;
-extern fixed_t Sky2ColumnOffset;
-extern dboolean DoubleSky;
+extern __STORAGE_MODIFIER int Sky1Texture;
+extern __STORAGE_MODIFIER int Sky2Texture;
+extern __STORAGE_MODIFIER fixed_t Sky1ColumnOffset;
+extern __STORAGE_MODIFIER fixed_t Sky2ColumnOffset;
+extern __STORAGE_MODIFIER dboolean DoubleSky;
 
 #endif

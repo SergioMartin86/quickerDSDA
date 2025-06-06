@@ -50,8 +50,8 @@
 
 #include "key_frame.h"
 
-static dboolean auto_kf_timed_out;
-static int auto_kf_timeout_count;
+static __STORAGE_MODIFIER dboolean auto_kf_timed_out;
+static __STORAGE_MODIFIER int auto_kf_timeout_count;
 
 #define TIMEOUT_LIMIT 1
 
@@ -60,12 +60,12 @@ static dsda_key_frame_t quick_kf;
 static dsda_key_frame_t temp_kf;
 static auto_kf_t* auto_key_frames;
 static auto_kf_t* last_auto_kf;
-static int auto_kf_size;
+static __STORAGE_MODIFIER int auto_kf_size;
 static int restore_key_frame_index = -1;
 
-static int dsda_auto_key_frame_interval;
-static int dsda_auto_key_frame_depth;
-static int dsda_auto_key_frame_timeout;
+static __STORAGE_MODIFIER int dsda_auto_key_frame_interval;
+static __STORAGE_MODIFIER int dsda_auto_key_frame_depth;
+static __STORAGE_MODIFIER int dsda_auto_key_frame_timeout;
 
 static int autoKeyFrameTimeout(void) {
   return dsda_StartInBuildMode() ? 0 : dsda_auto_key_frame_timeout;

@@ -33,15 +33,15 @@
 
 #include "skip.h"
 
-static dboolean skip_mode;
+static __STORAGE_MODIFIER dboolean skip_mode;
 
-static int demo_skiptics;
-static dboolean skip_until_next_map;
-static dboolean skip_until_end_of_map;
-static dboolean skip_until_logictic;
-static dboolean demo_warp_reached;
-static int skip_until_map;
-static int skip_until_episode;
+static __STORAGE_MODIFIER int demo_skiptics;
+static __STORAGE_MODIFIER dboolean skip_until_next_map;
+static __STORAGE_MODIFIER dboolean skip_until_end_of_map;
+static __STORAGE_MODIFIER dboolean skip_until_logictic;
+static __STORAGE_MODIFIER dboolean demo_warp_reached;
+static __STORAGE_MODIFIER int skip_until_map;
+static __STORAGE_MODIFIER int skip_until_episode;
 
 dboolean dsda_SkipMode(void) {
   return skip_mode;
@@ -52,7 +52,7 @@ static void dsda_CacheSkipSetting(dboolean* old, dboolean* current) {
   *current = true;
 }
 
-static dboolean old_fastdemo, old_nodrawers, old_nosfxparm, old_nomusicparm;
+static __STORAGE_MODIFIER dboolean old_fastdemo, old_nodrawers, old_nosfxparm, old_nomusicparm;
 
 static void dsda_ApplySkipSettings(void) {
   dsda_CacheSkipSetting(&old_fastdemo, &fastdemo);

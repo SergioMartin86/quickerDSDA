@@ -28,8 +28,8 @@
 
 dsda_tracker_t dsda_tracker[TRACKER_LIMIT];
 
-static int tracker_map;
-static int tracker_episode;
+static __STORAGE_MODIFIER int tracker_map;
+static __STORAGE_MODIFIER int tracker_episode;
 
 static int dsda_FindTracker(int type, int id) {
   int i;

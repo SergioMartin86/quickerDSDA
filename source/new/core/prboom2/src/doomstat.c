@@ -44,7 +44,7 @@ GameMission_t   gamemission = doom;
 Language_t   language = english;
 
 // Set if homebrew PWAD stuff has been added.
-dboolean modifiedgame;
+__STORAGE_MODIFIER dboolean modifiedgame;
 
 //-----------------------------------------------------------------------------
 
@@ -53,18 +53,18 @@ complevel_t compatibility_level;
 
 // e6y
 // it's required for demos recorded in "demo compatibility" mode by boom201 for example
-int demover;
+__STORAGE_MODIFIER int demover;
 
 int comp[MBF_COMP_TOTAL];    // killough 10/98
 int default_comperr[COMPERR_NUM];
 
-int demo_insurance;        // killough 1/16/98
+__STORAGE_MODIFIER int demo_insurance;        // killough 1/16/98
 
 int  allow_pushers = 1;      // MT_PUSH Things              // phares 3/10/98
 
 int  variable_friction = 1;      // ice & mud               // phares 3/10/98
 
-int  weapon_recoil = 0;              // weapon recoil                   // phares
+__STORAGE_MODIFIER int weapon_recoil = 0;              // weapon recoil                   // phares
 
 int player_bobbing = 1;  // whether player bobs or not          // phares 2/25/98
 
@@ -74,22 +74,22 @@ int monster_infighting=1;       // killough 7/19/98: monster<=>monster attacks
 
 int monster_friction=1;       // killough 10/98: monsters affected by friction
 
-int dogs;         // killough 7/19/98: Marine's best friend :)
-int dog_jumping;   // killough 10/98
+__STORAGE_MODIFIER int dogs;         // killough 7/19/98: Marine's best friend :)
+__STORAGE_MODIFIER int dog_jumping;   // killough 10/98
 
 // killough 8/8/98: distance friends tend to move towards players
 int distfriend = 128;
 
 // killough 9/8/98: whether monsters are allowed to strafe or retreat
-int monster_backing;
+__STORAGE_MODIFIER int monster_backing;
 
 // killough 9/9/98: whether monsters are able to avoid hazards (e.g. crushers)
-int monster_avoid_hazards;
+__STORAGE_MODIFIER int monster_avoid_hazards;
 
 // killough 9/9/98: whether monsters help friends
-int help_friends;
+__STORAGE_MODIFIER int help_friends;
 
-int monkeys;
+__STORAGE_MODIFIER int monkeys;
 
 char *VANILLA_MAP_LUMP_NAME(int e, int m)
 {

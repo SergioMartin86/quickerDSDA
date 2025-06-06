@@ -657,7 +657,7 @@ void A_ReFire(player_t *player, pspdef_t *psp)
     }
 }
 
-dboolean boom_weapon_state_injection;
+__STORAGE_MODIFIER dboolean boom_weapon_state_injection;
 
 void A_CheckReload(player_t *player, pspdef_t *psp)
 {
@@ -932,7 +932,7 @@ void A_FireBFG(player_t *player, pspdef_t *psp)
 // This code may not be used in other mods without appropriate credit given.
 // Code leeches will be telefragged.
 
-int autoaim = 0;  // killough 7/19/98: autoaiming was not in original beta
+__STORAGE_MODIFIER int autoaim = 0;  // killough 7/19/98: autoaiming was not in original beta
 void A_FireOldBFG(player_t *player, pspdef_t *psp)
 {
   int type = MT_PLASMA1;
@@ -956,7 +956,7 @@ void A_FireOldBFG(player_t *player, pspdef_t *psp)
     angle_t an = mo->angle;
     angle_t an1 = ((P_Random(pr_bfg)&127) - 64) * (ANG90/768) + an;
     angle_t an2 = ((P_Random(pr_bfg)&127) - 64) * (ANG90/640) + ANG90;
-    extern int autoaim;
+    extern __STORAGE_MODIFIER int autoaim;
 
     if (autoaim/* || !beta_emulation*/)
     {
@@ -1010,7 +1010,7 @@ void A_FirePlasma(player_t *player, pspdef_t *psp)
 //
 
 //e6y static
-fixed_t bulletslope;
+__STORAGE_MODIFIER fixed_t bulletslope;
 
 static void P_BulletSlope(mobj_t *mo)
 {
@@ -1559,7 +1559,7 @@ void P_MovePsprites(player_t *player)
 
 #define MAX_MACE_SPOTS 8
 
-static int MaceSpotCount;
+static __STORAGE_MODIFIER int MaceSpotCount;
 static struct
 {
     fixed_t x;

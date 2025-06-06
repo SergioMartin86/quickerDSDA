@@ -543,7 +543,7 @@ int dsda_LegacyPrepareInitNew(void) {
 }
 
 void dsda_LegacyParTime(int* partime, dboolean* modified) {
-  extern int deh_pars;
+  extern __STORAGE_MODIFIER int deh_pars;
 
   if (gamemode == commercial) {
     if (gamemap >= 1 && gamemap <= 34) {

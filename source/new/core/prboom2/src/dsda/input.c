@@ -33,8 +33,8 @@ typedef struct
   int game_deactivated_at;
 } dsda_input_state_t;
 
-static int dsda_input_counter; // +1 for each event
-static int dsda_input_tick_counter; // +1 for each game tick
+static __STORAGE_MODIFIER int dsda_input_counter; // +1 for each event
+static __STORAGE_MODIFIER int dsda_input_tick_counter; // +1 for each game tick
 static dsda_input_state_t gamekeys[NUMKEYS];
 static dsda_input_state_t mousearray[MAX_MOUSE_BUTTONS + 1];
 static dsda_input_state_t *mousebuttons = &mousearray[1]; // allow [-1]

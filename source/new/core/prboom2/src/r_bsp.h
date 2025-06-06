@@ -44,7 +44,7 @@ extern sector_t *backsector;
  * extern drawseg_t drawsegs[MAXDRAWSEGS];
  * new code -- killough: */
 extern drawseg_t *drawsegs;
-extern unsigned maxdrawsegs;
+extern __STORAGE_MODIFIER unsigned maxdrawsegs;
 
 // e6y: resolution limitation is removed
 extern byte *solidcol;

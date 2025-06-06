@@ -85,14 +85,14 @@ void I_StartTic (void);
 
 void I_StartFrame (void);
 
-extern int desired_fullscreen; //e6y
-extern int exclusive_fullscreen;
+extern __STORAGE_MODIFIER int desired_fullscreen; //e6y
+extern __STORAGE_MODIFIER int exclusive_fullscreen;
 
 void I_UpdateRenderSize(void);	// Handle potential
-extern int renderW;		// resolution scaling
-extern int renderH;		// - DTIED
+extern __STORAGE_MODIFIER int renderW;		// resolution scaling
+extern __STORAGE_MODIFIER int renderH;		// - DTIED
 
-extern dboolean window_focused;
+extern __STORAGE_MODIFIER dboolean window_focused;
 dboolean I_WindowFocused(void);
 void UpdateGrab(void);
 

@@ -80,26 +80,26 @@
 #include "dsda/stretch.h"
 #include <math.h>
 
-dboolean wasWiped = false;
+__STORAGE_MODIFIER dboolean wasWiped = false;
 
-int secretfound;
-int demo_playerscount;
-int demo_tics_count;
-char demo_len_st[80];
+__STORAGE_MODIFIER int secretfound;
+__STORAGE_MODIFIER int demo_playerscount;
+__STORAGE_MODIFIER int demo_tics_count;
+__STORAGE_MODIFIER char demo_len_st[80];
 
-int mouse_handler;
+__STORAGE_MODIFIER int mouse_handler;
 int gl_render_fov = 90;
 
 camera_t walkcamera;
 
-angle_t viewpitch;
-float skyscale;
-float screen_skybox_zplane;
-float tan_pitch;
-float skyUpAngle;
-float skyUpShift;
-float skyXShift;
-float skyYShift;
+__STORAGE_MODIFIER angle_t viewpitch;
+__STORAGE_MODIFIER float skyscale;
+__STORAGE_MODIFIER float screen_skybox_zplane;
+__STORAGE_MODIFIER float tan_pitch;
+__STORAGE_MODIFIER float skyUpAngle;
+__STORAGE_MODIFIER float skyUpShift;
+__STORAGE_MODIFIER float skyXShift;
+__STORAGE_MODIFIER float skyYShift;
 
 #ifdef _WIN32
 const char* WINError(void)
@@ -302,10 +302,10 @@ void CheckPitch(signed int *pitch)
   (*pitch) <<= 16;
 }
 
-float gl_render_ratio;
-float gl_render_fovratio;
+__STORAGE_MODIFIER float gl_render_ratio;
+__STORAGE_MODIFIER float gl_render_fovratio;
 float gl_render_fovy = FOV90;
-float gl_render_multiplier;
+__STORAGE_MODIFIER float gl_render_multiplier;
 
 void M_ChangeAspectRatio(void)
 {
@@ -369,7 +369,7 @@ void M_ChangeFOV(void)
   skyscale = 1.0f / (float)tan(DEG2RAD(gl_render_fov / 2));
 }
 
-float viewPitch;
+__STORAGE_MODIFIER float viewPitch;
 
 int StepwiseSum(int value, int direction, int minval, int maxval, int defval)
 {
@@ -429,10 +429,10 @@ int I_MessageBox(const char* text, unsigned int type)
   return PRB_IDCANCEL;
 }
 
-int stats_level;
-int stroller;
-int numlevels = 0;
-int levels_max = 0;
+__STORAGE_MODIFIER int stats_level;
+__STORAGE_MODIFIER int stroller;
+__STORAGE_MODIFIER int numlevels = 0;
+__STORAGE_MODIFIER int levels_max = 0;
 timetable_t *stats = NULL;
 
 void e6y_G_DoCompleted(void)
@@ -594,8 +594,8 @@ void e6y_WriteStats(void)
 
 //--------------------------------------------------
 
-static double mouse_accelfactor;
-static double analog_accelfactor;
+static __STORAGE_MODIFIER double mouse_accelfactor;
+static __STORAGE_MODIFIER double analog_accelfactor;
 
 void AccelChanging(void)
 {
@@ -631,7 +631,7 @@ int AccelerateAnalog(float val)
   return M_DoubleToInt(pow((double) val, analog_accelfactor));
 }
 
-int mlooky = 0;
+__STORAGE_MODIFIER int mlooky = 0;
 
 void e6y_G_Compatibility(void)
 {
@@ -710,9 +710,9 @@ const char* PathFindFileName(const char* pPath)
   return pT;
 }
 
-int levelstarttic;
+__STORAGE_MODIFIER int levelstarttic;
 
-int force_singletics_to = 0;
+__STORAGE_MODIFIER int force_singletics_to = 0;
 
 int HU_DrawDemoProgress(int force)
 {

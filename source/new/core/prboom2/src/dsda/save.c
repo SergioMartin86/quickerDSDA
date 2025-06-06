@@ -39,10 +39,10 @@
 static char* dsda_base_save_dir;
 static char* dsda_wad_save_dir;
 
-extern int dsda_max_kill_requirement;
-extern int player_damage_last_tic;
-extern dboolean reachedLevelExit;
-extern dboolean reachedGameEnd;
+extern __STORAGE_MODIFIER int dsda_max_kill_requirement;
+extern __STORAGE_MODIFIER int player_damage_last_tic;
+extern __STORAGE_MODIFIER dboolean reachedLevelExit;
+extern __STORAGE_MODIFIER dboolean reachedGameEnd;
 
 static void dsda_ArchiveInternal(void) {
   uint64_t features;
@@ -232,8 +232,8 @@ char* dsda_SaveGameName(int slot, dboolean via_cmd) {
 }
 
 static int* demo_save_slots;
-static int allocated_save_slot_count;
-static int demo_save_slot_count;
+static __STORAGE_MODIFIER int allocated_save_slot_count;
+static __STORAGE_MODIFIER int demo_save_slot_count;
 
 void dsda_ResetDemoSaveSlots(void) {
   demo_save_slot_count = 0;

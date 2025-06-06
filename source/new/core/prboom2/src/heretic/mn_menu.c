@@ -30,15 +30,15 @@
 #define SFX_VOL_INDEX 1
 #define MUS_VOL_INDEX 3
 
-extern int g_menu_save_page_size;
+extern __STORAGE_MODIFIER int g_menu_save_page_size;
 
-static int FontABaseLump;
-static int FontAYellowBaseLump;
-static int FontBBaseLump;
-static int SkullBaseLump;
-static int MenuTime;
+static __STORAGE_MODIFIER int FontABaseLump;
+static __STORAGE_MODIFIER int FontAYellowBaseLump;
+static __STORAGE_MODIFIER int FontBBaseLump;
+static __STORAGE_MODIFIER int SkullBaseLump;
+static __STORAGE_MODIFIER int MenuTime;
 
-dboolean mn_SuicideConsole;
+__STORAGE_MODIFIER dboolean mn_SuicideConsole;
 
 static int MN_SafeFontALump(int offset)
 {
@@ -88,7 +88,7 @@ void MN_DrawHelp1(void);
 void MN_DrawHelp2(void);
 
 extern void M_ChangeMenu(menu_t *menu, menuactive_t mnact);
-extern dboolean inhelpscreens;
+extern __STORAGE_MODIFIER dboolean inhelpscreens;
 extern menu_t ExtHelpDef;
 extern void M_NewGame(int choice);
 extern void M_Options(int choice);
@@ -397,7 +397,7 @@ void MN_Ticker(void)
 }
 
 extern menu_t* currentMenu;
-extern short itemOn;
+extern __STORAGE_MODIFIER short itemOn;
 
 void MN_DrawMessage(const char* messageString)
 {
@@ -590,12 +590,12 @@ void MN_DrawSound(void)
   MN_DrawSlider(SoundDef.x - 8, SoundDef.y + ITEM_HEIGHT * MUS_VOL_INDEX, 16, snd_MusicVolume);
 }
 
-extern char savegamestrings[10][SAVESTRINGSIZE];
+extern __STORAGE_MODIFIER char savegamestrings[10][SAVESTRINGSIZE];
 
 static void MN_DrawFileSlots(int x, int y)
 {
   int i;
-  extern char save_page_string[];
+  extern __STORAGE_MODIFIER char save_page_string[];
 
   for (i = 0; i < g_menu_save_page_size; i++)
   {
@@ -620,8 +620,8 @@ void MN_DrawLoad(void)
     M_DrawDelVerify();
 }
 
-extern int saveStringEnter;
-extern int saveSlot;
+extern __STORAGE_MODIFIER int saveStringEnter;
+extern __STORAGE_MODIFIER int saveSlot;
 
 void MN_DrawSave(void)
 {

@@ -118,7 +118,7 @@ void I_StopSong(int handle);
 void I_UnRegisterSong(int handle);
 
 // CPhipps - put these in config file
-extern int snd_samplerate;
+extern __STORAGE_MODIFIER int snd_samplerate;
 
 // prefered MIDI player
 typedef enum

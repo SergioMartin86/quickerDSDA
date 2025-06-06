@@ -84,11 +84,11 @@ static byte channelvelocities[] =
 
 // Timestamps between sequences of MUS events
 
-static unsigned int queuedtime = 0;
+static unsigned __STORAGE_MODIFIER int queuedtime = 0;
 
 // Counter for the length of the track
 
-static unsigned int tracksize;
+static unsigned __STORAGE_MODIFIER int tracksize;
 
 static const byte controller_map[] =
 {
@@ -96,7 +96,7 @@ static const byte controller_map[] =
   0x40, 0x43, 0x78, 0x7B, 0x7E, 0x7F, 0x79
 };
 
-static int channel_map[NUM_CHANNELS];
+static __STORAGE_MODIFIER int channel_map[NUM_CHANNELS];
 
 // Write timestamp to a MIDI file.
 

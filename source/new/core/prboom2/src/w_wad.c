@@ -63,7 +63,7 @@
 
 // Location of each lump on disk.
 lumpinfo_t *lumpinfo;
-int        numlumps;         // killough
+__STORAGE_MODIFIER int numlumps;         // killough
 
 void ExtractFileBase (const char *path, char *dest)
 {

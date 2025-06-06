@@ -121,36 +121,36 @@
 static void D_PageDrawer(void);
 
 // jff 1/24/98 add new versions of these variables to remember command line
-dboolean clnomonsters;   // checkparm of -nomonsters
-dboolean clrespawnparm;  // checkparm of -respawn
-dboolean clfastparm;     // checkparm of -fast
+__STORAGE_MODIFIER dboolean clnomonsters;   // checkparm of -nomonsters
+__STORAGE_MODIFIER dboolean clrespawnparm;  // checkparm of -respawn
+__STORAGE_MODIFIER dboolean clfastparm;     // checkparm of -fast
 // jff 1/24/98 end definition of command line version of play mode switches
 
-dboolean nomonsters;     // working -nomonsters
-dboolean respawnparm;    // working -respawn
-dboolean fastparm;       // working -fast
+__STORAGE_MODIFIER dboolean nomonsters;     // working -nomonsters
+__STORAGE_MODIFIER dboolean respawnparm;    // working -respawn
+__STORAGE_MODIFIER dboolean fastparm;       // working -fast
 
-dboolean randomclass;
+__STORAGE_MODIFIER dboolean randomclass;
 
-dboolean singletics = false; // debug flag to cancel adaptiveness
+__STORAGE_MODIFIER dboolean singletics = false; // debug flag to cancel adaptiveness
 
 //jff 1/22/98 parms for disabling music and sound
-dboolean nosfxparm;
-dboolean nomusicparm;
+__STORAGE_MODIFIER dboolean nosfxparm;
+__STORAGE_MODIFIER dboolean nomusicparm;
 
 //jff 4/18/98
-extern dboolean inhelpscreens;
-extern dboolean BorderNeedRefresh;
+extern __STORAGE_MODIFIER dboolean inhelpscreens;
+extern __STORAGE_MODIFIER dboolean BorderNeedRefresh;
 
-extern dboolean enableOutput;
+extern __STORAGE_MODIFIER dboolean enableOutput;
 
-int     startskill;
-int     startepisode;
-int     startmap;
-dboolean autostart;
+__STORAGE_MODIFIER int startskill;
+__STORAGE_MODIFIER int startepisode;
+__STORAGE_MODIFIER int startmap;
+__STORAGE_MODIFIER dboolean autostart;
 FILE    *debugfile;
 
-dboolean advancedemo;
+__STORAGE_MODIFIER dboolean advancedemo;
 
 //jff 4/19/98 list of standard IWAD names
 const char *const standard_iwads[]=
@@ -313,7 +313,7 @@ static void D_Wipe(void)
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
 gamestate_t    wipegamestate = GS_DEMOSCREEN;
-extern dboolean setsizeneeded;
+extern __STORAGE_MODIFIER dboolean setsizeneeded;
 
 static void D_DrawPause(void)
 {
@@ -341,7 +341,7 @@ static void D_DrawPause(void)
   V_EndUIDraw();
 }
 
-static dboolean must_fill_back_screen;
+static __STORAGE_MODIFIER dboolean must_fill_back_screen;
 
 void D_MustFillBackScreen(void)
 {
@@ -623,10 +623,10 @@ static void D_DoomLoop(void)
 //  DEMO LOOP
 //
 
-static int  demosequence;         // killough 5/2/98: made static
-static int  pagetic;
+static __STORAGE_MODIFIER int demosequence;         // killough 5/2/98: made static
+static __STORAGE_MODIFIER int pagetic;
 static const char *pagename; // CPhipps - const
-dboolean bfgedition = 0;
+__STORAGE_MODIFIER dboolean bfgedition = 0;
 
 //
 // D_PageTicker
@@ -1187,7 +1187,7 @@ static void IdentifyVersion (void)
 
 static void DoLooseFiles(void)
 {
-  extern int dsda_argc;
+  extern __STORAGE_MODIFIER int dsda_argc;
   extern char **dsda_argv;
 
   int i, k;
@@ -1239,7 +1239,7 @@ static void DoLooseFiles(void)
 const char *port_wad_file;
 
 // CPhipps - misc screen stuff
-int desired_screenwidth, desired_screenheight;
+__STORAGE_MODIFIER int desired_screenwidth, desired_screenheight;
 
 // Calculate the path to the directory for autoloaded WADs/DEHs.
 // Creates the directory as necessary.
@@ -1299,7 +1299,7 @@ static deh_queue_t autoload_deh_all_queue;
 static deh_queue_t autoload_deh_game_queue;
 static deh_queue_t autoload_deh_iwad_queue;
 static deh_queue_t *autoload_deh_pwad_queue;
-static int autoload_deh_pwad_count;
+static __STORAGE_MODIFIER int autoload_deh_pwad_count;
 
 static void D_QueueAutoloadDeh(deh_queue_t *queue, const char *name)
 {
@@ -1651,10 +1651,10 @@ static void EvaluateDoomVerStr(void)
 //
 // CPhipps - the old contents of D_DoomMain, but moved out of the main
 //  line of execution so its stack space can be freed
-extern dboolean preventLevelExit;
-extern dboolean preventGameEnd;
-extern dboolean reachedLevelExit;
-extern dboolean reachedGameEnd;
+extern __STORAGE_MODIFIER dboolean preventLevelExit;
+extern __STORAGE_MODIFIER dboolean preventGameEnd;
+extern __STORAGE_MODIFIER dboolean reachedLevelExit;
+extern __STORAGE_MODIFIER dboolean reachedGameEnd;
 
 
 void D_DoomMainSetup(void)

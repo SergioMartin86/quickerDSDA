@@ -20,7 +20,7 @@
 #include "player_tracker.h"
 
 void dsda_PlayerTrackerHC(char* str, size_t max_size) {
-  extern int player_damage_last_tic;
+  extern __STORAGE_MODIFIER int player_damage_last_tic;
 
   snprintf(
     str,

@@ -89,13 +89,13 @@ typedef struct
     size_t size;
 } thinkInfo_t;
 
-static int MobjCount;
+static __STORAGE_MODIFIER int MobjCount;
 static mobj_t **MobjList;
 static mobj_t ***TargetPlayerAddrs;
-static int TargetPlayerCount;
+static __STORAGE_MODIFIER int TargetPlayerCount;
 
-extern int inv_ptr;
-extern int curpos;
+extern __STORAGE_MODIFIER int inv_ptr;
+extern __STORAGE_MODIFIER int curpos;
 
 typedef struct
 {

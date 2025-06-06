@@ -132,7 +132,7 @@ typedef struct
 } markpoint_t;
 
 extern markpoint_t *markpoints;
-extern int markpointnum, markpointnum_max;
+extern __STORAGE_MODIFIER int markpointnum, markpointnum_max;
 
 // end changes -- killough 2/22/98
 

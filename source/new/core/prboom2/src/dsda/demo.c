@@ -49,11 +49,11 @@
 static char* dsda_demo_name_base;
 static byte* dsda_demo_write_buffer;
 static byte* dsda_demo_write_buffer_p;
-static int dsda_demo_write_buffer_length;
-static int dsda_extra_demo_header_data_offset;
-static int largest_real_offset;
-static int demo_tics;
-static int compatibility_level_unspecified;
+static __STORAGE_MODIFIER int dsda_demo_write_buffer_length;
+static __STORAGE_MODIFIER int dsda_extra_demo_header_data_offset;
+static __STORAGE_MODIFIER int largest_real_offset;
+static __STORAGE_MODIFIER int demo_tics;
+static __STORAGE_MODIFIER int compatibility_level_unspecified;
 
 #define DSDA_UDMF_VERSION 1
 #define DSDA_DEMO_VERSION 3
@@ -75,11 +75,11 @@ static dsda_demo_header_data_t dsda_demo_header_data;
 #define DF_FROM_KEYFRAME   0x01
 #define DF_CASUAL_FEATURES 0x02
 
-static dboolean join_queued;
-static int dsda_demo_version;
-static int bytes_per_tic;
+static __STORAGE_MODIFIER dboolean join_queued;
+static __STORAGE_MODIFIER int dsda_demo_version;
+static __STORAGE_MODIFIER int bytes_per_tic;
 
-static dboolean use_demo_name_with_time;
+static __STORAGE_MODIFIER dboolean use_demo_name_with_time;
 
 int dsda_DemoTic(void) {
   return demo_tics;
@@ -242,7 +242,7 @@ void dsda_CopyPriorCmd(ticcmd_t* cmd, int delta) {
 }
 
 void dsda_RestoreCommandHistory(void) {
-  extern int dsda_command_history_size;
+  extern __STORAGE_MODIFIER int dsda_command_history_size;
 
   ticcmd_t cmd = { 0 };
 
@@ -822,7 +822,7 @@ void dsda_ApplyDSDADemoFormat(byte** demo_p) {
 
 int dsda_DemoTicsCount(const byte* p, const byte* demobuffer, int demolength) {
   int count = 0;
-  extern int demo_playerscount;
+  extern __STORAGE_MODIFIER int demo_playerscount;
 
   if (dsda_demo_version)
     return dsda_demo_header_data.demo_tics;

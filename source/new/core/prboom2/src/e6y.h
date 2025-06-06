@@ -59,35 +59,35 @@ typedef struct camera_s
   int type;
 } camera_t;
 
-extern dboolean wasWiped;
+extern __STORAGE_MODIFIER dboolean wasWiped;
 
-extern int secretfound;
-extern int demo_tics_count;
-extern int demo_playerscount;
-extern char demo_len_st[80];
+extern __STORAGE_MODIFIER int secretfound;
+extern __STORAGE_MODIFIER int demo_tics_count;
+extern __STORAGE_MODIFIER int demo_playerscount;
+extern __STORAGE_MODIFIER char demo_len_st[80];
 
-extern int mouse_handler;
+extern __STORAGE_MODIFIER int mouse_handler;
 
 extern int gl_render_fov;
-extern float gl_render_ratio;
-extern float gl_render_fovratio;
+extern __STORAGE_MODIFIER float gl_render_ratio;
+extern __STORAGE_MODIFIER float gl_render_fovratio;
 extern float gl_render_fovy;
-extern float gl_render_multiplier;
+extern __STORAGE_MODIFIER float gl_render_multiplier;
 void M_ChangeAspectRatio(void);
 void M_ChangeStretch(void);
 
 extern camera_t walkcamera;
 
 extern int PitchSign;
-extern angle_t viewpitch;
-extern float skyscale;
-extern float screen_skybox_zplane;
+extern __STORAGE_MODIFIER angle_t viewpitch;
+extern __STORAGE_MODIFIER float skyscale;
+extern __STORAGE_MODIFIER float screen_skybox_zplane;
 extern float maxNoPitch[];
-extern float tan_pitch;
-extern float skyUpAngle;
-extern float skyUpShift;
-extern float skyXShift;
-extern float skyYShift;
+extern __STORAGE_MODIFIER float tan_pitch;
+extern __STORAGE_MODIFIER float skyUpAngle;
+extern __STORAGE_MODIFIER float skyUpShift;
+extern __STORAGE_MODIFIER float skyXShift;
+extern __STORAGE_MODIFIER float skyYShift;
 
 void ParamsMatchingCheck();
 void e6y_HandleSkip(void);
@@ -119,7 +119,7 @@ void CheckPitch(signed int *pitch);
 
 dboolean HaveMouseLook(void);
 
-extern float viewPitch;
+extern __STORAGE_MODIFIER float viewPitch;
 
 typedef struct prboom_comp_s
 {
@@ -192,8 +192,8 @@ typedef struct timetable_s
 const char* WINError(void);
 #endif
 
-extern int stats_level;
-extern int stroller;
+extern __STORAGE_MODIFIER int stats_level;
+extern __STORAGE_MODIFIER int stroller;
 
 void e6y_G_DoCompleted(void);
 void e6y_WriteStats(void);
@@ -208,7 +208,7 @@ int AccelerateMouse(int val);
 int AccelerateAnalog(float val);
 void AccelChanging(void);
 
-extern int mlooky;
+extern __STORAGE_MODIFIER int mlooky;
 
 void e6y_G_Compatibility(void);
 
@@ -218,9 +218,9 @@ const char* PathFindFileName(const char* pPath);
 
 extern dboolean isskytexture;
 
-extern int levelstarttic;
+extern __STORAGE_MODIFIER int levelstarttic;
 
-extern int force_singletics_to;
+extern __STORAGE_MODIFIER int force_singletics_to;
 
 int HU_DrawDemoProgress(int force);
 

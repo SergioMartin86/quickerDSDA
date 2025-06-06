@@ -72,7 +72,7 @@
 
 #include "dsda/settings.h"
 
-static dboolean registered_non_rw = false;
+static __STORAGE_MODIFIER dboolean registered_non_rw = false;
 
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
@@ -80,7 +80,7 @@ static dboolean registered_non_rw = false;
 //  mixing buffer, and the samplerate of the raw data.
 
 // The actual output device.
-int audio_fd;
+__STORAGE_MODIFIER int audio_fd;
 
 typedef struct
 {
@@ -112,13 +112,13 @@ typedef struct
 channel_info_t channelinfo[MAX_CHANNELS];
 
 // Pitch to stepping lookup.
-int   steptable[256];
+__STORAGE_MODIFIER int steptable[256];
 
 // Volume lookups.
 //int   vol_lookup[128 * 256];
 
 // NSM
-static int dumping_sound = 0;
+static __STORAGE_MODIFIER int dumping_sound = 0;
 
 
 // lock for updating any params related to sfx
@@ -126,9 +126,9 @@ static int dumping_sound = 0;
 // lock for updating any params related to music
 // SDL_mutex *musmutex;
 
-static int pitched_sounds;
-int snd_samplerate; // samples per second
-static int snd_samplecount;
+static __STORAGE_MODIFIER int pitched_sounds;
+__STORAGE_MODIFIER int snd_samplerate; // samples per second
+static __STORAGE_MODIFIER int snd_samplecount;
 
 static const char *snd_midiplayer;
 
@@ -691,7 +691,7 @@ static void I_UpdateSound(void *unused, uint8_t *stream, int len)
   // SDL_UnlockMutex (sfxmutex);
 }
 
-static dboolean sound_was_initialized;
+static __STORAGE_MODIFIER dboolean sound_was_initialized;
 
 void I_ShutdownSound(void)
 {
@@ -890,7 +890,7 @@ static const music_player_t *music_players[] =
 };
 #define NUM_MUS_PLAYERS ((int)(sizeof (music_players) / sizeof (music_player_t *) - 1))
 
-static int music_player_was_init[NUM_MUS_PLAYERS];
+static __STORAGE_MODIFIER int music_player_was_init[NUM_MUS_PLAYERS];
 
 #define PLAYER_VORBIS     "vorbis player"
 #define PLAYER_MAD        "mad mp3 player"
@@ -949,7 +949,7 @@ void I_InitMusic(void)
 }
 
 // Derived value (not saved, accounts for muted music)
-static int music_volume;
+static __STORAGE_MODIFIER int music_volume;
 
 void I_ResetMusicVolume(void)
 {

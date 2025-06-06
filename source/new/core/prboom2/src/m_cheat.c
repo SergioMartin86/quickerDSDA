@@ -593,7 +593,7 @@ static void cheat_massacre()    // jff 2/01/98 kill all monsters
 
 void M_CheatIDDT(void)
 {
-  extern int dsda_reveal_map;
+  extern __STORAGE_MODIFIER int dsda_reveal_map;
 
   dsda_TrackFeature(uf_iddt);
 
@@ -649,7 +649,7 @@ static void cheat_reveal_secret()
 
 static void cheat_cycle_mobj(mobj_t **last_mobj, int *last_count, int flags, int alive)
 {
-  extern int init_thinkers_count;
+  extern __STORAGE_MODIFIER int init_thinkers_count;
   thinker_t *th, *start_th;
 
   // If the thinkers have been wiped, addresses are invalid
