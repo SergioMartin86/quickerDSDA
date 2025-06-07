@@ -72,10 +72,10 @@ __STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
 
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT];
-screeninfo_t screens[NUM_SCREENS];
+__STORAGE_MODIFIER screeninfo_t screens[NUM_SCREENS];
 
 /* jff 4/24/98 initialize this at runtime */
-const byte *colrngs[CR_LIMIT];
+__STORAGE_MODIFIER const byte *colrngs[CR_LIMIT];
 
 __STORAGE_MODIFIER int usegamma;
 
@@ -99,7 +99,7 @@ int V_BloodColor(int blood)
 // I don't care either way. It is effectively dual-licensed I suppose.
 
 unsigned __STORAGE_MODIFIER int Col2RGB8[65][256];
-byte RGB32k[32][32][32];
+__STORAGE_MODIFIER byte RGB32k[32][32][32];
 
 #define MAKECOLOR(a) (((a)<<3)|((a)>>2))
 

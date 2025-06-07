@@ -62,7 +62,7 @@ extern __STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
 // Screen 1 is an extra buffer.
 
 // array of pointers to color translation tables
-extern const byte *colrngs[];
+extern __STORAGE_MODIFIER const byte *colrngs[];
 
 // symbolic indices into color translation table pointer array
 typedef enum
@@ -106,7 +106,7 @@ typedef struct {
 } screeninfo_t;
 
 #define NUM_SCREENS 6
-extern screeninfo_t screens[NUM_SCREENS];
+extern __STORAGE_MODIFIER screeninfo_t screens[NUM_SCREENS];
 extern __STORAGE_MODIFIER int usegamma;
 
 // Varying bit-depth support -POPE
