@@ -156,6 +156,8 @@ int main(int argc, char *argv[])
     // Initializing emulator instance
     e.initialize();
     
+    JAFFAR_BARRIER;
+
     // Disable rendering
     e.disableRendering();
 
@@ -190,8 +192,11 @@ int main(int argc, char *argv[])
 
     // Actually running the sequence
     auto t0 = std::chrono::high_resolution_clock::now();
+    size_t currentInputIndex = 0;
     for (const auto &input : decodedSequence)
     {
+      printf("[] Running input %lu/%lu\n", currentInputIndex + 1, sequenceLength);
+      currentInputIndex++;
       if (doPreAdvance == true) 
       {
         for (size_t i = 0; i < rerecordDepth; i++) e.advanceState(generateRandomInput(rng));

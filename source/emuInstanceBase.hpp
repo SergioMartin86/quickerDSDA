@@ -239,7 +239,7 @@ class EmuInstanceBase
     _videoBufferSize = _videoWidth * _videoHeight * pixelBytes;
 
     // Allocating buffer
-    _videoBuffer = (uint32_t*) malloc (_videoBufferSize);
+    _videoBuffer = (uint32_t*) calloc (_videoBufferSize, 1);
 
     #endif
 
@@ -280,7 +280,7 @@ class EmuInstanceBase
     #ifdef _ENABLE_RENDERING
 
     // If rendering is enabled, update vid now
-    if(_renderingEnabled == true) 
+    if(_renderingEnabled == true) if (players[0].mo != nullptr)
     {
       displayplayer = consoleplayer = _playerPointOfView;
       headlessUpdateVideo();
@@ -304,7 +304,7 @@ class EmuInstanceBase
     #endif
 
     if (reachedLevelExit == 1) jaffarCommon::logger::log("[] Level Exit detected on tic:   %d\n", gametic);
-    if (reachedGameEnd   == 1) jaffarCommon::logger::log("[] Gane End detected on tic:   %d\n", gametic);
+    if (reachedGameEnd   == 1) jaffarCommon::logger::log("[] Game End detected on tic:   %d\n", gametic);
   }
 
   inline jaffarCommon::hash::hash_t getStateHash() const

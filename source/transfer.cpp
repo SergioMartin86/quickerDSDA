@@ -168,8 +168,10 @@ int main(int argc, char *argv[])
       auto& e = *emulators[threadId];
 
       // Running decoded sequence
+      size_t currentStep = 0;
       for (size_t i = 0; i < decodedSequence.size(); i++)
       {
+        // printf("Current Step: %lu\n", currentStep++);
         // Getting input
         const auto &input = decodedSequence[i];
 
