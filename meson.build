@@ -33,6 +33,17 @@ if get_option('buildPlayer') == true
     link_args           : [ '-lncurses' ],
   )
 
+  newPlayer = executable('newPlayer',
+    'source/player.cpp',
+    cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
+    dependencies        : [ newDependency,
+                            jaffarCommonDependency,
+                            dependency('sdl2',  required : true)
+                          ],
+    include_directories : include_directories(['source']),
+    link_args           : [ '-lncurses' ],
+  )
+
 endif
 
 # Building parallel tester tool

@@ -52,7 +52,7 @@ typedef struct {
 #define AT_LEAST_ONE_NONNEGATIVE_INT 0, INT_MAX, 1, INT_MAX
 #define EXACT_ARRAY_LENGTH(x) 0, 0, x, x
 
-static arg_config_t arg_config[dsda_arg_count] = {
+static __STORAGE_MODIFIER arg_config_t arg_config[dsda_arg_count] = {
   [dsda_arg_help] = {
     "-help", "--help", NULL,
     "prints out command line argument information",

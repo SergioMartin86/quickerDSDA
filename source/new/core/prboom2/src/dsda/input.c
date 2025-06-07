@@ -163,9 +163,11 @@ dboolean dsda_InputActivated(int identifier) {
     if (gamekeys[input->key[i]].activated_at == dsda_input_counter)
       return true;
 
-  return
-    mousebuttons[input->mouseb].activated_at == dsda_input_counter ||
-    joybuttons[input->joyb].activated_at == dsda_input_counter;
+  return false;
+
+  // return
+  //   mousebuttons[input->mouseb].activated_at == dsda_input_counter ||
+  //   joybuttons[input->joyb].activated_at == dsda_input_counter;
 }
 
 dboolean dsda_InputTickActivated(int identifier) {
@@ -177,9 +179,10 @@ dboolean dsda_InputTickActivated(int identifier) {
     if (gamekeys[input->key[i]].game_activated_at > dsda_input_tick_counter)
       return true;
 
-  return
-    mousebuttons[input->mouseb].game_activated_at > dsda_input_tick_counter ||
-    joybuttons[input->joyb].game_activated_at > dsda_input_tick_counter;
+  return false;
+  // return
+  //   mousebuttons[input->mouseb].game_activated_at > dsda_input_tick_counter ||
+  //   joybuttons[input->joyb].game_activated_at > dsda_input_tick_counter;
 }
 
 dboolean dsda_InputDeactivated(int identifier) {
@@ -194,14 +197,15 @@ dboolean dsda_InputDeactivated(int identifier) {
     else if (gamekeys[input->key[i]].deactivated_at == dsda_input_counter)
       deactivated = true;
 
-  return
-    !mousebuttons[input->mouseb].on &&
-    !joybuttons[input->joyb].on &&
-    (
-      deactivated ||
-      mousebuttons[input->mouseb].deactivated_at == dsda_input_counter ||
-      joybuttons[input->joyb].deactivated_at == dsda_input_counter
-    );
+  return false;
+  // return
+  //   !mousebuttons[input->mouseb].on &&
+  //   !joybuttons[input->joyb].on &&
+  //   (
+  //     deactivated ||
+  //     mousebuttons[input->mouseb].deactivated_at == dsda_input_counter ||
+  //     joybuttons[input->joyb].deactivated_at == dsda_input_counter
+  //   );
 }
 
 void dsda_InputFlush(void) {
@@ -359,8 +363,9 @@ dboolean dsda_InputActive(int identifier) {
     if (gamekeys[input->key[i]].game_on)
       return true;
 
-  return (input->mouseb >= 0 && mousebuttons[input->mouseb].game_on) ||
-         (input->joyb >= 0   && joybuttons[input->joyb].game_on);
+  return false;
+  // return (input->mouseb >= 0 && mousebuttons[input->mouseb].game_on) ||
+  //        (input->joyb >= 0   && joybuttons[input->joyb].game_on);
 }
 
 dboolean dsda_InputKeyActive(int identifier) {

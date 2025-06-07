@@ -271,7 +271,7 @@ quickerDSDACompileArgs = [
 # DSDA dependency
 
  quickerDSDADependency = declare_dependency(
-  compile_args        : [  quickerDSDACompileArgs, '-D__STORAGE_MODIFIER=__thread', '-pthread' ],
+  compile_args        : [  quickerDSDACompileArgs, '-D__STORAGE_MODIFIER=__thread', '-pthread', '-D_ENABLE_RENDERING' ],
 	link_args        : [   '-lpthread' ],
   include_directories : include_directories(quickerDSDAIncludeDirs),
   sources             : [ quickerDSDASrc ],
