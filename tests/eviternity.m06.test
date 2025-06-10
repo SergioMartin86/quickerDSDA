@@ -1,0 +1,40 @@
+{
+  "State Size": 1048560,
+  "IWAD File Path": "wads/DOOM2.WAD",
+  "Expected IWAD SHA1": "7EC7652FCFCE8DDC6E801839291F0E28EF1D5AE7",
+  "PWADS": [ 
+      {
+          "File Path": "wads/dsda-doom.wad",
+          "Expected SHA1": "D8604FA2A4154F80C3C2730DCB0836BB1D14323C"
+      },
+      {
+          "File Path": "wads/Eviternity.wad",
+          "Expected SHA1": "8A46F87DD140B502C471FDC66B6000828330BD68"
+      },
+      {
+          "File Path": "wads/eviternity.map06.reduced.wad",
+          "Expected SHA1": "1223954A9C48DF65443FF242005FDCA487FB6088"
+      }
+  ],
+  "Skill Level": 4,
+  "Episode": 0, 
+  "Map": 6,
+  "Compatibility Level": 11,
+  "Fast Monsters": false,
+  "Monsters Respawn": false,
+  "No Monsters": false,
+  "Player 1 Present": true,
+  "Player 2 Present": false,
+  "Player 3 Present": false,
+  "Player 4 Present": false,
+  "Player Point of View": 0,
+  "Prevent Level Exit": false,
+  "Prevent Game End": false,
+
+  "Expected Result":
+  {
+    "Map Number": 6,
+    "Is Level Exit": false, 
+    "Is Game End": false
+  }
+}
