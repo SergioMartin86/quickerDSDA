@@ -2126,8 +2126,8 @@ void headlessClearTickCommand()
 
 void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon, int automap, int lookfly, int artifact, int jump, int endPlayer)
 {
-  local_cmds[playerId].forwardmove = forwardSpeed;
-  local_cmds[playerId].sidemove    = strafingSpeed;
+  if (forwardSpeed != -127)  local_cmds[playerId].forwardmove = forwardSpeed;
+  if (strafingSpeed != -127) local_cmds[playerId].sidemove    = strafingSpeed;
   local_cmds[playerId].angleturn   = (shorttics || !longtics) ? turningSpeed << 8 : turningSpeed;
 
   if (fire == 1)    local_cmds[playerId].buttons |= 0b00000001;

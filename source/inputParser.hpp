@@ -90,7 +90,9 @@ public:
     forwardSpeedString[2] = ss.get();
     forwardSpeedString[3] = ss.get();
     forwardSpeedString[4] = '\0';
-    input.forwardSpeed = atoi(forwardSpeedString);
+
+    if (forwardSpeedString[3] == 'X') input.forwardSpeed = -127;
+    else input.forwardSpeed = atoi(forwardSpeedString);
 
     // Parsing comma
     c = ss.get();
@@ -103,7 +105,9 @@ public:
     strafingSpeedString[2] = ss.get();
     strafingSpeedString[3] = ss.get();
     strafingSpeedString[4] = '\0';
-    input.strafingSpeed = atoi(strafingSpeedString);
+
+    if (strafingSpeedString[3] == 'X') input.strafingSpeed = -127;
+    else input.strafingSpeed = atoi(strafingSpeedString);
     
     // Parsing comma
     c = ss.get();

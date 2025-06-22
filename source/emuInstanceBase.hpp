@@ -63,6 +63,7 @@ extern "C" __STORAGE_MODIFIER int gametic;
 extern "C" __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
 extern "C" __STORAGE_MODIFIER int consoleplayer;
 extern "C" __STORAGE_MODIFIER int displayplayer;
+extern "C" __STORAGE_MODIFIER ticcmd_t local_cmds[MAX_MAXPLAYERS];
 
 namespace jaffar
 {
@@ -259,7 +260,7 @@ class EmuInstanceBase
   virtual void advanceState(const jaffar::input_t &input)
   {
     // Setting inputs
-    headlessClearTickCommand();
+    // headlessClearTickCommand();
     for (int i = 0; i < _playerCount; i++)
       headlessSetTickCommand
       (
@@ -432,6 +433,7 @@ class EmuInstanceBase
     headlessSetSaveStatePointer(_saveData, _stateSize);
     dsda_ArchiveAll();
     s.push(_saveData, _stateSize);
+    s.push(local_cmds, sizeof(local_cmds));
   }
 
   void deserializeState(jaffarCommon::deserializer::Base& d) 
@@ -439,6 +441,7 @@ class EmuInstanceBase
     d.pop(_saveData, _stateSize);
     headlessSetSaveStatePointer(_saveData, _stateSize);
     dsda_UnArchiveAll();
+    d.pop(local_cmds, sizeof(local_cmds));
   }
 
   size_t getVideoBufferSize() const
