@@ -285,11 +285,13 @@ TRIM_FIELDS = [
     # per-field mutation/read analysis):
     #  sec->tag, li->tag, li->special_args : never mutated post level-load (constant).
     #  li->flags : only ML_MAPPED (renderer) mutates it -> constant when headless.
-    #  li->player_activations : write-only statistics counter, never read by sim.
     # NOTE: sec->lightlevel is render-only too, but the deep-equivalence oracle
     # (getDeepStateHash) hashes it, so it is kept saved (like mobj sprite/frame).
+    # NOTE: li->player_activations is MUTATED by gameplay (dsda.c ++ on line use)
+    # and is the Jaffar win signal ("Line[N] Activations") + read by brute_force.c,
+    # so it MUST stay saved or it goes stale across load/advance -> false wins.
     "sec->tag",
-    "li->flags", "li->tag", "li->player_activations", "li->special_args",
+    "li->flags", "li->tag", "li->special_args",
 ]
 
 

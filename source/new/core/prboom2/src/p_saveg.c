@@ -242,7 +242,7 @@ void P_ArchiveWorld (void)
     // [min-headless trim] P_SAVE_X(li->flags);  // render-only/constant at headless Doom2 cl2
     P_SAVE_X(li->special);
     // [min-headless trim] P_SAVE_X(li->tag);  // render-only/constant at headless Doom2 cl2
-    // [min-headless trim] P_SAVE_BYTE(li->player_activations);  // render-only/constant at headless Doom2 cl2
+    P_SAVE_BYTE(li->player_activations);
     // [min-headless trim] P_SAVE_ARRAY(li->special_args);  // render-only/constant at headless Doom2 cl2
     // zdoom
     // [min-headless trim] P_SAVE_X(li->automap_style);  // render-only/constant at headless Doom2 cl2
@@ -336,7 +336,7 @@ void P_UnArchiveWorld (void)
     // [min-headless trim] P_LOAD_X(li->flags);  // render-only/constant at headless Doom2 cl2
     P_LOAD_X(li->special);
     // [min-headless trim] P_LOAD_X(li->tag);  // render-only/constant at headless Doom2 cl2
-    // [min-headless trim] P_LOAD_BYTE(li->player_activations);  // render-only/constant at headless Doom2 cl2
+    P_LOAD_BYTE(li->player_activations);
     // [min-headless trim] P_LOAD_ARRAY(li->special_args);  // render-only/constant at headless Doom2 cl2
     // zdoom
     // [min-headless trim] P_LOAD_X(li->automap_style);  // render-only/constant at headless Doom2 cl2
