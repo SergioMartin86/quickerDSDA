@@ -344,13 +344,6 @@ typedef struct mobj_s
     struct mobj_s*      tracer;         // thing being chased/attacked for tracers
     struct mobj_s*      lastenemy;      // last known enemy -- killough 2/15/98
 
-    // friction properties for the sector the object is in (e6y restored)
-    int friction;                                           // phares 3/17/98
-    int movefactor;
-
-    uint64_t flags2;            // Heretic & MBF21 flags (kept: read as info->flags2 at cl2)
-    fixed_t gravity;            // zdoom/MBF21 per-mobj gravity (kept: read by P_GetGravity)
-
     // ---- TRIMMED TAIL: NOT saved in the savestate (zeroed/rebuilt on load) ----
     // Render-only, Heretic/Hexen-only, respawn-only, or transient (rebuilt by
     // P_SetThingPosition / the secnode rebuild / P_AddThinker, or dead).
@@ -397,6 +390,12 @@ typedef struct mobj_s
     float alpha;
     byte color;
     const byte* tranmap;        // re-derived/NULL on load
+
+    // Constant at complevel 2 -> re-derived on load instead of saved:
+    int friction;               // = ORIG_FRICTION (reset each tic)         phares 3/17/98
+    int movefactor;             // = 0 (only read under !compatibility)
+    uint64_t flags2;            // = info->flags2 (not mutated at cl2)
+    fixed_t gravity;            // = map_info.gravity (spawn default at cl2)
 
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;

@@ -56,6 +56,7 @@
 
 #include "dsda/ambient.h"
 #include "dsda/map_format.h"
+#include "dsda/mapinfo.h"   /* map_info.gravity — re-derived trimmed mobj field */
 #include "dsda/msecnode.h"
 #include "dsda/scroll.h"
 #include "dsda/tranmap.h"
@@ -115,19 +116,6 @@ void P_FreeSaveBuffer(void)
 // Overwrite allocation-dependent pointer fields in the *buffer copy* (never the
 // live object) with deterministic values. Everything zeroed here is rebuilt or
 // re-derived on load (P_AddThinker / P_SetThingPosition / &mobjinfo[type] / ...).
-
-static void P_CanonicalizeMobj(mobj_t *d)
-{
-  // Only the saved PREFIX is canonicalized (Design B state-size reduction): the
-  // former pointer/render fields (snext/sprev/bnext/bprev, touching_sectorlist,
-  // info, tranmap, PrevX/Y/Z) now live in the trimmed tail and are NOT in the
-  // buffer copy, so they must not be written here. The remaining prefix pointers
-  // (subsector/state/target/tracer/lastenemy/player) are swizzled to indices.
-  d->thinker.next = NULL;                 // thinker.prev holds the swizzled index
-  d->thinker.cnext = NULL;
-  d->thinker.cprev = NULL;
-  d->thinker.function = NULL;             // load sets P_MobjThinker unconditionally
-}
 
 static void P_CanonicalizeSpecialThinker(thinker_t *d)
 {
@@ -1127,18 +1115,22 @@ void P_ArchiveThinkers(void) {
     {
       mobj_t *mobj;
       mobj_t *live = (mobj_t *)th;
-      size_t _sz = offsetof(mobj_t, snext);   // Design B: save only the gameplay prefix
+      // Design B: save only the gameplay window [x, snext). The whole thinker_t
+      // header [0, x) is rebuilt on load (P_AddThinker resets next/prev/cnext/
+      // cprev/references; the load sets function), so it is never saved.
+      size_t _sz = offsetof(mobj_t, snext) - offsetof(mobj_t, x);
 
       // Mobjs pending delayed removal (e.g. an Archvile still attacking the spot
       // where a now-deleted lost soul was) are flagged via the type byte instead
       // of the (now-trimmed) index==MARKED_FOR_DELETION sentinel.
       P_SAVE_BYTE(live->thinker.function == P_RemoveThinkerDelayed ? tc_mobj_marked : tc_mobj);
 
-      // Copy only the saved prefix [0, offsetof(snext)) into the buffer; swizzle
-      // its pointer fields (all of which live in the prefix) to indices.
       CheckSaveGame(_sz);
-      mobj = (mobj_t *)save_p;
-      memcpy(save_p, th, _sz);
+      memcpy(save_p, (char *)th + offsetof(mobj_t, x), _sz);
+      // View the buffer as a mobj_t aligned so that mobj->x maps to save_p[0];
+      // all swizzled pointer fields (state/subsector/target/...) are >= x, hence
+      // inside the written window. The thinker header is never touched here.
+      mobj = (mobj_t *)(save_p - offsetof(mobj_t, x));
       save_p += _sz;
 
       mobj->state = (state_t *)(mobj->state - states);
@@ -1153,7 +1145,6 @@ void P_ArchiveThinkers(void) {
       if (mobj->player)
         mobj->player = (player_t *)((mobj->player-players) + 1);
 
-      P_CanonicalizeMobj(mobj);   // Design A: canonicalize the prefix's remaining pointers
       { /* incr.2a: save touching-sector indices to skip the blockmap scan on load */
         const msecnode_t *m; int count = 0;
         for (m = live->touching_sectorlist; m; m = m->m_tnext) count++;
@@ -1275,7 +1266,7 @@ void P_UnArchiveThinkers(void) {
         tc == tc_poly_door      ? sizeof(polydoor_t)       :
         tc == tc_quake          ? sizeof(quake_t)          :
         tc == tc_ambient_source ? sizeof(ambient_source_t) :
-        (tc == tc_mobj || tc == tc_mobj_marked) ? offsetof(mobj_t, snext) : /* Design B: saved prefix only */
+        (tc == tc_mobj || tc == tc_mobj_marked) ? offsetof(mobj_t, snext) - offsetof(mobj_t, x) : /* Design B: saved window [x,snext) */
       0;
       if (tc == tc_mobj || tc == tc_mobj_marked) { int sc; memcpy(&sc, save_p, sizeof(int)); save_p += sizeof(int) + (size_t) sc * sizeof(int); } /* incr.2a */
     }
@@ -1663,18 +1654,20 @@ void P_UnArchiveThinkers(void) {
       case tc_mobj_marked:
         {
           mobj_t *mobj = Z_MallocLevel(sizeof(mobj_t));
-          size_t _sz = offsetof(mobj_t, snext);   // Design B: only the prefix was saved
+          size_t _sz = offsetof(mobj_t, snext) - offsetof(mobj_t, x);   // Design B: only [x, snext) was saved
 
           // killough 2/14/98 -- insert pointers to thinkers into table, in order:
           mobj_count++;
           mobj_p[mobj_count] = mobj;
 
-          // Load the saved gameplay prefix; zero the trimmed tail (render /
-          // Heretic-Hexen / respawn / transient fields), matching a fresh spawn's
-          // memset. Tail links are rebuilt below (P_SetThingPosition + incr.2a),
-          // info/tranmap are re-derived.
-          memcpy(mobj, save_p, _sz); save_p += _sz;
-          memset((char *)mobj + _sz, 0, sizeof(mobj_t) - _sz);
+          // Zero the trimmed thinker header [0, x) (rebuilt by P_AddThinker + the
+          // function set below), load the saved gameplay window [x, snext), and
+          // zero the trimmed tail (render/Heretic-Hexen/respawn/transient), matching
+          // a fresh spawn. Tail links are rebuilt (P_SetThingPosition + incr.2a),
+          // info/tranmap/flags2/gravity/friction re-derived.
+          memset(mobj, 0, offsetof(mobj_t, x));
+          memcpy((char *)mobj + offsetof(mobj_t, x), save_p, _sz); save_p += _sz;
+          memset((char *)mobj + offsetof(mobj_t, snext), 0, sizeof(mobj_t) - offsetof(mobj_t, snext));
 
           mobj->state = states + (intptr_t) mobj->state;
           mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */
@@ -1688,9 +1681,18 @@ void P_UnArchiveThinkers(void) {
 
           mobj->info = &mobjinfo[mobj->type];
 
+          // Re-derive the trimmed constant-at-cl2 fields (not saved). movefactor
+          // stays 0 (tail-zeroed; only read under !compatibility).
+          mobj->flags2   = mobj->info->flags2;   // not mutated at cl2
+          mobj->gravity  = map_info.gravity;     // spawn default (stock things = FRACUNIT)
+          mobj->friction = ORIG_FRICTION;        // reset each tic at cl2
+
           // Don't place objects marked for deletion (flagged via the type byte)
           if (tc == tc_mobj_marked)
           {
+            // index is a trimmed (zeroed) field; restore the live sentinel so the
+            // target-relink pass below applies its references-- correction.
+            mobj->index = MARKED_FOR_DELETION;
             mobj->thinker.function = P_RemoveThinkerDelayed;
             P_AddThinker(&mobj->thinker);
 
