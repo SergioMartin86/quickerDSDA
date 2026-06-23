@@ -3667,6 +3667,11 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   //e6y
   totallive = 0;
 
+  // Increment 3: static map geometry is loaded below with the thinker arena
+  // OFF, so only the dynamic objects (spawned from load_things onward) land in
+  // the contiguous slab.
+  Z_EndThinkerArena();
+
   main_tranmap = dsda_DefaultTranMap();
 
   dsda_WatchBeforeLevelSetup();
@@ -3860,6 +3865,10 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   {
     PO_ResetBlockMap(true);
   }
+
+  // Increment 3: geometry is loaded; route all dynamic objects spawned from
+  // here on (initial things, specials, and all gameplay spawns) into the slab.
+  Z_BeginThinkerArena();
 
   map_loader.load_things(level_components.things);
 

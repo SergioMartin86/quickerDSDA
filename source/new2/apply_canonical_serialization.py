@@ -300,6 +300,191 @@ def patch_save(path):
     return True
 
 
+ARENA_BLOCK = '''
+/* ---- Increment 3: contiguous per-thread "thinker" arena ----
+ * Dynamic level objects (mobjs + the special thinkers) are bump-allocated from
+ * a single contiguous per-thread slab with a segregated (per exact 16-byte size
+ * class) free list, so the whole live dynamic set occupies one contiguous
+ * region. That contiguity is the foundation for the bulk zone-snapshot save/load
+ * path (a single memcpy + pointer relocation in place of the per-thinker field
+ * walk). Routing is gated by dsda_thinker_arena_active, flipped on in
+ * P_SetupLevel *after* the one-time map geometry is loaded and off before it,
+ * so only the dynamic objects (never the static geometry) land in the slab.
+ * Blocks keep the ordinary memblock_t header and blockbytag linkage, so the
+ * existing pointer-swizzling archive path works unchanged on top of this. */
+#ifndef DSDA_THINKER_ARENA_BYTES
+#define DSDA_THINKER_ARENA_BYTES ((size_t)32 * 1024 * 1024)
+#endif
+#define TA_ALIGN       16u
+#define TA_MAX_CLASSES 2048u   /* arena-eligible up to TA_MAX_CLASSES*TA_ALIGN = 32KB; larger falls back to malloc */
+
+__STORAGE_MODIFIER int dsda_thinker_arena_active;       /* routing flag (set in p_setup.c) */
+static __STORAGE_MODIFIER char       *ta_base;          /* slab base (malloc'd once per thread) */
+static __STORAGE_MODIFIER size_t      ta_high;          /* bump high-water mark (bytes used) */
+static __STORAGE_MODIFIER size_t      ta_peak;          /* max high-water seen (for reporting/sizing) */
+static __STORAGE_MODIFIER memblock_t *ta_free[TA_MAX_CLASSES]; /* segregated free lists, keyed by size class */
+
+/* Reset the slab to empty and start routing dynamic allocations into it. Called
+ * after the geometry load, when no thinker objects are live. */
+void Z_BeginThinkerArena(void)
+{
+  ta_high = 0;
+  memset(ta_free, 0, sizeof(ta_free));
+  dsda_thinker_arena_active = 1;
+}
+
+/* Stop routing into the slab (e.g. while (re)loading static geometry). */
+void Z_EndThinkerArena(void)
+{
+  dsda_thinker_arena_active = 0;
+}
+
+size_t Z_ThinkerArenaUsed(void) { return ta_high; }
+size_t Z_ThinkerArenaPeak(void) { return ta_peak; }
+
+static memblock_t *Z_ArenaCarve(size_t total, unsigned cls)
+{
+  memblock_t *b;
+  if (ta_free[cls])                 /* exact-size reuse: perfect for fixed-size structs */
+  {
+    b = ta_free[cls];
+    ta_free[cls] = b->next;
+    return b;
+  }
+  if (!ta_base)
+  {
+    ta_base = malloc(DSDA_THINKER_ARENA_BYTES);
+    if (!ta_base)
+      I_Error("Z_ArenaCarve: failed to reserve %lu-byte thinker arena", (unsigned long) DSDA_THINKER_ARENA_BYTES);
+  }
+  if (ta_high + total > DSDA_THINKER_ARENA_BYTES)
+    I_Error("Z_ArenaCarve: thinker arena exhausted (need %lu)", (unsigned long)(ta_high + total));
+  b = (memblock_t *)(ta_base + ta_high);
+  ta_high += total;
+  if (ta_high > ta_peak) ta_peak = ta_high;
+  return b;
+}
+
+static inline int Z_InArena(const void *block)
+{
+  return ta_base && (const char *)block >= ta_base && (const char *)block < ta_base + ta_high;
+}
+'''
+
+
+def patch_zone(zone_c, zone_h):
+    s = open(zone_c).read()
+    if "dsda_thinker_arena_active" in s:
+        return False
+    # 1. arena globals + helpers, right after the per-tag block list
+    s = s.replace(
+        "static __STORAGE_MODIFIER memblock_t *blockbytag[ZONE_MAX];\n",
+        "static __STORAGE_MODIFIER memblock_t *blockbytag[ZONE_MAX];\n" + ARENA_BLOCK, 1)
+    # 2. route dynamic level allocations into the arena
+    s = s.replace(
+        "  memblock_t *block = NULL;\n"
+        "\n"
+        "  if (!size)\n"
+        "    return NULL; // malloc(0) returns NULL\n"
+        "\n"
+        "  if (!(block = malloc(size + HEADER_SIZE)))\n"
+        "  {\n"
+        "    I_Error (\"Z_Malloc: Failure trying to allocate %lu bytes\", (unsigned long) size);\n"
+        "  }",
+        "  memblock_t *block = NULL;\n"
+        "  size_t blocksize = size;\n"
+        "\n"
+        "  if (!size)\n"
+        "    return NULL; // malloc(0) returns NULL\n"
+        "\n"
+        "  // Increment 3: route dynamic level objects into the contiguous thinker arena.\n"
+        "  if (tag == ZONE_LEVEL && dsda_thinker_arena_active)\n"
+        "  {\n"
+        "    size_t rounded = (size + (TA_ALIGN - 1)) & ~(size_t)(TA_ALIGN - 1);\n"
+        "    unsigned cls = (unsigned)(rounded / TA_ALIGN);\n"
+        "    if (cls < TA_MAX_CLASSES)\n"
+        "    {\n"
+        "      block = Z_ArenaCarve(rounded + HEADER_SIZE, cls);\n"
+        "      blocksize = rounded;   // capacity == class size, so re-free maps back to the same class\n"
+        "    }\n"
+        "  }\n"
+        "\n"
+        "  if (!block && !(block = malloc(blocksize + HEADER_SIZE)))\n"
+        "  {\n"
+        "    I_Error (\"Z_Malloc: Failure trying to allocate %lu bytes\", (unsigned long) size);\n"
+        "  }", 1)
+    # 3. record the (possibly rounded) capacity as the block size
+    s = s.replace(
+        "  block->size = size;\n"
+        "  block->signature = ZONE_SIGNATURE;",
+        "  block->size = blocksize;\n"
+        "  block->signature = ZONE_SIGNATURE;", 1)
+    # 4. arena blocks return to their size-class free list, not the heap
+    s = s.replace(
+        "  block->prev->next = block->next;\n"
+        "  block->next->prev = block->prev;\n"
+        "\n"
+        "  free(block);\n"
+        "}",
+        "  block->prev->next = block->next;\n"
+        "  block->next->prev = block->prev;\n"
+        "\n"
+        "  // Increment 3: arena blocks return to their size-class free list, not the heap.\n"
+        "  if (Z_InArena(block))\n"
+        "  {\n"
+        "    unsigned cls = (unsigned)(block->size / TA_ALIGN);\n"
+        "    block->next = ta_free[cls];\n"
+        "    ta_free[cls] = block;\n"
+        "    return;\n"
+        "  }\n"
+        "\n"
+        "  free(block);\n"
+        "}", 1)
+    open(zone_c, "w").write(s)
+    # header decls
+    h = open(zone_h).read()
+    if "Z_BeginThinkerArena" not in h:
+        h = h.replace(
+            "char *Z_StrdupLevel(const char *s);\n",
+            "char *Z_StrdupLevel(const char *s);\n\n"
+            "/* Increment 3: contiguous per-thread thinker arena (see z_zone.c) */\n"
+            "void   Z_BeginThinkerArena(void);\n"
+            "void   Z_EndThinkerArena(void);\n"
+            "size_t Z_ThinkerArenaUsed(void);\n"
+            "size_t Z_ThinkerArenaPeak(void);\n", 1)
+        open(zone_h, "w").write(h)
+    return True
+
+
+def patch_setup(path):
+    s = open(path).read()
+    if "Z_BeginThinkerArena" in s:
+        return False
+    s = s.replace(
+        "  //e6y\n"
+        "  totallive = 0;\n"
+        "\n"
+        "  main_tranmap = dsda_DefaultTranMap();",
+        "  //e6y\n"
+        "  totallive = 0;\n"
+        "\n"
+        "  // Increment 3: static map geometry is loaded below with the thinker arena\n"
+        "  // OFF, so only the dynamic objects (spawned from load_things onward) land in\n"
+        "  // the contiguous slab.\n"
+        "  Z_EndThinkerArena();\n"
+        "\n"
+        "  main_tranmap = dsda_DefaultTranMap();", 1)
+    s = s.replace(
+        "  map_loader.load_things(level_components.things);",
+        "  // Increment 3: geometry is loaded; route all dynamic objects spawned from\n"
+        "  // here on (initial things, specials, and all gameplay spawns) into the slab.\n"
+        "  Z_BeginThinkerArena();\n"
+        "\n"
+        "  map_loader.load_things(level_components.things);", 1)
+    open(path, "w").write(s)
+    return True
+
+
 def main():
     root = sys.argv[1] if len(sys.argv) > 1 else \
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "core/prboom2/src")
@@ -307,10 +492,14 @@ def main():
     t = patch_trims(os.path.join(root, "p_saveg.c"))
     b = patch_save(os.path.join(root, "dsda/save.c"))
     m = patch_maputl(os.path.join(root, "p_maputl.c"))
+    z = patch_zone(os.path.join(root, "z_zone.c"), os.path.join(root, "z_zone.h"))
+    p = patch_setup(os.path.join(root, "p_setup.c"))
     print(f"[canonical] p_saveg.c {'patched' if a else 'already-applied'}, "
           f"trims {t if t is not False else 'already-applied'}, "
           f"save.c {'patched' if b else 'already-applied'}, "
-          f"p_maputl.c {'patched' if m else 'already-applied'}")
+          f"p_maputl.c {'patched' if m else 'already-applied'}, "
+          f"z_zone.c {'patched' if z else 'already-applied'}, "
+          f"p_setup.c {'patched' if p else 'already-applied'}")
 
 
 if __name__ == "__main__":
