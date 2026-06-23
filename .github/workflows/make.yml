@@ -28,7 +28,10 @@ jobs:
     - name: Building project
       run: ninja -C build
     - name: Running tests
-      run: ninja test -C build
+      # Serial test execution: pTester/tTester are multi-threaded, so meson's default
+      # parallel test run oversubscribes a 2-core CI runner and the engine's per-thread
+      # sched_getcpu indexing collides and crashes. One multi-threaded test at a time.
+      run: meson test -C build --num-processes 1
     - uses: actions/upload-artifact@v4
       with:
         name: meson-logs
