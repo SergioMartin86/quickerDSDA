@@ -66,8 +66,32 @@ tTester = executable('tTester',
 
 newTester = executable('newTester',
   'source/tester.cpp',
-  cpp_args            : [ commonCompileArgs ], 
+  cpp_args            : [ commonCompileArgs ],
   dependencies        : [ newDependency, jaffarCommonDependency, dependency('sdl2',  required : true) ],
+)
+
+# Building tester tool for the clean-regenerated (new2) core
+
+new2Tester = executable('new2Tester',
+  'source/tester.cpp',
+  cpp_args            : [ commonCompileArgs ],
+  dependencies        : [ new2Dependency, jaffarCommonDependency ],
+)
+
+# Parallel tester for the new2 core
+
+pTester2 = executable('pTester2',
+  'source/parallel.cpp',
+  cpp_args            : [ commonCompileArgs ],
+  dependencies        : [ new2Dependency, jaffarCommonDependency ],
+)
+
+# Cross-thread save-state transfer (Jaffar-compatibility) tester for the new2 core
+
+tTester2 = executable('tTester2',
+  'source/transfer.cpp',
+  cpp_args            : [ commonCompileArgs ],
+  dependencies        : [ new2Dependency, jaffarCommonDependency ],
 )
 
 # Building tester tool for the original emulator

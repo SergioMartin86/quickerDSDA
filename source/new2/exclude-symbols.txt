@@ -1,0 +1,10 @@
+# Symbols the deglobalizer must NOT make thread-local (left shared).
+#
+# Rationale: these are immutable lookup tables whose ADDRESS is taken in a
+# file-scope static initializer. Making them __thread turns that address into a
+# non-constant expression, breaking the static initializer (C requires constant
+# initializers). They are read-only trig data, so leaving them shared is both
+# correct and a per-thread memory saving.
+#
+#   tables.h: static fixed_t *const finecosine = finesine + (FINEANGLES/4);
+finesine

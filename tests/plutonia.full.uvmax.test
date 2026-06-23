@@ -1,6 +1,7 @@
 {
   "IWAD File Path": "wads/PLUTONIA.WAD",
   "Expected IWAD SHA1": "327F8C41EBD4138354E9FCA63CEBBBD1B9489749",
+  "State Size": 1048576,
   "PWADS": [ 
     {
       "File Path": "wads/dsda-doom.wad",
@@ -18,6 +19,7 @@
   "Player 2 Present": false,
   "Player 3 Present": false,
   "Player 4 Present": false,
+  "Player Point of View": 0,
   "Prevent Level Exit": false,
   "Prevent Game End": true,
 

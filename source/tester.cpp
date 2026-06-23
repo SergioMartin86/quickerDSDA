@@ -69,6 +69,11 @@ int main(int argc, char *argv[])
   .default_value(false)
   .implicit_value(true);
 
+  program.add_argument("--deepHash")
+  .help("Also fold a deep full-state hash (all mobjs + sectors) over the trajectory and print it. Use to validate savestate trims base-vs-new2.")
+  .default_value(false)
+  .implicit_value(true);
+
   // Try to parse arguments
   try { program.parse_args(argc, argv); } catch (const std::runtime_error &err) { JAFFAR_THROW_LOGIC("%s\n%s", err.what(), program.help().str().c_str()); }
 
@@ -182,28 +187,33 @@ int main(int argc, char *argv[])
   bool doDeserialize = cycleType == "Rerecord";
   bool doSerialize = cycleType == "Rerecord";
 
+  const bool doDeepHash = program.get<bool>("--deepHash");
+  MetroHash128 deepHashAccum;
+
   // Actually running the sequence
   auto t0 = std::chrono::high_resolution_clock::now();
   for (const auto &input : decodedSequence)
   {
-    if (doPreAdvance == true) 
+    if (doPreAdvance == true)
     {
       for (size_t i = 0; i < rerecordDepth; i++) e.advanceState(generateRandomInput(rng));
     }
-    
+
     if (doDeserialize == true)
     {
       jaffarCommon::deserializer::Contiguous d(currentState, stateSize);
       e.deserializeState(d);
-    } 
-    
+    }
+
     e.advanceState(input);
 
     if (doSerialize == true)
     {
       auto s = jaffarCommon::serializer::Contiguous(currentState, stateSize);
       e.serializeState(s);
-    } 
+    }
+
+    if (doDeepHash) { auto h = e.getDeepStateHash(); deepHashAccum.Update(h); }
   }
   auto tf = std::chrono::high_resolution_clock::now();
 
@@ -226,8 +236,20 @@ int main(int argc, char *argv[])
   printf("[] Performance:                            %.3f inputs / s\n", (double)sequenceLength / elapsedTimeSeconds);
   printf("[] Final State Hash:                       %s\n", hashStringBuffer);
 
+  if (doDeepHash)
+  {
+    jaffarCommon::hash::hash_t deep; deepHashAccum.Finalize(reinterpret_cast<uint8_t *>(&deep));
+    printf("[] Deep Trajectory Hash:                   0x%lX%lX\n", deep.first, deep.second);
+  }
+
   if (cycleType == "Rerecord")
   printf("[] Effective Save State Size:              %lu bytes\n", e.getEffectiveSaveStateSize());
+
+  // Persisting the final-state hash unconditionally. The hash is the
+  // base-vs-new equivalence signal and must be available regardless of whether
+  // the (fixture-dependent) expected-result checks below pass, so equivalence
+  // testing does not get coupled to demo/expected-result drift.
+  if (hashOutputFile != "") jaffarCommon::file::saveStringToFile(std::string(hashStringBuffer), hashOutputFile.c_str());
 
   // Checking expected consitions
   auto mapNumber = e.getMapNumber ();
@@ -242,10 +264,6 @@ int main(int argc, char *argv[])
     if (isLevelExit != expectedIsLevelExit) { printf("[] Test Failed: Failed to reach level exit on the last tic\n"); return -1; }
     if (isGameEnd != expectedIsGameEnd) { printf("[] Test Failed: Failed to reach game end on the last tic\n"); return -1; }
   }
-
- 
-  // If saving hash, do it now
-  if (hashOutputFile != "") jaffarCommon::file::saveStringToFile(std::string(hashStringBuffer), hashOutputFile.c_str());
 
   // If reached this point, everything ran ok
   return 0;

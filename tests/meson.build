@@ -97,3 +97,18 @@ foreach testFile : rerecordTestSet
        args : [ testFile + '.test', testFile + '.sol', '--cycleType', 'Rerecord', '--rerecordDepth', '16' ],
        suite : [ testSuite ])
 endforeach
+
+# Cross-thread save-state transfer (Jaffar-compatibility) testing on the new2 core.
+# Verifies that states saved by one thread load identically on another after
+# divergent random exploration -- the core guarantee JaffarPlus's parallel search
+# relies on, and what any serialization optimization must preserve.
+foreach testFile : rerecordTestSet
+  testSuite = testFile.split('.')[0]
+  testName = testFile.split('.')[1] + '.' + testFile.split('.')[2] + '.' + 'transfer'
+  test(testName,
+       tTester2,
+       workdir : meson.current_source_dir(),
+       timeout: testTimeout,
+       args : [ testFile + '.test', testFile + '.sol', '--iterations', '50', '--strict' ],
+       suite : [ testSuite ])
+endforeach
