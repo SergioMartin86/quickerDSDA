@@ -65,6 +65,8 @@
 #define SAVEGAMESIZE 0x20000
 
 extern __STORAGE_MODIFIER int dsda_use_saved_subsector;  /* Design B incr.1 (p_maputl.c) */
+extern __STORAGE_MODIFIER int dsda_skip_secnode_build;   /* Design B incr.2a (p_maputl.c) */
+extern msecnode_t* P_AddSecnode(sector_t* s, mobj_t* thing, msecnode_t* nextnode);  /* incr.2a: 64-bit return */
 __STORAGE_MODIFIER byte *save_p;
 __STORAGE_MODIFIER byte *savebuffer;
 static __STORAGE_MODIFIER int savegamesize;
@@ -1169,6 +1171,12 @@ void P_ArchiveThinkers(void) {
         mobj->player = (player_t *)((mobj->player-players) + 1);
 
       P_CanonicalizeMobj(mobj);   // Design A: zero remaining raw pointer bytes
+      { /* incr.2a: save touching-sector indices to skip the blockmap scan on load */
+        mobj_t *live = (mobj_t *)th; const msecnode_t *m; int count = 0;
+        for (m = live->touching_sectorlist; m; m = m->m_tnext) count++;
+        P_SAVE_X(count);
+        for (m = live->touching_sectorlist; m; m = m->m_tnext) { int si = (int)(m->m_sector - sectors); P_SAVE_X(si); }
+      }
     }
   }
 
@@ -1276,6 +1284,7 @@ void P_UnArchiveThinkers(void) {
         tc == tc_ambient_source ? sizeof(ambient_source_t) :
         tc == tc_mobj           ? sizeof(mobj_t)           :
       0;
+      if (tc == tc_mobj) { int sc; memcpy(&sc, save_p, sizeof(int)); save_p += sizeof(int) + (size_t) sc * sizeof(int); } /* incr.2a */
     }
 
     if (*--save_p != tc_end)
@@ -1669,6 +1678,10 @@ void P_UnArchiveThinkers(void) {
 
           mobj->state = states + (intptr_t) mobj->state;
           mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */
+          int sec_count; int sec_idx[256]; /* incr.2a */
+          P_LOAD_X(sec_count);
+          if (sec_count < 0 || sec_count > 256) I_Error("P_UnArchiveThinkers: bad touching-sector count %d", sec_count);
+          { int _i; for (_i = 0; _i < sec_count; _i++) P_LOAD_X(sec_idx[_i]); }
 
           if (mobj->player)
             (mobj->player = &players[(size_t) mobj->player - 1]) -> mo = mobj;
@@ -1691,9 +1704,14 @@ void P_UnArchiveThinkers(void) {
           else
             mobj->tranmap = NULL;
 
-          dsda_use_saved_subsector = 1; /* incr.1: trust restored subsector */
+          dsda_use_saved_subsector = 1; /* incr.1 */
+          dsda_skip_secnode_build = 1;  /* incr.2a */
           P_SetThingPosition (mobj);
+          dsda_skip_secnode_build = 0;
           dsda_use_saved_subsector = 0;
+          { msecnode_t *sl = NULL; int _i; /* incr.2a: rebuild touching_sectorlist (reverse preserves order) */
+            for (_i = sec_count - 1; _i >= 0; _i--) sl = P_AddSecnode(&sectors[sec_idx[_i]], mobj, sl);
+            mobj->touching_sectorlist = sl; }
 
           // killough 2/28/98:
           // Fix for falling down into a wall after savegame loaded:

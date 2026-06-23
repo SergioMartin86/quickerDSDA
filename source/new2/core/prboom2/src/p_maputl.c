@@ -383,6 +383,7 @@ void P_UnsetThingPosition (mobj_t *thing)
 // positioned thing, so this is exact. The savestate loader sets it around its
 // relink calls only.
 __STORAGE_MODIFIER int dsda_use_saved_subsector = 0;
+__STORAGE_MODIFIER int dsda_skip_secnode_build = 0;  // Design B incr.2a
 
 void P_SetThingPosition(mobj_t *thing)
 {                                                      // link into subsector
@@ -415,9 +416,12 @@ void P_SetThingPosition(mobj_t *thing)
       // at sector_t->touching_thinglist) are broken. When a node is
       // added, new sector links are created.
 
-      P_CreateSecNodeList(thing,thing->x,thing->y);
-      thing->touching_sectorlist = sector_list; // Attach to Thing's mobj_t
-      sector_list = NULL; // clear for next time
+      if (!dsda_skip_secnode_build)
+      {
+        P_CreateSecNodeList(thing,thing->x,thing->y);
+        thing->touching_sectorlist = sector_list; // Attach to Thing's mobj_t
+        sector_list = NULL; // clear for next time
+      }
     }
 
   // link into blockmap
