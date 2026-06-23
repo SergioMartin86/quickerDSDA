@@ -97,7 +97,15 @@ class EmuInstanceBase
 
     // Getting maximum state size
     _stateSize = jaffarCommon::json::getNumber<size_t>(config, "State Size");
- 
+
+#ifdef _ENABLE_RENDERING
+    // Rendering builds (jaffar-player on the base core) do single-instance playback
+    // with no state DB, and the *untrimmed* base archive is far larger than a
+    // search-tuned, trimmed "State Size". Over-size the buffer so the visual player
+    // runs straight off the ordinary search config -- no separate render config.
+    if (_stateSize < (4ull << 20)) _stateSize = (4ull << 20); // >= 4 MB
+#endif
+
     // Getting Doom parameters
     _skill  = jaffarCommon::json::getNumber<unsigned int>(config, "Skill Level");
     _episode  = jaffarCommon::json::getNumber<unsigned int>(config, "Episode");
