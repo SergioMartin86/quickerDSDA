@@ -286,7 +286,8 @@ DSDACompileArgs = [
   compile_args        : [ ],
   include_directories : [ include_directories( ['.', '..'] )],
   sources             : [ ],
-  dependencies        : [ 
+  dependencies        : [
 			                       DSDADependency,
+			                       dependency('sdl2', required : true),
                         ]
  )

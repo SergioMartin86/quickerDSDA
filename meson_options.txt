@@ -11,3 +11,10 @@ option('onlyFree',
   description : 'Test using only free wads (for cloud CI)',
   yield: true
 )
+
+option('buildBaseCore',
+  type : 'boolean',
+  value : false,
+  description : 'Also build the pristine non-TLS base core (exposes baseDependency to subprojects, e.g. for a rendering jaffar-player)',
+  yield: true
+)
