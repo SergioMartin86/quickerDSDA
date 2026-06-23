@@ -23,7 +23,7 @@
 
 #include "palette.h"
 
-static __STORAGE_MODIFIER int playpal_index = playpal_default;
+static int playpal_index = playpal_default;
 
 static dsda_playpal_t playpal_data[NUMPALETTES] = {
   { playpal_default, "PLAYPAL" },

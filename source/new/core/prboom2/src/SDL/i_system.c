@@ -220,7 +220,7 @@ int I_Filelength(int handle)
 void I_SwitchToWindow(HWND hwnd)
 {
   typedef BOOL (WINAPI *TSwitchToThisWindow) (HWND wnd, BOOL restore);
-  static __STORAGE_MODIFIER TSwitchToThisWindow SwitchToThisWindow = NULL;
+  static TSwitchToThisWindow SwitchToThisWindow = NULL;
 
   if (!SwitchToThisWindow)
     SwitchToThisWindow = (TSwitchToThisWindow)GetProcAddress(GetModuleHandle("user32.dll"), "SwitchToThisWindow");
@@ -245,9 +245,9 @@ const char *I_ConfigDir(void)
 
 const char *I_ExeDir(void)
 {
-  extern __STORAGE_MODIFIER char **dsda_argv;
+  extern char **dsda_argv;
 
-  static __STORAGE_MODIFIER char *base;
+  static char *base;
   if (!base)        // cache multiple requests
     {
       size_t len = strlen(*dsda_argv);
@@ -270,7 +270,7 @@ const char *I_ExeDir(void)
 
 const char* I_GetTempDir(void)
 {
-  static __STORAGE_MODIFIER const char* tmp_path;
+  static const char* tmp_path;
 
   if (!tmp_path)
   {
@@ -467,6 +467,7 @@ char* I_FindFileInternal(const char* wfname, const char* ext, dboolean isStatic)
   {
     char *dwp;
 
+    // initialize with the static lookup table
     num_search = sizeof(search0)/sizeof(*search0);
     search = Z_Malloc(num_search * sizeof(*search));
     memcpy(search, search0, num_search * sizeof(*search));

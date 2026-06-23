@@ -56,15 +56,15 @@ __STORAGE_MODIFIER complevel_t compatibility_level;
 __STORAGE_MODIFIER int demover;
 
 __STORAGE_MODIFIER int comp[MBF_COMP_TOTAL];    // killough 10/98
-__STORAGE_MODIFIER int default_comperr[COMPERR_NUM];
+int default_comperr[COMPERR_NUM];
 
 __STORAGE_MODIFIER int demo_insurance;        // killough 1/16/98
 
-__STORAGE_MODIFIER int allow_pushers = 1;      // MT_PUSH Things              // phares 3/10/98
+__STORAGE_MODIFIER int  allow_pushers = 1;      // MT_PUSH Things              // phares 3/10/98
 
-__STORAGE_MODIFIER int variable_friction = 1;      // ice & mud               // phares 3/10/98
+__STORAGE_MODIFIER int  variable_friction = 1;      // ice & mud               // phares 3/10/98
 
-__STORAGE_MODIFIER int weapon_recoil = 0;              // weapon recoil                   // phares
+__STORAGE_MODIFIER int  weapon_recoil = 0;              // weapon recoil                   // phares
 
 __STORAGE_MODIFIER int player_bobbing = 1;  // whether player bobs or not          // phares 2/25/98
 

@@ -19,8 +19,8 @@
 
 #include "base.h"
 
-static __STORAGE_MODIFIER char digit_lump[9];
-static const __STORAGE_MODIFIER char *digit_lump_format;
+static char digit_lump[9];
+static const char* digit_lump_format;
 
 int dsda_HudComponentY(int y_offset, int vpt, double ratio) {
   int dsda_ExHudVerticalOffset(void);
@@ -43,7 +43,7 @@ int dsda_HudComponentY(int y_offset, int vpt, double ratio) {
 }
 
 void dsda_InitTextHC(dsda_text_t* component, int x_offset, int y_offset, int vpt) {
-  static __STORAGE_MODIFIER double ratio;
+  static double ratio;
   int x, y;
 
   DO_ONCE
@@ -58,7 +58,7 @@ void dsda_InitTextHC(dsda_text_t* component, int x_offset, int y_offset, int vpt
 }
 
 void dsda_InitBlockyHC(dsda_text_t* component, int x_offset, int y_offset, int vpt) {
-  static __STORAGE_MODIFIER double ratio;
+  static double ratio;
   int x, y;
 
   DO_ONCE

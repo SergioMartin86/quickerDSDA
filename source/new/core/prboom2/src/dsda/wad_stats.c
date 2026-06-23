@@ -29,11 +29,11 @@
 
 #include "wad_stats.h"
 
-static __STORAGE_MODIFIER const char* filename = "stats.txt";
-static __STORAGE_MODIFIER const int current_version = 1;
-static __STORAGE_MODIFIER map_stats_t *current_map_stats;
+static const char* filename = "stats.txt";
+static const int current_version = 1;
+static map_stats_t* current_map_stats;
 
-__STORAGE_MODIFIER wad_stats_t wad_stats;
+wad_stats_t wad_stats;
 
 static void dsda_EnsureMapCount(int count) {
   wad_stats.map_count = count;
@@ -51,7 +51,7 @@ static void dsda_EnsureMapCount(int count) {
 }
 
 static const char* dsda_WadStatsPath(void) {
-static __STORAGE_MODIFIER dsda_string_t path;
+  static dsda_string_t path;
 
   if (!path.string)
     dsda_StringPrintF(&path, "%s/%s", dsda_DataDir(), filename);
@@ -200,7 +200,7 @@ static void dsda_LoadWadStats(void) {
   }
 }
 
-static __STORAGE_MODIFIER dboolean forget_wad_stats;
+static dboolean forget_wad_stats;
 
 void M_ForgetWadStats(void)
 {

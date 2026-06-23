@@ -16,18 +16,18 @@
 //  Original Author: elim
 //
 
-extern __STORAGE_MODIFIER int gl_window_width;
-extern __STORAGE_MODIFIER int gl_window_height;
-extern __STORAGE_MODIFIER int gl_viewport_width;
-extern __STORAGE_MODIFIER int gl_viewport_height;
-extern __STORAGE_MODIFIER int gl_viewport_x;
-extern __STORAGE_MODIFIER int gl_viewport_y;
-extern __STORAGE_MODIFIER int gl_statusbar_height;
-extern __STORAGE_MODIFIER int gl_scene_width;
-extern __STORAGE_MODIFIER int gl_scene_height;
-extern __STORAGE_MODIFIER float gl_scale_x;
-extern __STORAGE_MODIFIER float gl_scale_y;
-extern __STORAGE_MODIFIER int gl_letterbox_clear_required;
+extern int gl_window_width;
+extern int gl_window_height;
+extern int gl_viewport_width;
+extern int gl_viewport_height;
+extern int gl_viewport_x;
+extern int gl_viewport_y;
+extern int gl_statusbar_height;
+extern int gl_scene_width;
+extern int gl_scene_height;
+extern float gl_scale_x;
+extern float gl_scale_y;
+extern int gl_letterbox_clear_required;
 
 void dsda_GLSetRenderViewportParams(void);
 void dsda_GLSetRenderViewport(void);

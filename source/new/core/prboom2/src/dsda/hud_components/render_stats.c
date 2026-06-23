@@ -25,11 +25,11 @@ typedef struct {
   dsda_text_t component[2];
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
 static void dsda_UpdateCurrentComponentText(char* str, size_t max_size) {
-  extern __STORAGE_MODIFIER dsda_render_stats_t dsda_render_stats;
-  extern __STORAGE_MODIFIER int dsda_render_stats_fps;
+  extern dsda_render_stats_t dsda_render_stats;
+  extern int dsda_render_stats_fps;
 
   snprintf(
     str, max_size,
@@ -54,7 +54,7 @@ static void dsda_UpdateCurrentComponentText(char* str, size_t max_size) {
 }
 
 static void dsda_UpdateMaxComponentText(char* str, size_t max_size) {
-  extern __STORAGE_MODIFIER dsda_render_stats_t dsda_render_stats_max;
+  extern dsda_render_stats_t dsda_render_stats_max;
 
   snprintf(
     str, max_size,

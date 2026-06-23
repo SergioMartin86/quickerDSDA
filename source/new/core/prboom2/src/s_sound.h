@@ -86,7 +86,7 @@ void S_StopSound(void* origin);
 
 void S_StopSoundLoops(void);
 
-extern __STORAGE_MODIFIER int full_sounds;
+extern int full_sounds;
 void S_UnlinkSound(void *origin);
 
 // Start music using <music_id> from sounds.h
@@ -116,10 +116,10 @@ void S_UpdateSounds(void);
 
 // machine-independent sound params
 extern int default_numChannels;
-extern __STORAGE_MODIFIER int numChannels;
+extern int numChannels;
 
 //jff 3/17/98 holds last IDMUS number, or -1
-extern __STORAGE_MODIFIER int idmusnum;
+extern int idmusnum;
 
 // heretic
 

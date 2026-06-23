@@ -37,9 +37,9 @@ typedef struct {
   dsda_text_t component;
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
-static __STORAGE_MODIFIER int ticks;
+static int ticks;
 
 void dsda_InitEventSplitHC(int x_offset, int y_offset, int vpt, int* args, int arg_count, void** data) {
   *data = Z_Calloc(1, sizeof(local_component_t));

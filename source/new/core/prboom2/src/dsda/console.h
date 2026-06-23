@@ -23,7 +23,7 @@
 
 #define CONSOLE_SCRIPT_COUNT 10
 
-extern __STORAGE_MODIFIER menu_t dsda_ConsoleDef;
+extern menu_t dsda_ConsoleDef;
 
 int dsda_ConsoleHeight(void);
 dboolean dsda_OpenConsole(void);

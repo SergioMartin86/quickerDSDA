@@ -64,18 +64,18 @@
 #include "dsda/map_format.h"
 #include "dsda/render_stats.h"
 
-__STORAGE_MODIFIER int Sky1Texture;
-__STORAGE_MODIFIER int Sky2Texture;
-__STORAGE_MODIFIER fixed_t Sky1ColumnOffset;
-__STORAGE_MODIFIER fixed_t Sky2ColumnOffset;
-__STORAGE_MODIFIER dboolean DoubleSky;
+int Sky1Texture;
+int Sky2Texture;
+fixed_t Sky1ColumnOffset;
+fixed_t Sky2ColumnOffset;
+dboolean DoubleSky;
 
 #define MAXVISPLANES 256    /* must be a power of 2 */
 
-static __STORAGE_MODIFIER visplane_t *visplanes[MAXVISPLANES];   // killough
-static __STORAGE_MODIFIER visplane_t *freetail;                  // killough
-static __STORAGE_MODIFIER visplane_t **freehead;     // killough
-__STORAGE_MODIFIER visplane_t *floorplane, *ceilingplane;
+static visplane_t *visplanes[MAXVISPLANES];   // killough
+static visplane_t *freetail;                  // killough
+static visplane_t **freehead = &freetail;     // killough
+visplane_t *floorplane, *ceilingplane;
 
 // killough -- hash function for visplanes
 // Empirically verified to be fairly uniform:
@@ -83,8 +83,8 @@ __STORAGE_MODIFIER visplane_t *floorplane, *ceilingplane;
 #define visplane_hash(picnum,lightlevel,height) \
   ((unsigned)((picnum)*3+(lightlevel)+(height)*7) & (MAXVISPLANES-1))
 
-__STORAGE_MODIFIER size_t maxopenings;
-__STORAGE_MODIFIER int *openings,*lastopening; // dropoff overflow
+size_t maxopenings;
+int *openings,*lastopening; // dropoff overflow
 
 // Clip values are the solid pixel bounding the range.
 //  floorclip starts out SCREENHEIGHT
@@ -92,29 +92,28 @@ __STORAGE_MODIFIER int *openings,*lastopening; // dropoff overflow
 
 // dropoff overflow
 // e6y: resolution limitation is removed
-__STORAGE_MODIFIER int *floorclip = NULL;
-__STORAGE_MODIFIER int *ceilingclip = NULL;
+int *floorclip = NULL;
+int *ceilingclip = NULL;
 
 // spanstart holds the start of a plane span; initialized to 0 at start
 
 // e6y: resolution limitation is removed
-static __STORAGE_MODIFIER int *spanstart = NULL;                // killough 2/8/98
+static int *spanstart = NULL;                // killough 2/8/98
 
 //
 // texture mapping
 //
 
+// killough 2/8/98: make variables static
 
-static __STORAGE_MODIFIER fixed_t *cachedheight = NULL;
+static fixed_t *cachedheight = NULL;
 
 // e6y: resolution limitation is removed
-__STORAGE_MODIFIER fixed_t *yslope = NULL;
-__STORAGE_MODIFIER fixed_t *distscale = NULL;
+fixed_t *yslope = NULL;
+fixed_t *distscale = NULL;
 
 void R_InitPlanesRes(void)
 {
-  freehead = &freetail;
-
   if (floorclip) Z_Free(floorclip);
   if (ceilingclip) Z_Free(ceilingclip);
   if (spanstart) Z_Free(spanstart);

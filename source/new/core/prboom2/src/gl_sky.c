@@ -82,10 +82,10 @@ int gl_drawskys;
 // now that it can handle all sky heights.
 int gl_stretchsky = false;
 
-static __STORAGE_MODIFIER PalEntry_t *SkyColor;
+static PalEntry_t *SkyColor;
 
-__STORAGE_MODIFIER SkyBoxParams_t SkyBox;
-__STORAGE_MODIFIER float y_offset_saved;
+SkyBoxParams_t SkyBox;
+float y_offset_saved;
 
 void gld_InitSky(void)
 {
@@ -432,12 +432,12 @@ void averageColor(PalEntry_t * PalEntry, const unsigned int *data, int size, fix
 }
 
 // The texture offset to be applied to the texture coordinates in SkyVertex().
-static __STORAGE_MODIFIER int rows, columns;
-static __STORAGE_MODIFIER dboolean yflip;
-static __STORAGE_MODIFIER int texw;
-static __STORAGE_MODIFIER float yMult, yAdd;
-static __STORAGE_MODIFIER dboolean foglayer;
-static __STORAGE_MODIFIER float delta = 0.0f;
+static int rows, columns;
+static dboolean yflip;
+static int texw;
+static float yMult, yAdd;
+static dboolean foglayer;
+static float delta = 0.0f;
 
 //-----------------------------------------------------------------------------
 //
@@ -510,8 +510,8 @@ void gld_GetSkyCapColors(void)
 
 static void SkyVertex(vbo_vertex_t *vbo, int r, int c)
 {
-  static __STORAGE_MODIFIER const float scale = 10000.0f;
-  static __STORAGE_MODIFIER const float maxSideAngle = DEG2RAD(60.0f);
+  static const float scale = 10000.0f;
+  static const float maxSideAngle = DEG2RAD(60.0f);
 
   float topAngle = DEG2RAD(c / (float)columns * 360.0f);
   float sideAngle = maxSideAngle * (float)(rows - r) / (float)rows;

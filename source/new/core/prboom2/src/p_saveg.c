@@ -32,6 +32,7 @@
  *-----------------------------------------------------------------------------*/
 
 #include <stdint.h>
+#include <stddef.h>   /* offsetof — Design B mobj prefix save */
 
 #include "doomstat.h"
 #include "r_main.h"
@@ -55,6 +56,7 @@
 
 #include "dsda/ambient.h"
 #include "dsda/map_format.h"
+#include "dsda/mapinfo.h"   /* map_info.gravity — re-derived trimmed mobj field */
 #include "dsda/msecnode.h"
 #include "dsda/scroll.h"
 #include "dsda/tranmap.h"
@@ -64,6 +66,9 @@
 
 #define SAVEGAMESIZE 0x20000
 
+extern __STORAGE_MODIFIER int dsda_use_saved_subsector;  /* Design B incr.1 (p_maputl.c) */
+extern __STORAGE_MODIFIER int dsda_skip_secnode_build;   /* Design B incr.2a (p_maputl.c) */
+extern msecnode_t* P_AddSecnode(sector_t* s, mobj_t* thing, msecnode_t* nextnode);  /* incr.2a: 64-bit return */
 __STORAGE_MODIFIER byte *save_p;
 __STORAGE_MODIFIER byte *savebuffer;
 static __STORAGE_MODIFIER int savegamesize;
@@ -107,6 +112,33 @@ void P_FreeSaveBuffer(void)
 //
 // P_ArchivePlayers
 //
+// ---- Design A: canonical serialization (apply_canonical_serialization.py) ----
+// Overwrite allocation-dependent pointer fields in the *buffer copy* (never the
+// live object) with deterministic values. Everything zeroed here is rebuilt or
+// re-derived on load (P_AddThinker / P_SetThingPosition / &mobjinfo[type] / ...).
+
+/* Design B: a special thinker's entire thinker_t header is rebuilt on load
+ * (P_AddThinker resets the list links + zeroes references; each load case sets
+ * its function). Save only the type-specific body [sizeof(thinker_t), sizeof],
+ * preceded by a 1-byte "active" flag carrying the only header bit that matters:
+ * ceiling/plat use a NULL function as a stasis marker. */
+#define P_SAVE_THINKER_BODY(x, ref, type) { \
+  byte _active = ((thinker_t *)(x))->function ? 1 : 0; \
+  size_t _bsz = sizeof(type) - sizeof(thinker_t); \
+  P_SAVE_BYTE(_active); \
+  CheckSaveGame(_bsz); \
+  memcpy(save_p, (char *)(x) + sizeof(thinker_t), _bsz); \
+  ref = (type *)(save_p - sizeof(thinker_t)); \
+  save_p += _bsz; }
+
+#define P_LOAD_THINKER_BODY(p) { \
+  byte _active; size_t _bsz = sizeof(*(p)) - sizeof(thinker_t); \
+  P_LOAD_BYTE(_active); \
+  memset((p), 0, sizeof(thinker_t)); \
+  memcpy((char *)(p) + sizeof(thinker_t), save_p, _bsz); \
+  save_p += _bsz; \
+  ((thinker_t *)(p))->function = _active ? (think_t)(intptr_t)1 : NULL; }
+
 void P_ArchivePlayers (void)
 {
   int i;
@@ -122,6 +154,13 @@ void P_ArchivePlayers (void)
           if (dest->psprites[j].state)
             dest->psprites[j].state =
               (state_t *)(dest->psprites[j].state-states);
+
+        // Design A: canonicalize raw mobj pointers (all NULL'd / re-linked on load)
+        dest->mo = NULL;
+        dest->attacker = NULL;
+        dest->rain1 = NULL;
+        dest->rain2 = NULL;
+        dest->poisoner = NULL;
       }
 }
 
@@ -175,77 +214,74 @@ void P_ArchiveWorld (void)
     P_SAVE_X(sec->ceilingpic);
     P_SAVE_X(sec->lightlevel);
     P_SAVE_X(sec->special);
-    P_SAVE_X(sec->tag);
-    P_SAVE_X(sec->seqType);
+    // [min-headless trim] P_SAVE_X(sec->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->seqType);  // render-only/constant at headless Doom2 cl2
     P_SAVE_X(sec->flags);
 
-    // // zdoom
-    // P_SAVE_X(sec->gravity);
-    // P_SAVE_X(sec->damage);
-    // P_SAVE_X(sec->lightlevel_floor);
-    // P_SAVE_X(sec->lightlevel_ceiling);
-    // P_SAVE_X(sec->floor_rotation);
-    // P_SAVE_X(sec->ceiling_rotation);
-    // P_SAVE_X(sec->floor_xscale);
-    // P_SAVE_X(sec->floor_yscale);
-    // P_SAVE_X(sec->ceiling_xscale);
-    // P_SAVE_X(sec->ceiling_yscale);
-    // P_SAVE_X(sec->floor_xoffs);
-    // P_SAVE_X(sec->floor_yoffs);
-    // P_SAVE_X(sec->ceiling_xoffs);
-    // P_SAVE_X(sec->ceiling_yoffs);
+    // zdoom
+    // [min-headless trim] P_SAVE_X(sec->gravity);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->damage);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->lightlevel_floor);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->lightlevel_ceiling);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_yoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_yoffs);  // render-only/constant at headless Doom2 cl2
   }
 
   for (i = 0, li = lines; i < numlines; i++, li++)
   {
     int j;
 
-    P_SAVE_X(li->flags);
+    // [min-headless trim] P_SAVE_X(li->flags);  // render-only/constant at headless Doom2 cl2
     P_SAVE_X(li->special);
-    P_SAVE_X(li->tag);
-    P_SAVE_BYTE(li->player_activations);
-    P_SAVE_ARRAY(li->special_args);
+    // [min-headless trim] P_SAVE_X(li->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_BYTE(li->player_activations);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_ARRAY(li->special_args);  // render-only/constant at headless Doom2 cl2
+    // zdoom
+    // [min-headless trim] P_SAVE_X(li->automap_style);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(li->health);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(li->alpha);  // render-only/constant at headless Doom2 cl2
+    for (j = 0; j < 2; j++)
+      if (li->sidenum[j] != NO_INDEX)
+      {
+        si = &sides[li->sidenum[j]];
 
-    // // zdoom
-    // P_SAVE_X(li->automap_style);
-    // P_SAVE_X(li->health);
-    // P_SAVE_X(li->alpha);
-
-    // for (j = 0; j < 2; j++)
-    //   if (li->sidenum[j] != NO_INDEX)
-    //   {
-    //     si = &sides[li->sidenum[j]];
-
-    //     P_SAVE_X(si->textureoffset);
-    //     P_SAVE_X(si->rowoffset);
-    //     P_SAVE_X(si->toptexture);
-    //     P_SAVE_X(si->bottomtexture);
-    //     P_SAVE_X(si->midtexture);
-
-    //     if (map_format.zdoom)
-    //     {
-    //       P_SAVE_X(si->textureoffset_top);
-    //       P_SAVE_X(si->textureoffset_mid);
-    //       P_SAVE_X(si->textureoffset_bottom);
-    //       P_SAVE_X(si->rowoffset_top);
-    //       P_SAVE_X(si->rowoffset_mid);
-    //       P_SAVE_X(si->rowoffset_bottom);
-    //       P_SAVE_X(si->scalex_top);
-    //       P_SAVE_X(si->scaley_top);
-    //       P_SAVE_X(si->scalex_mid);
-    //       P_SAVE_X(si->scaley_mid);
-    //       P_SAVE_X(si->scalex_bottom);
-    //       P_SAVE_X(si->scaley_bottom);
-    //       P_SAVE_X(si->lightlevel);
-    //       P_SAVE_X(si->lightlevel_top);
-    //       P_SAVE_X(si->lightlevel_mid);
-    //       P_SAVE_X(si->lightlevel_bottom);
-    //       P_SAVE_X(si->flags);
-    //     }
-    //   }
+        // [min-headless trim] P_SAVE_X(si->textureoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->rowoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->toptexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->bottomtexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->midtexture);  // render-only/constant at headless Doom2 cl2
+        if (map_format.zdoom)
+        {
+          P_SAVE_X(si->textureoffset_top);
+          P_SAVE_X(si->textureoffset_mid);
+          P_SAVE_X(si->textureoffset_bottom);
+          P_SAVE_X(si->rowoffset_top);
+          P_SAVE_X(si->rowoffset_mid);
+          P_SAVE_X(si->rowoffset_bottom);
+          P_SAVE_X(si->scalex_top);
+          P_SAVE_X(si->scaley_top);
+          P_SAVE_X(si->scalex_mid);
+          P_SAVE_X(si->scaley_mid);
+          P_SAVE_X(si->scalex_bottom);
+          P_SAVE_X(si->scaley_bottom);
+          P_SAVE_X(si->lightlevel);
+          P_SAVE_X(si->lightlevel_top);
+          P_SAVE_X(si->lightlevel_mid);
+          P_SAVE_X(si->lightlevel_bottom);
+          P_SAVE_X(si->flags);
+        }
+      }
   }
 
-  // P_SAVE_X(musinfo.current_item);
+  P_SAVE_X(musinfo.current_item);
 }
 
 
@@ -267,30 +303,29 @@ void P_UnArchiveWorld (void)
     P_LOAD_X(sec->ceilingpic);
     P_LOAD_X(sec->lightlevel);
     P_LOAD_X(sec->special);
-    P_LOAD_X(sec->tag);
-    P_LOAD_X(sec->seqType);
+    // [min-headless trim] P_LOAD_X(sec->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->seqType);  // render-only/constant at headless Doom2 cl2
     P_LOAD_X(sec->flags);
 
-    // // zdoom
-    // P_LOAD_X(sec->gravity);
-    // P_LOAD_X(sec->damage);
-    // P_LOAD_X(sec->lightlevel_floor);
-    // P_LOAD_X(sec->lightlevel_ceiling);
-    // P_LOAD_X(sec->floor_rotation);
-    // P_LOAD_X(sec->ceiling_rotation);
-    // P_LOAD_X(sec->floor_xscale);
-    // P_LOAD_X(sec->floor_yscale);
-    // P_LOAD_X(sec->ceiling_xscale);
-    // P_LOAD_X(sec->ceiling_yscale);
-    // P_LOAD_X(sec->floor_xoffs);
-    // P_LOAD_X(sec->floor_yoffs);
-    // P_LOAD_X(sec->ceiling_xoffs);
-    // P_LOAD_X(sec->ceiling_yoffs);
-
-    // sec->ceilingdata = 0; //jff 2/22/98 now three thinker fields, not two
-    // sec->floordata = 0;
-    // sec->lightingdata = 0;
-    // sec->soundtarget = 0;
+    // zdoom
+    // [min-headless trim] P_LOAD_X(sec->gravity);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->damage);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->lightlevel_floor);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->lightlevel_ceiling);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_yoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_yoffs);  // render-only/constant at headless Doom2 cl2
+    sec->ceilingdata = 0; //jff 2/22/98 now three thinker fields, not two
+    sec->floordata = 0;
+    sec->lightingdata = 0;
+    sec->soundtarget = 0;
   }
 
   // do lines
@@ -298,56 +333,53 @@ void P_UnArchiveWorld (void)
   {
     int j;
 
-    P_LOAD_X(li->flags);
+    // [min-headless trim] P_LOAD_X(li->flags);  // render-only/constant at headless Doom2 cl2
     P_LOAD_X(li->special);
-    P_LOAD_X(li->tag);
-    P_LOAD_BYTE(li->player_activations);
-    P_LOAD_ARRAY(li->special_args);
-
+    // [min-headless trim] P_LOAD_X(li->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_BYTE(li->player_activations);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_ARRAY(li->special_args);  // render-only/constant at headless Doom2 cl2
     // zdoom
-    // P_LOAD_X(li->automap_style);
-    // P_LOAD_X(li->health);
-    // P_LOAD_X(li->alpha);
+    // [min-headless trim] P_LOAD_X(li->automap_style);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(li->health);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(li->alpha);  // render-only/constant at headless Doom2 cl2
+    if (li->alpha < 1.f)
+      li->tranmap = dsda_TranMap(dsda_FloatToPercent(li->alpha));
 
-    // if (li->alpha < 1.f)
-    //   li->tranmap = dsda_TranMap(dsda_FloatToPercent(li->alpha));
+    for (j = 0; j < 2; j++)
+      if (li->sidenum[j] != NO_INDEX)
+      {
+        side_t *si = &sides[li->sidenum[j]];
 
-    // for (j = 0; j < 2; j++)
-    //   if (li->sidenum[j] != NO_INDEX)
-    //   {
-    //     side_t *si = &sides[li->sidenum[j]];
-
-    //     P_LOAD_X(si->textureoffset);
-    //     P_LOAD_X(si->rowoffset);
-    //     P_LOAD_X(si->toptexture);
-    //     P_LOAD_X(si->bottomtexture);
-    //     P_LOAD_X(si->midtexture);
-
-    //     // zdoom
-    //     if (map_format.zdoom)
-    //     {
-    //       P_LOAD_X(si->textureoffset_top);
-    //       P_LOAD_X(si->textureoffset_mid);
-    //       P_LOAD_X(si->textureoffset_bottom);
-    //       P_LOAD_X(si->rowoffset_top);
-    //       P_LOAD_X(si->rowoffset_mid);
-    //       P_LOAD_X(si->rowoffset_bottom);
-    //       P_LOAD_X(si->scalex_top);
-    //       P_LOAD_X(si->scaley_top);
-    //       P_LOAD_X(si->scalex_mid);
-    //       P_LOAD_X(si->scaley_mid);
-    //       P_LOAD_X(si->scalex_bottom);
-    //       P_LOAD_X(si->scaley_bottom);
-    //       P_LOAD_X(si->lightlevel);
-    //       P_LOAD_X(si->lightlevel_top);
-    //       P_LOAD_X(si->lightlevel_mid);
-    //       P_LOAD_X(si->lightlevel_bottom);
-    //       P_LOAD_X(si->flags);
-    //     }
-    //   }
+        // [min-headless trim] P_LOAD_X(si->textureoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->rowoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->toptexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->bottomtexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->midtexture);  // render-only/constant at headless Doom2 cl2
+        // zdoom
+        if (map_format.zdoom)
+        {
+          P_LOAD_X(si->textureoffset_top);
+          P_LOAD_X(si->textureoffset_mid);
+          P_LOAD_X(si->textureoffset_bottom);
+          P_LOAD_X(si->rowoffset_top);
+          P_LOAD_X(si->rowoffset_mid);
+          P_LOAD_X(si->rowoffset_bottom);
+          P_LOAD_X(si->scalex_top);
+          P_LOAD_X(si->scaley_top);
+          P_LOAD_X(si->scalex_mid);
+          P_LOAD_X(si->scaley_mid);
+          P_LOAD_X(si->scalex_bottom);
+          P_LOAD_X(si->scaley_bottom);
+          P_LOAD_X(si->lightlevel);
+          P_LOAD_X(si->lightlevel_top);
+          P_LOAD_X(si->lightlevel_mid);
+          P_LOAD_X(si->lightlevel_bottom);
+          P_LOAD_X(si->flags);
+        }
+      }
   }
 
-  // P_LOAD_X(musinfo.current_item);
+  P_LOAD_X(musinfo.current_item);
 }
 
 //
@@ -568,9 +600,9 @@ void P_UnArchiveThinkerSubclasses(mobj_t** mobj_p, int mobj_count)
 }
 
 extern __STORAGE_MODIFIER mobj_t** blocklinks;
-extern __STORAGE_MODIFIER int blocklinks_count;
-extern __STORAGE_MODIFIER int bmapwidth;
-extern __STORAGE_MODIFIER int bmapheight;
+extern __STORAGE_MODIFIER int      blocklinks_count;
+extern __STORAGE_MODIFIER int      bmapwidth;
+extern __STORAGE_MODIFIER int      bmapheight;
 
 void P_ArchiveBlockLinks(void)
 {
@@ -706,6 +738,7 @@ void P_UnArchivePolyObjSpecialData(void)
 // merges thinkerclass_t and specials_e
 typedef enum {
   tc_mobj,
+  tc_mobj_marked,   // Design B: mobj pending delayed removal (replaces the index==MARKED sentinel)
   tc_ceiling,
   tc_door,
   tc_floor,
@@ -779,8 +812,9 @@ void P_ArchiveThinkers(void) {
       ceiling_t *ceiling;
     ceiling:                               // killough 2/14/98
       P_SAVE_BYTE(tc_ceiling);
-      P_SAVE_TYPE_REF(th, ceiling, ceiling_t);
+      P_SAVE_THINKER_BODY(th, ceiling, ceiling_t);
       ceiling->sector = (sector_t *)(intptr_t)(ceiling->sector->iSectorID);
+      ceiling->list = NULL; /* re-created on load by P_AddActiveCeiling */
       continue;
     }
 
@@ -788,7 +822,7 @@ void P_ArchiveThinkers(void) {
     {
       vldoor_t *door;
       P_SAVE_BYTE(tc_door);
-      P_SAVE_TYPE_REF(th, door, vldoor_t);
+      P_SAVE_THINKER_BODY(th, door, vldoor_t);
       door->sector = (sector_t *)(intptr_t)(door->sector->iSectorID);
       //jff 1/31/98 archive line remembered by door as well
       door->line = (line_t *) (door->line ? door->line-lines : -1);
@@ -799,7 +833,7 @@ void P_ArchiveThinkers(void) {
     {
       floormove_t *floor;
       P_SAVE_BYTE(tc_floor);
-      P_SAVE_TYPE_REF(th, floor, floormove_t);
+      P_SAVE_THINKER_BODY(th, floor, floormove_t);
       floor->sector = (sector_t *)(intptr_t)(floor->sector->iSectorID);
       continue;
     }
@@ -809,8 +843,9 @@ void P_ArchiveThinkers(void) {
       plat_t *plat;
     plat:   // killough 2/14/98: added fix for original plat height above
       P_SAVE_BYTE(tc_plat);
-      P_SAVE_TYPE_REF(th, plat, plat_t);
+      P_SAVE_THINKER_BODY(th, plat, plat_t);
       plat->sector = (sector_t *)(intptr_t)(plat->sector->iSectorID);
+      plat->list = NULL; /* re-created on load by P_AddActivePlat */
       continue;
     }
 
@@ -818,7 +853,7 @@ void P_ArchiveThinkers(void) {
     {
       lightflash_t *flash;
       P_SAVE_BYTE(tc_flash);
-      P_SAVE_TYPE_REF(th, flash, lightflash_t);
+      P_SAVE_THINKER_BODY(th, flash, lightflash_t);
       flash->sector = (sector_t *)(intptr_t)(flash->sector->iSectorID);
       continue;
     }
@@ -827,7 +862,7 @@ void P_ArchiveThinkers(void) {
     {
       strobe_t *strobe;
       P_SAVE_BYTE(tc_strobe);
-      P_SAVE_TYPE_REF(th, strobe, strobe_t);
+      P_SAVE_THINKER_BODY(th, strobe, strobe_t);
       strobe->sector = (sector_t *)(intptr_t)(strobe->sector->iSectorID);
       continue;
     }
@@ -836,7 +871,7 @@ void P_ArchiveThinkers(void) {
     {
       glow_t *glow;
       P_SAVE_BYTE(tc_glow);
-      P_SAVE_TYPE_REF(th, glow, glow_t);
+      P_SAVE_THINKER_BODY(th, glow, glow_t);
       glow->sector = (sector_t *)(intptr_t)(glow->sector->iSectorID);
       continue;
     }
@@ -845,7 +880,7 @@ void P_ArchiveThinkers(void) {
     {
       zdoom_glow_t *glow;
       P_SAVE_BYTE(tc_zdoom_glow);
-      P_SAVE_TYPE_REF(th, glow, zdoom_glow_t);
+      P_SAVE_THINKER_BODY(th, glow, zdoom_glow_t);
       glow->sector = (sector_t *)(intptr_t)(glow->sector->iSectorID);
       continue;
     }
@@ -855,7 +890,7 @@ void P_ArchiveThinkers(void) {
     {
       fireflicker_t *flicker;
       P_SAVE_BYTE(tc_flicker);
-      P_SAVE_TYPE_REF(th, flicker, fireflicker_t);
+      P_SAVE_THINKER_BODY(th, flicker, fireflicker_t);
       flicker->sector = (sector_t *)(intptr_t)(flicker->sector->iSectorID);
       continue;
     }
@@ -864,7 +899,7 @@ void P_ArchiveThinkers(void) {
     {
       zdoom_flicker_t *flicker;
       P_SAVE_BYTE(tc_zdoom_flicker);
-      P_SAVE_TYPE_REF(th, flicker, zdoom_flicker_t);
+      P_SAVE_THINKER_BODY(th, flicker, zdoom_flicker_t);
       flicker->sector = (sector_t *)(intptr_t)(flicker->sector->iSectorID);
       continue;
     }
@@ -874,7 +909,7 @@ void P_ArchiveThinkers(void) {
     {
       elevator_t *elevator;         //jff 2/22/98
       P_SAVE_BYTE(tc_elevator);
-      P_SAVE_TYPE_REF(th, elevator, elevator_t);
+      P_SAVE_THINKER_BODY(th, elevator, elevator_t);
       elevator->sector = (sector_t *)(intptr_t)(elevator->sector->iSectorID);
       continue;
     }
@@ -882,77 +917,77 @@ void P_ArchiveThinkers(void) {
     if (th->function == dsda_UpdateSideScroller)
     {
       P_SAVE_BYTE(tc_scroll_side);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateFloorScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateCeilingScroller)
     {
       P_SAVE_BYTE(tc_scroll_ceiling);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateFloorCarryScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor_carry);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateZDoomFloorScroller)
     {
       P_SAVE_BYTE(tc_zdoom_scroll_floor);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateZDoomCeilingScroller)
     {
       P_SAVE_BYTE(tc_zdoom_scroll_ceiling);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateThruster)
     {
       P_SAVE_BYTE(tc_thrust);
-      P_SAVE_TYPE(th, scroll_t);
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlSideScroller)
     {
       P_SAVE_BYTE(tc_scroll_side_control);
-      P_SAVE_TYPE(th, control_scroll_t);
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlFloorScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor_control);
-      P_SAVE_TYPE(th, control_scroll_t);
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlCeilingScroller)
     {
       P_SAVE_BYTE(tc_scroll_ceiling_control);
-      P_SAVE_TYPE(th, control_scroll_t);
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlFloorCarryScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor_carry_control);
-      P_SAVE_TYPE(th, control_scroll_t);
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
@@ -961,14 +996,14 @@ void P_ArchiveThinkers(void) {
     if (th->function == T_Pusher)
     {
       P_SAVE_BYTE(tc_pusher);
-      P_SAVE_TYPE(th, pusher_t);
+      { pusher_t* _cz; P_SAVE_THINKER_BODY(th, _cz, pusher_t);        _cz->source = NULL; /* re-derived on load via P_GetPushThing(affectee) */ }
       continue;
     }
 
     if (th->function == T_Friction)
     {
       P_SAVE_BYTE(tc_friction);
-      P_SAVE_TYPE(th, friction_t);
+      { friction_t* _cz; P_SAVE_THINKER_BODY(th, _cz, friction_t); }
       continue;
     }
 
@@ -976,7 +1011,7 @@ void P_ArchiveThinkers(void) {
     {
       light_t *light;
       P_SAVE_BYTE(tc_light);
-      P_SAVE_TYPE_REF(th, light, light_t);
+      P_SAVE_THINKER_BODY(th, light, light_t);
       light->sector = (sector_t *)(intptr_t)(light->sector->iSectorID);
       continue;
     }
@@ -985,7 +1020,7 @@ void P_ArchiveThinkers(void) {
     {
       phase_t *phase;
       P_SAVE_BYTE(tc_phase);
-      P_SAVE_TYPE_REF(th, phase, phase_t);
+      P_SAVE_THINKER_BODY(th, phase, phase_t);
       phase->sector = (sector_t *)(intptr_t)(phase->sector->iSectorID);
       continue;
     }
@@ -994,7 +1029,7 @@ void P_ArchiveThinkers(void) {
     {
       acs_t *acs;
       P_SAVE_BYTE(tc_acs);
-      P_SAVE_TYPE_REF(th, acs, acs_t);
+      P_SAVE_THINKER_BODY(th, acs, acs_t);
       P_ReplaceMobjWithIndex(&acs->activator);
       acs->line = (line_t *) (acs->line ? acs->line - lines : -1);
 
@@ -1005,7 +1040,7 @@ void P_ArchiveThinkers(void) {
     {
       pillar_t *pillar;
       P_SAVE_BYTE(tc_pillar);
-      P_SAVE_TYPE_REF(th, pillar, pillar_t);
+      P_SAVE_THINKER_BODY(th, pillar, pillar_t);
       pillar->sector = (sector_t *)(intptr_t)(pillar->sector->iSectorID);
       continue;
     }
@@ -1014,7 +1049,7 @@ void P_ArchiveThinkers(void) {
     {
       planeWaggle_t *floor_waggle;
       P_SAVE_BYTE(tc_floor_waggle);
-      P_SAVE_TYPE_REF(th, floor_waggle, planeWaggle_t);
+      P_SAVE_THINKER_BODY(th, floor_waggle, planeWaggle_t);
       floor_waggle->sector = (sector_t *)(intptr_t)(floor_waggle->sector->iSectorID);
       continue;
     }
@@ -1023,7 +1058,7 @@ void P_ArchiveThinkers(void) {
     {
       planeWaggle_t *ceiling_waggle;
       P_SAVE_BYTE(tc_ceiling_waggle);
-      P_SAVE_TYPE_REF(th, ceiling_waggle, planeWaggle_t);
+      P_SAVE_THINKER_BODY(th, ceiling_waggle, planeWaggle_t);
       ceiling_waggle->sector = (sector_t *)(intptr_t)(ceiling_waggle->sector->iSectorID);
       continue;
     }
@@ -1031,21 +1066,21 @@ void P_ArchiveThinkers(void) {
     if (th->function == T_RotatePoly)
     {
       P_SAVE_BYTE(tc_poly_rotate);
-      P_SAVE_TYPE(th, polyevent_t);
+      { polyevent_t* _cz; P_SAVE_THINKER_BODY(th, _cz, polyevent_t); }
       continue;
     }
 
     if (th->function == T_MovePoly)
     {
       P_SAVE_BYTE(tc_poly_move);
-      P_SAVE_TYPE(th, polyevent_t);
+      { polyevent_t* _cz; P_SAVE_THINKER_BODY(th, _cz, polyevent_t); }
       continue;
     }
 
     if (th->function == T_PolyDoor)
     {
       P_SAVE_BYTE(tc_poly_door);
-      P_SAVE_TYPE(th, polydoor_t);
+      { polydoor_t* _cz; P_SAVE_THINKER_BODY(th, _cz, polydoor_t); }
       continue;
     }
 
@@ -1053,7 +1088,7 @@ void P_ArchiveThinkers(void) {
     {
       quake_t *quake;
       P_SAVE_BYTE(tc_quake);
-      P_SAVE_TYPE_REF(th, quake, quake_t);
+      P_SAVE_THINKER_BODY(th, quake, quake_t);
       P_ReplaceMobjWithIndex(&quake->location);
       continue;
     }
@@ -1062,7 +1097,7 @@ void P_ArchiveThinkers(void) {
     {
       ambient_source_t *ambient_source;
       P_SAVE_BYTE(tc_ambient_source);
-      P_SAVE_TYPE_REF(th, ambient_source, ambient_source_t);
+      P_SAVE_THINKER_BODY(th, ambient_source, ambient_source_t);
       P_ReplaceMobjWithIndex(&ambient_source->mobj);
       continue;
     }
@@ -1070,46 +1105,39 @@ void P_ArchiveThinkers(void) {
     if (P_IsMobjThinker(th))
     {
       mobj_t *mobj;
+      mobj_t *live = (mobj_t *)th;
+      // Design B: save only the gameplay window [x, snext). The whole thinker_t
+      // header [0, x) is rebuilt on load (P_AddThinker resets next/prev/cnext/
+      // cprev/references; the load sets function), so it is never saved.
+      size_t _sz = offsetof(mobj_t, snext) - offsetof(mobj_t, x);
 
-      P_SAVE_BYTE(tc_mobj);
-      P_SAVE_TYPE_REF(th, mobj, mobj_t);
+      // Mobjs pending delayed removal (e.g. an Archvile still attacking the spot
+      // where a now-deleted lost soul was) are flagged via the type byte instead
+      // of the (now-trimmed) index==MARKED_FOR_DELETION sentinel.
+      P_SAVE_BYTE(live->thinker.function == P_RemoveThinkerDelayed ? tc_mobj_marked : tc_mobj);
+
+      CheckSaveGame(_sz);
+      memcpy(save_p, (char *)th + offsetof(mobj_t, x), _sz);
+      // View the buffer as a mobj_t aligned so that mobj->x maps to save_p[0];
+      // all swizzled pointer fields (state/subsector/target/...) are >= x, hence
+      // inside the written window. The thinker header is never touched here.
+      mobj = (mobj_t *)(save_p - offsetof(mobj_t, x));
+      save_p += _sz;
 
       mobj->state = (state_t *)(mobj->state - states);
+      mobj->subsector = (subsector_t *)(intptr_t)(mobj->subsector - subsectors); /* incr.1 */
 
-      // Example:
-      // - Archvile is attacking a lost soul
-      // - The lost soul dies before the attack hits
-      // - The lost soul is marked for deletion
-      // - The archvile will still attack the spot where the lost soul was
-      // - We need to save such objects and remember they are marked for deletion
-      if (mobj->thinker.function == P_RemoveThinkerDelayed)
-        mobj->index = MARKED_FOR_DELETION;
-
-      // killough 2/14/98: convert pointers into indices.
-      // Fixes many savegame problems, by properly saving
-      // target and tracer fields. Note: we store NULL if
-      // the thinker pointed to by these fields is not a
-      // mobj thinker.
-
+      // killough 2/14/98: convert pointers into indices (NULL if not a mobj thinker).
       P_ReplaceMobjWithIndex(&mobj->target);
       P_ReplaceMobjWithIndex(&mobj->tracer);
-
-      // killough 2/14/98: new field: save last known enemy. Prevents
-      // monsters from going to sleep after killing monsters and not
-      // seeing player anymore.
-
       P_ReplaceMobjWithIndex(&mobj->lastenemy);
-
-      // killough 2/14/98: end changes
-
-      if (raven)
-      {
-        P_ReplaceMobjWithIndex(&mobj->special1.m);
-        P_ReplaceMobjWithIndex(&mobj->special2.m);
-      }
+      // (raven special1/2 mobj pointers are in the trimmed tail; not used by Doom2)
 
       if (mobj->player)
         mobj->player = (player_t *)((mobj->player-players) + 1);
+
+      // (touching_sectorlist is saved/rebuilt by dsda_Archive/UnArchiveMSecNodes;
+      //  the incr.2a per-mobj index list was redundant and has been removed.)
     }
   }
 
@@ -1150,20 +1178,30 @@ void P_UnArchiveThinkers(void) {
   // killough 3/26/98: Load boss brain state
   P_LOAD_X(brain);
 
-  // remove all the current thinkers
-  for (th = thinkercap.next; th != &thinkercap; )
+  // Increment 3b: bulk teardown of the previous state's thinkers. All dynamic
+  // objects (mobjs, special thinkers, and the secnode pools) live in the
+  // contiguous thinker arena, so the old state is discarded in O(1) by clearing
+  // every pointer into the arena and resetting it -- no per-object walk, no
+  // per-object malloc free. This replaces the per-object P_RemoveMobj loop; its
+  // only observable side effect not reproduced here is the itemrespawnque push,
+  // which matters solely in respawn modes (not targeted by this core).
   {
-    thinker_t *next = th->next;
-    if (P_IsMobjThinker(th))
+    extern __STORAGE_MODIFIER mobj_t **blocklinks;
+    extern __STORAGE_MODIFIER int      blocklinks_count;
+    void P_FreeSecNodeList(void);
+    int _i;
+
+    P_InitThinkers();                                  // clear the thinker + class lists
+    for (_i = 0; _i < numsectors; _i++)                // clear sector thing/secnode heads
     {
-      P_RemoveMobj ((mobj_t *) th);
-      P_RemoveThinkerDelayed(th); // fix mobj leak
+      sectors[_i].thinglist = NULL;
+      sectors[_i].touching_thinglist = NULL;
     }
-    else
-      Z_Free (th);
-    th = next;
+    if (blocklinks)                                    // clear blockmap thing heads
+      memset(blocklinks, 0, (size_t) blocklinks_count * sizeof(*blocklinks));
+    P_FreeSecNodeList();                               // drop secnode pools (they live in the arena)
+    Z_ResetThinkerArena();                             // reclaim the whole slab in O(1)
   }
-  P_InitThinkers ();
 
   // killough 2/14/98: count number of thinkers by skipping through them
   {
@@ -1178,44 +1216,44 @@ void P_UnArchiveThinkers(void) {
       if (tc == tc_end)
         break;
 
-      if (tc == tc_mobj) mobj_count++;
+      if (tc == tc_mobj || tc == tc_mobj_marked) mobj_count++;
       save_p +=
-        tc == tc_ceiling        ? sizeof(ceiling_t)        :
-        tc == tc_door           ? sizeof(vldoor_t)         :
-        tc == tc_floor          ? sizeof(floormove_t)      :
-        tc == tc_plat           ? sizeof(plat_t)           :
-        tc == tc_flash          ? sizeof(lightflash_t)     :
-        tc == tc_strobe         ? sizeof(strobe_t)         :
-        tc == tc_glow           ? sizeof(glow_t)           :
-        tc == tc_zdoom_glow     ? sizeof(zdoom_glow_t)     :
-        tc == tc_elevator       ? sizeof(elevator_t)       :
-        tc == tc_scroll_side                ? sizeof(scroll_t)         :
-        tc == tc_scroll_floor               ? sizeof(scroll_t)         :
-        tc == tc_scroll_ceiling             ? sizeof(scroll_t)         :
-        tc == tc_scroll_floor_carry         ? sizeof(scroll_t)         :
-        tc == tc_zdoom_scroll_floor         ? sizeof(scroll_t)         :
-        tc == tc_zdoom_scroll_ceiling       ? sizeof(scroll_t)         :
-        tc == tc_thrust                     ? sizeof(scroll_t)         :
-        tc == tc_scroll_side_control        ? sizeof(control_scroll_t) :
-        tc == tc_scroll_floor_control       ? sizeof(control_scroll_t) :
-        tc == tc_scroll_ceiling_control     ? sizeof(control_scroll_t) :
-        tc == tc_scroll_floor_carry_control ? sizeof(control_scroll_t) :
-        tc == tc_pusher         ? sizeof(pusher_t)         :
-        tc == tc_flicker        ? sizeof(fireflicker_t)    :
-        tc == tc_zdoom_flicker  ? sizeof(zdoom_flicker_t)  :
-        tc == tc_friction       ? sizeof(friction_t)       :
-        tc == tc_light          ? sizeof(light_t)          :
-        tc == tc_phase          ? sizeof(phase_t)          :
-        tc == tc_acs            ? sizeof(acs_t)            :
-        tc == tc_pillar         ? sizeof(pillar_t)         :
-        tc == tc_floor_waggle   ? sizeof(planeWaggle_t)    :
-        tc == tc_ceiling_waggle ? sizeof(planeWaggle_t)    :
-        tc == tc_poly_rotate    ? sizeof(polyevent_t)      :
-        tc == tc_poly_move      ? sizeof(polyevent_t)      :
-        tc == tc_poly_door      ? sizeof(polydoor_t)       :
-        tc == tc_quake          ? sizeof(quake_t)          :
-        tc == tc_ambient_source ? sizeof(ambient_source_t) :
-        tc == tc_mobj           ? sizeof(mobj_t)           :
+        tc == tc_ceiling        ? (sizeof(ceiling_t) - sizeof(thinker_t) + 1)         :
+        tc == tc_door           ? (sizeof(vldoor_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_floor          ? (sizeof(floormove_t) - sizeof(thinker_t) + 1)       :
+        tc == tc_plat           ? (sizeof(plat_t) - sizeof(thinker_t) + 1)            :
+        tc == tc_flash          ? (sizeof(lightflash_t) - sizeof(thinker_t) + 1)      :
+        tc == tc_strobe         ? (sizeof(strobe_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_glow           ? (sizeof(glow_t) - sizeof(thinker_t) + 1)            :
+        tc == tc_zdoom_glow     ? (sizeof(zdoom_glow_t) - sizeof(thinker_t) + 1)      :
+        tc == tc_elevator       ? (sizeof(elevator_t) - sizeof(thinker_t) + 1)        :
+        tc == tc_scroll_side                ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_floor               ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_ceiling             ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_floor_carry         ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_zdoom_scroll_floor         ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_zdoom_scroll_ceiling       ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_thrust                     ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_side_control        ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_scroll_floor_control       ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_scroll_ceiling_control     ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_scroll_floor_carry_control ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_pusher         ? (sizeof(pusher_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_flicker        ? (sizeof(fireflicker_t) - sizeof(thinker_t) + 1)     :
+        tc == tc_zdoom_flicker  ? (sizeof(zdoom_flicker_t) - sizeof(thinker_t) + 1)   :
+        tc == tc_friction       ? (sizeof(friction_t) - sizeof(thinker_t) + 1)        :
+        tc == tc_light          ? (sizeof(light_t) - sizeof(thinker_t) + 1)           :
+        tc == tc_phase          ? (sizeof(phase_t) - sizeof(thinker_t) + 1)           :
+        tc == tc_acs            ? (sizeof(acs_t) - sizeof(thinker_t) + 1)             :
+        tc == tc_pillar         ? (sizeof(pillar_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_floor_waggle   ? (sizeof(planeWaggle_t) - sizeof(thinker_t) + 1)     :
+        tc == tc_ceiling_waggle ? (sizeof(planeWaggle_t) - sizeof(thinker_t) + 1)     :
+        tc == tc_poly_rotate    ? (sizeof(polyevent_t) - sizeof(thinker_t) + 1)       :
+        tc == tc_poly_move      ? (sizeof(polyevent_t) - sizeof(thinker_t) + 1)       :
+        tc == tc_poly_door      ? (sizeof(polydoor_t) - sizeof(thinker_t) + 1)        :
+        tc == tc_quake          ? (sizeof(quake_t) - sizeof(thinker_t) + 1)           :
+        tc == tc_ambient_source ? (sizeof(ambient_source_t) - sizeof(thinker_t) + 1)  :
+        (tc == tc_mobj || tc == tc_mobj_marked) ? offsetof(mobj_t, snext) - offsetof(mobj_t, x) : /* Design B: saved window [x,snext) */
       0;
     }
 
@@ -1239,7 +1277,7 @@ void P_UnArchiveThinkers(void) {
       case tc_ceiling:
         {
           ceiling_t *ceiling = Z_MallocLevel (sizeof(*ceiling));
-          P_LOAD_P(ceiling);
+          P_LOAD_THINKER_BODY(ceiling);
           ceiling->sector = &sectors[(size_t)ceiling->sector];
           ceiling->sector->ceilingdata = ceiling; //jff 2/22/98
 
@@ -1254,7 +1292,7 @@ void P_UnArchiveThinkers(void) {
       case tc_door:
         {
           vldoor_t *door = Z_MallocLevel (sizeof(*door));
-          P_LOAD_P(door);
+          P_LOAD_THINKER_BODY(door);
           door->sector = &sectors[(size_t)door->sector];
 
           //jff 1/31/98 unarchive line remembered by door as well
@@ -1269,7 +1307,7 @@ void P_UnArchiveThinkers(void) {
       case tc_floor:
         {
           floormove_t *floor = Z_MallocLevel (sizeof(*floor));
-          P_LOAD_P(floor);
+          P_LOAD_THINKER_BODY(floor);
           floor->sector = &sectors[(size_t)floor->sector];
           floor->sector->floordata = floor; //jff 2/22/98
           floor->thinker.function = T_MoveFloor;
@@ -1280,7 +1318,7 @@ void P_UnArchiveThinkers(void) {
       case tc_plat:
         {
           plat_t *plat = Z_MallocLevel (sizeof(*plat));
-          P_LOAD_P(plat);
+          P_LOAD_THINKER_BODY(plat);
           plat->sector = &sectors[(size_t)plat->sector];
           plat->sector->floordata = plat; //jff 2/22/98
 
@@ -1295,7 +1333,7 @@ void P_UnArchiveThinkers(void) {
       case tc_flash:
         {
           lightflash_t *flash = Z_MallocLevel (sizeof(*flash));
-          P_LOAD_P(flash);
+          P_LOAD_THINKER_BODY(flash);
           flash->sector = &sectors[(size_t)flash->sector];
           flash->sector->lightingdata = flash;
           flash->thinker.function = T_LightFlash;
@@ -1306,7 +1344,7 @@ void P_UnArchiveThinkers(void) {
       case tc_strobe:
         {
           strobe_t *strobe = Z_MallocLevel (sizeof(*strobe));
-          P_LOAD_P(strobe);
+          P_LOAD_THINKER_BODY(strobe);
           strobe->sector = &sectors[(size_t)strobe->sector];
           strobe->sector->lightingdata = strobe;
           strobe->thinker.function = T_StrobeFlash;
@@ -1317,7 +1355,7 @@ void P_UnArchiveThinkers(void) {
       case tc_glow:
         {
           glow_t *glow = Z_MallocLevel (sizeof(*glow));
-          P_LOAD_P(glow);
+          P_LOAD_THINKER_BODY(glow);
           glow->sector = &sectors[(size_t)glow->sector];
           glow->sector->lightingdata = glow;
           glow->thinker.function = T_Glow;
@@ -1328,7 +1366,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_glow:
         {
           zdoom_glow_t *glow = Z_MallocLevel (sizeof(*glow));
-          P_LOAD_P(glow);
+          P_LOAD_THINKER_BODY(glow);
           glow->sector = &sectors[(size_t)glow->sector];
           glow->sector->lightingdata = glow;
           glow->thinker.function = T_ZDoom_Glow;
@@ -1339,7 +1377,7 @@ void P_UnArchiveThinkers(void) {
       case tc_flicker:           // killough 10/4/98
         {
           fireflicker_t *flicker = Z_MallocLevel (sizeof(*flicker));
-          P_LOAD_P(flicker);
+          P_LOAD_THINKER_BODY(flicker);
           flicker->sector = &sectors[(size_t)flicker->sector];
           flicker->sector->lightingdata = flicker;
           flicker->thinker.function = T_FireFlicker;
@@ -1350,7 +1388,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_flicker:
         {
           zdoom_flicker_t *flicker = Z_MallocLevel (sizeof(*flicker));
-          P_LOAD_P(flicker);
+          P_LOAD_THINKER_BODY(flicker);
           flicker->sector = &sectors[(size_t)flicker->sector];
           flicker->sector->lightingdata = flicker;
           flicker->thinker.function = T_ZDoom_Flicker;
@@ -1362,7 +1400,7 @@ void P_UnArchiveThinkers(void) {
       case tc_elevator:
         {
           elevator_t *elevator = Z_MallocLevel (sizeof(*elevator));
-          P_LOAD_P(elevator);
+          P_LOAD_THINKER_BODY(elevator);
           elevator->sector = &sectors[(size_t)elevator->sector];
           elevator->sector->floordata = elevator; //jff 2/22/98
           elevator->sector->ceilingdata = elevator; //jff 2/22/98
@@ -1374,7 +1412,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_side:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateSideScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1383,7 +1421,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateFloorScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1392,7 +1430,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_ceiling:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateCeilingScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1401,7 +1439,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor_carry:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateFloorCarryScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1410,7 +1448,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_scroll_floor:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateZDoomFloorScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1419,7 +1457,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_scroll_ceiling:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateZDoomCeilingScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1428,7 +1466,7 @@ void P_UnArchiveThinkers(void) {
       case tc_thrust:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateThruster;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1437,7 +1475,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_side_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlSideScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1446,7 +1484,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlFloorScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1455,7 +1493,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_ceiling_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlCeilingScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1464,7 +1502,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor_carry_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlFloorCarryScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1473,7 +1511,7 @@ void P_UnArchiveThinkers(void) {
       case tc_pusher:   // phares 3/22/98: new Push/Pull effect thinkers
         {
           pusher_t *pusher = Z_MallocLevel (sizeof(pusher_t));
-          P_LOAD_P(pusher);
+          P_LOAD_THINKER_BODY(pusher);
           pusher->thinker.function = T_Pusher;
           pusher->source = P_GetPushThing(pusher->affectee);
           P_AddThinker(&pusher->thinker);
@@ -1483,7 +1521,7 @@ void P_UnArchiveThinkers(void) {
       case tc_friction:
         {
           friction_t *friction = Z_MallocLevel (sizeof(friction_t));
-          P_LOAD_P(friction);
+          P_LOAD_THINKER_BODY(friction);
           friction->thinker.function = T_Friction;
           P_AddThinker(&friction->thinker);
           break;
@@ -1492,7 +1530,7 @@ void P_UnArchiveThinkers(void) {
       case tc_light:
         {
           light_t *light = Z_MallocLevel(sizeof(*light));
-          P_LOAD_P(light);
+          P_LOAD_THINKER_BODY(light);
           light->sector = &sectors[(size_t)light->sector];
           light->thinker.function = T_Light;
           P_AddThinker(&light->thinker);
@@ -1502,7 +1540,7 @@ void P_UnArchiveThinkers(void) {
       case tc_phase:
         {
           phase_t *phase = Z_MallocLevel(sizeof(*phase));
-          P_LOAD_P(phase);
+          P_LOAD_THINKER_BODY(phase);
           phase->sector = &sectors[(size_t)phase->sector];
           phase->sector->lightingdata = phase;
           phase->thinker.function = T_Phase;
@@ -1513,7 +1551,7 @@ void P_UnArchiveThinkers(void) {
       case tc_acs:
         {
           acs_t *acs = Z_MallocLevel(sizeof(*acs));
-          P_LOAD_P(acs);
+          P_LOAD_THINKER_BODY(acs);
           acs->line = (intptr_t) acs->line != -1 ? &lines[(size_t) acs->line] : NULL;
           acs->thinker.function = T_InterpretACS;
           P_AddThinker(&acs->thinker);
@@ -1523,7 +1561,7 @@ void P_UnArchiveThinkers(void) {
       case tc_pillar:
         {
           pillar_t *pillar = Z_MallocLevel(sizeof(*pillar));
-          P_LOAD_P(pillar);
+          P_LOAD_THINKER_BODY(pillar);
           pillar->sector = &sectors[(size_t)pillar->sector];
           pillar->sector->floordata = pillar;
           pillar->thinker.function = T_BuildPillar;
@@ -1534,7 +1572,7 @@ void P_UnArchiveThinkers(void) {
       case tc_floor_waggle:
         {
           planeWaggle_t *waggle = Z_MallocLevel(sizeof(*waggle));
-          P_LOAD_P(waggle);
+          P_LOAD_THINKER_BODY(waggle);
           waggle->sector = &sectors[(size_t)waggle->sector];
           waggle->sector->floordata = waggle;
           waggle->thinker.function = T_FloorWaggle;
@@ -1545,7 +1583,7 @@ void P_UnArchiveThinkers(void) {
       case tc_ceiling_waggle:
         {
           planeWaggle_t *waggle = Z_MallocLevel(sizeof(*waggle));
-          P_LOAD_P(waggle);
+          P_LOAD_THINKER_BODY(waggle);
           waggle->sector = &sectors[(size_t)waggle->sector];
           waggle->sector->floordata = waggle;
           waggle->thinker.function = T_CeilingWaggle;
@@ -1556,7 +1594,7 @@ void P_UnArchiveThinkers(void) {
       case tc_poly_rotate:
         {
           polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
+          P_LOAD_THINKER_BODY(poly);
           poly->thinker.function = T_RotatePoly;
           P_AddThinker(&poly->thinker);
           break;
@@ -1565,7 +1603,7 @@ void P_UnArchiveThinkers(void) {
       case tc_poly_move:
         {
           polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
+          P_LOAD_THINKER_BODY(poly);
           poly->thinker.function = T_MovePoly;
           P_AddThinker(&poly->thinker);
           break;
@@ -1574,7 +1612,7 @@ void P_UnArchiveThinkers(void) {
       case tc_poly_door:
         {
           polydoor_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
+          P_LOAD_THINKER_BODY(poly);
           poly->thinker.function = T_PolyDoor;
           P_AddThinker(&poly->thinker);
           break;
@@ -1583,7 +1621,7 @@ void P_UnArchiveThinkers(void) {
       case tc_quake:
         {
           quake_t *quake = Z_MallocLevel(sizeof(*quake));
-          P_LOAD_P(quake);
+          P_LOAD_THINKER_BODY(quake);
           quake->thinker.function = dsda_UpdateQuake;
           P_AddThinker(&quake->thinker);
           break;
@@ -1592,32 +1630,51 @@ void P_UnArchiveThinkers(void) {
       case tc_ambient_source:
         {
           ambient_source_t *ambient_source = Z_MallocLevel(sizeof(*ambient_source));
-          P_LOAD_P(ambient_source);
+          P_LOAD_THINKER_BODY(ambient_source);
           ambient_source->thinker.function = dsda_UpdateAmbientSource;
           P_AddThinker(&ambient_source->thinker);
           break;
         }
 
       case tc_mobj:
+      case tc_mobj_marked:
         {
           mobj_t *mobj = Z_MallocLevel(sizeof(mobj_t));
+          size_t _sz = offsetof(mobj_t, snext) - offsetof(mobj_t, x);   // Design B: only [x, snext) was saved
 
           // killough 2/14/98 -- insert pointers to thinkers into table, in order:
           mobj_count++;
           mobj_p[mobj_count] = mobj;
 
-          P_LOAD_P(mobj);
+          // Zero the trimmed thinker header [0, x) (rebuilt by P_AddThinker + the
+          // function set below), load the saved gameplay window [x, snext), and
+          // zero the trimmed tail (render/Heretic-Hexen/respawn/transient), matching
+          // a fresh spawn. Tail links are rebuilt (P_SetThingPosition + incr.2a),
+          // info/tranmap/flags2/gravity/friction re-derived.
+          memset(mobj, 0, offsetof(mobj_t, x));
+          memcpy((char *)mobj + offsetof(mobj_t, x), save_p, _sz); save_p += _sz;
+          memset((char *)mobj + offsetof(mobj_t, snext), 0, sizeof(mobj_t) - offsetof(mobj_t, snext));
 
           mobj->state = states + (intptr_t) mobj->state;
+          mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */
 
           if (mobj->player)
             (mobj->player = &players[(size_t) mobj->player - 1]) -> mo = mobj;
 
           mobj->info = &mobjinfo[mobj->type];
 
-          // Don't place objects marked for deletion
-          if (mobj->index == MARKED_FOR_DELETION)
+          // Re-derive the trimmed constant-at-cl2 fields (not saved). movefactor
+          // stays 0 (tail-zeroed; only read under !compatibility).
+          mobj->flags2   = mobj->info->flags2;   // not mutated at cl2
+          mobj->gravity  = map_info.gravity;     // spawn default (stock things = FRACUNIT)
+          mobj->friction = ORIG_FRICTION;        // reset each tic at cl2
+
+          // Don't place objects marked for deletion (flagged via the type byte)
+          if (tc == tc_mobj_marked)
           {
+            // index is a trimmed (zeroed) field; restore the live sentinel so the
+            // target-relink pass below applies its references-- correction.
+            mobj->index = MARKED_FOR_DELETION;
             mobj->thinker.function = P_RemoveThinkerDelayed;
             P_AddThinker(&mobj->thinker);
 
@@ -1626,12 +1683,16 @@ void P_UnArchiveThinkers(void) {
             break;
           }
 
-          if (mobj->alpha < 1.f)
-            mobj->tranmap = dsda_TranMap(dsda_FloatToPercent(mobj->alpha));
-          else
-            mobj->tranmap = NULL;
+          mobj->tranmap = NULL;   // render-only; alpha is trimmed
 
+          // incr.1: trust the restored subsector. incr.2a skip flag: skip
+          // P_CreateSecNodeList's blockmap scan -- touching_sectorlist is rebuilt
+          // from scratch (in saved order) by dsda_UnArchiveMSecNodes below.
+          dsda_use_saved_subsector = 1;
+          dsda_skip_secnode_build = 1;
           P_SetThingPosition (mobj);
+          dsda_skip_secnode_build = 0;
+          dsda_use_saved_subsector = 0;
 
           // killough 2/28/98:
           // Fix for falling down into a wall after savegame loaded:
@@ -2011,7 +2072,7 @@ void P_UnArchiveAmbientSound(void)
 
   if (AmbSfxPtrIndex == -1)
   {
-    extern int AmbSndSeqInit[];
+    extern __STORAGE_MODIFIER int AmbSndSeqInit[];
 
     AmbSfxPtr = AmbSndSeqInit;
   }

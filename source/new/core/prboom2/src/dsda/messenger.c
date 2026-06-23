@@ -39,8 +39,8 @@ typedef struct message_s {
   struct message_s* next_message;
 } message_t;
 
-static __STORAGE_MODIFIER message_t* current_message;
-static __STORAGE_MODIFIER message_t* last_message;
+static message_t* current_message;
+static message_t* last_message;
 
 static void dsda_FreeMessage(message_t* message) {
   Z_Free(message->str);

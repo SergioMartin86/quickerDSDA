@@ -94,7 +94,7 @@ int PUREFUNC R_CheckTextureNumForName (const char *name);
 
 int R_ColormapNumForName(const char *name);      // killough 4/4/98
 
-extern const __STORAGE_MODIFIER byte *main_tranmap, *tranmap;
+extern const byte *main_tranmap, *tranmap;
 
 /* Proff - Added for OpenGL - cph - const char* param */
 void R_SetPatchNum(patchnum_t *patchnum, const char *name);

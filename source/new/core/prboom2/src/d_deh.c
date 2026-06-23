@@ -434,13 +434,13 @@ const char *s_AMSTR_GRIDOFF      = AMSTR_GRIDOFF;
 const char *s_AMSTR_MARKEDSPOT   = AMSTR_MARKEDSPOT;
 const char *s_AMSTR_MARKSCLEARED = AMSTR_MARKSCLEARED;
 // CPhipps - automap rotate & overlay
-const char* s_AMSTR_ROTATEON     = AMSTR_ROTATEON;
-const char* s_AMSTR_ROTATEOFF    = AMSTR_ROTATEOFF;
-const char* s_AMSTR_OVERLAYON    = AMSTR_OVERLAYON;
-const char* s_AMSTR_OVERLAYOFF   = AMSTR_OVERLAYOFF;
+__STORAGE_MODIFIER const char* s_AMSTR_ROTATEON     = AMSTR_ROTATEON;
+__STORAGE_MODIFIER const char* s_AMSTR_ROTATEOFF    = AMSTR_ROTATEOFF;
+__STORAGE_MODIFIER const char* s_AMSTR_OVERLAYON    = AMSTR_OVERLAYON;
+__STORAGE_MODIFIER const char* s_AMSTR_OVERLAYOFF   = AMSTR_OVERLAYOFF;
 // e6y: textured automap
-const char* s_AMSTR_TEXTUREDON   = AMSTR_TEXTUREDON;
-const char* s_AMSTR_TEXTUREDOFF  = AMSTR_TEXTUREDOFF;
+__STORAGE_MODIFIER const char* s_AMSTR_TEXTUREDON   = AMSTR_TEXTUREDON;
+__STORAGE_MODIFIER const char* s_AMSTR_TEXTUREDOFF  = AMSTR_TEXTUREDOFF;
 
 const char *s_STSTR_MUS          = STSTR_MUS;
 const char *s_STSTR_NOMUS        = STSTR_NOMUS;
@@ -828,13 +828,13 @@ static deh_strs deh_strlookup[] = {
   {&savegamename,"SAVEGAMENAME"},  // Ty 05/03/98
 };
 
-static int deh_numstrlookup = sizeof(deh_strlookup) / sizeof(deh_strlookup[0]);
+static __STORAGE_MODIFIER int deh_numstrlookup = sizeof(deh_strlookup) / sizeof(deh_strlookup[0]);
 
 const char *deh_newlevel = "NEWLEVEL"; // CPhipps - const
 
 // DOOM shareware/registered/retail (Ultimate) names.
 // CPhipps - const**const
-const char **const mapnames[] =
+__STORAGE_MODIFIER const char **const mapnames[] =
 {
   &s_HUSTR_E1M1,
   &s_HUSTR_E1M2,
@@ -898,7 +898,7 @@ const char **const mapnames[] =
 };
 
 // CPhipps - const**const
-const char **const mapnames2[] = // DOOM 2 map names.
+__STORAGE_MODIFIER const char **const mapnames2[] = // DOOM 2 map names.
 {
   &s_HUSTR_1,
   &s_HUSTR_2,
@@ -938,7 +938,7 @@ const char **const mapnames2[] = // DOOM 2 map names.
 };
 
 // CPhipps - const**const
-const char **const mapnamesp[] = // Plutonia WAD map names.
+__STORAGE_MODIFIER const char **const mapnamesp[] = // Plutonia WAD map names.
 {
   &s_PHUSTR_1,
   &s_PHUSTR_2,
@@ -977,7 +977,7 @@ const char **const mapnamesp[] = // Plutonia WAD map names.
 };
 
 // CPhipps - const**const
-const char **const mapnamest[] = // TNT WAD map names.
+__STORAGE_MODIFIER const char **const mapnamest[] = // TNT WAD map names.
 {
   &s_THUSTR_1,
   &s_THUSTR_2,
@@ -1062,7 +1062,7 @@ typedef struct
 
 // Put all the block header values, and the function to be called when that
 // one is encountered, in this array:
-static const deh_block deh_blocks[] = { // CPhipps - static const
+static __STORAGE_MODIFIER const deh_block deh_blocks[] = { // CPhipps - static const
   /* 0 */  {"Thing",deh_procThing},
   /* 1 */  {"Frame",deh_procFrame},
   /* 2 */  {"Pointer",deh_procPointer},
@@ -1097,7 +1097,7 @@ static __STORAGE_MODIFIER dboolean includenotext = false;
 // * things are base zero but dehacked considers them to start at #1. ***
 // CPhipps - static const
 
-static const char *deh_mobjinfo_fields[] =
+static __STORAGE_MODIFIER const char *deh_mobjinfo_fields[] =
 {
   "ID #",                // .doomednum
   "Initial frame",       // .spawnstate
@@ -1171,7 +1171,7 @@ static uint64_t deh_translate_bits(uint64_t value, const struct deh_flag_s *flag
 }
 
 // CPhipps - static const
-static const struct deh_flag_s deh_mobjflags[] = {
+static __STORAGE_MODIFIER const struct deh_flag_s deh_mobjflags[] = {
   {"SPECIAL",      MF_SPECIAL}, // call  P_Specialthing when touched
   {"SOLID",        MF_SOLID}, // block movement
   {"SHOOTABLE",    MF_SHOOTABLE}, // can be hit
@@ -1215,7 +1215,7 @@ static const struct deh_flag_s deh_mobjflags[] = {
   { NULL }
 };
 
-static const struct deh_flag_s deh_mobjflags_standard[] = {
+static __STORAGE_MODIFIER const struct deh_flag_s deh_mobjflags_standard[] = {
   {"SPECIAL",      MF_SPECIAL}, // call  P_Specialthing when touched
   {"SOLID",        MF_SOLID}, // block movement
   {"SHOOTABLE",    MF_SHOOTABLE}, // can be hit
@@ -1251,7 +1251,7 @@ static const struct deh_flag_s deh_mobjflags_standard[] = {
   { NULL }
 };
 
-static const struct deh_flag_s deh_mobjflags_mbf21[] = {
+static __STORAGE_MODIFIER const struct deh_flag_s deh_mobjflags_mbf21[] = {
   {"LOGRAV",         MF2_LOGRAV}, // low gravity
   {"SHORTMRANGE",    MF2_SHORTMRANGE}, // short missile range
   {"DMGIGNORED",     MF2_DMGIGNORED}, // other things ignore its attacks
@@ -1274,7 +1274,7 @@ static const struct deh_flag_s deh_mobjflags_mbf21[] = {
   { NULL }
 };
 
-static const struct deh_flag_s deh_weaponflags_mbf21[] = {
+static __STORAGE_MODIFIER const struct deh_flag_s deh_weaponflags_mbf21[] = {
   { "NOTHRUST",       WPF_NOTHRUST }, // doesn't thrust Mobj's
   { "SILENT",         WPF_SILENT }, // weapon is silent
   { "NOAUTOFIRE",     WPF_NOAUTOFIRE }, // weapon won't autofire in A_WeaponReady
@@ -1294,7 +1294,7 @@ static const struct deh_flag_s deh_weaponflags_mbf21[] = {
 // that Dehacked uses and is useless to us.
 // * states are base zero and have a dummy #0 (TROO)
 
-static const char *deh_state_fields[] = // CPhipps - static const*
+static __STORAGE_MODIFIER const char *deh_state_fields[] = // CPhipps - static const*
 {
   "Sprite number",    // .sprite (spritenum_t) // an enum
   "Sprite subnumber", // .frame (long)
@@ -1315,7 +1315,7 @@ static const char *deh_state_fields[] = // CPhipps - static const*
   "MBF21 Bits",       // .flags
 };
 
-static const struct deh_flag_s deh_stateflags_mbf21[] = {
+static __STORAGE_MODIFIER const struct deh_flag_s deh_stateflags_mbf21[] = {
   { "SKILL5FAST", STATEF_SKILL5FAST }, // tics halve on nightmare skill
   { NULL }
 };
@@ -1324,7 +1324,7 @@ static const struct deh_flag_s deh_stateflags_mbf21[] = {
 // usage = Ammo n (name)
 // Ammo information for the few types of ammo
 
-static const char *deh_ammo[] = // CPhipps - static const*
+static __STORAGE_MODIFIER const char *deh_ammo[] = // CPhipps - static const*
 {
   "Max ammo",   // maxammo[]
   "Per ammo"    // clipammo[]
@@ -1334,7 +1334,7 @@ static const char *deh_ammo[] = // CPhipps - static const*
 // Usage: Weapon nn (name)
 // Basically a list of frames and what kind of ammo (see above)it uses.
 
-static const char *deh_weapon[] = // CPhipps - static const*
+static __STORAGE_MODIFIER const char *deh_weapon[] = // CPhipps - static const*
 {
   "Ammo type",      // .ammo
   "Deselect frame", // .upstate
@@ -1357,7 +1357,7 @@ static const char *deh_weapon[] = // CPhipps - static const*
 // Usage: Misc 0
 // Always uses a zero in the dehacked file, for consistency.  No meaning.
 
-static const char *deh_misc[] = // CPhipps - static const*
+static __STORAGE_MODIFIER const char *deh_misc[] = // CPhipps - static const*
 {
   "Initial Health",    // initial_health
   "Initial Bullets",   // initial_bullets
@@ -1408,7 +1408,7 @@ typedef struct {
 #define TI_ARGS7 0x0100
 #define TI_ARGS8 0x0200
 
-static const deh_bexptr deh_bexptrs[] = // CPhipps - static const
+static __STORAGE_MODIFIER const deh_bexptr deh_bexptrs[] = // CPhipps - static const
 {
   {A_Light0,          "A_Light0"},
   {A_WeaponReady,     "A_WeaponReady"},
@@ -1854,7 +1854,7 @@ static void deh_procBexCodePointers(DEHFILE *fpin, char *line)
 // to prboom types - POPE
 //---------------------------------------------------------------------------
 static uint64_t getConvertedDEHBits(uint64_t bits) {
-  static const uint64_t bitMap[32] = {
+  static __STORAGE_MODIFIER const uint64_t bitMap[32] = {
     /* cf linuxdoom-1.10 p_mobj.h */
     MF_SPECIAL, // 0 Can be picked up - When touched the thing can be picked up.
     MF_SOLID, // 1 Obstacle - The thing is solid and will not let you (or others) pass through it
@@ -3362,7 +3362,7 @@ dboolean deh_GetData(char *s, char *k, uint64_t *l, char **strval)
   return(okrc);
 }
 
-static deh_bexptr null_bexptr = { NULL, "(NULL)" };
+static __STORAGE_MODIFIER deh_bexptr null_bexptr = { NULL, "(NULL)" };
 
 void PostProcessDeh(void)
 {
@@ -3379,7 +3379,7 @@ void PostProcessDeh(void)
 
   if (processed_dehacked)
   {
-    extern __STORAGE_MODIFIER  byte* defined_codeptr_args;
+    extern __STORAGE_MODIFIER byte* defined_codeptr_args;
 
     for (i = 0; i < num_states; i++)
     {

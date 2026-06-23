@@ -69,7 +69,7 @@ static const unsigned char doom_rndtable[256] = { // 1/19/98 killough -- made co
     120, 163, 236, 249
 };
 
-static const unsigned char hexen_rndtable[256] = {
+static __STORAGE_MODIFIER const unsigned char hexen_rndtable[256] = {
     201, 1, 243, 19, 18, 42, 183, 203, 101, 123, 154, 137, 34, 118, 10, 216,
     135, 246, 0, 107, 133, 229, 35, 113, 177, 211, 110, 17, 139, 84, 251, 235,
     182, 166, 161, 230, 143, 91, 24, 81, 22, 94, 7, 51, 232, 104, 122, 248,
@@ -88,11 +88,11 @@ static const unsigned char hexen_rndtable[256] = {
     23, 25, 48, 218, 120, 147, 208, 36, 226, 223, 193, 238, 157, 204, 146, 31
 };
 
-static const unsigned __STORAGE_MODIFIER char *rndtable = doom_rndtable;
+static __STORAGE_MODIFIER const unsigned char *rndtable = doom_rndtable;
 
 __STORAGE_MODIFIER rng_t rng;     // the random number state
 
-unsigned __STORAGE_MODIFIER int rngseed = 1993;   // killough 3/26/98: The seed
+__STORAGE_MODIFIER unsigned int rngseed = 1993;   // killough 3/26/98: The seed
 
 int (P_Random)(pr_class_t pr_class)
 {

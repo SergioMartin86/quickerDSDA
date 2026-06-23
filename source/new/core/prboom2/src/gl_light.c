@@ -49,10 +49,10 @@
 
 #include "dsda/configuration.h"
 
-__STORAGE_MODIFIER dboolean gl_ui_lightmode_indexed = false;
-__STORAGE_MODIFIER dboolean gl_automap_lightmode_indexed = false;
+dboolean gl_ui_lightmode_indexed = false;
+dboolean gl_automap_lightmode_indexed = false;
 
-static __STORAGE_MODIFIER float lighttable[5][256];
+static float lighttable[5][256];
 
 /*
  * lookuptable for lightvalues

@@ -88,10 +88,10 @@ typedef enum {
   dsda_bf_limit_max = dsda_bf_limit_duo_max
 } dsda_bf_limit_t;
 
-extern const __STORAGE_MODIFIER char *dsda_bf_attribute_names[dsda_bf_attribute_max];
-extern const __STORAGE_MODIFIER char *dsda_bf_operator_names[dsda_bf_operator_max];
-extern const __STORAGE_MODIFIER char *dsda_bf_item_names[dsda_bf_item_max];
-extern const __STORAGE_MODIFIER char *dsda_bf_limit_names[dsda_bf_limit_max];
+extern const char* dsda_bf_attribute_names[dsda_bf_attribute_max];
+extern const char* dsda_bf_operator_names[dsda_bf_operator_max];
+extern const char* dsda_bf_item_names[dsda_bf_item_max];
+extern const char* dsda_bf_limit_names[dsda_bf_limit_max];
 
 dboolean dsda_BruteForce(void);
 dboolean dsda_BruteForceEnded(void);

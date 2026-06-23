@@ -50,13 +50,13 @@
 //      CHANGE THE TEXTURE OF A WALL SWITCH TO ITS OPPOSITE
 //
 //==================================================================
-const switchlist_t heretic_alphSwitchList[] = {
+__STORAGE_MODIFIER const switchlist_t heretic_alphSwitchList[] = {
   { "SW1OFF", "SW1ON", 1 },
   { "SW2OFF", "SW2ON", 1 },
   { "",        "",     0 }
 };
 
-const switchlist_t hexen_alphSwitchList[] = {
+__STORAGE_MODIFIER const switchlist_t hexen_alphSwitchList[] = {
     {"SW_1_UP", "SW_1_DN", hexen_sfx_switch1},
     {"SW_2_UP", "SW_2_DN", hexen_sfx_switch1},
     {"VALVE1", "VALVE2", hexen_sfx_valve_turn},
@@ -76,9 +76,9 @@ static __STORAGE_MODIFIER int *switchlist;                           // killough
 static __STORAGE_MODIFIER int max_numswitches;                       // killough
 static __STORAGE_MODIFIER int numswitches;                           // killough
 
-__STORAGE_MODIFIER button_t buttonlist[MAXBUTTONS];
+__STORAGE_MODIFIER button_t  buttonlist[MAXBUTTONS];
 
-const switchlist_t *alphSwitchList;         //jff 3/23/98 pointer to switch table
+__STORAGE_MODIFIER const switchlist_t *alphSwitchList;         //jff 3/23/98 pointer to switch table
 
 //
 // P_InitSwitchList()
@@ -88,6 +88,7 @@ const switchlist_t *alphSwitchList;         //jff 3/23/98 pointer to switch tabl
 // when activated, and in the case of buttons, change back after a timeout.
 //
 // This routine modified to read its data from a predefined lump or
+// PWAD lump called SWITCHES rather than a static table in this module to
 // allow wad designers to insert or modify switches.
 //
 // Lump format is an array of byte packed switchlist_t structures, terminated

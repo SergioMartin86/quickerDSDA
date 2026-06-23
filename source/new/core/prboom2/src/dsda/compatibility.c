@@ -318,7 +318,7 @@ static const dsda_compatibility_t* entry_f[] = {
 };
 
 // This is clumsy but I couldn't figure out how to inline everything
-static const dsda_compatibility_t** level_compatibilities[16] = {
+static __STORAGE_MODIFIER const dsda_compatibility_t** level_compatibilities[16] = {
   entry_0,
   entry_1,
   entry_2,

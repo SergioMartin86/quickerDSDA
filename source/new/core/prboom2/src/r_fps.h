@@ -44,7 +44,7 @@ typedef struct {
   fixed_t frac;
 } tic_vars_t;
 
-extern tic_vars_t tic_vars;
+extern __STORAGE_MODIFIER tic_vars_t tic_vars;
 
 void M_ChangeUncappedFrameRate(void);
 

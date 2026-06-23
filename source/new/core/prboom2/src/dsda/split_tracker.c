@@ -32,15 +32,15 @@
 
 #define SPLIT_VERSION 1
 
-static __STORAGE_MODIFIER dsda_split_t* dsda_splits;
-static __STORAGE_MODIFIER size_t dsda_splits_count;
-static __STORAGE_MODIFIER int attempts;
-static __STORAGE_MODIFIER int current_split;
-static __STORAGE_MODIFIER char *dsda_split_tracker_dir;
-static __STORAGE_MODIFIER char *dsda_split_tracker_path;
+static dsda_split_t* dsda_splits;
+static size_t dsda_splits_count;
+static int attempts;
+static int current_split;
+static char* dsda_split_tracker_dir;
+static char* dsda_split_tracker_path;
 
-extern __STORAGE_MODIFIER int gameskill, gamemap, gameepisode, leveltime, totalleveltimes;
-extern __STORAGE_MODIFIER int respawnparm, fastparm, nomonsters;
+extern int gameskill, gamemap, gameepisode, leveltime, totalleveltimes;
+extern int respawnparm, fastparm, nomonsters;
 
 static char* dsda_SplitTrackerDir(void) {
   if (!dsda_split_tracker_dir)
@@ -105,7 +105,7 @@ static void dsda_LoadSplits(void) {
   char* path;
   char* buffer;
   int version;
-  static __STORAGE_MODIFIER int loaded = false;
+  static int loaded = false;
 
   if (loaded)
     return;

@@ -26,12 +26,12 @@
 
 #include "music.h"
 
-__STORAGE_MODIFIER musicinfo_t *S_music;
-__STORAGE_MODIFIER int num_music;
-__STORAGE_MODIFIER int mus_musinfo;
-static __STORAGE_MODIFIER int deh_musicnames_size;
-static __STORAGE_MODIFIER char** deh_musicnames;
-static __STORAGE_MODIFIER byte* music_state;
+musicinfo_t* S_music;
+int num_music;
+int mus_musinfo;
+static int deh_musicnames_size;
+static char** deh_musicnames;
+static byte* music_state;
 
 static void dsda_EnsureCapacity(int limit) {
   while (limit >= num_music) {
@@ -88,7 +88,7 @@ int dsda_GetOriginalMusicIndex(const char* key) {
 
 void dsda_InitializeMusic(musicinfo_t* source, int count) {
   int i;
-  extern __STORAGE_MODIFIER int raven;
+  extern int raven;
 
   num_music = count;
   deh_musicnames_size = num_music + 1;
@@ -125,7 +125,7 @@ void dsda_FreeDehMusic(void) {
   free(music_state);
 }
 
-static __STORAGE_MODIFIER int music_queue = -1;
+static int music_queue = -1;
 
 void dsda_ArchiveMusic(void) {
   P_SAVE_X(musinfo.current_item);

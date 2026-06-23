@@ -59,12 +59,12 @@
 #define SRC_SCR 2
 #define DEST_SCR 3
 
-static __STORAGE_MODIFIER screeninfo_t wipe_scr_start;
-static __STORAGE_MODIFIER screeninfo_t wipe_scr_end;
-static __STORAGE_MODIFIER screeninfo_t wipe_scr;
+static screeninfo_t wipe_scr_start;
+static screeninfo_t wipe_scr_end;
+static screeninfo_t wipe_scr;
 
 // e6y: resolution limitation is removed
-static __STORAGE_MODIFIER int *y_lookup = NULL;
+static int *y_lookup = NULL;
 
 // e6y: resolution limitation is removed
 void R_InitMeltRes(void)
@@ -243,7 +243,7 @@ int wipe_EndScreen(void)
 // killough 3/5/98: reformatted and cleaned up
 int wipe_ScreenWipe(int ticks)
 {
-  static __STORAGE_MODIFIER dboolean go;                               // when zero, stop the wipe
+  static dboolean go;                               // when zero, stop the wipe
 
   if (!dsda_RenderWipeScreen())
     return 0;//e6y

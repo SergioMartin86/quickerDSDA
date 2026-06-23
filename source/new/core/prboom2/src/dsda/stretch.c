@@ -27,29 +27,29 @@
 
 #include "stretch.h"
 
-__STORAGE_MODIFIER int wide_offsetx;
-__STORAGE_MODIFIER int wide_offset2x;
-__STORAGE_MODIFIER int wide_offsety;
-__STORAGE_MODIFIER int wide_offset2y;
+int wide_offsetx;
+int wide_offset2x;
+int wide_offsety;
+int wide_offset2y;
 
-__STORAGE_MODIFIER int render_stretch_hud;
+int render_stretch_hud;
 
-__STORAGE_MODIFIER int patches_scalex;
-__STORAGE_MODIFIER int patches_scaley;
+int patches_scalex;
+int patches_scaley;
 
-static __STORAGE_MODIFIER cb_video_t video;
-static __STORAGE_MODIFIER cb_video_t video_stretch;
-static __STORAGE_MODIFIER cb_video_t video_full;
-static __STORAGE_MODIFIER cb_video_t video_ex_text;
+static cb_video_t video;
+static cb_video_t video_stretch;
+static cb_video_t video_full;
+static cb_video_t video_ex_text;
 
-static __STORAGE_MODIFIER stretch_param_t *stretch_params;
-static __STORAGE_MODIFIER stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];
+static stretch_param_t* stretch_params;
+static stretch_param_t stretch_params_table[patch_stretch_max][VPT_ALIGN_MAX];
 
-static __STORAGE_MODIFIER int ex_text_screenwidth;
-static __STORAGE_MODIFIER int ex_text_screenheight;
-static __STORAGE_MODIFIER int ex_text_st_scaled_height;
-static __STORAGE_MODIFIER double ex_text_scale_x;
-static __STORAGE_MODIFIER double ex_text_scale_y;
+static int ex_text_screenwidth;
+static int ex_text_screenheight;
+static int ex_text_st_scaled_height;
+static double ex_text_scale_x;
+static double ex_text_scale_y;
 
 
 static void GenLookup(short* lookup1, short* lookup2, int size, int max, int step) {

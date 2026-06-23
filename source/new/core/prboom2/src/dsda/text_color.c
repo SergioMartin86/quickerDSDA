@@ -153,11 +153,7 @@ void dsda_LoadTextColor(void) {
       continue;
 
     if (sscanf(line, "%32s %d", key, &color_range) != 2)
-    {
-      // Ignoring error
-      return;
       I_Error("DSDATC lump has unknown format! (%s)", line);
-    }
 
     for (p = dsda_text_colors; p->key; p++)
       if (!strcasecmp(key, p->key)) {
@@ -166,12 +162,7 @@ void dsda_LoadTextColor(void) {
       }
 
     if (!p->key)
-    {
-      // Ignoring error
-      return;
       I_Error("DSDATC lump has unknown key %s!", key);
-    }
-      
   }
 
   for (p = dsda_text_colors; p->key; p++) {

@@ -25,16 +25,16 @@
 
 #include "game_controller.h"
 
-static __STORAGE_MODIFIER int use_game_controller;
+static int use_game_controller;
 
 typedef struct {
   int deadzone;
   int sensitivity;
 } axis_t;
 
-static __STORAGE_MODIFIER int swap_analogs;
+static int swap_analogs;
 
-static __STORAGE_MODIFIER const char *button_names[] = {
+static const char* button_names[] = {
   [DSDA_CONTROLLER_BUTTON_A] = "pad a",
   [DSDA_CONTROLLER_BUTTON_B] = "pad b",
   [DSDA_CONTROLLER_BUTTON_X] = "pad x",

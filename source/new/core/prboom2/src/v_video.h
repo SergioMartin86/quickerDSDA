@@ -51,10 +51,10 @@
 // user preferences. The integer ratio is hardly used anymore, so further
 // simplification may be in order.
 void SetRatio(int width, int height);
-extern __STORAGE_MODIFIER dboolean tallscreen;
-extern unsigned __STORAGE_MODIFIER int ratio_multiplier, ratio_scale;
-extern __STORAGE_MODIFIER float gl_ratio;
-extern __STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
+extern dboolean tallscreen;
+extern unsigned int ratio_multiplier, ratio_scale;
+extern float gl_ratio;
+extern int psprite_offset; // Needed for "tallscreen" modes
 
 #define CENTERY     (SCREENHEIGHT/2)
 
@@ -62,7 +62,7 @@ extern __STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
 // Screen 1 is an extra buffer.
 
 // array of pointers to color translation tables
-extern __STORAGE_MODIFIER const byte *colrngs[];
+extern const byte *colrngs[];
 
 // symbolic indices into color translation table pointer array
 typedef enum
@@ -106,8 +106,8 @@ typedef struct {
 } screeninfo_t;
 
 #define NUM_SCREENS 6
-extern __STORAGE_MODIFIER screeninfo_t screens[NUM_SCREENS];
-extern __STORAGE_MODIFIER int usegamma;
+extern screeninfo_t screens[NUM_SCREENS];
+extern int          usegamma;
 
 // Varying bit-depth support -POPE
 //

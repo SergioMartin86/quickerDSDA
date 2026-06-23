@@ -54,11 +54,11 @@ static void TranslateToStartSpot(int tag, int originX, int originY);
 
 polyblock_t **PolyBlockMap;
 polyobj_t *polyobjs;            // list of all poly-objects on the level
-__STORAGE_MODIFIER int po_NumPolyobjs;
+int po_NumPolyobjs;
 
-static __STORAGE_MODIFIER int PolySegCount;
-static __STORAGE_MODIFIER fixed_t PolyStartX;
-static __STORAGE_MODIFIER fixed_t PolyStartY;
+static int PolySegCount;
+static fixed_t PolyStartX;
+static fixed_t PolyStartY;
 
 static void ResetSegDrawingParameters(seg_t *seg)
 {

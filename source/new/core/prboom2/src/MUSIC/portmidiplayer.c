@@ -78,26 +78,30 @@ const music_player_t pm_player =
 
 #include "dsda/configuration.h"
 
-static __STORAGE_MODIFIER midi_event_t **events;
-static __STORAGE_MODIFIER int eventpos;
-static __STORAGE_MODIFIER midi_file_t *midifile;
-static __STORAGE_MODIFIER int pm_playing;
-static __STORAGE_MODIFIER int pm_paused;
-static __STORAGE_MODIFIER int pm_looping;
-static __STORAGE_MODIFIER int pm_volume = -1;
-static __STORAGE_MODIFIER double spmc;
-static __STORAGE_MODIFIER double pm_delta;
-static __STORAGE_MODIFIER unsigned long trackstart;
-static __STORAGE_MODIFIER PortMidiStream *pm_stream;
+static midi_event_t **events;
+static int eventpos;
+static midi_file_t *midifile;
+
+static int pm_playing;
+static int pm_paused;
+static int pm_looping;
+static int pm_volume = -1;
+static double spmc;
+static double pm_delta;
+
+static unsigned long trackstart;
+
+static PortMidiStream *pm_stream;
 
 #define SYSEX_BUFF_SIZE 1024
-static __STORAGE_MODIFIER byte sysexbuff[SYSEX_BUFF_SIZE];
-static __STORAGE_MODIFIER int sysexbufflen;
-static __STORAGE_MODIFIER const char *mus_portmidi_reset_type; // portmidi reset type
-static __STORAGE_MODIFIER int mus_portmidi_reset_delay; // portmidi delay after reset
-static __STORAGE_MODIFIER int mus_portmidi_filter_sysex; // portmidi block sysex from midi files
-static __STORAGE_MODIFIER int mus_portmidi_reverb_level; // portmidi reverb send level
-static __STORAGE_MODIFIER int mus_portmidi_chorus_level; // portmidi chorus send level
+static byte sysexbuff[SYSEX_BUFF_SIZE];
+static int sysexbufflen;
+
+static const char *mus_portmidi_reset_type; // portmidi reset type
+static int mus_portmidi_reset_delay; // portmidi delay after reset
+static int mus_portmidi_filter_sysex; // portmidi block sysex from midi files
+static int mus_portmidi_reverb_level; // portmidi reverb send level
+static int mus_portmidi_chorus_level; // portmidi chorus send level
 
 // latency: we're generally writing timestamps slightly in the past (from when the last time
 // render was called to this time.  portmidi latency instruction must be larger than that window
@@ -118,20 +122,21 @@ static const char *pm_name (void)
 #endif
 
 #define DEFAULT_VOLUME 100
-static __STORAGE_MODIFIER int channel_volume[16];
-static __STORAGE_MODIFIER float volume_scale;
-static __STORAGE_MODIFIER dboolean use_reset_delay;
-static __STORAGE_MODIFIER byte *sysex_reset;
-static __STORAGE_MODIFIER byte gs_reset[] = {0xf0, 0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7f, 0x00, 0x41, 0xf7};
-static __STORAGE_MODIFIER byte gm_system_on[] = {0xf0, 0x7e, 0x7f, 0x09, 0x01, 0xf7};
-static __STORAGE_MODIFIER byte gm2_system_on[] = {0xf0, 0x7e, 0x7f, 0x09, 0x03, 0xf7};
-static __STORAGE_MODIFIER byte xg_system_on[] = {0xf0, 0x43, 0x10, 0x4c, 0x00, 0x00, 0x7e, 0x00, 0xf7};
-static __STORAGE_MODIFIER PmEvent event_notes_off[16];
-static __STORAGE_MODIFIER PmEvent event_sound_off[16];
-static __STORAGE_MODIFIER PmEvent event_reset[16 * 6];
-static __STORAGE_MODIFIER PmEvent event_pbs[16 * 6];
-static __STORAGE_MODIFIER PmEvent event_reverb[16];
-static __STORAGE_MODIFIER PmEvent event_chorus[16];
+static int channel_volume[16];
+static float volume_scale;
+
+static dboolean use_reset_delay;
+static byte *sysex_reset;
+static byte gs_reset[] = {0xf0, 0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7f, 0x00, 0x41, 0xf7};
+static byte gm_system_on[] = {0xf0, 0x7e, 0x7f, 0x09, 0x01, 0xf7};
+static byte gm2_system_on[] = {0xf0, 0x7e, 0x7f, 0x09, 0x03, 0xf7};
+static byte xg_system_on[] = {0xf0, 0x43, 0x10, 0x4c, 0x00, 0x00, 0x7e, 0x00, 0xf7};
+static PmEvent event_notes_off[16];
+static PmEvent event_sound_off[16];
+static PmEvent event_reset[16 * 6];
+static PmEvent event_pbs[16 * 6];
+static PmEvent event_reverb[16];
+static PmEvent event_chorus[16];
 
 static void reset_device (void)
 {

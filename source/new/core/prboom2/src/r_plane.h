@@ -41,11 +41,11 @@
 #define PL_SKYFLAT (PL_SKYFLAT_LINE|PL_SKYFLAT_SECTOR)
 
 /* Visplane related. */
-extern __STORAGE_MODIFIER int *lastopening; // dropoff overflow
+extern int *lastopening; // dropoff overflow
 
 // e6y: resolution limitation is removed
-extern __STORAGE_MODIFIER int *floorclip, *ceilingclip; // dropoff overflow
-extern __STORAGE_MODIFIER fixed_t *yslope, *distscale;
+extern int *floorclip, *ceilingclip; // dropoff overflow
+extern fixed_t *yslope, *distscale;
 
 void R_InitVisplanesRes(void);
 void R_InitPlanesRes(void);

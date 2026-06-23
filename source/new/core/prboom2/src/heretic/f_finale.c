@@ -28,16 +28,16 @@
 
 #include "heretic/f_finale.h"
 
-static __STORAGE_MODIFIER int finalestage;                // 0 = text, 1 = art screen
-static __STORAGE_MODIFIER int finalecount;
+static int finalestage;                // 0 = text, 1 = art screen
+static int finalecount;
 
 #define TEXTSPEED       3
 #define TEXTWAIT        250
 
-static __STORAGE_MODIFIER const char *finaletext;
-static __STORAGE_MODIFIER const char *finaleflat;
+static const char *finaletext;
+static const char *finaleflat;
 
-static __STORAGE_MODIFIER int FontABaseLump;
+static int FontABaseLump;
 
 /*
 =======================
@@ -198,8 +198,8 @@ void Heretic_F_TextWrite(void)
 
 void F_DemonScroll(void)
 {
-  static __STORAGE_MODIFIER int yval = 0;
-  static __STORAGE_MODIFIER int nextscroll = 0;
+  static int yval = 0;
+  static int nextscroll = 0;
 
   if (finalecount < 70)
   {

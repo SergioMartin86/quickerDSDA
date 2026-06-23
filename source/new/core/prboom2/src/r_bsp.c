@@ -58,13 +58,13 @@
 
 __STORAGE_MODIFIER int currentsubsectornum;
 
-__STORAGE_MODIFIER seg_t *curline;
-__STORAGE_MODIFIER side_t *sidedef;
-__STORAGE_MODIFIER line_t *linedef;
-__STORAGE_MODIFIER sector_t *frontsector;
-__STORAGE_MODIFIER sector_t *backsector;
-__STORAGE_MODIFIER sector_t *poly_frontsector;
-__STORAGE_MODIFIER dboolean poly_add_line;
+__STORAGE_MODIFIER seg_t     *curline;
+__STORAGE_MODIFIER side_t    *sidedef;
+__STORAGE_MODIFIER line_t    *linedef;
+__STORAGE_MODIFIER sector_t  *frontsector;
+__STORAGE_MODIFIER sector_t  *backsector;
+__STORAGE_MODIFIER sector_t  *poly_frontsector;
+__STORAGE_MODIFIER dboolean   poly_add_line;
 __STORAGE_MODIFIER drawseg_t *ds_p;
 
 // killough 4/7/98: indicates doors closed wrt automap bugfix:
@@ -72,7 +72,7 @@ __STORAGE_MODIFIER drawseg_t *ds_p;
 
 // killough: New code which removes 2s linedef limit
 __STORAGE_MODIFIER drawseg_t *drawsegs;
-__STORAGE_MODIFIER unsigned maxdrawsegs;
+__STORAGE_MODIFIER unsigned  maxdrawsegs;
 // drawseg_t drawsegs[MAXDRAWSEGS];       // old code -- killough
 
 //
@@ -540,7 +540,7 @@ static void R_AddLine (seg_t *line)
 //  if some part of the bbox might be visible.
 //
 
-static const int checkcoord[12][4] = // killough -- static const
+static __STORAGE_MODIFIER const int checkcoord[12][4] = // killough -- static const
 {
   {3,0,2,1},
   {3,0,2,0},
@@ -807,6 +807,7 @@ static void R_UpdateGlobalPlanes(sector_t *sector, int *floorlightlevel, int *ce
 // Add sprites of things in sector.
 // Draw one or more line segments.
 //
+// killough 1/31/98 -- made static, polished
 
 static void R_AddPolyLines(polyobj_t *poly)
 {

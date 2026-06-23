@@ -64,9 +64,9 @@
 #include "dsda/settings.h"
 #include "dsda/time.h"
 
-__STORAGE_MODIFIER ticcmd_t local_cmds[MAX_MAXPLAYERS];
-__STORAGE_MODIFIER int maketic;
-__STORAGE_MODIFIER int solo_net = 0;
+ticcmd_t local_cmds[MAX_MAXPLAYERS];
+int maketic;
+int solo_net = 0;
 
 void D_InitFakeNetGame (void)
 {
@@ -84,7 +84,7 @@ void D_InitFakeNetGame (void)
 
 void FakeNetUpdate(void)
 {
-  static __STORAGE_MODIFIER int lastmadetic;
+  static int lastmadetic;
 
   if (isExtraDDisplay)
     return;
@@ -109,7 +109,7 @@ void FakeNetUpdate(void)
 }
 
 // Implicitly tracked whenever we check the current tick
-__STORAGE_MODIFIER int ms_to_next_tick;
+int ms_to_next_tick;
 
 void TryRunTics (void)
 {

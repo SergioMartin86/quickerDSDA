@@ -29,10 +29,10 @@ typedef struct
     int endFrameDef;
 } animDef_t;
 
-extern __STORAGE_MODIFIER animDef_t AnimDefs[MAX_ANIM_DEFS];
+extern animDef_t AnimDefs[MAX_ANIM_DEFS];
 
-extern __STORAGE_MODIFIER int NextLightningFlash;
-extern __STORAGE_MODIFIER int LightningFlash;
+extern int NextLightningFlash;
+extern int LightningFlash;
 
 void P_AnimateSurfaces(void);
 void P_ForceLightning(void);

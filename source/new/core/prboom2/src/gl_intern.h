@@ -322,22 +322,24 @@ void gld_AddDrawItem(GLDrawItemType itemtype, void *itemdata);
 
 void gld_DrawTriangleStrip(GLWall *wall, gl_strip_coords_t *c);
 
-extern __STORAGE_MODIFIER float roll;
-extern __STORAGE_MODIFIER float yaw;
-extern __STORAGE_MODIFIER float inv_yaw;
-extern __STORAGE_MODIFIER float pitch;
-extern __STORAGE_MODIFIER int gl_preprocessed; //e6y
-extern __STORAGE_MODIFIER GLDrawInfo gld_drawinfo;
+extern float roll;
+extern float yaw;
+extern float inv_yaw;
+extern float pitch;
+
+extern int gl_preprocessed; //e6y
+
+extern GLDrawInfo gld_drawinfo;
 void gld_FreeDrawInfo(void);
 void gld_ResetDrawInfo(void);
 
-extern __STORAGE_MODIFIER GLSector *sectorloops;
-extern __STORAGE_MODIFIER GLMapSubsector *subsectorloops;
+extern GLSector *sectorloops;
+extern GLMapSubsector *subsectorloops;
 
-extern __STORAGE_MODIFIER float gl_texture_filter_anisotropic;
+extern float gl_texture_filter_anisotropic;
 void gld_SetTexFilters(GLTexture *gltexture);
 
-extern __STORAGE_MODIFIER float xCamera,yCamera,zCamera;
+extern float xCamera,yCamera,zCamera;
 
 //
 //detail
@@ -391,14 +393,14 @@ int gld_ProgressStart(void);
 int gld_ProgressEnd(void);
 
 //FBO
-extern __STORAGE_MODIFIER unsigned int glSceneImageFBOTexID;
-extern __STORAGE_MODIFIER unsigned int glSceneImageTextureFBOTexID;
+extern unsigned int glSceneImageFBOTexID;
+extern unsigned int glSceneImageTextureFBOTexID;
 
-extern __STORAGE_MODIFIER dboolean invul_cm;
-extern __STORAGE_MODIFIER float bw_red;
-extern __STORAGE_MODIFIER float bw_green;
-extern __STORAGE_MODIFIER float bw_blue;
-extern __STORAGE_MODIFIER int SceneInTexture;
+extern dboolean invul_cm;
+extern float bw_red;
+extern float bw_green;
+extern float bw_blue;
+extern int SceneInTexture;
 void gld_InitFBO(void);
 void gld_FreeScreenSizeFBO(void);
 
@@ -441,8 +443,8 @@ typedef struct SkyBoxParams_s
   PalEntry_t FloorSkyColor[2];
   PalEntry_t CeilingSkyColor[2];
 } SkyBoxParams_t;
-extern __STORAGE_MODIFIER SkyBoxParams_t SkyBox;
-extern __STORAGE_MODIFIER float gl_whitecolor[];
+extern SkyBoxParams_t SkyBox;
+extern float gl_whitecolor[];
 void gld_InitSky(void);
 void gld_AddSkyTexture(GLWall *wall, int sky1, int sky2, int skytype);
 void gld_GetSkyCapColors(void);
@@ -483,10 +485,10 @@ typedef struct vbo_xy_uv_rgba_s
 } PACKEDATTR vbo_xy_uv_rgba_t;
 
 // preprocessing
-extern __STORAGE_MODIFIER byte *segrendered; // true if sector rendered (only here for malloc)
-extern __STORAGE_MODIFIER int *linerendered[2]; // true if linedef rendered (only here for malloc)
-extern __STORAGE_MODIFIER int rendermarker;
-extern __STORAGE_MODIFIER unsigned int flats_vbo_id;
+extern byte *segrendered; // true if sector rendered (only here for malloc)
+extern int *linerendered[2]; // true if linedef rendered (only here for malloc)
+extern int rendermarker;
+extern unsigned int flats_vbo_id;
 
 void glsl_Init(void);
 void glsl_SetTextureDims(int unit, unsigned int width, unsigned int height);

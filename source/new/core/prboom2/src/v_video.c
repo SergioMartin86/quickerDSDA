@@ -65,19 +65,19 @@
 // SetRatio sets the following global variables based on window geometry and
 // user preferences. The integer ratio is hardly used anymore, so further
 // simplification may be in order.
-__STORAGE_MODIFIER dboolean tallscreen;
-unsigned __STORAGE_MODIFIER int ratio_multiplier, ratio_scale;
-__STORAGE_MODIFIER float gl_ratio;
-__STORAGE_MODIFIER int psprite_offset; // Needed for "tallscreen" modes
+dboolean tallscreen;
+unsigned int ratio_multiplier, ratio_scale;
+float gl_ratio;
+int psprite_offset; // Needed for "tallscreen" modes
 
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT];
-__STORAGE_MODIFIER screeninfo_t screens[NUM_SCREENS];
+screeninfo_t screens[NUM_SCREENS];
 
 /* jff 4/24/98 initialize this at runtime */
-__STORAGE_MODIFIER const byte *colrngs[CR_LIMIT];
+const byte *colrngs[CR_LIMIT];
 
-__STORAGE_MODIFIER int usegamma;
+int usegamma;
 
 int V_BloodColor(int blood)
 {
@@ -98,14 +98,14 @@ int V_BloodColor(int blood)
 // so it can be considered GPL as used here, rather than BSD. But,
 // I don't care either way. It is effectively dual-licensed I suppose.
 
-unsigned __STORAGE_MODIFIER int Col2RGB8[65][256];
-__STORAGE_MODIFIER byte RGB32k[32][32][32];
+unsigned int Col2RGB8[65][256];
+byte RGB32k[32][32][32];
 
 #define MAKECOLOR(a) (((a)<<3)|((a)>>2))
 
 void V_InitFlexTranTable(void)
 {
-  static __STORAGE_MODIFIER int flexTranInit = false;
+  static int flexTranInit = false;
 
   if (!flexTranInit)
   {
@@ -625,7 +625,7 @@ static void V_DrawMemPatch(int x, int y, int scrn, const rpatch_t *patch,
 //
 static void FUNC_V_DrawShaded(int scrn, int x, int y, int width, int height, int shade)
 {
-  extern __STORAGE_MODIFIER const lighttable_t **colormaps;
+  extern const lighttable_t **colormaps;
   byte* dest;
   int ix, iy;
 
@@ -660,7 +660,7 @@ static void FUNC_V_DrawNumPatchPrecise(float x, float y, int scrn, int lump,
   V_DrawMemPatch((int)x, (int)y, scrn, R_PatchByNum(lump), cm, flags);
 }
 
-__STORAGE_MODIFIER int currentPaletteIndex = 0;
+int currentPaletteIndex = 0;
 
 void V_TouchPalette(void)
 {
@@ -821,7 +821,7 @@ static void NULL_DrawLine(fline_t* fl, int color) {}
 static void NULL_DrawLineWu(fline_t* fl, int color) {}
 static void NULL_DrawShaded(int scrn, int x, int y, int width, int height, int shade) {}
 
-static __STORAGE_MODIFIER video_mode_t current_videomode = VID_MODESW;
+static video_mode_t current_videomode = VID_MODESW;
 
 V_BeginUIDraw_f V_BeginUIDraw = NULL_BeginUIDraw;
 V_EndUIDraw_f V_EndUIDraw = NULL_EndUIDraw;
@@ -984,7 +984,7 @@ static void WRAP_V_DrawLine(fline_t* fl, int color)
   register int d;
 
 #ifdef RANGECHECK         // killough 2/22/98
-  static __STORAGE_MODIFIER int fuck = 0;
+  static int fuck = 0;
 
   // For debugging only
   if

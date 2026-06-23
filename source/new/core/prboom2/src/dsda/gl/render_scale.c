@@ -25,21 +25,21 @@
 #include "r_main.h"
 #include "st_stuff.h"
 
-__STORAGE_MODIFIER int gl_window_width;
-__STORAGE_MODIFIER int gl_window_height;
-__STORAGE_MODIFIER int gl_viewport_width;
-__STORAGE_MODIFIER int gl_viewport_height;
-__STORAGE_MODIFIER int gl_viewport_x;
-__STORAGE_MODIFIER int gl_viewport_y;
-__STORAGE_MODIFIER int gl_statusbar_height;
-__STORAGE_MODIFIER int gl_scene_width;
-__STORAGE_MODIFIER int gl_scene_height;
-__STORAGE_MODIFIER float gl_scale_x;
-__STORAGE_MODIFIER float gl_scale_y;
-__STORAGE_MODIFIER int gl_letterbox_clear_required = 0;
+int gl_window_width;
+int gl_window_height;
+int gl_viewport_width;
+int gl_viewport_height;
+int gl_viewport_x;
+int gl_viewport_y;
+int gl_statusbar_height;
+int gl_scene_width;
+int gl_scene_height;
+float gl_scale_x;
+float gl_scale_y;
+int gl_letterbox_clear_required = 0;
 
-static __STORAGE_MODIFIER int gl_clear_box_width;
-static __STORAGE_MODIFIER int gl_clear_box_height;
+static int gl_clear_box_width;
+static int gl_clear_box_height;
 
 void dsda_GLGetSDLWindowSize(SDL_Window* sdl_window) {
   SDL_GL_GetDrawableSize(sdl_window, &gl_window_width, &gl_window_height);

@@ -60,10 +60,10 @@
 
 #include "heretic/def.h"
 
-static __STORAGE_MODIFIER mobj_t *tmthing;
-static __STORAGE_MODIFIER mobj_t *tsthing; // hexen
-static __STORAGE_MODIFIER fixed_t tmx;
-static __STORAGE_MODIFIER fixed_t tmy;
+static __STORAGE_MODIFIER mobj_t    *tmthing;
+static __STORAGE_MODIFIER mobj_t    *tsthing; // hexen
+static __STORAGE_MODIFIER fixed_t   tmx;
+static __STORAGE_MODIFIER fixed_t   tmy;
 static __STORAGE_MODIFIER int pe_x; // Pain Elemental position for Lost Soul checks // phares
 static __STORAGE_MODIFIER int pe_y; // Pain Elemental position for Lost Soul checks // phares
 static __STORAGE_MODIFIER int ls_x; // Lost Soul position for Lost Soul checks      // phares
@@ -89,18 +89,18 @@ static __STORAGE_MODIFIER dboolean nofit;
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
 
-__STORAGE_MODIFIER dboolean floatok;
+__STORAGE_MODIFIER dboolean   floatok;
 
 /* killough 11/98: if "felldown" true, object was pushed down ledge */
-__STORAGE_MODIFIER dboolean felldown;
+__STORAGE_MODIFIER dboolean   felldown;
 
 // The tm* items are used to hold information globally, usually for
 // line or object intersection checking
 
-__STORAGE_MODIFIER fixed_t tmbbox[4];  // bounding box for line intersection checks
-__STORAGE_MODIFIER fixed_t tmfloorz;   // floor you'd hit if free to fall
-__STORAGE_MODIFIER fixed_t tmceilingz; // ceiling of sector you're in
-__STORAGE_MODIFIER fixed_t tmdropoffz; // dropoff on other side of line you're crossing
+__STORAGE_MODIFIER fixed_t   tmbbox[4];  // bounding box for line intersection checks
+__STORAGE_MODIFIER fixed_t   tmfloorz;   // floor you'd hit if free to fall
+__STORAGE_MODIFIER fixed_t   tmceilingz; // ceiling of sector you're in
+__STORAGE_MODIFIER fixed_t   tmdropoffz; // dropoff on other side of line you're crossing
 
 // heretic
 __STORAGE_MODIFIER int tmflags;
@@ -112,10 +112,10 @@ __STORAGE_MODIFIER mobj_t *BlockingMobj;
 // keep track of the line that lowers the ceiling,
 // so missiles don't explode against sky hack walls
 
-__STORAGE_MODIFIER line_t *ceilingline;
-__STORAGE_MODIFIER line_t *blockline;    /* killough 8/11/98: blocking linedef */
-__STORAGE_MODIFIER line_t *floorline;    /* killough 8/1/98: Highest touched floor */
-static __STORAGE_MODIFIER int tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
+__STORAGE_MODIFIER line_t        *ceilingline;
+__STORAGE_MODIFIER line_t        *blockline;    /* killough 8/11/98: blocking linedef */
+__STORAGE_MODIFIER line_t        *floorline;    /* killough 8/1/98: Highest touched floor */
+static __STORAGE_MODIFIER int    tmunstuck;     /* killough 8/1/98: whether to allow unsticking */
 
 // keep track of special lines as they are hit,
 // but don't process them until the move is proven valid
@@ -486,7 +486,8 @@ dboolean P_TeleportMove (mobj_t* thing,fixed_t x,fixed_t y, dboolean boss)
 // longer and probably really isn't worth the effort.
 //
 
-static dboolean PIT_CrossLine (line_t* ld)
+static // killough 3/26/98: make static
+dboolean PIT_CrossLine (line_t* ld)
 {
   if (!(ld->flags & ML_TWOSIDED) ||
       (ld->flags & (ML_BLOCKING|ML_BLOCKMONSTERS)))
@@ -541,7 +542,8 @@ static void CheckForDamageSpecial(line_t *line, mobj_t *mo)
 
 static void CheckForPushSpecial(line_t * line, int side, mobj_t * mobj);
 
-static dboolean PIT_CheckLine (line_t* ld)
+static // killough 3/26/98: make static
+dboolean PIT_CheckLine (line_t* ld)
 {
   dboolean rail = false;
 
@@ -1882,11 +1884,12 @@ dboolean P_ThingHeightClip (mobj_t* thing)
 // Allows the player to slide along any angled walls.
 //
 
-static __STORAGE_MODIFIER fixed_t bestslidefrac;
-static __STORAGE_MODIFIER line_t *bestslideline;
-static __STORAGE_MODIFIER mobj_t *slidemo;
-static __STORAGE_MODIFIER fixed_t tmxmove;
-static __STORAGE_MODIFIER fixed_t tmymove;
+/* killough 8/2/98: make variables static */
+static __STORAGE_MODIFIER fixed_t   bestslidefrac;
+static __STORAGE_MODIFIER line_t*   bestslideline;
+static __STORAGE_MODIFIER mobj_t*   slidemo;
+static __STORAGE_MODIFIER fixed_t   tmxmove;
+static __STORAGE_MODIFIER fixed_t   tmymove;
 
 //
 // P_HitSlideLine
@@ -2174,25 +2177,26 @@ void P_SlideMove(mobj_t *mo)
 //
 // P_LineAttack
 //
-__STORAGE_MODIFIER mobj_t* linetarget; // who got hit (or NULL)
-__STORAGE_MODIFIER mobj_t *crosshair_target;
-static __STORAGE_MODIFIER mobj_t *shootthing;
+__STORAGE_MODIFIER mobj_t*   linetarget; // who got hit (or NULL)
+__STORAGE_MODIFIER mobj_t*   crosshair_target;
+static __STORAGE_MODIFIER mobj_t*   shootthing;
 
 /* killough 8/2/98: for more intelligent autoaiming */
 static __STORAGE_MODIFIER uint64_t aim_flags_mask;
 
 // Height if not aiming up or down
-__STORAGE_MODIFIER fixed_t shootz;
+__STORAGE_MODIFIER fixed_t   shootz;
 
-__STORAGE_MODIFIER int la_damage;
-__STORAGE_MODIFIER fixed_t attackrange;
+__STORAGE_MODIFIER int       la_damage;
+__STORAGE_MODIFIER fixed_t   attackrange;
 
-static __STORAGE_MODIFIER fixed_t aimslope;
+static __STORAGE_MODIFIER fixed_t   aimslope;
 
 // slopes to top and bottom of target
+// killough 4/20/98: make static instead of using ones in p_sight.c
 
-static __STORAGE_MODIFIER fixed_t topslope;
-static __STORAGE_MODIFIER fixed_t bottomslope;
+static __STORAGE_MODIFIER fixed_t  topslope;
+static __STORAGE_MODIFIER fixed_t  bottomslope;
 
 
 //
@@ -2614,7 +2618,7 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope,
 // USE LINES
 //
 
-__STORAGE_MODIFIER mobj_t *usething;
+__STORAGE_MODIFIER mobj_t*   usething;
 
 dboolean PTR_UseTraverse (intercept_t* in)
 {
@@ -3210,7 +3214,7 @@ inline static void P_PutSecnode(msecnode_t* node)
 //
 // Maintain a freelist of msecnode_t's to reduce memory allocs and frees.
 
-__STORAGE_MODIFIER msecnode_t *headsecnode = NULL;
+msecnode_t *headsecnode = NULL;
 
 //
 // P_FreeSecNodeList
@@ -3707,18 +3711,18 @@ void P_AppendSpecHit(line_t * ld)
   // e6y: Spechits overrun emulation code
   if (numspechit > 8 && demo_compatibility)
   {
-    spechit_overrun_param_t spechit_overrun_param = {
+     spechit_overrun_param_t spechit_overrun_param = {
       NULL,          // line_t *line;
 
       &spechit,      // line_t **spechit;
-      &numspechit,   // __STORAGE_MODIFIER int *numspechit;
+      &numspechit,   // int *numspechit;
 
-      tmbbox,        // __STORAGE_MODIFIER fixed_t *tmbbox[4];
-      &tmfloorz,     // __STORAGE_MODIFIER fixed_t *tmfloorz;
-      &tmceilingz,   // __STORAGE_MODIFIER fixed_t *tmceilingz;
+      tmbbox,        // fixed_t *tmbbox[4];
+      &tmfloorz,     // fixed_t *tmfloorz;
+      &tmceilingz,   // fixed_t *tmceilingz;
 
-      &crushchange,  // __STORAGE_MODIFIER int *crushchange;
-      &nofit,        // __STORAGE_MODIFIER dboolean *nofit;
+      &crushchange,  // int *crushchange;
+      &nofit,        // dboolean *nofit;
     };
     spechit_overrun_param.line = ld;
     SpechitOverrun(&spechit_overrun_param);

@@ -86,7 +86,7 @@
 #include "dsda/time.h"
 #include "dsda/gl/render_scale.h"
 
-__STORAGE_MODIFIER dboolean window_focused;
+dboolean window_focused;
 
 // Window resize state.
 static void ActivateMouse(void);
@@ -100,9 +100,9 @@ extern const int gl_colorbuffer_bits;
 extern const int gl_depthbuffer_bits;
 
 extern void M_QuitDOOM(int choice);
-__STORAGE_MODIFIER int desired_fullscreen;
-__STORAGE_MODIFIER int exclusive_fullscreen;
-unsigned __STORAGE_MODIFIER int windowid = 0;
+int desired_fullscreen;
+int exclusive_fullscreen;
+unsigned int windowid = 0;
 
 
 dboolean I_WindowFocused(void)
@@ -173,8 +173,8 @@ static void I_UploadNewPalette(int pal, int force)
   // This is used to replace the current 256 colour cmap with a new one
   // Used by 256 colour PseudoColor modes
 
-  static __STORAGE_MODIFIER int cachedgamma;
-  static __STORAGE_MODIFIER size_t num_pals;
+  static int cachedgamma;
+  static size_t num_pals;
   dsda_playpal_t* playpal_data;
 
   if (V_IsOpenGLMode())
@@ -223,8 +223,8 @@ void I_ShutdownGraphics(void)
 {
 }
 
-static __STORAGE_MODIFIER dboolean queue_frame_capture;
-static __STORAGE_MODIFIER dboolean queue_screenshot;
+static dboolean queue_frame_capture;
+static dboolean queue_screenshot;
 
 void I_QueueFrameCapture(void)
 {
@@ -254,7 +254,7 @@ void I_HandleCapture(void)
 //
 // I_FinishUpdate
 //
-static __STORAGE_MODIFIER int newpal = 0;
+static int newpal = 0;
 #define NO_PALETTE_CHANGE 1000
 
 void I_FinishUpdate (void)
@@ -531,7 +531,7 @@ void I_SetWindowIcon(void)
 
 void I_InitGraphics(void)
 {
-  static __STORAGE_MODIFIER int    firsttime=1;
+  static int    firsttime=1;
 
   if (firsttime)
   {
@@ -620,7 +620,7 @@ static void DeactivateMouse(void)
 // Interpolates mouse input to mitigate stuttering
 static void CorrectMouseStutter(int *x, int *y)
 {
-  static __STORAGE_MODIFIER int x_remainder_old, y_remainder_old;
+  static int x_remainder_old, y_remainder_old;
   int x_remainder, y_remainder;
   fixed_t fractic, correction_factor;
 

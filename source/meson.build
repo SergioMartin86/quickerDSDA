@@ -7,5 +7,4 @@ endif
 
 subdir('new')
 
-subdir('new2')
 

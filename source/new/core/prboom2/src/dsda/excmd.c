@@ -25,8 +25,8 @@
 
 #include "excmd.h"
 
-static __STORAGE_MODIFIER dboolean excmd_enabled;
-static __STORAGE_MODIFIER dboolean casual_excmd_features;
+static dboolean excmd_enabled;
+static dboolean casual_excmd_features;
 
 void dsda_EnableExCmd(void) {
   excmd_enabled = true;

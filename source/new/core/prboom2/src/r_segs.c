@@ -56,56 +56,58 @@
 
 // OPTIMIZE: closed two sided lines as single sided
 
+// killough 1/6/98: replaced globals with statics where appropriate
+
 // True if any of the segs textures might be visible.
-static __STORAGE_MODIFIER dboolean segtextured;
-static __STORAGE_MODIFIER dboolean markfloor;      // False if the back side is the same plane.
-static __STORAGE_MODIFIER dboolean markceiling;
-static __STORAGE_MODIFIER dboolean maskedtexture;
-static __STORAGE_MODIFIER int toptexture;
-static __STORAGE_MODIFIER int bottomtexture;
-static __STORAGE_MODIFIER int midtexture;
+static dboolean  segtextured;
+static dboolean  markfloor;      // False if the back side is the same plane.
+static dboolean  markceiling;
+static dboolean  maskedtexture;
+static int      toptexture;
+static int      bottomtexture;
+static int      midtexture;
 
-static __STORAGE_MODIFIER fixed_t toptexheight, midtexheight, bottomtexheight; // cph
+static fixed_t  toptexheight, midtexheight, bottomtexheight; // cph
 
-__STORAGE_MODIFIER angle_t rw_normalangle; // angle to line origin
-__STORAGE_MODIFIER int rw_angle1;
-__STORAGE_MODIFIER fixed_t rw_distance;
-const __STORAGE_MODIFIER lighttable_t    **walllights;
+angle_t         rw_normalangle; // angle to line origin
+int             rw_angle1;
+fixed_t         rw_distance;
+const lighttable_t    **walllights;
 
 //
 // regular wall
 //
-static __STORAGE_MODIFIER int rw_x;
-static __STORAGE_MODIFIER int rw_stopx;
-static __STORAGE_MODIFIER angle_t rw_centerangle;
-static __STORAGE_MODIFIER fixed_t rw_offset;
-static __STORAGE_MODIFIER fixed_t rw_scale;
-static __STORAGE_MODIFIER fixed_t rw_scalestep;
-static __STORAGE_MODIFIER fixed_t rw_midtexturemid;
-static __STORAGE_MODIFIER fixed_t rw_toptexturemid;
-static __STORAGE_MODIFIER fixed_t rw_bottomtexturemid;
-static __STORAGE_MODIFIER int rw_lightlevel;
-static __STORAGE_MODIFIER int worldtop;
-static __STORAGE_MODIFIER int worldbottom;
-static __STORAGE_MODIFIER int worldhigh;
-static __STORAGE_MODIFIER int worldlow;
-static __STORAGE_MODIFIER int64_t pixhigh; // R_WiggleFix
-static __STORAGE_MODIFIER int64_t pixlow; // R_WiggleFix
-static __STORAGE_MODIFIER fixed_t pixhighstep;
-static __STORAGE_MODIFIER fixed_t pixlowstep;
-static __STORAGE_MODIFIER int64_t topfrac; // R_WiggleFix
-static __STORAGE_MODIFIER fixed_t topstep;
-static __STORAGE_MODIFIER int64_t bottomfrac; // R_WiggleFix
-static __STORAGE_MODIFIER fixed_t bottomstep;
-static __STORAGE_MODIFIER int *maskedtexturecol; // dropoff overflow
+static int      rw_x;
+static int      rw_stopx;
+static angle_t  rw_centerangle;
+static fixed_t  rw_offset;
+static fixed_t  rw_scale;
+static fixed_t  rw_scalestep;
+static fixed_t  rw_midtexturemid;
+static fixed_t  rw_toptexturemid;
+static fixed_t  rw_bottomtexturemid;
+static int      rw_lightlevel;
+static int      worldtop;
+static int      worldbottom;
+static int      worldhigh;
+static int      worldlow;
+static int64_t  pixhigh; // R_WiggleFix
+static int64_t  pixlow; // R_WiggleFix
+static fixed_t  pixhighstep;
+static fixed_t  pixlowstep;
+static int64_t  topfrac; // R_WiggleFix
+static fixed_t  topstep;
+static int64_t  bottomfrac; // R_WiggleFix
+static fixed_t  bottomstep;
+static int      *maskedtexturecol; // dropoff overflow
 
-static __STORAGE_MODIFIER int max_rwscale = 64 * FRACUNIT;
-static __STORAGE_MODIFIER int HEIGHTBITS = 12;
-static __STORAGE_MODIFIER int	HEIGHTUNIT = (1 << 12);
-static __STORAGE_MODIFIER int invhgtbits = 4;
+static int	max_rwscale = 64 * FRACUNIT;
+static int	HEIGHTBITS = 12;
+static int	HEIGHTUNIT = (1 << 12);
+static int	invhgtbits = 4;
 
 /* cph - allow crappy fake contrast to be disabled */
-__STORAGE_MODIFIER fake_contrast_mode_t fake_contrast_mode;
+fake_contrast_mode_t fake_contrast_mode;
 
 //
 // R_FixWiggle()
@@ -148,7 +150,7 @@ __STORAGE_MODIFIER fake_contrast_mode_t fake_contrast_mode;
 
 void R_FixWiggle(sector_t *sec)
 {
-  static __STORAGE_MODIFIER int  lastheight = 0;
+  static int  lastheight = 0;
 
   static const struct
   {
@@ -481,7 +483,7 @@ void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2)
 // CALLED: CORE LOOPING ROUTINE.
 //
 
-static __STORAGE_MODIFIER int didsolidcol; /* True if at least one column was marked solid */
+static int didsolidcol; /* True if at least one column was marked solid */
 
 static void R_RenderSegLoop (void)
 {
@@ -737,8 +739,8 @@ void R_StoreWallRange(const int start, const int stop)
   rw_stopx = stop+1;
 
   {     // killough 1/6/98, 2/1/98: remove limit on openings
-    extern __STORAGE_MODIFIER int *openings; // dropoff overflow
-    extern __STORAGE_MODIFIER size_t maxopenings;
+    extern int *openings; // dropoff overflow
+    extern size_t maxopenings;
     size_t pos = lastopening - openings;
     size_t need = (rw_stopx - start)*sizeof(*lastopening) + pos;
     if (need > maxopenings)

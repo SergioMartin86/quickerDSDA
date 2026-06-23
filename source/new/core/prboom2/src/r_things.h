@@ -48,8 +48,8 @@ extern __STORAGE_MODIFIER int *screenheightarray; /* change to MAX_*  */ // drop
 
 /* Vars for R_DrawMaskedColumn */
 
-extern __STORAGE_MODIFIER int *mfloorclip;    // dropoff overflow
-extern __STORAGE_MODIFIER int *mceilingclip;  // dropoff overflow
+extern __STORAGE_MODIFIER int     *mfloorclip;    // dropoff overflow
+extern __STORAGE_MODIFIER int     *mceilingclip;  // dropoff overflow
 extern __STORAGE_MODIFIER fixed_t spryscale;
 extern __STORAGE_MODIFIER int64_t sprtopscreen;
 extern __STORAGE_MODIFIER fixed_t pspriteiscale;

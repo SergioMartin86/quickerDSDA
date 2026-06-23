@@ -112,10 +112,10 @@ typedef struct {
   int   pitch;
 } draw_vars_t;
 
-extern __STORAGE_MODIFIER draw_vars_t drawvars;
+extern draw_vars_t drawvars;
 
-extern __STORAGE_MODIFIER byte playernumtotrans[MAX_MAXPLAYERS]; // CPhipps - what translation table for what player
-extern __STORAGE_MODIFIER byte       *translationtables;
+extern byte playernumtotrans[MAX_MAXPLAYERS]; // CPhipps - what translation table for what player
+extern byte       *translationtables;
 
 R_DrawColumn_f R_GetDrawColumnFunc(enum column_pipeline_e type, enum draw_filter_type_e filterz);
 

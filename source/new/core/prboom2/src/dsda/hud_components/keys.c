@@ -26,9 +26,9 @@ typedef struct {
   dboolean horizontal;
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
-static __STORAGE_MODIFIER int key_patch_num[NUMCARDS];
+static int key_patch_num[NUMCARDS];
 
 static const char* dsda_Key1Name(player_t* player) {
   if (heretic) {

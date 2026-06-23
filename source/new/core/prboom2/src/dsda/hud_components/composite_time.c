@@ -24,10 +24,10 @@ typedef struct {
   char label[8];
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {
-  extern __STORAGE_MODIFIER dboolean dsda_reborn;
+  extern dboolean dsda_reborn;
 
   int total_time;
   int length;

@@ -21,7 +21,7 @@ struct lump
   unsigned int offset;
 };
 
-static unsigned __STORAGE_MODIFIER int numlumps, dirsize;
+static unsigned int numlumps, dirsize;
 static struct lump *dir;
 
 //

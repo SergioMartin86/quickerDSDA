@@ -69,20 +69,20 @@ typedef struct {
   bf_t best_bf[MAX_BF_DEPTH];
 } bf_target_t;
 
-static __STORAGE_MODIFIER bf_t brute_force[MAX_BF_DEPTH];
-static __STORAGE_MODIFIER int bf_depth;
-static __STORAGE_MODIFIER int bf_logictic;
-static __STORAGE_MODIFIER int bf_condition_count;
-static __STORAGE_MODIFIER bf_condition_t bf_condition[MAX_BF_CONDITIONS];
-static long __STORAGE_MODIFIER long bf_volume;
-static long __STORAGE_MODIFIER long bf_volume_max;
-static __STORAGE_MODIFIER dboolean bf_mode;
-static __STORAGE_MODIFIER dboolean bf_nomonsters;
-static __STORAGE_MODIFIER dsda_key_frame_t nomo_key_frame;
-static __STORAGE_MODIFIER bf_target_t bf_target;
-static __STORAGE_MODIFIER ticcmd_t bf_result[MAX_BF_DEPTH];
+static bf_t brute_force[MAX_BF_DEPTH];
+static int bf_depth;
+static int bf_logictic;
+static int bf_condition_count;
+static bf_condition_t bf_condition[MAX_BF_CONDITIONS];
+static long long bf_volume;
+static long long bf_volume_max;
+static dboolean bf_mode;
+static dboolean bf_nomonsters;
+static dsda_key_frame_t nomo_key_frame;
+static bf_target_t bf_target;
+static ticcmd_t bf_result[MAX_BF_DEPTH];
 
-__STORAGE_MODIFIER const char *dsda_bf_attribute_names[dsda_bf_attribute_max] = {
+const char* dsda_bf_attribute_names[dsda_bf_attribute_max] = {
   [dsda_bf_x] = "x",
   [dsda_bf_y] = "y",
   [dsda_bf_z] = "z",
@@ -102,13 +102,13 @@ __STORAGE_MODIFIER const char *dsda_bf_attribute_names[dsda_bf_attribute_max] = 
   [dsda_bf_bmapwidth] = "bmw",
 };
 
-__STORAGE_MODIFIER const char *dsda_bf_misc_names[dsda_bf_misc_max] = {
+const char* dsda_bf_misc_names[dsda_bf_misc_max] = {
   "line skip",
   "line activation",
   "have item",
 };
 
-__STORAGE_MODIFIER const char *dsda_bf_operator_names[dsda_bf_operator_max] = {
+const char* dsda_bf_operator_names[dsda_bf_operator_max] = {
   [dsda_bf_less_than] = "<",
   [dsda_bf_less_than_or_equal_to] = "<=",
   [dsda_bf_greater_than] = ">",
@@ -117,13 +117,13 @@ __STORAGE_MODIFIER const char *dsda_bf_operator_names[dsda_bf_operator_max] = {
   [dsda_bf_not_equal_to] = "!="
 };
 
-__STORAGE_MODIFIER const char *dsda_bf_limit_names[dsda_bf_limit_max] = {
+const char* dsda_bf_limit_names[dsda_bf_limit_max] = {
   "acap",
   "max",
   "min",
 };
 
-__STORAGE_MODIFIER const char *dsda_bf_item_names[dsda_bf_item_max] = {
+const char* dsda_bf_item_names[dsda_bf_item_max] = {
   [dsda_bf_red_key_card] = "rkc",
   [dsda_bf_yellow_key_card] = "ykc",
   [dsda_bf_blue_key_card] = "bkc",
@@ -233,8 +233,8 @@ static void dsda_PrintBFProgress(void) {
 #define BF_FAILURE 0
 #define BF_SUCCESS 1
 
-static __STORAGE_MODIFIER const char *bf_result_text[2] = { "FAILURE", "SUCCESS" };
-static __STORAGE_MODIFIER dboolean brute_force_ended;
+static const char* bf_result_text[2] = { "FAILURE", "SUCCESS" };
+static dboolean brute_force_ended;
 
 dboolean dsda_BruteForceEnded(void) {
   return brute_force_ended;
@@ -260,7 +260,7 @@ static void dsda_EndBF(int result) {
 }
 
 static fixed_t dsda_BFAttribute(int attribute) {
-  extern __STORAGE_MODIFIER int bmapwidth;
+  extern int bmapwidth;
 
   player_t* player;
 
@@ -281,7 +281,7 @@ static fixed_t dsda_BFAttribute(int attribute) {
       return P_PlayerSpeed(player);
     case dsda_bf_damage:
       {
-        extern __STORAGE_MODIFIER int player_damage_last_tic;
+        extern int player_damage_last_tic;
 
         return player_damage_last_tic;
       }

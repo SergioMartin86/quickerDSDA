@@ -23,9 +23,9 @@ typedef struct {
   dsda_text_t component;
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
-static __STORAGE_MODIFIER char *free_text;
+static char* free_text;
 
 void dsda_UpdateFreeText(void) {
   int i, j;

@@ -62,9 +62,9 @@
 // STATUS BAR DATA
 //
 
-__STORAGE_MODIFIER int ST_SCALED_HEIGHT;
-__STORAGE_MODIFIER int ST_SCALED_WIDTH;
-__STORAGE_MODIFIER int ST_SCALED_OFFSETX;
+int ST_SCALED_HEIGHT;
+int ST_SCALED_WIDTH;
+int ST_SCALED_OFFSETX;
 
 // Palette indices.
 // For damage/bonus red-/gold-shifts
@@ -257,108 +257,122 @@ __STORAGE_MODIFIER int ST_SCALED_OFFSETX;
 // killough 2/8/98: weapon info position macros UNUSED, removed here
 
 // main player in game
-static __STORAGE_MODIFIER player_t *plyr;
-static __STORAGE_MODIFIER dboolean st_firsttime;
-static __STORAGE_MODIFIER int veryfirsttime = 1;
-static __STORAGE_MODIFIER unsigned int st_clock;
-static __STORAGE_MODIFIER dboolean st_statusbaron;
-static __STORAGE_MODIFIER dboolean st_notdeathmatch;
-static __STORAGE_MODIFIER dboolean st_armson;
+static player_t *plyr;
+
+// ST_Start() has just been called
+static dboolean st_firsttime;
+
+// used to execute ST_Init() only once
+static int veryfirsttime = 1;
+
+// CPhipps - no longer do direct PLAYPAL handling here
+
+// used for timing
+static unsigned int st_clock;
+
+// whether left-side main status bar is active
+static dboolean st_statusbaron;
 
 // !deathmatch
-static __STORAGE_MODIFIER dboolean st_fragson;
+static dboolean st_notdeathmatch;
+
+// !deathmatch && st_statusbaron
+static dboolean st_armson;
+
+// !deathmatch
+static dboolean st_fragson;
 
 // 0-9, tall numbers
-static __STORAGE_MODIFIER patchnum_t tallnum[10];
+static patchnum_t tallnum[10];
 
 // tall % sign
-static __STORAGE_MODIFIER patchnum_t tallpercent;
+static patchnum_t tallpercent;
 
 // 0-9, short, yellow (,different!) numbers
-static __STORAGE_MODIFIER patchnum_t shortnum[10];
+static patchnum_t shortnum[10];
 
 // 3 key-cards, 3 skulls, 3 card/skull combos
 // jff 2/24/98 extend number of patches by three skull/card combos
-static __STORAGE_MODIFIER patchnum_t keys[DOOM_NUMCARDS+3];
+static patchnum_t keys[DOOM_NUMCARDS+3];
 
 // face status patches
-static __STORAGE_MODIFIER patchnum_t faces[ST_NUMFACES];
+static patchnum_t faces[ST_NUMFACES];
 
 // face background
-static __STORAGE_MODIFIER patchnum_t faceback; // CPhipps - single background, translated for different players
+static patchnum_t faceback; // CPhipps - single background, translated for different players
 
 //e6y: status bar background
-__STORAGE_MODIFIER patchnum_t stbarbg;
-__STORAGE_MODIFIER patchnum_t grnrock;
-__STORAGE_MODIFIER patchnum_t brdr_b;
+patchnum_t stbarbg;
+patchnum_t grnrock;
+patchnum_t brdr_b;
 
 // main bar right
-static __STORAGE_MODIFIER patchnum_t armsbg;
+static patchnum_t armsbg;
 
 // weapon ownership patches
-static __STORAGE_MODIFIER patchnum_t arms[6][2];
+static patchnum_t arms[6][2];
 
 // ready-weapon widget
-static __STORAGE_MODIFIER st_number_t w_ready;
+static st_number_t w_ready;
 
  // in deathmatch only, summary of frags stats
-static __STORAGE_MODIFIER st_number_t w_frags;
+static st_number_t w_frags;
 
 // health widget
-static __STORAGE_MODIFIER st_percent_t w_health;
+static st_percent_t w_health;
 
 // weapon ownership widgets
-static __STORAGE_MODIFIER st_multicon_t w_arms[6];
+static st_multicon_t w_arms[6];
 
 // face status widget
-static __STORAGE_MODIFIER st_multicon_t w_faces;
+static st_multicon_t w_faces;
 
 // keycard widgets
-static __STORAGE_MODIFIER st_multicon_t w_keyboxes[3];
+static st_multicon_t w_keyboxes[3];
 
 // armor widget
-static __STORAGE_MODIFIER st_percent_t  w_armor;
+static st_percent_t  w_armor;
 
 // ammo widgets
-static __STORAGE_MODIFIER st_number_t   w_ammo[4];
+static st_number_t   w_ammo[4];
 
 // max ammo widgets
-static __STORAGE_MODIFIER st_number_t   w_maxammo[4];
+static st_number_t   w_maxammo[4];
 
  // number of frags so far in deathmatch
-static __STORAGE_MODIFIER int st_fragscount;
+static int      st_fragscount;
 
 // used to use appopriately pained face
-static __STORAGE_MODIFIER int st_oldhealth = -1;
+static int      st_oldhealth = -1;
 
 // used for evil grin
-static __STORAGE_MODIFIER dboolean oldweaponsowned[NUMWEAPONS];
+static dboolean  oldweaponsowned[NUMWEAPONS];
 
  // count until face changes
-static __STORAGE_MODIFIER int st_facecount = 0;
+static int      st_facecount = 0;
 
 // current face index, used by w_faces
-static __STORAGE_MODIFIER int st_faceindex = 0;
+static int      st_faceindex = 0;
 
 // holds key-type for each key box on bar
-static __STORAGE_MODIFIER int keyboxes[3];
+static int      keyboxes[3];
 
 // a random number per tick
-static __STORAGE_MODIFIER int st_randomnumber;
+static int      st_randomnumber;
 
-extern __STORAGE_MODIFIER char *mapnames[];
+extern char     *mapnames[];
 
-static __STORAGE_MODIFIER int cr_health_bad;
-static __STORAGE_MODIFIER int cr_health_warning;
-static __STORAGE_MODIFIER int cr_health_ok;
-static __STORAGE_MODIFIER int cr_health_super;
-static __STORAGE_MODIFIER int cr_armor_zero;
-static __STORAGE_MODIFIER int cr_armor_one;
-static __STORAGE_MODIFIER int cr_armor_two;
-static __STORAGE_MODIFIER int cr_ammo_bad;
-static __STORAGE_MODIFIER int cr_ammo_warning;
-static __STORAGE_MODIFIER int cr_ammo_ok;
-static __STORAGE_MODIFIER int cr_ammo_full;
+static int cr_health_bad;
+static int cr_health_warning;
+static int cr_health_ok;
+static int cr_health_super;
+static int cr_armor_zero;
+static int cr_armor_one;
+static int cr_armor_two;
+static int cr_ammo_bad;
+static int cr_ammo_warning;
+static int cr_ammo_ok;
+static int cr_ammo_full;
 
 //
 // STATUS BAR CODE
@@ -447,8 +461,8 @@ dboolean ST_Responder(event_t *ev)
 
 static int ST_calcPainOffset(void)
 {
-  static __STORAGE_MODIFIER int lastcalc;
-  static __STORAGE_MODIFIER int oldhealth = -1;
+  static int lastcalc;
+  static int oldhealth = -1;
   int health = plyr->health > 100 ? 100 : plyr->health;
 
   if (health != oldhealth)
@@ -471,8 +485,8 @@ static void ST_updateFaceWidget(void)
   int         i;
   angle_t     badguyangle;
   angle_t     diffang;
-  static __STORAGE_MODIFIER int  lastattackdown = -1;
-  static __STORAGE_MODIFIER int  priority = 0;
+  static int  lastattackdown = -1;
+  static int  priority = 0;
   dboolean     doevilgrin;
 
   if (priority < 10)
@@ -655,11 +669,11 @@ static void ST_updateFaceWidget(void)
 
 }
 
-__STORAGE_MODIFIER int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
+int sts_traditional_keys; // killough 2/28/98: traditional status bar keys
 
 static void ST_updateWidgets(void)
 {
-  static __STORAGE_MODIFIER int  largeammo = 1994; // means "n/a"
+  static int  largeammo = 1994; // means "n/a"
   int         i;
 
   // must redirect the pointer if the ready weapon has changed.
@@ -670,6 +684,8 @@ static void ST_updateWidgets(void)
   else
     w_ready.num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
   //{
+  // static int tic=0;
+  // static int dir=-1;
   // if (!(tic&15))
   //   plyr->ammo[weaponinfo[plyr->readyweapon].ammo]+=dir;
   // if (plyr->ammo[weaponinfo[plyr->readyweapon].ammo] == -100)
@@ -727,7 +743,7 @@ void ST_Ticker(void)
   st_oldhealth = plyr->health;
 }
 
-__STORAGE_MODIFIER int st_palette = 0;
+int st_palette = 0;
 
 static void ST_doPaletteStuff(void)
 {
@@ -1178,7 +1194,7 @@ static void ST_createWidgets(void)
                 ST_MAXAMMO3WIDTH);
 }
 
-static __STORAGE_MODIFIER dboolean st_stopped = true;
+static dboolean st_stopped = true;
 
 void ST_Start(void)
 {

@@ -93,13 +93,13 @@ typedef struct
 // killough 4/17/98: make firstcolormaplump,lastcolormaplump external
 __STORAGE_MODIFIER int firstcolormaplump, lastcolormaplump;      // killough 4/17/98
 
-__STORAGE_MODIFIER int firstflat, lastflat, numflats;
-__STORAGE_MODIFIER int firstspritelump, lastspritelump, numspritelumps;
-__STORAGE_MODIFIER int numtextures;
+__STORAGE_MODIFIER int       firstflat, lastflat, numflats;
+__STORAGE_MODIFIER int       firstspritelump, lastspritelump, numspritelumps;
+__STORAGE_MODIFIER int       numtextures;
 __STORAGE_MODIFIER texture_t **textures; // proff - 04/05/2000 removed static for OpenGL
 __STORAGE_MODIFIER fixed_t   *textureheight; //needed for texture pegging (and TFE fix - killough)
-__STORAGE_MODIFIER int *flattranslation;             // for global animation
-__STORAGE_MODIFIER int *texturetranslation;
+__STORAGE_MODIFIER int       *flattranslation;             // for global animation
+__STORAGE_MODIFIER int       *texturetranslation;
 
 //
 // R_GetTextureColumn
@@ -530,6 +530,8 @@ static inline void precache_lump(int l)
 
 void R_PrecacheLevel(void)
 {
+  /* [min-headless neuter] */ return;  /* precache only loads rendering graphics lumps; physics-neutral */
+
   register int i;
   register byte *hitlist;
 

@@ -53,22 +53,22 @@ typedef struct
 
 static void P_LightningFlash(void);
 
-extern __STORAGE_MODIFIER fixed_t Sky1ColumnOffset;
-extern __STORAGE_MODIFIER fixed_t Sky2ColumnOffset;
-extern __STORAGE_MODIFIER dboolean DoubleSky;
-extern __STORAGE_MODIFIER short numlinespecials;
-extern __STORAGE_MODIFIER line_t *linespeciallist[];
+extern fixed_t Sky1ColumnOffset;
+extern fixed_t Sky2ColumnOffset;
+extern dboolean DoubleSky;
+extern short numlinespecials;
+extern line_t *linespeciallist[];
 
-__STORAGE_MODIFIER fixed_t Sky1ScrollDelta;
-__STORAGE_MODIFIER fixed_t Sky2ScrollDelta;
+fixed_t Sky1ScrollDelta;
+fixed_t Sky2ScrollDelta;
 
-__STORAGE_MODIFIER animDef_t AnimDefs[MAX_ANIM_DEFS];
-static __STORAGE_MODIFIER frameDef_t FrameDefs[MAX_FRAME_DEFS];
-static __STORAGE_MODIFIER int AnimDefCount;
-static __STORAGE_MODIFIER dboolean LevelHasLightning;
-__STORAGE_MODIFIER int NextLightningFlash;
-__STORAGE_MODIFIER int LightningFlash;
-static __STORAGE_MODIFIER int *LightningLightLevels;
+animDef_t AnimDefs[MAX_ANIM_DEFS];
+static frameDef_t FrameDefs[MAX_FRAME_DEFS];
+static int AnimDefCount;
+static dboolean LevelHasLightning;
+int NextLightningFlash;
+int LightningFlash;
+static int *LightningLightLevels;
 
 void P_AnimateCompatibleSurfaces(void)
 {

@@ -20,7 +20,7 @@
 
 #include "pause.h"
 
-static __STORAGE_MODIFIER dboolean paused;
+static dboolean paused;
 
 dboolean dsda_Paused(void) {
   return paused != 0;

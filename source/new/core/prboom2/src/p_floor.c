@@ -1587,7 +1587,7 @@ int EV_DoFloorAndCeiling(line_t * line, byte * args, dboolean raise)
 #define STAIR_SECTOR_TYPE       26
 #define STAIR_QUEUE_SIZE        32
 
-struct
+__STORAGE_MODIFIER struct
 {
     sector_t *sector;
     int type;

@@ -43,7 +43,7 @@ static __STORAGE_MODIFIER doom_mapinfo_cluster_t* next_cluster;
 static __STORAGE_MODIFIER doom_mapinfo_cluster_t* current_cluster;
 static __STORAGE_MODIFIER const doom_mapinfo_map_next_t* end_data;
 
-static doom_mapinfo_map_next_t default_end_data = {
+static __STORAGE_MODIFIER doom_mapinfo_map_next_t default_end_data = {
   .end = dmi_end_game_cast
 };
 
@@ -345,13 +345,13 @@ int dsda_DoomInterMusic(int* music_index, int* music_lump) {
   return true;
 }
 
-extern __STORAGE_MODIFIER int finalestage;
-extern __STORAGE_MODIFIER int finalecount;
-extern const __STORAGE_MODIFIER char *finaletext;
-extern const __STORAGE_MODIFIER char *finaleflat;
-extern const __STORAGE_MODIFIER char *finalepatch;
-extern __STORAGE_MODIFIER int acceleratestage;
-extern __STORAGE_MODIFIER int midstage;
+extern int finalestage;
+extern int finalecount;
+extern const char* finaletext;
+extern const char* finaleflat;
+extern const char* finalepatch;
+extern int acceleratestage;
+extern int midstage;
 
 // TODO: use end_game everywhere and collapse all the finale implementations
 
@@ -658,9 +658,9 @@ int dsda_DoomBorderTexture(const char** border_texture) {
 }
 
 int dsda_DoomPrepareEntering(void) {
-  extern const __STORAGE_MODIFIER char *el_levelname;
-  extern const __STORAGE_MODIFIER char *el_levelpic;
-  extern const __STORAGE_MODIFIER char *el_author;
+  extern const char *el_levelname;
+  extern const char *el_levelpic;
+  extern const char *el_author;
 
   if (!next_map)
     return false;
@@ -680,9 +680,9 @@ int dsda_DoomPrepareEntering(void) {
 }
 
 int dsda_DoomPrepareFinished(void) {
-  extern const __STORAGE_MODIFIER char *lf_levelname;
-  extern const __STORAGE_MODIFIER char *lf_levelpic;
-  extern const __STORAGE_MODIFIER char *lf_author;
+  extern const char *lf_levelname;
+  extern const char *lf_levelpic;
+  extern const char *lf_author;
 
   if (!last_map)
     return false;

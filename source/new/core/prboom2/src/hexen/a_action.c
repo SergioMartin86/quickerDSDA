@@ -30,7 +30,7 @@
 
 #include "a_action.h"
 
-__STORAGE_MODIFIER int orbitTableX[256] = {
+int orbitTableX[256] = {
     983025, 982725, 981825, 980340, 978255, 975600, 972330, 968490,
     964065, 959070, 953475, 947325, 940590, 933300, 925440, 917025,
     908055, 898545, 888495, 877905, 866775, 855135, 842985, 830310,
@@ -65,7 +65,7 @@ __STORAGE_MODIFIER int orbitTableX[256] = {
     964215, 968625, 972450, 975690, 978330, 980400, 981870, 982740
 };
 
-__STORAGE_MODIFIER int orbitTableY[256] = {
+int orbitTableY[256] = {
     375, 24495, 48600, 72690, 96720, 120705, 144600, 168420,
     192150, 215745, 239220, 262545, 285720, 308715, 331530, 354135,
     376530, 398700, 420630, 442320, 463725, 484860, 505695, 526230,
@@ -100,7 +100,7 @@ __STORAGE_MODIFIER int orbitTableY[256] = {
     -191400, -167685, -143865, -119955, -95970, -71940, -47850, -23745
 };
 
-extern __STORAGE_MODIFIER fixed_t FloatBobOffsets[64];
+extern fixed_t FloatBobOffsets[64];
 
 void A_PotteryExplode(mobj_t * actor)
 {
@@ -602,7 +602,7 @@ dboolean A_LocalQuake(byte * args, mobj_t * actor)
     return (success);
 }
 
-__STORAGE_MODIFIER int localQuakeHappening[MAX_MAXPLAYERS];
+int localQuakeHappening[MAX_MAXPLAYERS];
 
 void A_Quake(mobj_t * actor)
 {

@@ -204,7 +204,7 @@ static void P_BringUpWeapon(player_t *player)
 // in DOOM2 to bring up the weapon, i.e. 6 = plasma gun. These    //    |
 // are NOT the wp_* constants.                                    //    V
 
-__STORAGE_MODIFIER int weapon_preferences[2][NUMWEAPONS+1] = {
+int weapon_preferences[2][NUMWEAPONS+1] = {
   {6, 9, 4, 3, 2, 8, 5, 7, 1, 0},  // !compatibility preferences
   {6, 9, 4, 3, 2, 8, 5, 7, 1, 0},  //  compatibility preferences
 };
@@ -1560,7 +1560,7 @@ void P_MovePsprites(player_t *player)
 #define MAX_MACE_SPOTS 8
 
 static __STORAGE_MODIFIER int MaceSpotCount;
-static struct
+static __STORAGE_MODIFIER struct
 {
     fixed_t x;
     fixed_t y;
@@ -2556,7 +2556,7 @@ void P_CloseWeapons(void)
 
 extern __STORAGE_MODIFIER fixed_t FloatBobOffsets[64];
 
-static int WeaponManaUse[NUMCLASSES][HEXEN_NUMWEAPONS] = {
+static __STORAGE_MODIFIER int WeaponManaUse[NUMCLASSES][HEXEN_NUMWEAPONS] = {
     [PCLASS_FIGHTER] = {0, 2, 3, 14},
                        {0, 1, 4, 18},
                        {0, 3, 5, 15},

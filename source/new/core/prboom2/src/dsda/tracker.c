@@ -28,8 +28,8 @@
 
 dsda_tracker_t dsda_tracker[TRACKER_LIMIT];
 
-static __STORAGE_MODIFIER int tracker_map;
-static __STORAGE_MODIFIER int tracker_episode;
+static int tracker_map;
+static int tracker_episode;
 
 static int dsda_FindTracker(int type, int id) {
   int i;
@@ -123,7 +123,7 @@ static void dsda_ParseCommandlineTrackers(int arg_id, dboolean (*track)(int)) {
 }
 
 void dsda_ResetTrackers(void) {
-  static __STORAGE_MODIFIER dboolean first_time = true;
+  static dboolean first_time = true;
 
   if (first_time) {
     first_time = false;

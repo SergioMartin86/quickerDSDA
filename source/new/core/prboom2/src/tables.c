@@ -31,15 +31,15 @@
  *      Do not try to look them up :-).
  *      In the order of appearance:
  *
- *      __STORAGE_MODIFIER int finetangent[4096]   - Tangens LUT.
+ *      int finetangent[4096]   - Tangens LUT.
  *       Should work with BAM fairly well (12 of 16bit,
  *      effectively, by shifting).
  *
- *      __STORAGE_MODIFIER int finesine[10240]             - Sine lookup.
+ *      int finesine[10240]             - Sine lookup.
  *       Guess what, serves as cosine, too.
  *       Remarkable thing is, how to use BAMs with this?
  *
- *      __STORAGE_MODIFIER int tantoangle[2049]    - ArcTan LUT,
+ *      int tantoangle[2049]    - ArcTan LUT,
  *        maps tan(angle) to angle fast. Gotta search.
  *
  *-----------------------------------------------------------------------------
@@ -75,13 +75,13 @@ int SlopeDivEx(unsigned int num, unsigned int den)
   return ans <= SLOPERANGE ? (int)ans : SLOPERANGE;
 }
 
-fixed_t finetangent[4096];
+__STORAGE_MODIFIER fixed_t finetangent[4096];
 
 //const fixed_t *const finecosine = &finesine[FINEANGLES/4];
 
 fixed_t finesine[10240];
 
-angle_t tantoangle[2049];
+__STORAGE_MODIFIER angle_t tantoangle[2049];
 
 #include "m_swap.h"
 #include "lprintf.h"

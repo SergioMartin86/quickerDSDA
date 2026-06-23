@@ -139,14 +139,14 @@ __STORAGE_MODIFIER dboolean nosfxparm;
 __STORAGE_MODIFIER dboolean nomusicparm;
 
 //jff 4/18/98
-extern __STORAGE_MODIFIER dboolean inhelpscreens;
-extern __STORAGE_MODIFIER dboolean BorderNeedRefresh;
+extern dboolean inhelpscreens;
+extern dboolean BorderNeedRefresh;
 
 extern __STORAGE_MODIFIER dboolean enableOutput;
 
-__STORAGE_MODIFIER int startskill;
-__STORAGE_MODIFIER int startepisode;
-__STORAGE_MODIFIER int startmap;
+__STORAGE_MODIFIER int     startskill;
+__STORAGE_MODIFIER int     startepisode;
+__STORAGE_MODIFIER int     startmap;
 __STORAGE_MODIFIER dboolean autostart;
 __STORAGE_MODIFIER FILE    *debugfile;
 
@@ -312,7 +312,7 @@ static void D_Wipe(void)
 //
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
-__STORAGE_MODIFIER gamestate_t wipegamestate = GS_DEMOSCREEN;
+__STORAGE_MODIFIER gamestate_t    wipegamestate = GS_DEMOSCREEN;
 extern __STORAGE_MODIFIER dboolean setsizeneeded;
 
 static void D_DrawPause(void)
@@ -623,8 +623,8 @@ static void D_DoomLoop(void)
 //  DEMO LOOP
 //
 
-static __STORAGE_MODIFIER int demosequence;         // killough 5/2/98: made static
-static __STORAGE_MODIFIER int pagetic;
+static __STORAGE_MODIFIER int  demosequence;         // killough 5/2/98: made static
+static __STORAGE_MODIFIER int  pagetic;
 static __STORAGE_MODIFIER const char *pagename; // CPhipps - const
 __STORAGE_MODIFIER dboolean bfgedition = 0;
 
@@ -715,9 +715,9 @@ static void D_DrawTitle2(const char *name)
 /* killough 11/98: tabulate demo sequences
  */
 
-extern const demostate_t (*demostates)[4];
+extern __STORAGE_MODIFIER const demostate_t (*demostates)[4];
 
-const demostate_t doom_demostates[][4] =
+__STORAGE_MODIFIER const demostate_t doom_demostates[][4] =
 {
   {
     {D_DrawTitle1, "TITLEPIC"},
@@ -1564,7 +1564,7 @@ static void HandlePlayback(void)
   dsda_LoadExDemo(file);
 }
 
-__STORAGE_MODIFIER const char *doomverstr = "Unknown";
+__STORAGE_MODIFIER const char* doomverstr = "Unknown";
 
 static void EvaluateDoomVerStr(void)
 {
@@ -1986,7 +1986,7 @@ void D_DoomMainSetup(void)
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "S_Init: Setting up sound.\n");
-  // S_Init();
+  S_Init();
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_DEBUG, "dsda_InitFont: Loading the hud fonts.\n");
@@ -2126,8 +2126,8 @@ void headlessClearTickCommand()
 
 void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, int turningSpeed, int fire, int action, int weapon, int automap, int lookfly, int artifact, int jump, int endPlayer)
 {
-  if (forwardSpeed != -127)  local_cmds[playerId].forwardmove = forwardSpeed;
-  if (strafingSpeed != -127) local_cmds[playerId].sidemove    = strafingSpeed;
+  local_cmds[playerId].forwardmove = forwardSpeed;
+  local_cmds[playerId].sidemove    = strafingSpeed;
   local_cmds[playerId].angleturn   = (shorttics || !longtics) ? turningSpeed << 8 : turningSpeed;
 
   if (fire == 1)    local_cmds[playerId].buttons |= 0b00000001;
@@ -2146,4 +2146,13 @@ void headlessSetTickCommand(int playerId, int forwardSpeed, int strafingSpeed, i
   if (jump == 1)      local_cmds[playerId].arti |= 0b10000000;
 
   // printf("ForwardSpeed: %d - sideMove:     %d - angleTurn:    %d - buttons: %u\n", forwardSpeed, strafingSpeed, turningSpeed, local_cmds[playerId].buttons);
+}
+/* deglobalizer: master per-thread TLS pointer initializer; called
+   once per thread from the headless host after headlessMain. */
+void __deglob_init_tls(void)
+{
+  extern void __deglob_tls_init_options_c(void);
+  extern void __deglob_tls_init_p_maputl_c(void);
+  __deglob_tls_init_options_c();
+  __deglob_tls_init_p_maputl_c();
 }

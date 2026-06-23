@@ -593,7 +593,7 @@ static void cheat_massacre()    // jff 2/01/98 kill all monsters
 
 void M_CheatIDDT(void)
 {
-  extern __STORAGE_MODIFIER int dsda_reveal_map;
+  extern int dsda_reveal_map;
 
   dsda_TrackFeature(uf_iddt);
 
@@ -610,7 +610,7 @@ static void cheat_ddt()
 
 static void cheat_reveal_secret()
 {
-  static __STORAGE_MODIFIER int last_secret = -1;
+  static int last_secret = -1;
 
   if (automap_input)
   {
@@ -649,7 +649,7 @@ static void cheat_reveal_secret()
 
 static void cheat_cycle_mobj(mobj_t **last_mobj, int *last_count, int flags, int alive)
 {
-  extern __STORAGE_MODIFIER int init_thinkers_count;
+  extern int init_thinkers_count;
   thinker_t *th, *start_th;
 
   // If the thinkers have been wiped, addresses are invalid
@@ -690,8 +690,8 @@ static void cheat_reveal_kill()
 {
   if (automap_input)
   {
-    static __STORAGE_MODIFIER int last_count;
-    static __STORAGE_MODIFIER mobj_t *last_mobj;
+    static int last_count;
+    static mobj_t *last_mobj;
 
     dsda_TrackFeature(uf_iddt);
 
@@ -703,8 +703,8 @@ static void cheat_reveal_item()
 {
   if (automap_input)
   {
-    static __STORAGE_MODIFIER int last_count;
-    static __STORAGE_MODIFIER mobj_t *last_mobj;
+    static int last_count;
+    static mobj_t *last_mobj;
 
     dsda_TrackFeature(uf_iddt);
 
@@ -886,7 +886,7 @@ static dboolean M_CheatAllowed(int when)
 
 static void cht_InitCheats(void)
 {
-  static __STORAGE_MODIFIER int init = false;
+  static int init = false;
 
   if (!init)
   {
@@ -956,7 +956,7 @@ static int M_FindCheats(int key)
       {
         if (cht->param_chars_read)
         {
-          static __STORAGE_MODIFIER char argbuf[CHEAT_ARGS_MAX + 1];
+          static char argbuf[CHEAT_ARGS_MAX + 1];
 
           // process the arg buffer
           memcpy(argbuf, cht->parameter_buf, -cht->arg);
@@ -1267,7 +1267,7 @@ static void cheat_script(char buf[3])
   int script;
   byte script_args[3];
   int tens, ones;
-  static __STORAGE_MODIFIER char textBuffer[40];
+  static char textBuffer[40];
 
   if (!map_format.acs) return;
 

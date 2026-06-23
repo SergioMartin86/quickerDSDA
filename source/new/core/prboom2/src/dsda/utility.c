@@ -357,7 +357,7 @@ fixed_t dsda_FloatToFixed(float x)
   return (fixed_t) (x * FRACUNIT);
 }
 
-static int pow10[8] = {
+static __STORAGE_MODIFIER int pow10[8] = {
   10,
   100,
   1000,

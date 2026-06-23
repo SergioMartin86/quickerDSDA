@@ -46,9 +46,9 @@
 // Command line parameters.
 //
 
-extern  __STORAGE_MODIFIER dboolean nomonsters; // checkparm of -nomonsters
-extern  __STORAGE_MODIFIER dboolean respawnparm;  // checkparm of -respawn
-extern  __STORAGE_MODIFIER dboolean fastparm; // checkparm of -fast
+extern __STORAGE_MODIFIER  dboolean nomonsters; // checkparm of -nomonsters
+extern __STORAGE_MODIFIER  dboolean respawnparm;  // checkparm of -respawn
+extern __STORAGE_MODIFIER  dboolean fastparm; // checkparm of -fast
 
 // -----------------------------------------------------
 // Game Mode - identify IWAD as shareware, retail etc.
@@ -61,7 +61,7 @@ extern __STORAGE_MODIFIER const char *doomverstr;
 extern char *VANILLA_MAP_LUMP_NAME(int e, int m);
 
 // Set if homebrew PWAD stuff has been added.
-extern  __STORAGE_MODIFIER dboolean modifiedgame;
+extern __STORAGE_MODIFIER  dboolean modifiedgame;
 
 // CPhipps - new compatibility handling
 extern __STORAGE_MODIFIER complevel_t compatibility_level;
@@ -127,26 +127,26 @@ enum {
 };
 
 extern __STORAGE_MODIFIER int comp[MBF_COMP_TOTAL];
-extern __STORAGE_MODIFIER int default_comperr[COMPERR_NUM];
+extern int default_comperr[COMPERR_NUM];
 
 // -------------------------------------------
 // Language.
-extern  __STORAGE_MODIFIER Language_t   language;
+extern __STORAGE_MODIFIER  Language_t   language;
 
 // -------------------------------------------
 // Selected skill type, map etc.
 //
 
 // Defaults for menu, methinks.
-extern  __STORAGE_MODIFIER int startskill;
-extern  __STORAGE_MODIFIER int startepisode;
+extern __STORAGE_MODIFIER  int   startskill;
+extern __STORAGE_MODIFIER  int             startepisode;
 
-extern  __STORAGE_MODIFIER dboolean autostart;
+extern __STORAGE_MODIFIER  dboolean   autostart;
 
 // Selected by user.
-extern  __STORAGE_MODIFIER int gameskill;
-extern  __STORAGE_MODIFIER int gameepisode;
-extern  __STORAGE_MODIFIER int gamemap;
+extern __STORAGE_MODIFIER  int   gameskill;
+extern __STORAGE_MODIFIER  int   gameepisode;
+extern __STORAGE_MODIFIER  int   gamemap;
 
 typedef struct
 {
@@ -162,13 +162,13 @@ extern __STORAGE_MODIFIER leave_data_t leave_data;
 #define LEAVE_VICTORY -1
 
 // Netgame? Only true if >1 player.
-extern  __STORAGE_MODIFIER dboolean netgame;
+extern __STORAGE_MODIFIER  dboolean netgame;
 
 // Flag: true only if started as net deathmatch.
 // An enum might handle altdeath/cooperative better.
-extern  __STORAGE_MODIFIER dboolean deathmatch;
+extern __STORAGE_MODIFIER  dboolean deathmatch;
 
-extern __STORAGE_MODIFIER int solo_net;
+extern int solo_net;
 extern __STORAGE_MODIFIER dboolean coop_spawns;
 
 extern __STORAGE_MODIFIER dboolean randomclass;
@@ -184,17 +184,17 @@ extern __STORAGE_MODIFIER dboolean randomclass;
 //  Sound FX volume has default, 0 - 15
 //  Music volume has default, 0 - 15
 // These are multiplied by 8.
-extern __STORAGE_MODIFIER int snd_SfxVolume;      // maximum volume for sound
-extern __STORAGE_MODIFIER int snd_MusicVolume;    // maximum volume for music
+extern int snd_SfxVolume;      // maximum volume for sound
+extern int snd_MusicVolume;    // maximum volume for music
 
 // CPhipps - screen parameters
 extern __STORAGE_MODIFIER int desired_screenwidth, desired_screenheight;
 
-extern __STORAGE_MODIFIER int automap_active;
-extern __STORAGE_MODIFIER int automap_overlay;
-extern __STORAGE_MODIFIER int automap_rotate;
-extern __STORAGE_MODIFIER int automap_follow;
-extern __STORAGE_MODIFIER int automap_grid;
+extern int automap_active;
+extern int automap_overlay;
+extern int automap_rotate;
+extern int automap_follow;
+extern int automap_grid;
 
 #define automap_on (automap_active && !automap_overlay)
 #define automap_off (!automap_active && automap_overlay > 0)
@@ -208,49 +208,49 @@ typedef enum {
   mnact_float, // doom-style large font menu, doesn't overlap anything
   mnact_full, // boom-style small font menu, may overlap status bar
 } menuactive_t;
-extern __STORAGE_MODIFIER menuactive_t menuactive; // Type of menu overlaid, if any
+extern menuactive_t menuactive; // Type of menu overlaid, if any
 
-extern  __STORAGE_MODIFIER dboolean nodrawers;
+extern __STORAGE_MODIFIER  dboolean nodrawers;
 
 // Player taking events, and displaying.
-extern  __STORAGE_MODIFIER int consoleplayer;
-extern  __STORAGE_MODIFIER int displayplayer;
+extern __STORAGE_MODIFIER  int consoleplayer;
+extern __STORAGE_MODIFIER  int displayplayer;
 
 // -------------------------------------
 // Scores, rating.
 // Statistics on a given map, for intermission.
 //
-extern  __STORAGE_MODIFIER int totalkills, totallive;
-extern  __STORAGE_MODIFIER int totalitems;
-extern  __STORAGE_MODIFIER int totalsecret;
+extern __STORAGE_MODIFIER  int totalkills, totallive;
+extern __STORAGE_MODIFIER  int totalitems;
+extern __STORAGE_MODIFIER  int totalsecret;
 
-extern  __STORAGE_MODIFIER int boom_basetic;
-extern  __STORAGE_MODIFIER int true_basetic;
-extern  __STORAGE_MODIFIER int leveltime;       // level time in tics
-extern  __STORAGE_MODIFIER int totalleveltimes; // sum of intermission times in tics at second resolution
-extern  __STORAGE_MODIFIER int levels_completed;
+extern __STORAGE_MODIFIER  int boom_basetic;
+extern __STORAGE_MODIFIER  int true_basetic;
+extern __STORAGE_MODIFIER  int leveltime;       // level time in tics
+extern __STORAGE_MODIFIER  int totalleveltimes; // sum of intermission times in tics at second resolution
+extern __STORAGE_MODIFIER  int levels_completed;
 
 // --------------------------------------
 // DEMO playback/recording related stuff.
 
-extern  __STORAGE_MODIFIER dboolean demoplayback;
-extern  __STORAGE_MODIFIER dboolean demorecording;
-extern  __STORAGE_MODIFIER int demover;
+extern  dboolean demoplayback;
+extern __STORAGE_MODIFIER  dboolean demorecording;
+extern __STORAGE_MODIFIER  int demover;
 
 #define allow_incompatibility (!demorecording && !demoplayback)
 #define comperr(i) (default_comperr[i] && allow_incompatibility)
 
-extern  __STORAGE_MODIFIER dboolean userdemo;
+extern  dboolean userdemo;
 #define userplayback (demoplayback && userdemo)
 #define reelplayback (demoplayback && !userdemo)
 
 // Print timing information after quitting.  killough
-extern  __STORAGE_MODIFIER dboolean timingdemo;
+extern __STORAGE_MODIFIER  dboolean   timingdemo;
 // Run tick clock at fastest speed possible while playing demo.  killough
-extern  __STORAGE_MODIFIER dboolean fastdemo;
+extern __STORAGE_MODIFIER  dboolean   fastdemo;
 
-extern  __STORAGE_MODIFIER gamestate_t gamestate;
-extern  __STORAGE_MODIFIER dboolean in_game;
+extern __STORAGE_MODIFIER  gamestate_t  gamestate;
+extern __STORAGE_MODIFIER  dboolean     in_game;
 
 //-----------------------------
 // Internal parameters, fixed.
@@ -258,31 +258,31 @@ extern  __STORAGE_MODIFIER dboolean in_game;
 //  according to user inputs. Partly load from
 //  WAD, partly set at startup time.
 
-extern  __STORAGE_MODIFIER int gametic;
+extern __STORAGE_MODIFIER  int   gametic;
 
 #define boom_logictic (gametic - boom_basetic)
 #define true_logictic (gametic - true_basetic)
 
 //e6y
-extern  __STORAGE_MODIFIER dboolean realframe;
+extern __STORAGE_MODIFIER  dboolean realframe;
 
 // Bookkeeping on players - state.
-extern  __STORAGE_MODIFIER player_t players[MAX_MAXPLAYERS];
-extern  __STORAGE_MODIFIER int upmove;
+extern __STORAGE_MODIFIER  player_t  players[MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER  int       upmove;
 
 // Alive? Disconnected?
-extern  __STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER  dboolean   playeringame[MAX_MAXPLAYERS];
 
 extern __STORAGE_MODIFIER pclass_t PlayerClass[MAX_MAXPLAYERS];
 
-extern  __STORAGE_MODIFIER mapthing_t *deathmatchstarts;     // killough
-extern  __STORAGE_MODIFIER size_t     num_deathmatchstarts; // killough
+extern __STORAGE_MODIFIER  mapthing_t *deathmatchstarts;     // killough
+extern __STORAGE_MODIFIER  size_t     num_deathmatchstarts; // killough
 
-extern  __STORAGE_MODIFIER mapthing_t *deathmatch_p;
+extern __STORAGE_MODIFIER  mapthing_t *deathmatch_p;
 
 // Player spawn spots.
 #define MAX_PLAYER_STARTS 8
-extern  __STORAGE_MODIFIER mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
+extern __STORAGE_MODIFIER  mapthing_t playerstarts[MAX_PLAYER_STARTS][MAX_MAXPLAYERS];
 
 // Intermission stats.
 // Parameters for world map / intermission.
@@ -293,26 +293,26 @@ extern __STORAGE_MODIFIER wbstartstruct_t wminfo;
 //
 
 // File handling stuff.
-extern  __STORAGE_MODIFIER FILE   *debugfile;
+extern __STORAGE_MODIFIER  FILE   *debugfile;
 
 // wipegamestate can be set to -1
 //  to force a wipe on the next draw
-extern  __STORAGE_MODIFIER gamestate_t wipegamestate;
+extern __STORAGE_MODIFIER  gamestate_t     wipegamestate;
 
 // debug flag to cancel adaptiveness
-extern  __STORAGE_MODIFIER dboolean singletics;
+extern __STORAGE_MODIFIER  dboolean         singletics;
 
 // Needed to store the number of the dummy sky flat.
 // Used for rendering, as well as tracking projectiles etc.
 
-extern __STORAGE_MODIFIER int skyflatnum;
+extern int    skyflatnum;
 
-extern  __STORAGE_MODIFIER int maketic;
+extern  int        maketic;
 
 // Networking and tick handling related.
 #define BACKUPTICS              12
 
-extern  __STORAGE_MODIFIER ticcmd_t local_cmds[];
+extern __STORAGE_MODIFIER ticcmd_t   local_cmds[];
 
 //-----------------------------------------------------------------------------
 

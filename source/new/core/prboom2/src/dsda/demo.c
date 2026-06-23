@@ -46,14 +46,14 @@
 
 #define INITIAL_DEMO_BUFFER_SIZE 0x20000
 
-static __STORAGE_MODIFIER char *dsda_demo_name_base;
-static __STORAGE_MODIFIER byte* dsda_demo_write_buffer;
-static __STORAGE_MODIFIER byte* dsda_demo_write_buffer_p;
-static __STORAGE_MODIFIER int dsda_demo_write_buffer_length;
-static __STORAGE_MODIFIER int dsda_extra_demo_header_data_offset;
-static __STORAGE_MODIFIER int largest_real_offset;
-static __STORAGE_MODIFIER int demo_tics;
-static __STORAGE_MODIFIER int compatibility_level_unspecified;
+static char* dsda_demo_name_base;
+static byte* dsda_demo_write_buffer;
+static byte* dsda_demo_write_buffer_p;
+static int dsda_demo_write_buffer_length;
+static int dsda_extra_demo_header_data_offset;
+static int largest_real_offset;
+static int demo_tics;
+static int compatibility_level_unspecified;
 
 #define DSDA_UDMF_VERSION 1
 #define DSDA_DEMO_VERSION 3
@@ -68,18 +68,18 @@ typedef struct {
   byte udmf_version;
 } dsda_demo_header_data_t;
 
-static __STORAGE_MODIFIER dsda_demo_header_data_t dsda_demo_header_data;
+static dsda_demo_header_data_t dsda_demo_header_data;
 
 #define DEMOMARKER 0x80
 
 #define DF_FROM_KEYFRAME   0x01
 #define DF_CASUAL_FEATURES 0x02
 
-static __STORAGE_MODIFIER dboolean join_queued;
-static __STORAGE_MODIFIER int dsda_demo_version;
-static __STORAGE_MODIFIER int bytes_per_tic;
+static dboolean join_queued;
+static int dsda_demo_version;
+static int bytes_per_tic;
 
-static __STORAGE_MODIFIER dboolean use_demo_name_with_time;
+static dboolean use_demo_name_with_time;
 
 int dsda_DemoTic(void) {
   return demo_tics;
@@ -157,7 +157,7 @@ static dboolean dsda_UseFailedDemoName(void) {
 }
 
 char* dsda_FailedDemoName(void) {
-  static __STORAGE_MODIFIER char* dsda_failed_demo_name_base;
+  static char* dsda_failed_demo_name_base;
   ADD_FILE_COUNTER
 
   if (!dsda_demo_name_base)
@@ -242,7 +242,7 @@ void dsda_CopyPriorCmd(ticcmd_t* cmd, int delta) {
 }
 
 void dsda_RestoreCommandHistory(void) {
-  extern __STORAGE_MODIFIER int dsda_command_history_size;
+  extern int dsda_command_history_size;
 
   ticcmd_t cmd = { 0 };
 
@@ -267,7 +267,7 @@ void dsda_MarkCompatibilityLevelUnspecified(void) {
 }
 
 void dsda_InitDemoRecording(void) {
-  static __STORAGE_MODIFIER dboolean demo_key_frame_initialized;
+  static dboolean demo_key_frame_initialized;
 
   if (compatibility_level_unspecified)
     I_Error("You must specify a compatibility level when recording a demo!\n"
@@ -822,7 +822,7 @@ void dsda_ApplyDSDADemoFormat(byte** demo_p) {
 
 int dsda_DemoTicsCount(const byte* p, const byte* demobuffer, int demolength) {
   int count = 0;
-  extern __STORAGE_MODIFIER int demo_playerscount;
+  extern int demo_playerscount;
 
   if (dsda_demo_version)
     return dsda_demo_header_data.demo_tics;

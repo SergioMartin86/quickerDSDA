@@ -16,10 +16,10 @@ int SC_MatchString(const char **strings);
 int SC_MustMatchString(const char **strings);
 void SC_ScriptError(const char *message);
 
-extern __STORAGE_MODIFIER char *sc_String;
-extern __STORAGE_MODIFIER int sc_Number;
-extern __STORAGE_MODIFIER int sc_Line;
-extern __STORAGE_MODIFIER dboolean sc_End;
-extern __STORAGE_MODIFIER dboolean sc_Crossed;
+extern char *sc_String;
+extern int sc_Number;
+extern int sc_Line;
+extern dboolean sc_End;
+extern dboolean sc_Crossed;
 
 #endif // __SC_MAN__

@@ -116,7 +116,7 @@ typedef struct {
 // Identifiers for all music in game.
 //
 
-extern __STORAGE_MODIFIER int mus_musinfo;
+extern int mus_musinfo;
 
 typedef enum {
   mus_None,
@@ -1000,9 +1000,9 @@ extern musicinfo_t heretic_S_music[];
 extern sfxinfo_t doom_S_sfx[];
 extern musicinfo_t doom_S_music[];
 
-extern __STORAGE_MODIFIER sfxinfo_t *S_sfx;
-extern __STORAGE_MODIFIER int num_sfx;
-extern __STORAGE_MODIFIER musicinfo_t *S_music;
-extern __STORAGE_MODIFIER int num_music;
+extern sfxinfo_t* S_sfx;
+extern int num_sfx;
+extern musicinfo_t* S_music;
+extern int num_music;
 
 #endif

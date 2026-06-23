@@ -86,28 +86,28 @@
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
 //
 
-__STORAGE_MODIFIER int numvertexes;
+__STORAGE_MODIFIER int      numvertexes;
 __STORAGE_MODIFIER vertex_t *vertexes;
 
-__STORAGE_MODIFIER int numsegs;
-__STORAGE_MODIFIER seg_t *segs;
+__STORAGE_MODIFIER int      numsegs;
+__STORAGE_MODIFIER seg_t    *segs;
 
-__STORAGE_MODIFIER int numsectors;
+__STORAGE_MODIFIER int      numsectors;
 __STORAGE_MODIFIER sector_t *sectors;
 
-__STORAGE_MODIFIER int numsubsectors;
+__STORAGE_MODIFIER int      numsubsectors;
 __STORAGE_MODIFIER subsector_t *subsectors;
 
-__STORAGE_MODIFIER int numnodes;
-__STORAGE_MODIFIER node_t *nodes;
+__STORAGE_MODIFIER int      numnodes;
+__STORAGE_MODIFIER node_t   *nodes;
 
-__STORAGE_MODIFIER int numlines;
-__STORAGE_MODIFIER line_t *lines;
+__STORAGE_MODIFIER int      numlines;
+__STORAGE_MODIFIER line_t   *lines;
 
-__STORAGE_MODIFIER int numsides;
-__STORAGE_MODIFIER side_t *sides;
+__STORAGE_MODIFIER int      numsides;
+__STORAGE_MODIFIER side_t   *sides;
 
-__STORAGE_MODIFIER int *sslines_indexes;
+__STORAGE_MODIFIER int      *sslines_indexes;
 __STORAGE_MODIFIER ssline_t *sslines;
 
 __STORAGE_MODIFIER byte     *map_subsectors;
@@ -154,18 +154,18 @@ typedef struct
 //
 // Blockmap size.
 
-__STORAGE_MODIFIER int bmapwidth, bmapheight;  // size in mapblocks
+__STORAGE_MODIFIER int       bmapwidth, bmapheight;  // size in mapblocks
 
 // killough 3/1/98: remove blockmap limit internally:
-__STORAGE_MODIFIER int *blockmap;              // was short -- killough
+__STORAGE_MODIFIER int       *blockmap;              // was short -- killough
 
 // offsets in blockmap are from here
-__STORAGE_MODIFIER int *blockmaplump;          // was short -- killough
+__STORAGE_MODIFIER int       *blockmaplump;          // was short -- killough
 
-__STORAGE_MODIFIER fixed_t bmaporgx, bmaporgy;     // origin of block map
+__STORAGE_MODIFIER fixed_t   bmaporgx, bmaporgy;     // origin of block map
 
 __STORAGE_MODIFIER mobj_t    **blocklinks;           // for thing chains
-__STORAGE_MODIFIER int blocklinks_count;
+__STORAGE_MODIFIER int       blocklinks_count;
 
 // MAES: extensions to support 512x512 blockmaps.
 // They represent the maximum negative number which represents
@@ -1842,7 +1842,7 @@ static void P_LoadUDMFThings(int lump)
 void P_TranslateZDoomLineFlags(unsigned int *flags, line_activation_t *spac)
 {
   unsigned int result;
-  static unsigned int spac_lookup[8] = {
+  static __STORAGE_MODIFIER unsigned int spac_lookup[8] = {
     SPAC_CROSS,
     SPAC_USE,
     SPAC_MCROSS,
@@ -1880,7 +1880,7 @@ void P_TranslateZDoomLineFlags(unsigned int *flags, line_activation_t *spac)
 void P_TranslateHexenLineFlags(unsigned int *flags, line_activation_t *spac)
 {
   unsigned int result;
-  static unsigned int spac_lookup[8] = {
+  static __STORAGE_MODIFIER unsigned int spac_lookup[8] = {
     SPAC_CROSS,
     SPAC_USE,
     SPAC_MCROSS,
@@ -3388,7 +3388,7 @@ static void P_VerifyLevelComponents(int lumpnum)
 {
   int i;
 
-  static const char *ml_labels[] = {
+  static __STORAGE_MODIFIER const char *ml_labels[] = {
     "LABEL",             // A separator, name, ExMx or MAPxx
     "THINGS",            // Monsters, items..
     "LINEDEFS",          // LineDefs, from editing
@@ -3667,6 +3667,11 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   //e6y
   totallive = 0;
 
+  // Increment 3: static map geometry is loaded below with the thinker arena
+  // OFF, so only the dynamic objects (spawned from load_things onward) land in
+  // the contiguous slab.
+  Z_EndThinkerArena();
+
   main_tranmap = dsda_DefaultTranMap();
 
   dsda_WatchBeforeLevelSetup();
@@ -3692,7 +3697,7 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   S_ParseMusInfo(lumpname);
 
   // Make sure all sounds are stopped before Z_FreeTag.
-  //S_Start();
+  S_Start();
 
   Z_FreeLevel();
 
@@ -3860,6 +3865,10 @@ void P_SetupLevel(int episode, int map, int playermask, int skill)
   {
     PO_ResetBlockMap(true);
   }
+
+  // Increment 3: geometry is loaded; route all dynamic objects spawned from
+  // here on (initial things, specials, and all gameplay spawns) into the slab.
+  Z_BeginThinkerArena();
 
   map_loader.load_things(level_components.things);
 

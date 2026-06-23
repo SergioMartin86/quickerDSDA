@@ -131,7 +131,7 @@ mapcolor_t mapcolor_hexen = {
   .trail_2 = 15,
 };
 
-static __STORAGE_MODIFIER mapcolor_t *mapcolor_p;
+static mapcolor_t *mapcolor_p;
 
 static void AM_SetColors(void)
 {
@@ -156,18 +156,18 @@ typedef struct
   int connection_max;
 } highlight_t;
 
-static __STORAGE_MODIFIER highlight_t highlight;
+static highlight_t highlight;
 
-static __STORAGE_MODIFIER int map_blinking_locks;
-static __STORAGE_MODIFIER int map_secret_after;
-static __STORAGE_MODIFIER int map_grid_size;
-__STORAGE_MODIFIER int map_pan_speed;
-__STORAGE_MODIFIER int map_scroll_speed;
-static __STORAGE_MODIFIER int map_wheel_zoom;
-__STORAGE_MODIFIER int map_textured;
-__STORAGE_MODIFIER int map_use_multisampling;
+static int map_blinking_locks;
+static int map_secret_after;
+static int map_grid_size;
+int map_pan_speed;
+int map_scroll_speed;
+static int map_wheel_zoom;
+int map_textured;
+int map_use_multisampling;
 
-static __STORAGE_MODIFIER map_things_appearance_t map_things_appearance;
+static map_things_appearance_t map_things_appearance;
 
 // drawing stuff
 #define FB    0
@@ -202,7 +202,7 @@ static __STORAGE_MODIFIER map_things_appearance_t map_things_appearance;
 #define CYMTOF_F(y)  ((float)f_y + (f_h - MTOF_F((y)-m_y)))
 
 #define R ((8*PLAYERRADIUS)/7)
-__STORAGE_MODIFIER mline_t hexen_player_arrow[] = {
+mline_t hexen_player_arrow[] = {
   { { -R+R/4, 0 }, { 0, 0} }, // center line.
   { { -R+R/4, R/8 }, { R, 0} }, // blade
   { { -R+R/4, -R/8 }, { R, 0 } },
@@ -223,7 +223,7 @@ __STORAGE_MODIFIER mline_t hexen_player_arrow[] = {
 //   starting from the middle.
 //
 #define R ((8*PLAYERRADIUS)/7)
-__STORAGE_MODIFIER mline_t doom_player_arrow[] =
+mline_t doom_player_arrow[] =
 {
   { { -R+R/8, 0 }, { R, 0 } }, // -----
   { { R, 0 }, { R-R/2, R/4 } },  // ----->
@@ -236,11 +236,11 @@ __STORAGE_MODIFIER mline_t doom_player_arrow[] =
 #undef R
 #define NUMPLYRLINES (sizeof(doom_player_arrow)/sizeof(mline_t))
 
-static __STORAGE_MODIFIER int numplyrlines;
-static __STORAGE_MODIFIER mline_t *player_arrow;
+static int numplyrlines;
+static mline_t *player_arrow;
 
 #define R ((8*PLAYERRADIUS)/7)
-__STORAGE_MODIFIER mline_t cheat_player_arrow[] =
+mline_t cheat_player_arrow[] =
 { // killough 3/22/98: He's alive, Jim :)
   { { -R+R/8, 0 }, { R, 0 } }, // -----
   { { R, 0 }, { R-R/2, R/4 } },  // ----->
@@ -262,7 +262,7 @@ __STORAGE_MODIFIER mline_t cheat_player_arrow[] =
 
 //jff 1/5/98 new symbol for keys on automap
 #define R (FRACUNIT)
-__STORAGE_MODIFIER mline_t cross_mark[] =
+mline_t cross_mark[] =
 {
   { { -R, 0 }, { R, 0} },
   { { 0, -R }, { 0, R } },
@@ -272,7 +272,7 @@ __STORAGE_MODIFIER mline_t cross_mark[] =
 //jff 1/5/98 end of new symbol
 
 #define R (FRACUNIT)
-__STORAGE_MODIFIER mline_t thintriangle_guy[] =
+mline_t thintriangle_guy[] =
 {
 { { (fixed_t)(-.5*R), (fixed_t)(-.7*R) }, { (fixed_t)(    R), (fixed_t)(    0) } },
 { { (fixed_t)(    R), (fixed_t)(    0) }, { (fixed_t)(-.5*R), (fixed_t)( .7*R) } },
@@ -281,66 +281,66 @@ __STORAGE_MODIFIER mline_t thintriangle_guy[] =
 #undef R
 #define NUMTHINTRIANGLEGUYLINES (sizeof(thintriangle_guy)/sizeof(mline_t))
 
-__STORAGE_MODIFIER int automap_active;
-__STORAGE_MODIFIER int automap_overlay;
-__STORAGE_MODIFIER int automap_rotate;
-__STORAGE_MODIFIER int automap_follow;
-__STORAGE_MODIFIER int automap_grid;
+int automap_active;
+int automap_overlay;
+int automap_rotate;
+int automap_follow;
+int automap_grid;
 
 // location of window on screen
-static __STORAGE_MODIFIER int f_x;
-static __STORAGE_MODIFIER int f_y;
+static int  f_x;
+static int  f_y;
 
 // size of window on screen
-static __STORAGE_MODIFIER int f_w;
-static __STORAGE_MODIFIER int f_h;
+static int  f_w;
+static int  f_h;
 
 mpoint_t m_paninc;    // how far the window pans each tic (map coords)
-__STORAGE_MODIFIER fixed_t mtof_zoommul; // how far the window zooms each tic (map coords)
-__STORAGE_MODIFIER fixed_t ftom_zoommul; // how far the window zooms each tic (fb coords)
-__STORAGE_MODIFIER fixed_t curr_mtof_zoommul;
+fixed_t mtof_zoommul; // how far the window zooms each tic (map coords)
+fixed_t ftom_zoommul; // how far the window zooms each tic (fb coords)
+fixed_t curr_mtof_zoommul;
 
-static __STORAGE_MODIFIER fixed_t m_x, m_y;     // LL x,y window location on the map (map coords)
-static __STORAGE_MODIFIER fixed_t m_x2, m_y2;   // UR x,y window location on the map (map coords)
+static fixed_t m_x, m_y;     // LL x,y window location on the map (map coords)
+static fixed_t m_x2, m_y2;   // UR x,y window location on the map (map coords)
 
-static __STORAGE_MODIFIER fixed_t prev_m_x, prev_m_y;
+static fixed_t prev_m_x, prev_m_y;
 
 //
 // width/height of window on map (map coords)
 //
-static __STORAGE_MODIFIER fixed_t m_w;
-static __STORAGE_MODIFIER fixed_t m_h;
+static fixed_t  m_w;
+static fixed_t  m_h;
 
 // based on level size
-static __STORAGE_MODIFIER fixed_t min_x;
-static __STORAGE_MODIFIER fixed_t min_y;
-static __STORAGE_MODIFIER fixed_t max_x;
-static __STORAGE_MODIFIER fixed_t max_y;
+static fixed_t  min_x;
+static fixed_t  min_y;
+static fixed_t  max_x;
+static fixed_t  max_y;
 
-static __STORAGE_MODIFIER fixed_t max_w;          // max_x-min_x,
-static __STORAGE_MODIFIER fixed_t max_h;          // max_y-min_y
+static fixed_t  max_w;          // max_x-min_x,
+static fixed_t  max_h;          // max_y-min_y
 
-static __STORAGE_MODIFIER fixed_t min_scale_mtof; // used to tell when to stop zooming out
-static __STORAGE_MODIFIER fixed_t max_scale_mtof; // used to tell when to stop zooming in
+static fixed_t  min_scale_mtof; // used to tell when to stop zooming out
+static fixed_t  max_scale_mtof; // used to tell when to stop zooming in
 
 // old stuff for recovery later
-static __STORAGE_MODIFIER fixed_t old_m_w, old_m_h;
-static __STORAGE_MODIFIER fixed_t old_m_x, old_m_y;
+static fixed_t old_m_w, old_m_h;
+static fixed_t old_m_x, old_m_y;
 
 // used by MTOF to scale from map-to-frame-buffer coords
 fixed_t scale_mtof = (fixed_t)INITSCALEMTOF;
 // used by FTOM to scale from frame-buffer-to-map coords (=1/scale_mtof)
-__STORAGE_MODIFIER fixed_t scale_ftom;
+fixed_t scale_ftom;
 static fixed_t prev_scale_mtof = (fixed_t)INITSCALEMTOF;
 
-static __STORAGE_MODIFIER player_t *plr;           // the player represented by an arrow
+static player_t *plr;           // the player represented by an arrow
 
 // killough 2/22/98: Remove limit on automap marks,
 // and make variables external for use in savegames.
 
 markpoint_t *markpoints = NULL;    // where the points are
-__STORAGE_MODIFIER int markpointnum = 0; // next point to be assigned (also number of points now)
-__STORAGE_MODIFIER int markpointnum_max = 0;       // killough 2/22/98
+int markpointnum = 0; // next point to be assigned (also number of points now)
+int markpointnum_max = 0;       // killough 2/22/98
 
 typedef struct
 {
@@ -349,16 +349,16 @@ typedef struct
 } trailpoint_t;
 
 #define TRAIL_SIZE 350 // ten seconds
-static __STORAGE_MODIFIER trailpoint_t player_trail[TRAIL_SIZE];
-static __STORAGE_MODIFIER int trail_index;
-static __STORAGE_MODIFIER int trail_size;
-static __STORAGE_MODIFIER int trail_size_max;
+static trailpoint_t player_trail[TRAIL_SIZE];
+static int trail_index;
+static int trail_size;
+static int trail_size_max;
 
-__STORAGE_MODIFIER map_trail_mode_t map_trail_mode;
+map_trail_mode_t map_trail_mode;
 
-__STORAGE_MODIFIER am_frame_t am_frame;
+am_frame_t am_frame;
 
-__STORAGE_MODIFIER array_t map_lines;
+array_t map_lines;
 
 static void AM_rotate(fixed_t* x,  fixed_t* y, angle_t a);
 
@@ -377,8 +377,8 @@ static void AM_SetFPointFloatValue(fpoint_t *p)
   p->fy = (float)p->y;
 }
 
-__STORAGE_MODIFIER dboolean stop_zooming;
-__STORAGE_MODIFIER int zoom_leveltime;
+dboolean stop_zooming;
+int zoom_leveltime;
 
 void AM_StopZooming(void)
 {
@@ -455,7 +455,7 @@ void AM_restoreScaleAndLoc(void)
 void AM_setMarkParams(int num)
 {
   int i;
-  static __STORAGE_MODIFIER char namebuf[16] = "AMMNUM0";
+  static char namebuf[16] = "AMMNUM0";
 
   markpoints[num].w = 0;
   markpoints[num].h = 0;
@@ -745,10 +745,10 @@ void AM_InitParams(void)
 
 void AM_ExchangeScales(int full_automap, int *last_full_automap)
 {
-  static __STORAGE_MODIFIER int full_min_scale_mtof;
-  static __STORAGE_MODIFIER int full_max_scale_mtof;
-  static __STORAGE_MODIFIER int full_scale_mtof;
-  static __STORAGE_MODIFIER int full_scale_ftom;
+  static int full_min_scale_mtof;
+  static int full_max_scale_mtof;
+  static int full_scale_mtof;
+  static int full_scale_ftom;
 
   if (*last_full_automap && !full_automap)
   {
@@ -802,8 +802,8 @@ void AM_Stop (dboolean minimap)
 //
 void AM_Start(dboolean full_automap)
 {
-  static __STORAGE_MODIFIER int lastlevel = -1, lastepisode = -1;
-  static __STORAGE_MODIFIER int last_full_automap;
+  static int lastlevel = -1, lastepisode = -1;
+  static int last_full_automap;
 
   AM_InitParams();
 
@@ -1007,7 +1007,7 @@ static void AM_HighlightByTag(void)
 dboolean AM_Responder
 ( event_t*  ev )
 {
-  static __STORAGE_MODIFIER int bigstate=0;
+  static int bigstate=0;
 
   if (dsda_InputActivated(dsda_input_map_overlay) && (automap_input || dsda_ShowMinimap()))
   {
@@ -1326,7 +1326,8 @@ void AM_Ticker (void)
 // clipping on them in the lines frame coordinates.
 // Returns true if any part of line was not clipped
 //
-static dboolean AM_clipMline( mline_t*  ml,
+static dboolean AM_clipMline
+( mline_t*  ml,
   fline_t*  fl )
 {
   enum
@@ -1504,7 +1505,7 @@ static void AM_drawMline
 ( mline_t*  ml,
   int   color )
 {
-  static __STORAGE_MODIFIER fline_t fl;
+  static fline_t fl;
 
   if (color==-1)  // jff 4/3/98 allow not drawing any sort of line
     return;       // by setting its color to -1
@@ -1746,7 +1747,7 @@ static void AM_drawWalls(void)
 {
   int i;
   automap_style_t automap_style;
-  static __STORAGE_MODIFIER mline_t l;
+  static mline_t l;
   int hide_locks;
 
   hide_locks = map_blinking_locks && (gametic & 16);

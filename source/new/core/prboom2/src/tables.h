@@ -31,15 +31,15 @@
  *      Do not try to look them up :-).
  *      In the order of appearance:
  *
- *      __STORAGE_MODIFIER int finetangent[4096]   - Tangens LUT.
+ *      int finetangent[4096]   - Tangens LUT.
  *       Should work with BAM fairly well (12 of 16bit,
  *      effectively, by shifting).
  *
- *      __STORAGE_MODIFIER int finesine[10240]             - Sine lookup.
+ *      int finesine[10240]             - Sine lookup.
  *       Guess what, serves as cosine, too.
  *       Remarkable thing is, how to use BAMs with this?
  *
- *      __STORAGE_MODIFIER int tantoangle[2049]    - ArcTan LUT,
+ *      int tantoangle[2049]    - ArcTan LUT,
  *        maps tan(angle) to angle fast. Gotta search.
  *
  *-----------------------------------------------------------------------------*/
@@ -97,12 +97,12 @@ extern fixed_t finesine[5*FINEANGLES/4];
 static fixed_t *const finecosine = finesine + (FINEANGLES/4);
 
 // Effective size is 4096.
-extern fixed_t finetangent[FINEANGLES/2];
+extern __STORAGE_MODIFIER fixed_t finetangent[FINEANGLES/2];
 
 // Effective size is 2049;
 // The +1 size is to handle the case when x==y without additional checking.
 
-extern angle_t tantoangle[SLOPERANGE+1];
+extern __STORAGE_MODIFIER angle_t tantoangle[SLOPERANGE+1];
 
 // Utility function, called by R_PointToAngle.
 typedef int (*slope_div_fn)(unsigned int num, unsigned int den);

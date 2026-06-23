@@ -25,7 +25,7 @@ typedef struct {
   dsda_patch_component_t component;
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
 int dsda_AmmoColor(player_t* player) {
   int ammo_percent;

@@ -107,12 +107,12 @@ typedef struct
 
 #define MAXANIMS 32                   // no longer a strict limit -- killough
 
-static __STORAGE_MODIFIER anim_t *lastanim;
-static __STORAGE_MODIFIER anim_t *anims;                // new structure w/o limits -- killough
+static __STORAGE_MODIFIER anim_t*  lastanim;
+static __STORAGE_MODIFIER anim_t*  anims;                // new structure w/o limits -- killough
 static __STORAGE_MODIFIER size_t maxanims;
 
-TAnimItemParam *anim_flats = NULL;
-TAnimItemParam *anim_textures = NULL;
+__STORAGE_MODIFIER TAnimItemParam *anim_flats = NULL;
+__STORAGE_MODIFIER TAnimItemParam *anim_textures = NULL;
 
 // killough 3/7/98: Initialize generalized scrolling
 static void P_SpawnScrollers(void);
@@ -120,7 +120,7 @@ static void P_SpawnScrollers(void);
 static void P_SpawnFriction(void);    // phares 3/16/98
 static void P_SpawnPushers(void);     // phares 3/20/98
 
-static const animdef_t heretic_animdefs[] = {
+static __STORAGE_MODIFIER const animdef_t heretic_animdefs[] = {
     // false = flat
     // true = texture
     { false, "FLTWAWA3", "FLTWAWA1", 8 }, // Water
@@ -178,6 +178,7 @@ void MarkAnimatedTextures(void)
 // and end entry, in the order found in the WAD file.
 //
 // This routine modified to read its data from a predefined lump or
+// PWAD lump called ANIMATED rather than a static table in this module to
 // allow wad designers to insert or modify animation sequences.
 //
 // Lump format is an array of byte packed animdef_t structures, terminated
@@ -2794,7 +2795,7 @@ void P_PlayerInCompatibleSector(player_t *player, sector_t *sector)
 
 void P_PlayerInZDoomSector(player_t *player, sector_t *sector)
 {
-  static const int heretic_carry[5] = {
+  static __STORAGE_MODIFIER const int heretic_carry[5] = {
     2048 * 5,
     2048 * 10,
     2048 * 25,
@@ -2802,7 +2803,7 @@ void P_PlayerInZDoomSector(player_t *player, sector_t *sector)
     2048 * 35
   };
 
-  static const int hexen_carry[3] = {
+  static __STORAGE_MODIFIER const int hexen_carry[3] = {
     2048 * 5,
     2048 * 10,
     2048 * 25
@@ -3023,10 +3024,10 @@ dboolean P_MobjInZDoomSector(mobj_t *mobj)
 //  levelFragLimit, levelFragLimitCount
 //
 
-static __STORAGE_MODIFIER dboolean levelTimer;
-static __STORAGE_MODIFIER int levelTimeCount;
-__STORAGE_MODIFIER dboolean levelFragLimit;      // Ty 03/18/98 Added -frags support
-__STORAGE_MODIFIER int levelFragLimitCount; // Ty 03/18/98 Added -frags support
+static __STORAGE_MODIFIER dboolean  levelTimer;
+static __STORAGE_MODIFIER int      levelTimeCount;
+__STORAGE_MODIFIER dboolean         levelFragLimit;      // Ty 03/18/98 Added -frags support
+__STORAGE_MODIFIER int             levelFragLimitCount; // Ty 03/18/98 Added -frags support
 
 void P_UpdateSpecials (void)
 {
@@ -3383,7 +3384,7 @@ void P_SpawnZDoomSectorSpecial(sector_t *sector, int i)
       if (sector->special >= zs_scroll_north_slow &&
           sector->special <= zs_scroll_southwest_fast)
       { // Hexen scroll special
-        static const fixed_t hexenScrollies[24][2] =
+        static __STORAGE_MODIFIER const fixed_t hexenScrollies[24][2] =
         {
           {  0,  1 }, {  0,  2 }, {  0,  4 },
           { -1,  0 }, { -2,  0 }, { -4,  0 },
@@ -4314,7 +4315,7 @@ static void Add_Pusher(int type, int x_mag, int y_mag, mobj_t* source, int affec
 //
 // killough 10/98: allow to affect things besides players
 
-__STORAGE_MODIFIER pusher_t *tmpusher; // pusher structure for blockmap searches
+__STORAGE_MODIFIER pusher_t* tmpusher; // pusher structure for blockmap searches
 
 static dboolean PIT_PushThing(mobj_t* thing)
 {
@@ -4651,18 +4652,18 @@ __STORAGE_MODIFIER int AmbSfxCount;
 __STORAGE_MODIFIER int AmbSfxTics;
 __STORAGE_MODIFIER int AmbSfxVolume;
 
- int AmbSndSeqInit[] = {         // Startup
+__STORAGE_MODIFIER int AmbSndSeqInit[] = {         // Startup
     afxcmd_end
 };
- int AmbSndSeq1[] = {            // Scream
+int AmbSndSeq1[] = {            // Scream
     afxcmd_play, heretic_sfx_amb1,
     afxcmd_end
 };
- int AmbSndSeq2[] = {            // Squish
+int AmbSndSeq2[] = {            // Squish
     afxcmd_play, heretic_sfx_amb2,
     afxcmd_end
 };
- int AmbSndSeq3[] = {            // Drops
+int AmbSndSeq3[] = {            // Drops
     afxcmd_play, heretic_sfx_amb3,
     afxcmd_delay, 16,
     afxcmd_delayrand, 31,
@@ -4683,7 +4684,7 @@ __STORAGE_MODIFIER int AmbSfxVolume;
     afxcmd_delayrand, 31,
     afxcmd_end
 };
- int AmbSndSeq4[] = {            // SlowFootSteps
+int AmbSndSeq4[] = {            // SlowFootSteps
     afxcmd_play, heretic_sfx_amb4,
     afxcmd_delay, 15,
     afxcmd_playrelvol, heretic_sfx_amb11, -3,
@@ -4701,7 +4702,7 @@ __STORAGE_MODIFIER int AmbSfxVolume;
     afxcmd_playrelvol, heretic_sfx_amb11, -3,
     afxcmd_end
 };
- int AmbSndSeq5[] = {            // Heartbeat
+int AmbSndSeq5[] = {            // Heartbeat
     afxcmd_play, heretic_sfx_amb5,
     afxcmd_delay, 35,
     afxcmd_play, heretic_sfx_amb5,
@@ -4776,7 +4777,7 @@ __STORAGE_MODIFIER int *AmbientSfx[] = {
 };
 
 __STORAGE_MODIFIER int *TerrainTypes;
-struct
+__STORAGE_MODIFIER struct
 {
     const char *name;
     int type;
@@ -5154,7 +5155,7 @@ void P_CrossHereticSpecialLine(line_t * line, int side, mobj_t * thing, dboolean
 
 void P_PlayerInHereticSector(player_t * player, sector_t * sector)
 {
-    static int pushTab[5] = {
+    static __STORAGE_MODIFIER int pushTab[5] = {
         2048 * 5,
         2048 * 10,
         2048 * 25,
@@ -5279,7 +5280,7 @@ void P_SpawnLineSpecials(void)
 
 #define MAX_TAGGED_LINES 64
 
-static struct
+static __STORAGE_MODIFIER struct
 {
     line_t *line;
     int lineTag;
@@ -5626,7 +5627,7 @@ dboolean P_ActivateLine(line_t * line, mobj_t * mo, int side, line_activation_t 
 
 void P_PlayerInHexenSector(player_t * player, sector_t * sector)
 {
-    static int pushTab[3] = {
+    static __STORAGE_MODIFIER int pushTab[3] = {
         2048 * 5,
         2048 * 10,
         2048 * 25
@@ -5723,7 +5724,7 @@ static dboolean P_ArgToCrushType(int arg)
 
 static crushmode_e P_ArgToCrushMode(int arg, dboolean slowdown)
 {
-  static const crushmode_e map[] = { crushDoom, crushHexen, crushSlowdown };
+  static __STORAGE_MODIFIER const crushmode_e map[] = { crushDoom, crushHexen, crushSlowdown };
 
   if (arg >= 1 && arg <= 3) return map[arg - 1];
 
@@ -5737,7 +5738,7 @@ static int P_ArgToCrush(int arg)
 
 static byte P_ArgToChange(int arg)
 {
-  static const byte ChangeMap[8] = { 0, 1, 5, 3, 7, 2, 6, 0 };
+  static __STORAGE_MODIFIER const byte ChangeMap[8] = { 0, 1, 5, 3, 7, 2, 6, 0 };
 
   return (arg >= 0 && arg < 8) ? ChangeMap[arg] : 0;
 }
@@ -5979,7 +5980,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
         dboolean raise_or_lower;
         byte index;
 
-        static floor_e floor_type[2][7] = {
+        static __STORAGE_MODIFIER floor_e floor_type[2][7] = {
           {
             floorLowerByValue,
             floorLowerToHighest,
@@ -6209,7 +6210,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
         dboolean raise_or_lower;
         byte index;
 
-        static ceiling_e ceiling_type[2][7] = {
+        static __STORAGE_MODIFIER ceiling_e ceiling_type[2][7] = {
           {
             ceilLowerByValue,
             ceilLowerToHighest,
@@ -6463,7 +6464,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         int i;
         const int *id_p;
-        const int flags[] =
+        static __STORAGE_MODIFIER const int flags[] =
         {
           ML_BLOCKING,
           ML_BLOCKMONSTERS,
@@ -6502,7 +6503,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         int i;
         const int *id_p;
-        const int flags[] =
+        static __STORAGE_MODIFIER const int flags[] =
         {
           SECF_SILENT,
           0,
@@ -6539,7 +6540,7 @@ dboolean P_ExecuteZDoomLineSpecial(int special, int * args, line_t * line, int s
       {
         int i;
         const int *id_p;
-        const int flags[] =
+        static __STORAGE_MODIFIER const int flags[] =
         {
           ML_SECRET,
           ML_DONTDRAW,

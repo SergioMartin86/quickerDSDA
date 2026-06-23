@@ -87,25 +87,26 @@ const music_player_t fl_player =
   typedef fluid_long_long_t fl_sftell_t;
 #endif
 
-static __STORAGE_MODIFIER fluid_settings_t *f_set;
-static __STORAGE_MODIFIER fluid_synth_t *f_syn;
-static __STORAGE_MODIFIER int f_font;
-static __STORAGE_MODIFIER midi_event_t **events;
-static __STORAGE_MODIFIER int eventpos;
-static __STORAGE_MODIFIER midi_file_t *midifile;
-static __STORAGE_MODIFIER int f_playing;
-static __STORAGE_MODIFIER int f_paused;
-static __STORAGE_MODIFIER int f_looping;
-static __STORAGE_MODIFIER int f_volume;
-static __STORAGE_MODIFIER double spmc;
-static __STORAGE_MODIFIER double f_delta;
-static __STORAGE_MODIFIER int f_soundrate;
+static fluid_settings_t *f_set;
+static fluid_synth_t *f_syn;
+static int f_font;
+static midi_event_t **events;
+static int eventpos;
+static midi_file_t *midifile;
+
+static int f_playing;
+static int f_paused;
+static int f_looping;
+static int f_volume;
+static double spmc;
+static double f_delta;
+static int f_soundrate;
 
 #define SYSEX_BUFF_SIZE 1024
-static __STORAGE_MODIFIER unsigned char sysexbuff[SYSEX_BUFF_SIZE];
-static __STORAGE_MODIFIER int sysexbufflen;
+static unsigned char sysexbuff[SYSEX_BUFF_SIZE];
+static int sysexbufflen;
 
-static __STORAGE_MODIFIER const char *fl_name (void)
+static const char *fl_name (void)
 {
   return "fluidsynth midi player";
 }
@@ -434,8 +435,8 @@ static void fl_writesamples_ex (short *dest, int nsamp)
   int i;
   float multiplier = 16384.0f / 15.0f * f_volume;
 
-  static __STORAGE_MODIFIER float *fbuff = NULL;
-  static __STORAGE_MODIFIER int fbuff_siz = 0;
+  static float *fbuff = NULL;
+  static int fbuff_siz = 0;
 
   if (nsamp * 2 > fbuff_siz)
   {

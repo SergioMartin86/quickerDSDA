@@ -87,8 +87,9 @@ typedef struct drawsegs_xrange_s
 
 #define DS_RANGES_COUNT 3
 static __STORAGE_MODIFIER drawsegs_xrange_t drawsegs_xranges[DS_RANGES_COUNT];
+
 static __STORAGE_MODIFIER drawseg_xrange_item_t *drawsegs_xrange;
-static unsigned __STORAGE_MODIFIER int drawsegs_xrange_size = 0;
+static __STORAGE_MODIFIER unsigned int drawsegs_xrange_size = 0;
 static __STORAGE_MODIFIER int drawsegs_xrange_count = 0;
 
 // constant arrays
@@ -400,6 +401,8 @@ static __STORAGE_MODIFIER int num_vissprite, num_vissprite_alloc, num_vissprite_
 
 void R_InitSprites(const char * const *namelist)
 {
+  /* [min-headless neuter] */ return;  /* sprite frame tables + render clip arrays are pure rendering */
+
   int i;
   for (i=0; i<SCREENWIDTH; i++)    // killough 2/8/98
     negonearray[i] = -1;
@@ -443,8 +446,8 @@ static vissprite_t *R_NewVisSprite(void)
 //  in posts/runs of opaque pixels.
 //
 
-__STORAGE_MODIFIER int *mfloorclip;   // dropoff overflow
-__STORAGE_MODIFIER int *mceilingclip; // dropoff overflow
+__STORAGE_MODIFIER int   *mfloorclip;   // dropoff overflow
+__STORAGE_MODIFIER int   *mceilingclip; // dropoff overflow
 __STORAGE_MODIFIER fixed_t spryscale;
 __STORAGE_MODIFIER int64_t sprtopscreen; // R_WiggleFix
 __STORAGE_MODIFIER int colheight; // Scaled software fuzz
@@ -1007,7 +1010,7 @@ static void R_ApplyWeaponBob (fixed_t *sx, dboolean bobx, fixed_t *sy, dboolean 
 //
 
 // heretic
-static int PSpriteSY[NUMCLASSES][NUMWEAPONS] = {
+static __STORAGE_MODIFIER int PSpriteSY[NUMCLASSES][NUMWEAPONS] = {
   {
     0,                          // staff
     5 * FRACUNIT,               // goldwand

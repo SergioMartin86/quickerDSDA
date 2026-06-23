@@ -29,13 +29,13 @@
 
 #include "text_file.h"
 
-extern __STORAGE_MODIFIER int dsda_last_leveltime, dsda_last_gamemap, dsda_startmap;
+extern int dsda_last_leveltime, dsda_last_gamemap, dsda_startmap;
 
 static char* dsda_TextFileName(void) {
   int name_length;
   char* name;
   char* playdemo;
-  const char *playback_name;
+  const char* playback_name;
 
   playback_name = dsda_PlaybackName();
 
@@ -62,7 +62,7 @@ static char* dsda_TextFileName(void) {
 }
 
 static int dsda_IL(void) {
-  extern __STORAGE_MODIFIER int dsda_startmap;
+  extern int dsda_startmap;
 
   return dsda_startmap == dsda_last_gamemap;
 }

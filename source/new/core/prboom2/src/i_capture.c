@@ -39,8 +39,8 @@
 
 #include "dsda/configuration.h"
 
-__STORAGE_MODIFIER int capturing_video = 0;
-static __STORAGE_MODIFIER const char *vid_fname;
+int capturing_video = 0;
+static const char *vid_fname;
 
 typedef struct
 { // information on a running pipe
@@ -53,13 +53,13 @@ typedef struct
   void *user;
 } pipeinfo_t;
 
-static __STORAGE_MODIFIER pipeinfo_t soundpipe;
-static __STORAGE_MODIFIER pipeinfo_t videopipe;
-static __STORAGE_MODIFIER pipeinfo_t muxpipe;
+static pipeinfo_t soundpipe;
+static pipeinfo_t videopipe;
+static pipeinfo_t muxpipe;
 
-__STORAGE_MODIFIER int cap_fps;
-__STORAGE_MODIFIER int cap_frac;
-__STORAGE_MODIFIER int cap_wipescreen;
+int cap_fps;
+int cap_frac;
+int cap_wipescreen;
 
 // parses a command with simple printf-style replacements.
 
@@ -564,7 +564,7 @@ void I_CaptureFrame (void)
 {
   unsigned char *snd;
   unsigned char *vid;
-  static __STORAGE_MODIFIER int partsof35 = 0; // correct for sync when samplerate % 35 != 0
+  static int partsof35 = 0; // correct for sync when samplerate % 35 != 0
   int nsampreq;
 
   if (!capturing_video)

@@ -314,7 +314,7 @@ static append_mobjinfo_t append_mobjinfo[] = {
   { &ZMT_AMBIENTSOUND, &zmt_ambient_sound },
 };
 
-static int append_mobjinfo_count = sizeof(append_mobjinfo) / sizeof(append_mobjinfo[0]);
+static __STORAGE_MODIFIER int append_mobjinfo_count = sizeof(append_mobjinfo) / sizeof(append_mobjinfo[0]);
 
 void dsda_AppendZDoomMobjInfo(void) {
   int i;

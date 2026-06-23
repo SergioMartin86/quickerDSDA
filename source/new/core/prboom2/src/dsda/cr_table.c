@@ -49,9 +49,9 @@ cr_range_t cr_range[CR_HUD_LIMIT] = {
   [CR_WHITE]     = { 0x24, 0x24, 0x24, 0xFF, 0xFF, 0xFF },
 };
 
-static __STORAGE_MODIFIER char ref_lump_doom[9] = "STCFN065";
-static __STORAGE_MODIFIER char ref_lump_heretic[9] = "FONTA33";
-static __STORAGE_MODIFIER char ref_lump_hexen[9] = "FONTA33";
+static char ref_lump_doom[9] = "STCFN065";
+static char ref_lump_heretic[9] = "FONTA33";
+static char ref_lump_hexen[9] = "FONTA33";
 
 typedef struct {
   double light_lower_bound;
@@ -119,7 +119,7 @@ static void dsda_CalculateFontBounds(const char *playpal) {
           cr_font.light_lower_bound, cr_font.light_upper_bound, cr_font.multiplier);
 }
 
-void dsda_LoadCRLump(void) {
+static void dsda_LoadCRLump(void) {
   char* lump;
   char** lines;
   const char* line;
@@ -137,23 +137,14 @@ void dsda_LoadCRLump(void) {
     line = lines[line_i];
 
     if (sscanf(line, "%d %i %i %i %i %i %i", &i, &r1, &g1, &b1, &r2, &g2, &b2) != 7)
-    {
-      return; // Ignoring error
       I_Error("DSDACR lump has unknown format!");
-    }
 
     if (i < 1 || i >= CR_HUD_LIMIT)
-    {
-      return; // Ignoring error
       I_Error("DSDACR index %d is out of bounds!", i);
-    }
 
     if (r1 < 0 || g1 < 0 || b1 < 0 || r2 < 0 || g2 < 0 || b2 < 0 ||
         r1 > 255 || g1 > 255 || b1 > 255 || r2 > 255 || g2 > 255 || b2 > 255)
-    {
-      return; // Ignoring error
       I_Error("DSDACR index %d has color out of range (0-255)", i);
-    }
 
     cr_range[i].r1 = r1;
     cr_range[i].g1 = g1;

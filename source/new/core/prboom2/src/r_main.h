@@ -43,30 +43,30 @@ extern __STORAGE_MODIFIER int r_frame_count;
 // POV related.
 //
 
-extern __STORAGE_MODIFIER fixed_t viewcos;
-extern __STORAGE_MODIFIER fixed_t viewsin;
-extern __STORAGE_MODIFIER fixed_t viewtancos;
-extern __STORAGE_MODIFIER fixed_t viewtansin;
-extern __STORAGE_MODIFIER int viewwidth;
-extern __STORAGE_MODIFIER int viewheight;
-extern __STORAGE_MODIFIER int centerx;
-extern __STORAGE_MODIFIER int centery;
-extern __STORAGE_MODIFIER fixed_t globaluclip;
-extern __STORAGE_MODIFIER fixed_t globaldclip;
-extern __STORAGE_MODIFIER fixed_t centerxfrac;
-extern __STORAGE_MODIFIER fixed_t centeryfrac;
-extern __STORAGE_MODIFIER fixed_t yaspectmul;
-extern __STORAGE_MODIFIER fixed_t viewheightfrac; //e6y: for correct cliping of things
-extern __STORAGE_MODIFIER fixed_t projection;
-extern __STORAGE_MODIFIER fixed_t skyiscale;
+extern __STORAGE_MODIFIER fixed_t  viewcos;
+extern __STORAGE_MODIFIER fixed_t  viewsin;
+extern __STORAGE_MODIFIER fixed_t  viewtancos;
+extern __STORAGE_MODIFIER fixed_t  viewtansin;
+extern int      viewwidth;
+extern int      viewheight;
+extern __STORAGE_MODIFIER int      centerx;
+extern __STORAGE_MODIFIER int      centery;
+extern __STORAGE_MODIFIER fixed_t  globaluclip;
+extern __STORAGE_MODIFIER fixed_t  globaldclip;
+extern __STORAGE_MODIFIER fixed_t  centerxfrac;
+extern __STORAGE_MODIFIER fixed_t  centeryfrac;
+extern __STORAGE_MODIFIER fixed_t  yaspectmul;
+extern __STORAGE_MODIFIER fixed_t  viewheightfrac; //e6y: for correct cliping of things
+extern __STORAGE_MODIFIER fixed_t  projection;
+extern __STORAGE_MODIFIER fixed_t  skyiscale;
 // e6y: wide-res
 extern __STORAGE_MODIFIER int wide_centerx;
 #define RMUL (1.6f/1.333333f)
 
 // proff 11/06/98: Added for high-res
-extern __STORAGE_MODIFIER fixed_t projectiony;
-extern __STORAGE_MODIFIER int validcount;
-extern __STORAGE_MODIFIER int validcount2;
+extern __STORAGE_MODIFIER fixed_t  projectiony;
+extern __STORAGE_MODIFIER int      validcount;
+extern __STORAGE_MODIFIER int      validcount2;
 // e6y: Added for more precise flats drawing
 extern __STORAGE_MODIFIER fixed_t viewfocratio;
 
@@ -108,7 +108,7 @@ extern __STORAGE_MODIFIER dboolean use_boom_cm;
 extern __STORAGE_MODIFIER int boom_cm;         // current colormap
 extern __STORAGE_MODIFIER int frame_fixedcolormap;
 
-extern __STORAGE_MODIFIER int extralight;
+extern __STORAGE_MODIFIER int          extralight;
 extern __STORAGE_MODIFIER const lighttable_t *fixedcolormap;
 
 // Number of diminishing brightness levels.
@@ -124,11 +124,11 @@ extern __STORAGE_MODIFIER const lighttable_t *fixedcolormap;
 
 PUREFUNC int R_CompatiblePointOnSide(fixed_t x, fixed_t y, const node_t *node);
 PUREFUNC int R_ZDoomPointOnSide(fixed_t x, fixed_t y, const node_t *node);
-extern int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
+extern __STORAGE_MODIFIER int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
 
 PUREFUNC int R_CompatiblePointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
 PUREFUNC int R_ZDoomPointOnSegSide(fixed_t x, fixed_t y, const seg_t *line);
-extern int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
+extern __STORAGE_MODIFIER int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
 
 angle_t R_PointToAngle2(fixed_t x1, fixed_t y1, fixed_t x, fixed_t y);
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y);

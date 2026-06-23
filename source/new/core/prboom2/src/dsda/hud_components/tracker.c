@@ -34,7 +34,7 @@ typedef struct {
   dsda_text_t component[TRACKER_LIMIT];
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
 void dsda_InitTrackerHC(int x_offset, int y_offset, int vpt, int* args, int arg_count, void** data) {
   int i;

@@ -27,7 +27,7 @@
 
 __STORAGE_MODIFIER skill_info_t skill_info;
 
-const skill_info_t doom_skill_infos[5] = {
+__STORAGE_MODIFIER const skill_info_t doom_skill_infos[5] = {
   {
     .ammo_factor = FRACUNIT * 2,
     .damage_factor = FRACUNIT / 2,
@@ -69,7 +69,7 @@ const skill_info_t doom_skill_infos[5] = {
   },
 };
 
-const skill_info_t heretic_skill_infos[5] = {
+__STORAGE_MODIFIER const skill_info_t heretic_skill_infos[5] = {
   {
     .ammo_factor = FRACUNIT * 3 / 2,
     .damage_factor = FRACUNIT / 2,
@@ -100,7 +100,7 @@ const skill_info_t heretic_skill_infos[5] = {
   },
 };
 
-const skill_info_t hexen_skill_infos[5] = {
+__STORAGE_MODIFIER const skill_info_t hexen_skill_infos[5] = {
   {
     .ammo_factor = FRACUNIT * 3 / 2,
     .damage_factor = FRACUNIT / 2,
@@ -127,7 +127,7 @@ const skill_info_t hexen_skill_infos[5] = {
 };
 
 __STORAGE_MODIFIER int num_skills;
-skill_info_t* skill_infos;
+__STORAGE_MODIFIER skill_info_t* skill_infos;
 
 static void dsda_CopyFactor(fixed_t* dest, const char* source) {
   // We will compute integers with these,

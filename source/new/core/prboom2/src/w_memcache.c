@@ -44,7 +44,7 @@
 #include "z_zone.h"
 #include "lprintf.h"
 
-static __STORAGE_MODIFIER void **lump_data;
+static void **lump_data;
 
 /* W_InitCache
  *

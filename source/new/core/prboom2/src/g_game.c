@@ -118,7 +118,7 @@
 // Allows use of HELP2 screen for PWADs under DOOM 1
 __STORAGE_MODIFIER int pwad_help2_check;
 
-struct
+__STORAGE_MODIFIER struct
 {
     int type;   // mobjtype_t
     int speed[2];
@@ -150,44 +150,44 @@ struct
 static __STORAGE_MODIFIER const byte *demobuffer;   /* cph - only used for playback */
 static __STORAGE_MODIFIER int demolength; // check for overrun (missing DEMOMARKER)
 
-__STORAGE_MODIFIER dboolean preventLevelExit;
-__STORAGE_MODIFIER dboolean preventGameEnd;
+__STORAGE_MODIFIER dboolean        preventLevelExit;
+__STORAGE_MODIFIER dboolean        preventGameEnd;
 
-__STORAGE_MODIFIER dboolean reachedLevelExit;
-__STORAGE_MODIFIER dboolean reachedGameEnd;
+__STORAGE_MODIFIER dboolean        reachedLevelExit;
+__STORAGE_MODIFIER dboolean        reachedGameEnd;
 
 __STORAGE_MODIFIER gameaction_t    gameaction;
-__STORAGE_MODIFIER gamestate_t gamestate;
-__STORAGE_MODIFIER dboolean in_game;
-__STORAGE_MODIFIER int gameskill;
-__STORAGE_MODIFIER int gameepisode;
-__STORAGE_MODIFIER int gamemap;
+__STORAGE_MODIFIER gamestate_t     gamestate;
+__STORAGE_MODIFIER dboolean        in_game;
+__STORAGE_MODIFIER int             gameskill;
+__STORAGE_MODIFIER int             gameepisode;
+__STORAGE_MODIFIER int             gamemap;
 // CPhipps - moved *_loadgame vars here
 static __STORAGE_MODIFIER dboolean forced_loadgame = false;
 static __STORAGE_MODIFIER dboolean load_via_cmd = false;
 
-__STORAGE_MODIFIER dboolean timingdemo;    // if true, exit with report on completion
-__STORAGE_MODIFIER dboolean fastdemo;      // if true, run at full speed -- killough
-__STORAGE_MODIFIER dboolean nodrawers;     // for comparative timing purposes
-__STORAGE_MODIFIER int starttime;     // for comparative timing purposes
-__STORAGE_MODIFIER dboolean deathmatch;    // only if started as net death
-__STORAGE_MODIFIER dboolean netgame;       // only true if packets are broadcast
-__STORAGE_MODIFIER dboolean playeringame[MAX_MAXPLAYERS];
-__STORAGE_MODIFIER player_t players[MAX_MAXPLAYERS];
-__STORAGE_MODIFIER pclass_t PlayerClass[MAX_MAXPLAYERS];
-__STORAGE_MODIFIER int upmove;
-__STORAGE_MODIFIER int consoleplayer; // player taking events and displaying
-__STORAGE_MODIFIER int displayplayer; // view being displayed
-__STORAGE_MODIFIER int gametic;
-__STORAGE_MODIFIER int boom_basetic;       /* killough 9/29/98: for demo sync */
-__STORAGE_MODIFIER int true_basetic;
-__STORAGE_MODIFIER int totalkills, totallive, totalitems, totalsecret;    // for intermission
-__STORAGE_MODIFIER dboolean demorecording;
+__STORAGE_MODIFIER dboolean         timingdemo;    // if true, exit with report on completion
+__STORAGE_MODIFIER dboolean         fastdemo;      // if true, run at full speed -- killough
+__STORAGE_MODIFIER dboolean         nodrawers;     // for comparative timing purposes
+__STORAGE_MODIFIER int             starttime;     // for comparative timing purposes
+__STORAGE_MODIFIER dboolean         deathmatch;    // only if started as net death
+__STORAGE_MODIFIER dboolean         netgame;       // only true if packets are broadcast
+__STORAGE_MODIFIER dboolean         playeringame[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER player_t        players[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER pclass_t        PlayerClass[MAX_MAXPLAYERS];
+__STORAGE_MODIFIER int             upmove;
+__STORAGE_MODIFIER int             consoleplayer; // player taking events and displaying
+__STORAGE_MODIFIER int             displayplayer; // view being displayed
+__STORAGE_MODIFIER int             gametic;
+__STORAGE_MODIFIER int             boom_basetic;       /* killough 9/29/98: for demo sync */
+__STORAGE_MODIFIER int             true_basetic;
+__STORAGE_MODIFIER int             totalkills, totallive, totalitems, totalsecret;    // for intermission
+__STORAGE_MODIFIER dboolean         demorecording;
 __STORAGE_MODIFIER wbstartstruct_t wminfo;               // parms for world map / intermission
-__STORAGE_MODIFIER dboolean haswolflevels = false;// jff 4/18/98 wolf levels present
-__STORAGE_MODIFIER int totalleveltimes;      // CPhipps - total time for all completed levels
-__STORAGE_MODIFIER int levels_completed;
-__STORAGE_MODIFIER int longtics;
+__STORAGE_MODIFIER dboolean         haswolflevels = false;// jff 4/18/98 wolf levels present
+__STORAGE_MODIFIER int             totalleveltimes;      // CPhipps - total time for all completed levels
+__STORAGE_MODIFIER int             levels_completed;
+__STORAGE_MODIFIER int             longtics;
 
 __STORAGE_MODIFIER dboolean coop_spawns;
 
@@ -212,7 +212,7 @@ __STORAGE_MODIFIER fixed_t sidemove[2]    = {0x18, 0x28};
 __STORAGE_MODIFIER fixed_t angleturn[3]   = {640, 1280, 320};  // + slow turn
 __STORAGE_MODIFIER fixed_t flyspeed[2]    = {1*256, 3*256};
 
-static __STORAGE_MODIFIER int turnheld;       // for accelerative turning
+static __STORAGE_MODIFIER int     turnheld;       // for accelerative turning
 
 // Set to -1 or +1 to switch to the previous or next weapon.
 
@@ -220,7 +220,7 @@ static __STORAGE_MODIFIER int next_weapon = 0;
 
 // Used for prev/next weapon keys.
 
-static const struct
+static __STORAGE_MODIFIER const struct
 {
   weapontype_t weapon;
   weapontype_t weapon_num;
@@ -254,22 +254,22 @@ static const struct
 // };
 
 // mouse values are used once
-static __STORAGE_MODIFIER int mousex;
-static __STORAGE_MODIFIER int mousey;
-static __STORAGE_MODIFIER int dclicktime;
-static __STORAGE_MODIFIER int dclickstate;
-static __STORAGE_MODIFIER int dclicks;
-static __STORAGE_MODIFIER int dclicktime2;
-static __STORAGE_MODIFIER int dclickstate2;
-static __STORAGE_MODIFIER int dclicks2;
+static __STORAGE_MODIFIER int   mousex;
+static __STORAGE_MODIFIER int   mousey;
+static __STORAGE_MODIFIER int   dclicktime;
+static __STORAGE_MODIFIER int   dclickstate;
+static __STORAGE_MODIFIER int   dclicks;
+static __STORAGE_MODIFIER int   dclicktime2;
+static __STORAGE_MODIFIER int   dclickstate2;
+static __STORAGE_MODIFIER int   dclicks2;
 
 static __STORAGE_MODIFIER int left_analog_x;
 static __STORAGE_MODIFIER int left_analog_y;
 
 // Game events info
 static __STORAGE_MODIFIER buttoncode_t special_event; // Event triggered by local player, to send
-static __STORAGE_MODIFIER int savegameslot;         // Slot to load if gameaction == ga_loadgame
-__STORAGE_MODIFIER char savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
+static __STORAGE_MODIFIER int   savegameslot;         // Slot to load if gameaction == ga_loadgame
+__STORAGE_MODIFIER char         savedescription[SAVEDESCLEN];  // Description to save in savegame if gameaction == ga_savegame
 
 // heretic
 #include "p_user.h"
@@ -331,6 +331,7 @@ static void G_DoSaveGame(dboolean via_cmd);
 static inline signed char fudgef(signed char b)
 {
 /*e6y
+  static int c;
   if (!b || !demo_compatibility || longtics) return b;
   if (++c & 0x1f) return b;
   b |= 1; if (b>2) b-=2;*/
@@ -651,7 +652,7 @@ void G_BuildTiccmd(ticcmd_t* cmd)
 
     if (hexen)
     {
-      extern __STORAGE_MODIFIER int mn_SuicideConsole;
+      extern int mn_SuicideConsole;
 
       if (dsda_InputActive(dsda_input_jump))
       {
@@ -2379,7 +2380,7 @@ static void G_LoadGameErr(const char *msg)
   M_ForcedLoadGame(msg);             // Print message asking for 'Y' to force
 }
 
-const __STORAGE_MODIFIER char *comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
+__STORAGE_MODIFIER const char * comp_lev_str[MAX_COMPATIBILITY_LEVEL] =
 { "Doom v1.2", "Doom v1.666", "Doom/Doom2 v1.9", "Ultimate Doom/Doom95", "Final Doom",
   "early DosDoom", "TASDoom", "\"boom compatibility\"", "boom v2.01", "boom v2.02", "lxdoom v1.3.2+",
   "MBF", "PrBoom 2.03beta", "PrBoom v2.1.0-2.1.1", "PrBoom v2.1.2-v2.2.6",
@@ -2418,7 +2419,7 @@ void RecalculateDrawnSubsectors(void)
 
 void G_AfterLoad(void)
 {
-  extern __STORAGE_MODIFIER int BorderNeedRefresh;
+  extern int BorderNeedRefresh;
 
   dsda_ResetTrackers();
 
@@ -2604,9 +2605,9 @@ static void G_DoSaveGame(dboolean via_cmd)
   Z_Free(name);
 }
 
-static __STORAGE_MODIFIER int d_skill;
-static __STORAGE_MODIFIER int d_episode;
-static __STORAGE_MODIFIER int d_map;
+static __STORAGE_MODIFIER int     d_skill;
+static __STORAGE_MODIFIER int     d_episode;
+static __STORAGE_MODIFIER int     d_map;
 
 void G_DeferedInitNew(int skill, int episode, int map)
 {
@@ -3540,7 +3541,7 @@ void G_BeginRecording (void)
 // G_PlayDemo
 //
 
-static const __STORAGE_MODIFIER char *defdemoname;
+static __STORAGE_MODIFIER const char *defdemoname;
 
 void G_DeferedPlayDemo (const char* name)
 {
@@ -4054,6 +4055,7 @@ dboolean G_CheckDemoStatus (void)
 // killough 1/22/98: this is a "Doom printf" for messages. I've gotten
 // tired of using players->message=... and so I've added this dprintf.
 //
+// killough 3/6/98: Made limit static to allow z_zone functions to call
 // this function, without calling realloc(), which seems to cause problems.
 
 #define MAX_MESSAGE_SIZE 1024

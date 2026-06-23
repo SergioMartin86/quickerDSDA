@@ -55,19 +55,19 @@
 #include "am_map.h"
 #include "lprintf.h"
 
-static __STORAGE_MODIFIER FILE *levelinfo;
+static FILE *levelinfo;
 
-static __STORAGE_MODIFIER int gld_max_vertexes = 0;
-static __STORAGE_MODIFIER int gld_num_vertexes = 0;
+static int gld_max_vertexes = 0;
+static int gld_num_vertexes = 0;
 
-static __STORAGE_MODIFIER int triangulate_subsectors = 0;
+static int triangulate_subsectors = 0;
 
 // this is the list for all sectors to the loops
-__STORAGE_MODIFIER GLSector *sectorloops;
+GLSector *sectorloops;
 
 // this is the list for all subsectors to the loops
 // uses by textured automap
-__STORAGE_MODIFIER GLMapSubsector *subsectorloops;
+GLMapSubsector *subsectorloops;
 
 static void gld_AddGlobalVertexes(int count)
 {
@@ -233,7 +233,7 @@ static vertex_t *gld_FlatEdgeClipper(int *numpoints, vertex_t *points, int numcl
   return points;
 }
 
-static void gld_FlatConvexCarver(int ssidx, __STORAGE_MODIFIER int num, divline_t *list)
+static void gld_FlatConvexCarver(int ssidx, int num, divline_t *list)
 {
   subsector_t *ssec=&subsectors[ssidx];
   int numclippers = num+ssec->numlines;
@@ -358,7 +358,7 @@ static void gld_CarveFlats(int bspnode, int numdivlines, divline_t *divlines)
   Z_Free(childlist);
 }
 
-static __STORAGE_MODIFIER int currentsector; // the sector which is currently tesselated
+static int currentsector; // the sector which is currently tesselated
 
 // ntessBegin
 //
@@ -483,7 +483,7 @@ static void CALLBACK ntessEnd( void )
 // There is no more HOM at the starting area on MAP16 @ Eternal.wad
 // I hope nothing was broken
 
-static void gld_PrecalculateSector(__STORAGE_MODIFIER int num)
+static void gld_PrecalculateSector(int num)
 {
   int i;
   dboolean *lineadded=NULL;
@@ -1030,8 +1030,8 @@ void gld_PreprocessLevel(void)
   if (!gl_preprocessed)
   {
     int i;
-    static __STORAGE_MODIFIER int numsectors_prev = 0;
-    static __STORAGE_MODIFIER int numsubsectors_prev = 0;
+    static int numsectors_prev = 0;
+    static int numsubsectors_prev = 0;
 
     Z_Free(gl_segs);
     Z_Free(gl_lines);

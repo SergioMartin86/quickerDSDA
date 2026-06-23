@@ -28,7 +28,7 @@ typedef struct {
   const char* label_wpn;
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {
   player_t* player;

@@ -38,13 +38,13 @@
 
 #include "smooth.h"
 
-__STORAGE_MODIFIER int demo_smoothturns;
-__STORAGE_MODIFIER int demo_smoothturnsfactor = 6;
+int demo_smoothturns;
+int demo_smoothturnsfactor = 6;
 
-static __STORAGE_MODIFIER int smooth_playing_turns[SMOOTH_PLAYING_MAXFACTOR];
-static __STORAGE_MODIFIER int64_t smooth_playing_sum;
-static __STORAGE_MODIFIER int smooth_playing_index;
-static __STORAGE_MODIFIER angle_t smooth_playing_angle;
+static int smooth_playing_turns[SMOOTH_PLAYING_MAXFACTOR];
+static int64_t smooth_playing_sum;
+static int smooth_playing_index;
+static angle_t smooth_playing_angle;
 
 void R_SmoothPlaying_Reset(player_t *player)
 {

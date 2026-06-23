@@ -150,7 +150,7 @@ static const dsda_options_t default_latest_options = {
   .comp_reservedlineflag = 1,
 };
 
-static dsda_options_t mbf_options;
+static __STORAGE_MODIFIER dsda_options_t mbf_options;
 
 typedef struct {
   const char* key;
@@ -160,79 +160,14 @@ typedef struct {
   int config_key;
 } dsda_option_t;
 
-static dsda_option_t option_list[] = {
-  { "weapon_recoil", &mbf_options.weapon_recoil, 0, 1 },
-  { "monsters_remember", &mbf_options.monsters_remember, 0, 1 },
-  { "monster_infighting", &mbf_options.monster_infighting, 0, 1 },
-  { "monster_backing", &mbf_options.monster_backing, 0, 1 },
-  { "monster_avoid_hazards", &mbf_options.monster_avoid_hazards, 0, 1 },
-  { "monkeys", &mbf_options.monkeys, 0, 1 },
-  { "monster_friction", &mbf_options.monster_friction, 0, 1 },
-  { "help_friends", &mbf_options.help_friends, 0, 1 },
-  { "player_helpers", &mbf_options.player_helpers, 0, 3 },
-  { "friend_distance", &mbf_options.friend_distance, 0, 999 },
-  { "dog_jumping", &mbf_options.dog_jumping, 0, 1 },
-  { "comp_telefrag", &mbf_options.comp_telefrag, 0, 1 },
-  { "comp_dropoff", &mbf_options.comp_dropoff, 0, 1 },
-  { "comp_vile", &mbf_options.comp_vile, 0, 1 },
-  { "comp_pain", &mbf_options.comp_pain, 0, 1 },
-  { "comp_skull", &mbf_options.comp_skull, 0, 1 },
-  { "comp_blazing", &mbf_options.comp_blazing, 0, 1 },
-  { "comp_doorlight", &mbf_options.comp_doorlight, 0, 1 },
-  { "comp_model", &mbf_options.comp_model, 0, 1 },
-  { "comp_god", &mbf_options.comp_god, 0, 1 },
-  { "comp_falloff", &mbf_options.comp_falloff, 0, 1 },
-  { "comp_floors", &mbf_options.comp_floors, 0, 1 },
-  { "comp_skymap", &mbf_options.comp_skymap, 0, 1 },
-  { "comp_pursuit", &mbf_options.comp_pursuit, 0, 1 },
-  { "comp_doorstuck", &mbf_options.comp_doorstuck, 0, 1 },
-  { "comp_staylift", &mbf_options.comp_staylift, 0, 1 },
-  { "comp_zombie", &mbf_options.comp_zombie, 0, 1 },
-  { "comp_stairs", &mbf_options.comp_stairs, 0, 1 },
-  { "comp_infcheat", &mbf_options.comp_infcheat, 0, 1 },
-  { "comp_zerotags", &mbf_options.comp_zerotags, 0, 1 },
-  { "comp_respawn", &mbf_options.comp_respawn, 0, 1 },
-  { "comp_respawnfix", &mbf_options.comp_respawn, 0, 1 },
-  { "comp_soul", &mbf_options.comp_soul, 0, 1 },
-  { "comp_ledgeblock", &mbf_options.comp_ledgeblock, 0, 1 },
-  { "comp_friendlyspawn", &mbf_options.comp_friendlyspawn, 0, 1 },
-  { "comp_voodooscroller", &mbf_options.comp_voodooscroller, 0, 1 },
-  { "comp_reservedlineflag", &mbf_options.comp_reservedlineflag, 0, 1 },
-
-  { "mapcolor_back", NULL, 0, 255, dsda_config_mapcolor_back },
-  { "mapcolor_grid", NULL, 0, 255, dsda_config_mapcolor_grid },
-  { "mapcolor_wall", NULL, 0, 255, dsda_config_mapcolor_wall },
-  { "mapcolor_fchg", NULL, 0, 255, dsda_config_mapcolor_fchg },
-  { "mapcolor_cchg", NULL, 0, 255, dsda_config_mapcolor_cchg },
-  { "mapcolor_clsd", NULL, 0, 255, dsda_config_mapcolor_clsd },
-  { "mapcolor_rkey", NULL, 0, 255, dsda_config_mapcolor_rkey },
-  { "mapcolor_bkey", NULL, 0, 255, dsda_config_mapcolor_bkey },
-  { "mapcolor_ykey", NULL, 0, 255, dsda_config_mapcolor_ykey },
-  { "mapcolor_rdor", NULL, 0, 255, dsda_config_mapcolor_rdor },
-  { "mapcolor_bdor", NULL, 0, 255, dsda_config_mapcolor_bdor },
-  { "mapcolor_ydor", NULL, 0, 255, dsda_config_mapcolor_ydor },
-  { "mapcolor_tele", NULL, 0, 255, dsda_config_mapcolor_tele },
-  { "mapcolor_secr", NULL, 0, 255, dsda_config_mapcolor_secr },
-  { "mapcolor_revsecr", NULL, 0, 255, dsda_config_mapcolor_revsecr },
-  { "mapcolor_exit", NULL, 0, 255, dsda_config_mapcolor_exit },
-  { "mapcolor_unsn", NULL, 0, 255, dsda_config_mapcolor_unsn },
-  { "mapcolor_flat", NULL, 0, 255, dsda_config_mapcolor_flat },
-  { "mapcolor_sprt", NULL, 0, 255, dsda_config_mapcolor_sprt },
-  { "mapcolor_item", NULL, 0, 255, dsda_config_mapcolor_item },
-  { "mapcolor_enemy", NULL, 0, 255, dsda_config_mapcolor_enemy },
-  { "mapcolor_frnd", NULL, 0, 255, dsda_config_mapcolor_frnd },
-  { "mapcolor_hair", NULL, 0, 255, dsda_config_mapcolor_hair },
-  { "mapcolor_sngl", NULL, 0, 255, dsda_config_mapcolor_sngl },
-  { "mapcolor_me", NULL, 0, 255, dsda_config_mapcolor_me },
-  { 0 }
-};
+static dsda_option_t option_list[63] ;
 
 typedef struct {
   dboolean found;
   int value;
 } dsda_parsed_option_t;
 
-static dsda_parsed_option_t parsed_option_list[arrlen(option_list)];
+static __STORAGE_MODIFIER dsda_parsed_option_t parsed_option_list[arrlen(option_list)];
 
 #define OPTIONS_LINE_LENGTH 80
 
@@ -329,7 +264,7 @@ const dsda_options_t* dsda_Options(void) {
 
 #define MBF21_COMP_TOTAL 25
 
-static int mbf21_comp_translation[MBF21_COMP_TOTAL] = {
+static __STORAGE_MODIFIER int mbf21_comp_translation[MBF21_COMP_TOTAL] = {
   comp_telefrag,
   comp_dropoff,
   comp_vile,
@@ -461,4 +396,73 @@ const byte *dsda_ReadOptions21(const byte *demo_p) {
   G_Compatibility();
 
   return demo_p;
+}
+
+/* deglobalizer: per-thread TLS pointer init */
+void __deglob_tls_init_options_c(void)
+{
+  // option_list
+  option_list[0] = (dsda_option_t){ "weapon_recoil", &mbf_options.weapon_recoil, 0, 1 };
+  option_list[1] = (dsda_option_t){ "monsters_remember", &mbf_options.monsters_remember, 0, 1 };
+  option_list[2] = (dsda_option_t){ "monster_infighting", &mbf_options.monster_infighting, 0, 1 };
+  option_list[3] = (dsda_option_t){ "monster_backing", &mbf_options.monster_backing, 0, 1 };
+  option_list[4] = (dsda_option_t){ "monster_avoid_hazards", &mbf_options.monster_avoid_hazards, 0, 1 };
+  option_list[5] = (dsda_option_t){ "monkeys", &mbf_options.monkeys, 0, 1 };
+  option_list[6] = (dsda_option_t){ "monster_friction", &mbf_options.monster_friction, 0, 1 };
+  option_list[7] = (dsda_option_t){ "help_friends", &mbf_options.help_friends, 0, 1 };
+  option_list[8] = (dsda_option_t){ "player_helpers", &mbf_options.player_helpers, 0, 3 };
+  option_list[9] = (dsda_option_t){ "friend_distance", &mbf_options.friend_distance, 0, 999 };
+  option_list[10] = (dsda_option_t){ "dog_jumping", &mbf_options.dog_jumping, 0, 1 };
+  option_list[11] = (dsda_option_t){ "comp_telefrag", &mbf_options.comp_telefrag, 0, 1 };
+  option_list[12] = (dsda_option_t){ "comp_dropoff", &mbf_options.comp_dropoff, 0, 1 };
+  option_list[13] = (dsda_option_t){ "comp_vile", &mbf_options.comp_vile, 0, 1 };
+  option_list[14] = (dsda_option_t){ "comp_pain", &mbf_options.comp_pain, 0, 1 };
+  option_list[15] = (dsda_option_t){ "comp_skull", &mbf_options.comp_skull, 0, 1 };
+  option_list[16] = (dsda_option_t){ "comp_blazing", &mbf_options.comp_blazing, 0, 1 };
+  option_list[17] = (dsda_option_t){ "comp_doorlight", &mbf_options.comp_doorlight, 0, 1 };
+  option_list[18] = (dsda_option_t){ "comp_model", &mbf_options.comp_model, 0, 1 };
+  option_list[19] = (dsda_option_t){ "comp_god", &mbf_options.comp_god, 0, 1 };
+  option_list[20] = (dsda_option_t){ "comp_falloff", &mbf_options.comp_falloff, 0, 1 };
+  option_list[21] = (dsda_option_t){ "comp_floors", &mbf_options.comp_floors, 0, 1 };
+  option_list[22] = (dsda_option_t){ "comp_skymap", &mbf_options.comp_skymap, 0, 1 };
+  option_list[23] = (dsda_option_t){ "comp_pursuit", &mbf_options.comp_pursuit, 0, 1 };
+  option_list[24] = (dsda_option_t){ "comp_doorstuck", &mbf_options.comp_doorstuck, 0, 1 };
+  option_list[25] = (dsda_option_t){ "comp_staylift", &mbf_options.comp_staylift, 0, 1 };
+  option_list[26] = (dsda_option_t){ "comp_zombie", &mbf_options.comp_zombie, 0, 1 };
+  option_list[27] = (dsda_option_t){ "comp_stairs", &mbf_options.comp_stairs, 0, 1 };
+  option_list[28] = (dsda_option_t){ "comp_infcheat", &mbf_options.comp_infcheat, 0, 1 };
+  option_list[29] = (dsda_option_t){ "comp_zerotags", &mbf_options.comp_zerotags, 0, 1 };
+  option_list[30] = (dsda_option_t){ "comp_respawn", &mbf_options.comp_respawn, 0, 1 };
+  option_list[31] = (dsda_option_t){ "comp_respawnfix", &mbf_options.comp_respawn, 0, 1 };
+  option_list[32] = (dsda_option_t){ "comp_soul", &mbf_options.comp_soul, 0, 1 };
+  option_list[33] = (dsda_option_t){ "comp_ledgeblock", &mbf_options.comp_ledgeblock, 0, 1 };
+  option_list[34] = (dsda_option_t){ "comp_friendlyspawn", &mbf_options.comp_friendlyspawn, 0, 1 };
+  option_list[35] = (dsda_option_t){ "comp_voodooscroller", &mbf_options.comp_voodooscroller, 0, 1 };
+  option_list[36] = (dsda_option_t){ "comp_reservedlineflag", &mbf_options.comp_reservedlineflag, 0, 1 };
+  option_list[37] = (dsda_option_t){ "mapcolor_back", NULL, 0, 255, dsda_config_mapcolor_back };
+  option_list[38] = (dsda_option_t){ "mapcolor_grid", NULL, 0, 255, dsda_config_mapcolor_grid };
+  option_list[39] = (dsda_option_t){ "mapcolor_wall", NULL, 0, 255, dsda_config_mapcolor_wall };
+  option_list[40] = (dsda_option_t){ "mapcolor_fchg", NULL, 0, 255, dsda_config_mapcolor_fchg };
+  option_list[41] = (dsda_option_t){ "mapcolor_cchg", NULL, 0, 255, dsda_config_mapcolor_cchg };
+  option_list[42] = (dsda_option_t){ "mapcolor_clsd", NULL, 0, 255, dsda_config_mapcolor_clsd };
+  option_list[43] = (dsda_option_t){ "mapcolor_rkey", NULL, 0, 255, dsda_config_mapcolor_rkey };
+  option_list[44] = (dsda_option_t){ "mapcolor_bkey", NULL, 0, 255, dsda_config_mapcolor_bkey };
+  option_list[45] = (dsda_option_t){ "mapcolor_ykey", NULL, 0, 255, dsda_config_mapcolor_ykey };
+  option_list[46] = (dsda_option_t){ "mapcolor_rdor", NULL, 0, 255, dsda_config_mapcolor_rdor };
+  option_list[47] = (dsda_option_t){ "mapcolor_bdor", NULL, 0, 255, dsda_config_mapcolor_bdor };
+  option_list[48] = (dsda_option_t){ "mapcolor_ydor", NULL, 0, 255, dsda_config_mapcolor_ydor };
+  option_list[49] = (dsda_option_t){ "mapcolor_tele", NULL, 0, 255, dsda_config_mapcolor_tele };
+  option_list[50] = (dsda_option_t){ "mapcolor_secr", NULL, 0, 255, dsda_config_mapcolor_secr };
+  option_list[51] = (dsda_option_t){ "mapcolor_revsecr", NULL, 0, 255, dsda_config_mapcolor_revsecr };
+  option_list[52] = (dsda_option_t){ "mapcolor_exit", NULL, 0, 255, dsda_config_mapcolor_exit };
+  option_list[53] = (dsda_option_t){ "mapcolor_unsn", NULL, 0, 255, dsda_config_mapcolor_unsn };
+  option_list[54] = (dsda_option_t){ "mapcolor_flat", NULL, 0, 255, dsda_config_mapcolor_flat };
+  option_list[55] = (dsda_option_t){ "mapcolor_sprt", NULL, 0, 255, dsda_config_mapcolor_sprt };
+  option_list[56] = (dsda_option_t){ "mapcolor_item", NULL, 0, 255, dsda_config_mapcolor_item };
+  option_list[57] = (dsda_option_t){ "mapcolor_enemy", NULL, 0, 255, dsda_config_mapcolor_enemy };
+  option_list[58] = (dsda_option_t){ "mapcolor_frnd", NULL, 0, 255, dsda_config_mapcolor_frnd };
+  option_list[59] = (dsda_option_t){ "mapcolor_hair", NULL, 0, 255, dsda_config_mapcolor_hair };
+  option_list[60] = (dsda_option_t){ "mapcolor_sngl", NULL, 0, 255, dsda_config_mapcolor_sngl };
+  option_list[61] = (dsda_option_t){ "mapcolor_me", NULL, 0, 255, dsda_config_mapcolor_me };
+  option_list[62] = (dsda_option_t){ 0 };
 }

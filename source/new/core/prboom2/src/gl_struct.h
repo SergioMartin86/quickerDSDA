@@ -175,6 +175,6 @@ void gld_AddNiceThing(int type, float x, float y, float radius, float angle,
 void gld_DrawNiceThings(int fx, int fy, int fw, int fh);
 void gld_ClearNiceThings(void);
 
-extern __STORAGE_MODIFIER int gl_render_fov;
+extern int gl_render_fov;
 
 #endif // _GL_STRUCT_H

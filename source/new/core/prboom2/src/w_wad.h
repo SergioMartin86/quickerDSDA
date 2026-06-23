@@ -77,7 +77,7 @@ typedef enum {
   ,source_deh
   ,source_err
 
-}  wad_source_t;
+} wad_source_t;
 
 // CPhipps - changed wad init
 // We _must_ have the wadfiles[] the same as those actually loaded, so there
@@ -134,7 +134,7 @@ typedef struct
 #define LUMP_PRBOOM 0x00000002 /* from internal resource */
 
 extern __STORAGE_MODIFIER lumpinfo_t *lumpinfo;
-extern __STORAGE_MODIFIER int numlumps;
+extern __STORAGE_MODIFIER int        numlumps;
 
 int     W_FindNumFromName2(const char *name, int ns, int lump);
 

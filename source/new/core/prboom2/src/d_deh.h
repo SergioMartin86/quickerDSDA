@@ -573,13 +573,13 @@ extern const char* s_AMSTR_MARKEDSPOT; // = AMSTR_MARKEDSPOT;
 extern const char* s_AMSTR_MARKSCLEARED; // = AMSTR_MARKSCLEARED;
 
 // CPhipps - automap rotate & overlay
-extern const char* s_AMSTR_ROTATEON;
-extern const char* s_AMSTR_ROTATEOFF;
-extern const char* s_AMSTR_OVERLAYON;
-extern const char* s_AMSTR_OVERLAYOFF;
+extern __STORAGE_MODIFIER const char* s_AMSTR_ROTATEON;
+extern __STORAGE_MODIFIER const char* s_AMSTR_ROTATEOFF;
+extern __STORAGE_MODIFIER const char* s_AMSTR_OVERLAYON;
+extern __STORAGE_MODIFIER const char* s_AMSTR_OVERLAYOFF;
 // e6y: textured automap
-extern const char* s_AMSTR_TEXTUREDON;
-extern const char* s_AMSTR_TEXTUREDOFF;
+extern __STORAGE_MODIFIER const char* s_AMSTR_TEXTUREDON;
+extern __STORAGE_MODIFIER const char* s_AMSTR_TEXTUREDOFF;
 
 //
 //      ST_stuff.C

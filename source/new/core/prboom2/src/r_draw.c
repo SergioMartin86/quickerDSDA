@@ -56,9 +56,9 @@
 //  and the total size == width*height*depth/8.,
 //
 
-__STORAGE_MODIFIER byte *viewimage;
-__STORAGE_MODIFIER int viewwidth;
-__STORAGE_MODIFIER int viewheight;
+byte *viewimage;
+int  viewwidth;
+int  viewheight;
 
 // Color tables for different players,
 //  translate a limited part to another
@@ -66,8 +66,8 @@ __STORAGE_MODIFIER int viewheight;
 //
 
 // CPhipps - made const*'s
-const __STORAGE_MODIFIER byte *tranmap;          // translucency filter maps 256x256   // phares
-const __STORAGE_MODIFIER byte *main_tranmap;     // killough 4/11/98
+const byte *tranmap;          // translucency filter maps 256x256   // phares
+const byte *main_tranmap;     // killough 4/11/98
 
 //
 // R_DrawColumn
@@ -85,18 +85,18 @@ typedef enum
    COL_FLEXADD
 } columntype_e;
 
-static __STORAGE_MODIFIER int temp_x = 0;
-static __STORAGE_MODIFIER int tempyl[4], tempyh[4];
+static int    temp_x = 0;
+static int    tempyl[4], tempyh[4];
 
 // e6y: resolution limitation is removed
-static __STORAGE_MODIFIER byte           *tempbuf;
+static byte           *tempbuf;
 
-static __STORAGE_MODIFIER int startx = 0;
-static __STORAGE_MODIFIER int temptype = COL_NONE;
-static __STORAGE_MODIFIER int commontop, commonbot;
-static const __STORAGE_MODIFIER byte *temptranmap = NULL;
+static int    startx = 0;
+static int    temptype = COL_NONE;
+static int    commontop, commonbot;
+static const byte *temptranmap = NULL;
 // SoM 7-28-04: Fix the fuzz problem.
-static const __STORAGE_MODIFIER byte   *tempfuzzmap;
+static const byte   *tempfuzzmap;
 
 //
 // Spectre/Invisibility.
@@ -117,12 +117,12 @@ static const int fuzzoffset_org[FUZZTABLE] = {
   FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF
 };
 
-static __STORAGE_MODIFIER int fuzzoffset[FUZZTABLE];
+static int fuzzoffset[FUZZTABLE];
 
-static __STORAGE_MODIFIER int fuzzpos = 0;
+static int fuzzpos = 0;
 
 // Fuzz cell size for scaled software fuzz
-static __STORAGE_MODIFIER int fuzzcellsize;
+static int fuzzcellsize;
 
 // render pipelines
 #define RDC_STANDARD      1
@@ -132,7 +132,7 @@ static __STORAGE_MODIFIER int fuzzcellsize;
 // no color mapping
 #define RDC_NOCOLMAP     16
 
-__STORAGE_MODIFIER draw_vars_t drawvars = {
+draw_vars_t drawvars = {
   NULL, // topleft
   0, // pitch
 };
@@ -236,7 +236,7 @@ void R_ResetColumnBuffer(void)
 //  be used. It has also been used with Wolfenstein 3D.
 //
 
-__STORAGE_MODIFIER byte *translationtables;
+byte *translationtables;
 
 #define R_DRAWCOLUMN_PIPELINE_TYPE RDC_PIPELINE_STANDARD
 #define R_DRAWCOLUMN_PIPELINE_BASE RDC_STANDARD
@@ -360,7 +360,7 @@ void R_SetDefaultDrawColumnVars(draw_column_vars_t *dcvars) {
 // Could be read from a lump instead.
 //
 
-__STORAGE_MODIFIER byte playernumtotrans[MAX_MAXPLAYERS];
+byte playernumtotrans[MAX_MAXPLAYERS];
 
 // HERETIC_TODO: player colors
 const byte player_colors[] = { 0x70, 0x60, 0x40, 0x20 };
@@ -457,7 +457,7 @@ void R_DrawSpan(draw_span_vars_t *dsvars) {
 
 void R_InitBuffersRes(void)
 {
-  extern __STORAGE_MODIFIER byte *solidcol;
+  extern byte *solidcol;
 
   if (solidcol) Z_Free(solidcol);
   if (tempbuf) Z_Free(tempbuf);

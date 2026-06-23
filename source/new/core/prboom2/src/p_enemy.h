@@ -42,9 +42,9 @@ void P_NoiseAlert (mobj_t *target, mobj_t *emmiter);
 void P_SpawnBrainTargets(void); /* killough 3/26/98: spawn icon landings */
 dboolean P_CheckBossDeath(mobj_t *mo);
 
-extern struct brain_s {         /* killough 3/26/98: global state of boss brain */
+extern __STORAGE_MODIFIER struct brain_s {         /* killough 3/26/98: global state of boss brain */
   int easy, targeton;
-} __STORAGE_MODIFIER brain;
+} brain;
 
 // ********************************************************************
 // Function addresses or Code Pointers

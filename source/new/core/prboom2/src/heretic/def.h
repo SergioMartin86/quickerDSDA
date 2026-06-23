@@ -19,11 +19,11 @@
 
 #include "doomtype.h"
 
-extern __STORAGE_MODIFIER int inv_ptr;
-extern __STORAGE_MODIFIER int curpos;
-extern __STORAGE_MODIFIER int ArtifactFlash;
-extern __STORAGE_MODIFIER dboolean inventory;
-extern __STORAGE_MODIFIER int playerkeys;
+extern int inv_ptr;
+extern int curpos;
+extern int ArtifactFlash;
+extern dboolean inventory;
+extern int playerkeys;
 
 #include "dstrings.h"
 

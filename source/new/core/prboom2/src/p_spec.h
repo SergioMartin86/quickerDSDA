@@ -220,8 +220,8 @@ typedef struct
   int index;
   anim_t *anim;
 } TAnimItemParam;
-extern TAnimItemParam *anim_flats;
-extern TAnimItemParam *anim_textures;
+extern __STORAGE_MODIFIER TAnimItemParam *anim_flats;
+extern __STORAGE_MODIFIER TAnimItemParam *anim_textures;
 
 // define names for the TriggerType field of the general linedefs
 

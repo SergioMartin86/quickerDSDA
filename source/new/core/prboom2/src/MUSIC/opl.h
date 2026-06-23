@@ -116,7 +116,7 @@ void OPL_Delay(unsigned int ms);
 void OPL_SetPaused(int paused);
 
 
-extern unsigned __STORAGE_MODIFIER int opl_sample_rate;
+extern unsigned int opl_sample_rate;
 
 void OPL_Render_Samples (void *dest, unsigned nsamp);
 

@@ -27,8 +27,8 @@
 
 #include "death.h"
 
-extern __STORAGE_MODIFIER int inv_ptr;
-extern __STORAGE_MODIFIER int curpos;
+extern int inv_ptr;
+extern int curpos;
 extern __STORAGE_MODIFIER int newtorch;
 extern __STORAGE_MODIFIER int newtorchdelta;
 

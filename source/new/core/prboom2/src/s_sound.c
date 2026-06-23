@@ -93,33 +93,33 @@ typedef struct
 } channel_t;
 
 // the set of channels available
-static __STORAGE_MODIFIER channel_t channels[MAX_CHANNELS];
-static __STORAGE_MODIFIER degenmobj_t sobjs[MAX_CHANNELS];
+static channel_t channels[MAX_CHANNELS];
+static degenmobj_t sobjs[MAX_CHANNELS];
 
 // Maximum volume of a sound effect.
 // Internal default is max out of 0-15.
-__STORAGE_MODIFIER int snd_SfxVolume;
+int snd_SfxVolume;
 
 // Derived value (not saved, accounts for muted sfx)
-static __STORAGE_MODIFIER int sfx_volume;
+static int sfx_volume;
 
 // Maximum volume of music.
-__STORAGE_MODIFIER int snd_MusicVolume = 15;
+int snd_MusicVolume = 15;
 
 // whether songs are mus_paused
-static __STORAGE_MODIFIER dboolean mus_paused;
+static dboolean mus_paused;
 
 // music currently being played
-__STORAGE_MODIFIER musicinfo_t *mus_playing;
+musicinfo_t *mus_playing;
 
 // music currently should play
-static __STORAGE_MODIFIER int musicnum_current;
+static int musicnum_current;
 
 // number of channels available
-__STORAGE_MODIFIER int numChannels;
+int numChannels;
 
 //jff 3/17/98 to keep track of last IDMUS specified music num
-__STORAGE_MODIFIER int idmusnum;
+int idmusnum;
 
 //
 // Internals.
@@ -133,11 +133,11 @@ static int S_getChannel(void *origin, sfxinfo_t *sfxinfo, sfx_params_t *params);
 
 
 // heretic
-__STORAGE_MODIFIER int max_snd_dist = 1600;
-__STORAGE_MODIFIER int dist_adjust = 160;
+int max_snd_dist = 1600;
+int dist_adjust = 160;
 
-static __STORAGE_MODIFIER byte* soundCurve;
-static __STORAGE_MODIFIER int AmbChan = -1;
+static byte* soundCurve;
+static int AmbChan = -1;
 
 static mobj_t* GetSoundListener(void);
 static void Heretic_S_StopSound(void *_origin);
@@ -180,7 +180,7 @@ void S_Init(void)
   //jff 1/22/98 skip sound init if sound not enabled
   if (!nosfxparm)
   {
-    static __STORAGE_MODIFIER dboolean first_s_init = true;
+    static dboolean first_s_init = true;
 
     // Whatever these did with DMX, these are rather dummies now.
     I_SetChannels();
@@ -294,8 +294,8 @@ void S_Start(void)
   }
 }
 
-static __STORAGE_MODIFIER float adjust_attenuation;
-static __STORAGE_MODIFIER float adjust_volume;
+static float adjust_attenuation;
+static float adjust_volume;
 
 void S_AdjustAttenuation(float attenuation) {
   adjust_attenuation = attenuation;
@@ -312,8 +312,6 @@ void S_ResetAdjustments(void) {
 
 void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume, int loop_timeout)
 {
-  return; 
-  
   int cnum;
   sfx_params_t params;
   sfxinfo_t *sfx;
@@ -514,7 +512,7 @@ void S_StopSoundLoops(void)
 }
 
 // [FG] disable sound cutoffs
-__STORAGE_MODIFIER int full_sounds;
+int full_sounds;
 
 void S_UnlinkSound(void *origin)
 {
@@ -1031,7 +1029,7 @@ static dboolean S_StopSoundInfo(sfxinfo_t* sfx, sfx_params_t *params)
 static int Raven_S_getChannel(mobj_t *listener, mobj_t *origin, sfxinfo_t *sfx, sfx_params_t *params)
 {
   int i;
-  static __STORAGE_MODIFIER int sndcount = 0;
+  static int sndcount = 0;
 
   for (i = 0; i < numChannels; i++)
   {
@@ -1110,15 +1108,16 @@ static int Raven_S_getChannel(mobj_t *listener, mobj_t *origin, sfxinfo_t *sfx, 
 
 static mobj_t* GetSoundListener(void)
 {
-  static __STORAGE_MODIFIER degenmobj_t dummy_listener;
+  static degenmobj_t dummy_listener;
 
   // If we are at the title screen, the display player doesn't have an
+  // object yet, so return a pointer to a static dummy listener instead.
 
   if (players[displayplayer].mo != NULL)
   {
     if (walkcamera.type > 1)
     {
-      static __STORAGE_MODIFIER mobj_t walkcamera_listener;
+      static mobj_t walkcamera_listener;
 
       walkcamera_listener.x = walkcamera.x;
       walkcamera_listener.y = walkcamera.y;

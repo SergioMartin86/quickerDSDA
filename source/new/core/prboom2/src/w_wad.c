@@ -63,7 +63,7 @@
 
 // Location of each lump on disk.
 __STORAGE_MODIFIER lumpinfo_t *lumpinfo;
-__STORAGE_MODIFIER int numlumps;         // killough
+__STORAGE_MODIFIER int        numlumps;         // killough
 
 void ExtractFileBase (const char *path, char *dest)
 {
@@ -126,6 +126,7 @@ char *AddDefaultExtension(char *path, const char *ext)
 //
 // proff - changed using pointer to wadfile_info_t
 static void W_AddFile(wadfile_info_t *wadfile)
+// killough 1/31/98: static, const
 {
   wadinfo_t   header;
   lumpinfo_t* lump_p;

@@ -36,8 +36,8 @@
 
 #include "save.h"
 
-static __STORAGE_MODIFIER char *dsda_base_save_dir;
-static __STORAGE_MODIFIER char *dsda_wad_save_dir;
+static __STORAGE_MODIFIER char* dsda_base_save_dir;
+static __STORAGE_MODIFIER char* dsda_wad_save_dir;
 
 extern __STORAGE_MODIFIER int dsda_max_kill_requirement;
 extern __STORAGE_MODIFIER int player_damage_last_tic;
@@ -95,11 +95,13 @@ static void dsda_ArchiveContext(void) {
   P_SAVE_X(totalleveltimes);
   P_SAVE_X(levels_completed);
 
-  boom_logictic_value = boom_logictic;
-  P_SAVE_X(boom_logictic_value);
-
-  true_logictic_value = true_logictic;
-  P_SAVE_X(true_logictic_value);
+  // Design A: save boom/true *basetic* directly (canonical state). The derived
+  // boom_logictic (= gametic - basetic) was reconstructed on load from the stale
+  // pre-restore gametic, making the bytes depend on the loading thread's history.
+  (void) boom_logictic_value;
+  (void) true_logictic_value;
+  P_SAVE_X(boom_basetic);
+  P_SAVE_X(true_basetic);
 }
 
 static void dsda_UnArchiveContext(void) {
@@ -129,7 +131,7 @@ static void dsda_UnArchiveContext(void) {
 
   P_LOAD_X(leave_data);
 
-  //G_InitNew(gameskill, gameepisode, gamemap, false);
+  /* [min-headless] skip redundant per-restore level reload; archive restores state */ /* G_InitNew(gameskill, gameepisode, gamemap, false); */
 
   P_LOAD_X(map_info.default_colormap);
 
@@ -137,11 +139,11 @@ static void dsda_UnArchiveContext(void) {
   P_LOAD_X(totalleveltimes);
   P_LOAD_X(levels_completed);
 
-  P_LOAD_X(boom_logictic_value);
-  boom_basetic = gametic - boom_logictic_value;
-
-  P_LOAD_X(true_logictic_value);
-  true_basetic = gametic - true_logictic_value;
+  // Design A: load boom/true basetic directly (no stale-gametic reconstruction).
+  (void) boom_logictic_value;
+  (void) true_logictic_value;
+  P_LOAD_X(boom_basetic);
+  P_LOAD_X(true_basetic);
 }
 
 void dsda_ArchiveAll(void) {
@@ -207,7 +209,7 @@ char* dsda_SaveDir(void) {
   return dsda_base_save_dir;
 }
 
-extern const char *savegamename;
+extern const char* savegamename;
 
 char* dsda_SaveGameName(int slot, dboolean via_cmd) {
   int length;
@@ -231,7 +233,7 @@ char* dsda_SaveGameName(int slot, dboolean via_cmd) {
   return name;
 }
 
-static __STORAGE_MODIFIER int *demo_save_slots;
+static __STORAGE_MODIFIER int* demo_save_slots;
 static __STORAGE_MODIFIER int allocated_save_slot_count;
 static __STORAGE_MODIFIER int demo_save_slot_count;
 

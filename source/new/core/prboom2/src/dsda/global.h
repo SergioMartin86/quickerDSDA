@@ -101,7 +101,7 @@ extern __STORAGE_MODIFIER int g_border_offset;
 extern __STORAGE_MODIFIER int g_mf_translucent;
 extern __STORAGE_MODIFIER int g_mf_shadow;
 
-extern __STORAGE_MODIFIER const char *g_skyflatname;
+extern __STORAGE_MODIFIER const char* g_skyflatname;
 
 extern __STORAGE_MODIFIER dboolean heretic;
 

@@ -347,8 +347,8 @@ static __STORAGE_MODIFIER fixed_t xspeed[8] = {FRACUNIT,47000,0,-47000,-FRACUNIT
 static __STORAGE_MODIFIER fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
 
 // 1/11/98 killough: Limit removed on special lines crossed
-extern  __STORAGE_MODIFIER line_t **spechit;          // New code -- killough
-extern  __STORAGE_MODIFIER int numspechit;
+extern __STORAGE_MODIFIER  line_t **spechit;          // New code -- killough
+extern __STORAGE_MODIFIER  int    numspechit;
 
 static dboolean P_Move(mobj_t *actor, dboolean dropoff) /* killough 9/12/98 */
 {
@@ -1570,8 +1570,8 @@ void A_HeadAttack(mobj_t * actor)
   mobj_t *mo;
   mobj_t *target;
   int randAttack;
-  static int atkResolve1[] = { 50, 150 };
-  static int atkResolve2[] = { 150, 200 };
+  static __STORAGE_MODIFIER int atkResolve1[] = { 50, 150 };
+  static __STORAGE_MODIFIER int atkResolve2[] = { 150, 200 };
   int dist;
 
   // Ice ball     (close 20% : far 60%)
@@ -1687,7 +1687,7 @@ void A_SkelMissile(mobj_t *actor)
   P_SetTarget(&mo->tracer, actor->target);
 }
 
-__STORAGE_MODIFIER int TRACEANGLE = 0xc000000;
+__STORAGE_MODIFIER int     TRACEANGLE = 0xc000000;
 
 void A_Tracer(mobj_t *actor)
 {
@@ -1797,8 +1797,8 @@ void A_SkelFist(mobj_t *actor)
 // Detect a corpse that could be raised.
 //
 
-__STORAGE_MODIFIER mobj_t *corpsehit;
-__STORAGE_MODIFIER mobj_t *vileobj;
+__STORAGE_MODIFIER mobj_t* corpsehit;
+__STORAGE_MODIFIER mobj_t* vileobj;
 __STORAGE_MODIFIER fixed_t viletryx;
 __STORAGE_MODIFIER fixed_t viletryy;
 __STORAGE_MODIFIER int viletryradius;
@@ -2792,8 +2792,8 @@ void A_CloseShotgun2(player_t *player, pspdef_t *psp)
 
 // killough 2/7/98: Remove limit on icon landings:
 __STORAGE_MODIFIER mobj_t **braintargets;
-__STORAGE_MODIFIER int numbraintargets_alloc;
-__STORAGE_MODIFIER int numbraintargets;
+__STORAGE_MODIFIER int    numbraintargets_alloc;
+__STORAGE_MODIFIER int    numbraintargets;
 
 __STORAGE_MODIFIER struct brain_s brain;   // killough 3/26/98: global state of boss brain
 
@@ -4129,7 +4129,7 @@ void P_DSparilTeleport(mobj_t * actor)
 
 void A_Srcr2Decide(mobj_t * actor)
 {
-    static int chance[] = {
+    static __STORAGE_MODIFIER int chance[] = {
         192, 120, 120, 120, 64, 64, 32, 16, 0
     };
 
@@ -4988,7 +4988,7 @@ void Heretic_A_BossDeath(mobj_t * actor)
     mobj_t *mo;
     thinker_t *think;
     line_t dummyLine;
-    static mobjtype_t bossType[6] = {
+    static __STORAGE_MODIFIER mobjtype_t bossType[6] = {
         HERETIC_MT_HEAD,
         HERETIC_MT_MINOTAUR,
         HERETIC_MT_SORCERER2,

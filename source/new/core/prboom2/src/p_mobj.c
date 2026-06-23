@@ -72,6 +72,8 @@
 
 #include "hexen/po_man.h"
 
+// heretic_note: static NUMSTATES arrays here - probably fine?
+// NUMSTATES > HERETIC_NUMSTATES
 
 //
 // P_SetMobjState
@@ -209,7 +211,7 @@ void P_ApplyCompatibleSectorMovementSpecial(mobj_t *mo, int special)
 // heretic, hexen, and zdoom all use the same values
 void P_ApplyHereticSectorMovementSpecial(mobj_t *mo, int special)
 {
-  static int windTab[3] = { 2048 * 5, 2048 * 10, 2048 * 25 };
+  static __STORAGE_MODIFIER int windTab[3] = { 2048 * 5, 2048 * 10, 2048 * 25 };
 
   if (mo->flags2 & MF2_WINDTHRUST)
   {
@@ -1833,9 +1835,9 @@ mobj_t* P_SpawnMobj(fixed_t x,fixed_t y,fixed_t z,mobjtype_t type)
 
 
 static __STORAGE_MODIFIER mapthing_t itemrespawnque[ITEMQUESIZE];
-static __STORAGE_MODIFIER int itemrespawntime[ITEMQUESIZE];
-__STORAGE_MODIFIER int iquehead;
-__STORAGE_MODIFIER int iquetail;
+static __STORAGE_MODIFIER int        itemrespawntime[ITEMQUESIZE];
+__STORAGE_MODIFIER int        iquehead;
+__STORAGE_MODIFIER int        iquetail;
 
 
 //
@@ -2024,7 +2026,7 @@ void P_RespawnSpecials (void)
 //  between levels.
 //
 
-extern __STORAGE_MODIFIER byte playernumtotrans[MAX_MAXPLAYERS];
+extern byte playernumtotrans[MAX_MAXPLAYERS];
 
 void P_SpawnPlayer (int n, const mapthing_t* mthing)
 {
@@ -2266,7 +2268,7 @@ static dboolean P_ShouldSpawnMapThing(int options)
 
   if (hexen)
   {
-    static unsigned int classFlags[] = {
+    static __STORAGE_MODIFIER unsigned int classFlags[] = {
       0, // null class
       MTF_FIGHTER,
       MTF_CLERIC,

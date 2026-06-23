@@ -35,13 +35,16 @@ static void DeInitializeFade(void);
 static void FadePic(void);
 static char *GetFinaleText(int sequence);
 
-static __STORAGE_MODIFIER int FinaleStage;
-static __STORAGE_MODIFIER int FinaleCount;
-static __STORAGE_MODIFIER int FinaleEndCount;
-static const __STORAGE_MODIFIER char *FinaleLumpName;
-static __STORAGE_MODIFIER int FontABaseLump;
-static __STORAGE_MODIFIER char *FinaleText;
+static int FinaleStage;
+static int FinaleCount;
+static int FinaleEndCount;
+static const char* FinaleLumpName;
+static int FontABaseLump;
+static char *FinaleText;
 
+// static fixed_t *Palette;
+// static fixed_t *PaletteDelta;
+// static byte *RealPalette;
 
 void Hexen_F_StartFinale(void)
 {
@@ -275,14 +278,14 @@ void Hexen_F_Drawer(void)
     }
 }
 
-extern __STORAGE_MODIFIER char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
+extern char ClusterMessage[MAX_INTRMSN_MESSAGE_SIZE];
 
 static char *GetFinaleText(int sequence)
 {
     const char *msgLumpName;
     int msgSize;
     int msgLump;
-    static __STORAGE_MODIFIER const char *winMsgLumpNames[] = {
+    static const char *winMsgLumpNames[] = {
         "win1msg",
         "win2msg",
         "win3msg"

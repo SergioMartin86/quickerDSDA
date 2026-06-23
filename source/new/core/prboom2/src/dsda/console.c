@@ -75,17 +75,17 @@ typedef struct console_entry_s {
   struct console_entry_s* next;
 } console_entry_t;
 
-static __STORAGE_MODIFIER console_entry_t* console_history_head;
-static __STORAGE_MODIFIER console_entry_t* console_entry;
-static __STORAGE_MODIFIER int console_entry_index;
-static __STORAGE_MODIFIER char console_message[CONSOLE_ENTRY_SIZE + 2];
-static __STORAGE_MODIFIER char* console_message_entry;
-static __STORAGE_MODIFIER hu_textline_t hu_console_prompt;
-static __STORAGE_MODIFIER hu_textline_t hu_console_message;
+static console_entry_t* console_history_head;
+static console_entry_t* console_entry;
+static int console_entry_index;
+static char console_message[CONSOLE_ENTRY_SIZE + 2] = { ' ', ' ' };
+static char* console_message_entry = console_message + 2;
+static hu_textline_t hu_console_prompt;
+static hu_textline_t hu_console_message;
 
-static __STORAGE_MODIFIER char** dsda_console_script_lines[CONSOLE_SCRIPT_COUNT];
+static char** dsda_console_script_lines[CONSOLE_SCRIPT_COUNT];
 
-static __STORAGE_MODIFIER int console_height;
+static int console_height;
 
 int dsda_ConsoleHeight(void) {
   return console_height;
@@ -97,7 +97,7 @@ static void dsda_DrawConsole(void) {
   HUlib_drawTextLine(&hu_console_message, false);
 }
 
-__STORAGE_MODIFIER menu_t dsda_ConsoleDef = {
+menu_t dsda_ConsoleDef = {
   0,
   NULL,
   NULL,
@@ -132,7 +132,7 @@ static void dsda_ResetConsoleEntry(void) {
 }
 
 dboolean dsda_OpenConsole(void) {
-  static __STORAGE_MODIFIER dboolean firsttime = true;
+  static dboolean firsttime = true;
 
   if (gamestate != GS_LEVEL)
     return false;
@@ -362,7 +362,7 @@ static dboolean console_PlayerSetAmmo(const char* command, const char* args) {
 }
 
 static dboolean console_PlayerGiveKey(const char* command, const char* args) {
-  extern __STORAGE_MODIFIER int playerkeys;
+  extern int playerkeys;
 
   int key;
 
@@ -380,7 +380,7 @@ static dboolean console_PlayerGiveKey(const char* command, const char* args) {
 }
 
 static dboolean console_PlayerRemoveKey(const char* command, const char* args) {
-  extern __STORAGE_MODIFIER int playerkeys;
+  extern int playerkeys;
 
   int key;
 
@@ -625,7 +625,7 @@ static dboolean console_GameQuit(const char* command, const char* args) {
 }
 
 static dboolean console_GameDescribe(const char* command, const char* args) {
-  extern __STORAGE_MODIFIER dsda_string_t hud_title;
+  extern dsda_string_t hud_title;
 
   dsda_string_t str;
 

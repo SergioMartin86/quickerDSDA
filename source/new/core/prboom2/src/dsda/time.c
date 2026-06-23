@@ -35,7 +35,7 @@
 #define CLOCK_MONOTONIC -1
 
 static int clock_gettime(int clockid, struct timespec *tp) {
-  static __STORAGE_MODIFIER unsigned long long timer_frequency = 0;
+  static unsigned long long timer_frequency = 0;
   unsigned long long time;
 
   // Get number of timer counts per second
@@ -54,7 +54,7 @@ static int clock_gettime(int clockid, struct timespec *tp) {
 
 #endif //_MSC_VER
 
-static struct timespec dsda_time[DSDA_TIMER_COUNT];
+static __STORAGE_MODIFIER struct timespec dsda_time[DSDA_TIMER_COUNT];
 
 void dsda_StartTimer(int timer) {
   clock_gettime(CLOCK_MONOTONIC, &dsda_time[timer]);
@@ -103,7 +103,7 @@ static void dsda_Throttle(int timer, unsigned long long target_time) {
 
 void dsda_LimitFPS(void) {
   extern __STORAGE_MODIFIER int movement_smooth;
-  extern __STORAGE_MODIFIER int window_focused;
+  extern int window_focused;
 
   int allow_limit;
   int fps_limit;
@@ -141,7 +141,7 @@ static unsigned long long dsda_ScaledTime(void) {
   return dsda_RealTime() * dsda_GameSpeed() / 100;
 }
 
-extern __STORAGE_MODIFIER int ms_to_next_tick;
+extern int ms_to_next_tick;
 
 // During a fast demo, each call yields a new tick
 static int dsda_GetTickFastDemo(void)
@@ -197,8 +197,8 @@ static unsigned long long dsda_TickElapsedScaledTime(void) {
   return dsda_ScaledTime() - (unsigned long long) tick * 1000000 / TICRATE;
 }
 
-int (*dsda_GetTick)(void) = dsda_GetTickRealTime;
-unsigned long long (*dsda_TickElapsedTime)(void) = dsda_TickElapsedRealTime;
+__STORAGE_MODIFIER int (*dsda_GetTick)(void) = dsda_GetTickRealTime;
+__STORAGE_MODIFIER unsigned long long (*dsda_TickElapsedTime)(void) = dsda_TickElapsedRealTime;
 
 void dsda_ResetTimeFunctions(int fastdemo) {
   if (fastdemo) {

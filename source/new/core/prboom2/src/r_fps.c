@@ -72,7 +72,7 @@ typedef struct
 
 static __STORAGE_MODIFIER int numinterpolations = 0;
 
-tic_vars_t tic_vars;
+__STORAGE_MODIFIER tic_vars_t tic_vars;
 
 static void R_DoAnInterpolation (int i, fixed_t smoothratio);
 

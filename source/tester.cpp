@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
   .implicit_value(true);
 
   program.add_argument("--deepHash")
-  .help("Also fold a deep full-state hash (all mobjs + sectors) over the trajectory and print it. Use to validate savestate trims base-vs-new2.")
+  .help("Also fold a deep full-state hash (all mobjs + sectors) over the trajectory and print it. Use to validate savestate trims base-vs-new.")
   .default_value(false)
   .implicit_value(true);
 

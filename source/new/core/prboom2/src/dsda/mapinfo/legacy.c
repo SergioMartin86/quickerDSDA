@@ -127,19 +127,19 @@ int dsda_LegacyResolveWarp(int* args, int arg_count, int* episode, int* map) {
 }
 
 int dsda_LegacyNextMap(int* episode, int* map) {
-  static byte doom2_next[33] = {
+  static __STORAGE_MODIFIER byte doom2_next[33] = {
     2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
     12, 13, 14, 15, 31, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 1,
     32, 16, 3
   };
-  static byte doom_next[4][9] = {
+  static __STORAGE_MODIFIER byte doom_next[4][9] = {
     { 12, 13, 19, 15, 16, 17, 18, 21, 14 },
     { 22, 23, 24, 25, 29, 27, 28, 31, 26 },
     { 32, 33, 34, 35, 36, 39, 38, 41, 37 },
     { 42, 49, 44, 45, 46, 47, 48, 11, 43 }
   };
-  static byte heretic_next[6][9] = {
+  static __STORAGE_MODIFIER byte heretic_next[6][9] = {
     { 12, 13, 14, 15, 16, 19, 18, 21, 17 },
     { 22, 23, 24, 29, 26, 27, 28, 31, 25 },
     { 32, 33, 34, 39, 36, 37, 38, 41, 35 },
@@ -200,19 +200,19 @@ int dsda_LegacyNextMap(int* episode, int* map) {
 }
 
 int dsda_LegacyPrevMap(int* episode, int* map) {
-  static byte doom2_prev[33] = {
+  static __STORAGE_MODIFIER byte doom2_prev[33] = {
     1, 1, 2, 3, 4, 5, 6, 7, 8, 9,
     10, 11, 12, 13, 14, 32, 16, 17, 18, 19,
     20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
     15, 31, 2
   };
-  static byte doom_prev[4][9] = {
+  static __STORAGE_MODIFIER byte doom_prev[4][9] = {
     { 11, 11, 12, 19, 14, 15, 16, 17, 13 },
     { 18, 21, 22, 23, 24, 29, 26, 27, 25 },
     { 28, 31, 32, 33, 34, 35, 39, 37, 36 },
     { 38, 41, 49, 43, 44, 45, 46, 47, 42 }
   };
-  static byte heretic_prev[6][9] = {
+  static __STORAGE_MODIFIER byte heretic_prev[6][9] = {
     { 11, 11, 12, 13, 14, 15, 19, 17, 16 },
     { 18, 21, 22, 23, 29, 25, 26, 27, 24 },
     { 28, 31, 32, 33, 39, 35, 36, 37, 34 },
@@ -366,7 +366,7 @@ int dsda_LegacyMapMusic(int* music_index, int* music_lump, int episode, int map)
     if (gamemode == commercial)
       *music_index = mus_runnin + WRAP(map - 1, DOOM_MUSINFO - mus_runnin);
     else {
-      static const int spmus[] = {
+      static __STORAGE_MODIFIER const int spmus[] = {
         mus_e3m4,
         mus_e3m2,
         mus_e3m3,
@@ -450,11 +450,11 @@ int dsda_LegacyMapAuthor(const char** author) {
 }
 
 int dsda_LegacyHUTitle(dsda_string_t* str) {
-  extern char** mapnames[];
-  extern char** mapnames2[];
-  extern char** mapnamesp[];
-  extern char** mapnamest[];
-  extern __STORAGE_MODIFIER const char *LevelNames[];
+  extern __STORAGE_MODIFIER char** mapnames[];
+  extern __STORAGE_MODIFIER char** mapnames2[];
+  extern __STORAGE_MODIFIER char** mapnamesp[];
+  extern __STORAGE_MODIFIER char** mapnamest[];
+  extern const char* LevelNames[];
 
   dsda_InitString(str, NULL);
 
@@ -498,7 +498,7 @@ int dsda_LegacySkyTexture(int* sky) {
   if (map_format.doublesky)
     *sky = Sky1Texture;
   else if (heretic) {
-    static const char *sky_lump_names[5] = {
+    static __STORAGE_MODIFIER const char *sky_lump_names[5] = {
         "SKY1", "SKY2", "SKY3", "SKY1", "SKY3"
     };
 
@@ -616,7 +616,7 @@ int dsda_LegacyPrepareIntermission(int* result) {
       // returning from secret level
       if (heretic)
       {
-        static int after_secret[5] = { 6, 4, 4, 4, 3 };
+        static __STORAGE_MODIFIER int after_secret[5] = { 6, 4, 4, 4, 3 };
         wminfo.next = after_secret[gameepisode - 1];
       }
       else
@@ -705,9 +705,9 @@ int dsda_LegacyBorderTexture(const char** border_texture) {
 }
 
 int dsda_LegacyPrepareEntering(void) {
-  extern __STORAGE_MODIFIER const char *el_levelname;
-  extern __STORAGE_MODIFIER const char *el_levelpic;
-  extern __STORAGE_MODIFIER const char *el_author;
+  extern const char *el_levelname;
+  extern const char *el_levelpic;
+  extern const char *el_author;
 
   el_levelname = NULL;
   el_levelpic = NULL;
@@ -717,9 +717,9 @@ int dsda_LegacyPrepareEntering(void) {
 }
 
 int dsda_LegacyPrepareFinished(void) {
-  extern __STORAGE_MODIFIER const char *lf_levelname;
-  extern __STORAGE_MODIFIER const char *lf_levelpic;
-  extern __STORAGE_MODIFIER const char *lf_author;
+  extern const char *lf_levelname;
+  extern const char *lf_levelpic;
+  extern const char *lf_author;
 
   lf_levelname = NULL;
   lf_levelpic = NULL;

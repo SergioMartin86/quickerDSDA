@@ -80,18 +80,18 @@ static void ShowOverflowWarning(overrun_list_t overflow, int fatal, const char *
     va_list argptr;
     char buffer[1024];
 
-    const char *name[OVERFLOW_MAX] = {
+    static __STORAGE_MODIFIER const char *name[OVERFLOW_MAX] = {
       "SPECHIT", "REJECT", "INTERCEPT", "PLYERINGAME", "DONUT", "MISSEDBACKSIDE"};
 
-    const char str1[] =
+    static __STORAGE_MODIFIER const char str1[] =
       "Too big or not supported %s overflow has been detected. "
       "Desync or crash can occur soon "
       "or during playback with the vanilla engine in case you're recording demo.%s%s";
 
-    const char str2[] =
+    static __STORAGE_MODIFIER const char str2[] =
       "%s overflow has been detected.%s%s";
 
-    const char str3[] =
+    static __STORAGE_MODIFIER const char str3[] =
       "%s overflow has been detected. "
       "The option responsible for emulation of this overflow is switched off "
       "hence desync or crash can occur soon "
@@ -121,12 +121,6 @@ static void ShowOverflowWarning(overrun_list_t overflow, int fatal, const char *
 // overrun code so that it should work properly on big endian machines
 // as well as little endian machines.
 
-extern __STORAGE_MODIFIER fixed_t bulletslope;
-extern __STORAGE_MODIFIER int bmapwidth;
-extern __STORAGE_MODIFIER int bmapheight;      /* in mapblocks */
-extern __STORAGE_MODIFIER fixed_t bmaporgx;
-extern __STORAGE_MODIFIER fixed_t bmaporgy;        /* origin of block map */
-
 // Overwrite a specific memory location with a value.
 static void InterceptsMemoryOverrun(int location, int value)
 {
@@ -134,52 +128,6 @@ static void InterceptsMemoryOverrun(int location, int value)
   int index;
   void *addr;
   void *addr2;
-
-  // e6y
-//
-// Intercepts memory table.  This is where various variables are located
-// in memory in Vanilla Doom.  When the intercepts table overflows, we
-// need to write to them.
-//
-// Almost all of the values to overwrite are 32-bit integers, except for
-// playerstarts, which is effectively an array of 16-bit integers and
-// must be treated differently.
-
-  intercepts_overrun_t intercepts_overrun[] =
-  {
-    {4,   NULL,                          NULL},
-    {4,   NULL, /* &earlyout, */         NULL},
-    {4,   NULL, /* &intercept_p, */      NULL},
-    {4,   &line_opening.lowfloor,        NULL},
-    {4,   &line_opening.bottom,          NULL},
-    {4,   &line_opening.top,             NULL},
-    {4,   &line_opening.range,           NULL},
-    {4,   NULL,                          NULL},
-    {120, NULL, /* &activeplats, */      NULL},
-    {8,   NULL,                          NULL},
-    {4,   &bulletslope,                  NULL},
-    {4,   NULL, /* &swingx, */           NULL},
-    {4,   NULL, /* &swingy, */           NULL},
-    {4,   NULL,                          NULL},
-    {4,  &playerstarts[0][0].x,       &playerstarts[0][0].y},
-    {4,  &playerstarts[0][0].angle,   &playerstarts[0][0].type},
-    {4,  &playerstarts[0][0].options, &playerstarts[0][1].x},
-    {4,  &playerstarts[0][1].y,       &playerstarts[0][1].angle},
-    {4,  &playerstarts[0][1].type,    &playerstarts[0][1].options},
-    {4,  &playerstarts[0][2].x,       &playerstarts[0][2].y},
-    {4,  &playerstarts[0][2].angle,   &playerstarts[0][2].type},
-    {4,  &playerstarts[0][2].options, &playerstarts[0][3].x},
-    {4,  &playerstarts[0][3].y,       &playerstarts[0][3].angle},
-    {4,  &playerstarts[0][3].type,    &playerstarts[0][3].options},
-    {4,   NULL, /* &blocklinks, */       NULL},
-    {4,   &bmapwidth,                    NULL},
-    {4,   NULL, /* &blockmap, */         NULL},
-    {4,   &bmaporgx,                     NULL},
-    {4,   &bmaporgy,                     NULL},
-    {4,   NULL, /* &blockmaplump, */     NULL},
-    {4,   &bmapheight,                   NULL},
-    {0,   NULL,                          NULL},
-  };
 
   i = 0;
   offset = 0;
@@ -271,7 +219,7 @@ int PlayeringameOverrun(const mapthing_t* mthing)
 // spechit overrun emulation
 //
 
-unsigned __STORAGE_MODIFIER int spechit_baseaddr = 0;
+__STORAGE_MODIFIER unsigned int spechit_baseaddr = 0;
 
 // e6y
 // Code to emulate the behavior of Vanilla Doom when encountering an overrun
@@ -479,12 +427,12 @@ void RejectOverrun(unsigned int length, const byte **rejectmatrix, int totalline
 
 unsigned char mem_dump_dos622[DOS_MEM_DUMP_SIZE] = {
   0x57, 0x92, 0x19, 0x00, 0xF4, 0x06, 0x70, 0x00, 0x16, 0x00};
-unsigned char mem_dump_win98[DOS_MEM_DUMP_SIZE] = {
+__STORAGE_MODIFIER unsigned char mem_dump_win98[DOS_MEM_DUMP_SIZE] = {
   0x9E, 0x0F, 0xC9, 0x00, 0x65, 0x04, 0x70, 0x00, 0x16, 0x00};
-unsigned char mem_dump_dosbox[DOS_MEM_DUMP_SIZE] = {
+__STORAGE_MODIFIER unsigned char mem_dump_dosbox[DOS_MEM_DUMP_SIZE] = {
   0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00};
 
-unsigned __STORAGE_MODIFIER char *dos_mem_dump = mem_dump_dos622;
+__STORAGE_MODIFIER unsigned char *dos_mem_dump = mem_dump_dos622;
 
 static int GetMemoryValue(unsigned int offset, void *value, int size)
 {

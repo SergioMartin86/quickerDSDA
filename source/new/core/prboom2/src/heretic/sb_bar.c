@@ -55,44 +55,44 @@ static void Hexen_DrawMainBar(void);
 
 // Public Data
 
-__STORAGE_MODIFIER dboolean inventory;
-__STORAGE_MODIFIER int curpos;
-__STORAGE_MODIFIER int inv_ptr;
-__STORAGE_MODIFIER int ArtifactFlash;
-__STORAGE_MODIFIER int SB_state = -1;
-__STORAGE_MODIFIER int playerkeys = 0;
+dboolean inventory;
+int curpos;
+int inv_ptr;
+int ArtifactFlash;
+int SB_state = -1;
+int playerkeys = 0;
 
 // Private Data
 
-static __STORAGE_MODIFIER int HealthMarker;
-static __STORAGE_MODIFIER int ChainWiggle;
-static __STORAGE_MODIFIER player_t *CPlayer;
+static int HealthMarker;
+static int ChainWiggle;
+static player_t *CPlayer;
 
-__STORAGE_MODIFIER int LumpLTFACE;
-__STORAGE_MODIFIER int LumpRTFACE;
-__STORAGE_MODIFIER int LumpBARBACK;
-__STORAGE_MODIFIER int LumpCHAIN;
-__STORAGE_MODIFIER int LumpSTATBAR;
-__STORAGE_MODIFIER int LumpLIFEGEM;
-__STORAGE_MODIFIER int LumpLTFCTOP;
-__STORAGE_MODIFIER int LumpRTFCTOP;
-__STORAGE_MODIFIER int LumpSELECTBOX;
-__STORAGE_MODIFIER int LumpINVLFGEM1;
-__STORAGE_MODIFIER int LumpINVLFGEM2;
-__STORAGE_MODIFIER int LumpINVRTGEM1;
-__STORAGE_MODIFIER int LumpINVRTGEM2;
-__STORAGE_MODIFIER int LumpINumbers[10];
-__STORAGE_MODIFIER int LumpNEGATIVE;
-__STORAGE_MODIFIER int LumpSmNumbers[10];
-__STORAGE_MODIFIER int LumpBLACKSQ;
-__STORAGE_MODIFIER int LumpINVBAR;
-__STORAGE_MODIFIER int LumpARMCLEAR;
-__STORAGE_MODIFIER int LumpCHAINBACK;
-__STORAGE_MODIFIER int FontBNumBase;
-__STORAGE_MODIFIER int spinbooklump;
-__STORAGE_MODIFIER int spinflylump;
+int LumpLTFACE;
+int LumpRTFACE;
+int LumpBARBACK;
+int LumpCHAIN;
+int LumpSTATBAR;
+int LumpLIFEGEM;
+int LumpLTFCTOP;
+int LumpRTFCTOP;
+int LumpSELECTBOX;
+int LumpINVLFGEM1;
+int LumpINVLFGEM2;
+int LumpINVRTGEM1;
+int LumpINVRTGEM2;
+int LumpINumbers[10];
+int LumpNEGATIVE;
+int LumpSmNumbers[10];
+int LumpBLACKSQ;
+int LumpINVBAR;
+int LumpARMCLEAR;
+int LumpCHAINBACK;
+int FontBNumBase;
+int spinbooklump;
+int spinflylump;
 
-static __STORAGE_MODIFIER char heretic_namearti[][10] = {
+static char heretic_namearti[][10] = {
     {"ARTIBOX"},                // none
     {"ARTIINVU"},               // invulnerability
     {"ARTIINVS"},               // invisibility
@@ -105,35 +105,35 @@ static __STORAGE_MODIFIER char heretic_namearti[][10] = {
     {"ARTISOAR"},               // fly
     {"ARTIATLP"}                // teleport
 };
-static __STORAGE_MODIFIER int heretic_lumparti[11];
+static int heretic_lumparti[11];
 
-static __STORAGE_MODIFIER int SpinMinotaurLump;
-static __STORAGE_MODIFIER int SpinSpeedLump;
-static __STORAGE_MODIFIER int SpinDefenseLump;
+static int SpinMinotaurLump;
+static int SpinSpeedLump;
+static int SpinDefenseLump;
 
-static __STORAGE_MODIFIER int LumpH2BAR;
-static __STORAGE_MODIFIER int LumpH2TOP;
-static __STORAGE_MODIFIER int LumpLFEDGE;
-static __STORAGE_MODIFIER int LumpRTEDGE;
-static __STORAGE_MODIFIER int LumpARTICLEAR;
-static __STORAGE_MODIFIER int LumpMANACLEAR;
-static __STORAGE_MODIFIER int LumpKILLS;
-static __STORAGE_MODIFIER int LumpMANAVIAL1;
-static __STORAGE_MODIFIER int LumpMANAVIAL2;
-static __STORAGE_MODIFIER int LumpMANAVIALDIM1;
-static __STORAGE_MODIFIER int LumpMANAVIALDIM2;
-static __STORAGE_MODIFIER int LumpMANADIM1;
-static __STORAGE_MODIFIER int LumpMANADIM2;
-static __STORAGE_MODIFIER int LumpMANABRIGHT1;
-static __STORAGE_MODIFIER int LumpMANABRIGHT2;
-static __STORAGE_MODIFIER int LumpKEYBAR;
-static __STORAGE_MODIFIER int LumpWEAPONSLOT;
-static __STORAGE_MODIFIER int LumpWEAPONFULL;
-static __STORAGE_MODIFIER int LumpPIECE1;
-static __STORAGE_MODIFIER int LumpPIECE2;
-static __STORAGE_MODIFIER int LumpPIECE3;
+static int LumpH2BAR;
+static int LumpH2TOP;
+static int LumpLFEDGE;
+static int LumpRTEDGE;
+static int LumpARTICLEAR;
+static int LumpMANACLEAR;
+static int LumpKILLS;
+static int LumpMANAVIAL1;
+static int LumpMANAVIAL2;
+static int LumpMANAVIALDIM1;
+static int LumpMANAVIALDIM2;
+static int LumpMANADIM1;
+static int LumpMANADIM2;
+static int LumpMANABRIGHT1;
+static int LumpMANABRIGHT2;
+static int LumpKEYBAR;
+static int LumpWEAPONSLOT;
+static int LumpWEAPONFULL;
+static int LumpPIECE1;
+static int LumpPIECE2;
+static int LumpPIECE3;
 
-static __STORAGE_MODIFIER char hexen_namearti[][10] = {
+static char hexen_namearti[][10] = {
     {"ARTIBOX"},                // none
     {"ARTIINVU"},               // invulnerability
     {"ARTIPTN2"},               // health
@@ -168,31 +168,31 @@ static __STORAGE_MODIFIER char hexen_namearti[][10] = {
     {"ARTIGER3"},               // hexen_arti_puzzgear3
     {"ARTIGER4"},               // hexen_arti_puzzgear4
 };
-static __STORAGE_MODIFIER int hexen_lumparti[33];
+static int hexen_lumparti[33];
 
-static __STORAGE_MODIFIER int *lumparti;
+static int *lumparti;
 
 // game config
-static __STORAGE_MODIFIER int sb_ticker_delta_cap;
-static __STORAGE_MODIFIER int sb_icon_y;
-static __STORAGE_MODIFIER int sb_inv_bar_x;
-static __STORAGE_MODIFIER int sb_inv_bar_y;
-static __STORAGE_MODIFIER int sb_inv_arti_y;
-static __STORAGE_MODIFIER int sb_inv_arti_count_x;
-static __STORAGE_MODIFIER int sb_inv_arti_count_y;
-static __STORAGE_MODIFIER int sb_inv_select_y;
-static __STORAGE_MODIFIER int sb_inv_gem_x;
-static __STORAGE_MODIFIER int sb_inv_gem_y;
-static __STORAGE_MODIFIER int sb_full_arti_x;
-static __STORAGE_MODIFIER int sb_full_arti_y;
-static __STORAGE_MODIFIER int sb_full_arti_count_x;
-static __STORAGE_MODIFIER int sb_full_inv_arti_x;
-static __STORAGE_MODIFIER int sb_full_inv_arti_y;
-static __STORAGE_MODIFIER int sb_full_inv_arti_count_x;
-static __STORAGE_MODIFIER int sb_full_inv_arti_count_y;
-static __STORAGE_MODIFIER int sb_full_inv_select_y;
-static __STORAGE_MODIFIER int sb_full_inv_gem_xl;
-static __STORAGE_MODIFIER int sb_full_inv_gem_xr;
+static int sb_ticker_delta_cap;
+static int sb_icon_y;
+static int sb_inv_bar_x;
+static int sb_inv_bar_y;
+static int sb_inv_arti_y;
+static int sb_inv_arti_count_x;
+static int sb_inv_arti_count_y;
+static int sb_inv_select_y;
+static int sb_inv_gem_x;
+static int sb_inv_gem_y;
+static int sb_full_arti_x;
+static int sb_full_arti_y;
+static int sb_full_arti_count_x;
+static int sb_full_inv_arti_x;
+static int sb_full_inv_arti_y;
+static int sb_full_inv_arti_count_x;
+static int sb_full_inv_arti_count_y;
+static int sb_full_inv_select_y;
+static int sb_full_inv_gem_xl;
+static int sb_full_inv_gem_xr;
 
 void SB_Start(void)
 {
@@ -205,8 +205,8 @@ void SB_Start(void)
 //
 //---------------------------------------------------------------------------
 
-extern __STORAGE_MODIFIER patchnum_t stbarbg;
-extern __STORAGE_MODIFIER patchnum_t brdr_b;
+extern patchnum_t stbarbg;
+extern patchnum_t brdr_b;
 
 void SB_Init(void)
 {
@@ -513,7 +513,7 @@ static void ShadeChain(void)
 //
 //---------------------------------------------------------------------------
 
-__STORAGE_MODIFIER char ammopic[][10] = {
+char ammopic[][10] = {
     {"INAMGLD"},
     {"INAMBOW"},
     {"INAMBST"},
@@ -522,19 +522,19 @@ __STORAGE_MODIFIER char ammopic[][10] = {
     {"INAMLOB"}
 };
 
-static __STORAGE_MODIFIER int oldarti = 0;
-static __STORAGE_MODIFIER int oldartiCount = 0;
-static __STORAGE_MODIFIER int oldfrags = -9999;
-static __STORAGE_MODIFIER int oldammo = -1;
-static __STORAGE_MODIFIER int oldarmor = -1;
-static __STORAGE_MODIFIER int oldweapon = -1;
-static __STORAGE_MODIFIER int oldhealth = -1;
-static __STORAGE_MODIFIER int oldlife = -1;
-static __STORAGE_MODIFIER int oldkeys = -1;
+static int oldarti = 0;
+static int oldartiCount = 0;
+static int oldfrags = -9999;
+static int oldammo = -1;
+static int oldarmor = -1;
+static int oldweapon = -1;
+static int oldhealth = -1;
+static int oldlife = -1;
+static int oldkeys = -1;
 
-static __STORAGE_MODIFIER int oldmana1 = -1;
-static __STORAGE_MODIFIER int oldmana2 = -1;
-static __STORAGE_MODIFIER int oldpieces = -1;
+static int oldmana1 = -1;
+static int oldmana2 = -1;
+static int oldpieces = -1;
 
 void SB_Drawer(dboolean statusbaron, dboolean refresh, dboolean fullmenu)
 {
@@ -628,7 +628,7 @@ void SB_Drawer(dboolean statusbaron, dboolean refresh, dboolean fullmenu)
 // and player->bonuscount
 void SB_PaletteFlash(dboolean forceChange)
 {
-    static __STORAGE_MODIFIER int sb_palette = 0;
+    static int sb_palette = 0;
     int palette;
 
     if (forceChange)
@@ -1128,7 +1128,7 @@ static void DrRedINumber(signed int val, int x, int y)
 static void DrawAnimatedIcons(void)
 {
     int frame;
-    static __STORAGE_MODIFIER dboolean hitCenterFrame;
+    static dboolean hitCenterFrame;
 
     // Flight icons
     if (CPlayer->powers[pw_flight])

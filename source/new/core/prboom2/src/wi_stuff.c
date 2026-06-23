@@ -53,7 +53,7 @@
 #include "hexen/in_lude.h"
 
 // Ty 03/17/98: flag that new par times have been loaded in d_deh
-extern __STORAGE_MODIFIER dboolean deh_pars;
+extern dboolean deh_pars;
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -273,7 +273,7 @@ static int NUMANIMS[NUMEPISODES] =
   sizeof(epsd2animinfo)/sizeof(wi_anim_t)
 };
 
-static __STORAGE_MODIFIER wi_anim_t *anims[NUMEPISODES] =
+static wi_anim_t *anims[NUMEPISODES] =
 {
   epsd0animinfo,
   epsd1animinfo,
@@ -307,13 +307,13 @@ static __STORAGE_MODIFIER wi_anim_t *anims[NUMEPISODES] =
 
 
 // used to accelerate or skip a stage
-__STORAGE_MODIFIER int acceleratestage;           // killough 3/28/98: made global
+int   acceleratestage;           // killough 3/28/98: made global
 
 // wbs->pnum
-static __STORAGE_MODIFIER int me;
+static int    me;
 
  // specifies current state
-static __STORAGE_MODIFIER stateenum_t state;
+static stateenum_t  state;
 
 // contains information passed into intermission
 static wbstartstruct_t* wbs;
@@ -321,35 +321,35 @@ static wbstartstruct_t* wbs;
 static wbplayerstruct_t* plrs;  // wbs->plyr[]
 
 // used for general timing
-static __STORAGE_MODIFIER int cnt;
+static int    cnt;
 
 // used for timing of background animation
-static __STORAGE_MODIFIER int bcnt;
+static int    bcnt;
 
 // signals to refresh everything for one frame
-static __STORAGE_MODIFIER int firstrefresh;
+static int    firstrefresh;
 
-static __STORAGE_MODIFIER int cnt_time;
-static __STORAGE_MODIFIER int cnt_total_time;
-static __STORAGE_MODIFIER int cnt_par;
-static __STORAGE_MODIFIER int cnt_pause;
+static int    cnt_time;
+static int    cnt_total_time;
+static int    cnt_par;
+static int    cnt_pause;
 
 //
 //  GRAPHICS
 //
 
 // You Are Here graphic
-static const __STORAGE_MODIFIER char *yah[3] = { "WIURH0", "WIURH1", 0 };
+static const char* yah[3] = { "WIURH0", "WIURH1", 0 };
 
 // splat
-static const __STORAGE_MODIFIER char *splat[2] = {"WISPLAT", 0};
+static const char* splat[2] = {"WISPLAT", 0};
 
 // %, : graphics
 static const char percent[] = {"WIPCNT"};
 static const char colon[] = {"WICOLON"};
 
 // 0-9 graphic
-static __STORAGE_MODIFIER patchnum_t num[10];
+static patchnum_t num[10];
 
 // minus sign
 static const char wiminus[] = {"WIMINUS"};
@@ -386,7 +386,7 @@ static const char bstar[] = {"STFDEAD0"};
 // "red P[1..g_maxplayers]"
 static const char facebackp[] = {"STPB0"};
 
-static const __STORAGE_MODIFIER char *exitpic, *enterpic;
+static const char *exitpic, *enterpic;
 
 //
 // CODE
@@ -519,9 +519,9 @@ static void WI_DrawString(int cx, int cy, const char* ch)
 // Args:    none
 // Returns: void
 //
-const __STORAGE_MODIFIER char *lf_levelname;
-const __STORAGE_MODIFIER char *lf_levelpic;
-const __STORAGE_MODIFIER char *lf_author;
+const char *lf_levelname;
+const char *lf_levelpic;
+const char *lf_author;
 
 void WI_drawLF(void)
 {
@@ -576,9 +576,9 @@ void WI_drawLF(void)
 // Args:    none
 // Returns: void
 //
-const __STORAGE_MODIFIER char *el_levelname;
-const __STORAGE_MODIFIER char *el_levelpic;
-const __STORAGE_MODIFIER char *el_author;
+const char *el_levelname;
+const char *el_levelpic;
+const char *el_author;
 
 void WI_drawEL(void)
 {
@@ -1027,7 +1027,7 @@ void WI_updateNoState(void)
     G_WorldDone();
 }
 
-static __STORAGE_MODIFIER dboolean snl_pointeron = false;
+static dboolean    snl_pointeron = false;
 
 
 // ====================================================================
@@ -1202,10 +1202,10 @@ int WI_fragSum(int playernum)
   return frags;
 }
 
-static __STORAGE_MODIFIER int dm_state;
+static int          dm_state;
 // CPhipps - short, dynamically allocated
-static __STORAGE_MODIFIER short int  **dm_frags;  // frags matrix
-static __STORAGE_MODIFIER short int *dm_totals;  // totals by player
+static short int  **dm_frags;  // frags matrix
+static short int   *dm_totals;  // totals by player
 
 // ====================================================================
 // WI_initDeathmatchStats
@@ -1451,12 +1451,12 @@ void WI_drawDeathmatchStats(void)
 // Note: The term "Netgame" means a coop game
 //
 
-static __STORAGE_MODIFIER int *cnt_kills;
-static __STORAGE_MODIFIER int *cnt_items;
-static __STORAGE_MODIFIER int *cnt_secret;
-static __STORAGE_MODIFIER int *cnt_frags;
-static __STORAGE_MODIFIER int dofrags;
-static __STORAGE_MODIFIER int ng_state;
+static int *cnt_kills;
+static int *cnt_items;
+static int *cnt_secret;
+static int *cnt_frags;
+static int    dofrags;
+static int    ng_state;
 
 // ====================================================================
 // CPhipps - WI_endNetgameStats
@@ -1741,7 +1741,7 @@ void WI_drawNetgameStats(void)
     WI_drawTimeStats(plrs[me].stime / TICRATE, wbs->totaltimes / TICRATE, wbs->partime / TICRATE);
 }
 
-static __STORAGE_MODIFIER int sp_state;
+static int  sp_state;
 
 // ====================================================================
 // WI_initStats
@@ -1776,7 +1776,7 @@ void WI_initStats(void)
 void WI_updateStats(void)
 {
   //e6y
-  static __STORAGE_MODIFIER dboolean play_early_explosion = true;
+  static dboolean play_early_explosion = true;
 
   WI_updateAnimatedBack();
 

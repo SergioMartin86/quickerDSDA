@@ -69,7 +69,7 @@ enum { unused_block = 0, used_block = 1};
 
 void* Z_BMalloc(struct block_memory_alloc_s *pzone)
 {
-  bmalpool_t **pool = (bmalpool_t **)&(pzone->firstpool);
+  register bmalpool_t **pool = (bmalpool_t **)&(pzone->firstpool);
   while (*pool != NULL) {
     byte *p = memchr((*pool)->used, unused_block, (*pool)->blocks); // Scan for unused marker
     if (p) {

@@ -61,57 +61,57 @@ extern __STORAGE_MODIFIER int numspritelumps;
 //
 // Lookup tables for map data.
 //
-extern __STORAGE_MODIFIER spritedef_t *sprites;
+extern __STORAGE_MODIFIER spritedef_t      *sprites;
 
-extern __STORAGE_MODIFIER int numvertexes;
-extern __STORAGE_MODIFIER vertex_t *vertexes;
+extern __STORAGE_MODIFIER int              numvertexes;
+extern __STORAGE_MODIFIER vertex_t         *vertexes;
 
-extern __STORAGE_MODIFIER int numsegs;
-extern __STORAGE_MODIFIER seg_t *segs;
+extern __STORAGE_MODIFIER int              numsegs;
+extern __STORAGE_MODIFIER seg_t            *segs;
 
-extern __STORAGE_MODIFIER int numsectors;
-extern __STORAGE_MODIFIER sector_t *sectors;
+extern __STORAGE_MODIFIER int              numsectors;
+extern __STORAGE_MODIFIER sector_t         *sectors;
 
-extern __STORAGE_MODIFIER int numsubsectors;
-extern __STORAGE_MODIFIER subsector_t *subsectors;
+extern __STORAGE_MODIFIER int              numsubsectors;
+extern __STORAGE_MODIFIER subsector_t      *subsectors;
 
-extern __STORAGE_MODIFIER int numnodes;
-extern __STORAGE_MODIFIER node_t *nodes;
+extern __STORAGE_MODIFIER int              numnodes;
+extern __STORAGE_MODIFIER node_t           *nodes;
 
-extern __STORAGE_MODIFIER int numlines;
-extern __STORAGE_MODIFIER line_t *lines;
+extern __STORAGE_MODIFIER int              numlines;
+extern __STORAGE_MODIFIER line_t           *lines;
 
-extern __STORAGE_MODIFIER int numsides;
-extern __STORAGE_MODIFIER side_t *sides;
+extern __STORAGE_MODIFIER int              numsides;
+extern __STORAGE_MODIFIER side_t           *sides;
 
-extern __STORAGE_MODIFIER int *sslines_indexes;
-extern __STORAGE_MODIFIER ssline_t *sslines;
+extern __STORAGE_MODIFIER int              *sslines_indexes;
+extern __STORAGE_MODIFIER ssline_t         *sslines;
 
 extern __STORAGE_MODIFIER byte             *map_subsectors;
 
 //
 // POV data.
 //
-extern __STORAGE_MODIFIER fixed_t viewx;
-extern __STORAGE_MODIFIER fixed_t viewy;
-extern __STORAGE_MODIFIER fixed_t viewz;
-extern __STORAGE_MODIFIER angle_t viewangle;
-extern __STORAGE_MODIFIER player_t *viewplayer;
-extern __STORAGE_MODIFIER angle_t clipangle;
-extern __STORAGE_MODIFIER int viewangletox[FINEANGLES/2];
+extern __STORAGE_MODIFIER fixed_t          viewx;
+extern __STORAGE_MODIFIER fixed_t          viewy;
+extern __STORAGE_MODIFIER fixed_t          viewz;
+extern __STORAGE_MODIFIER angle_t          viewangle;
+extern __STORAGE_MODIFIER player_t         *viewplayer;
+extern __STORAGE_MODIFIER angle_t          clipangle;
+extern __STORAGE_MODIFIER int              viewangletox[FINEANGLES/2];
 
 // e6y: resolution limitation is removed
-extern __STORAGE_MODIFIER angle_t *xtoviewangle;  // killough 2/8/98
+extern __STORAGE_MODIFIER angle_t          *xtoviewangle;  // killough 2/8/98
 
-extern __STORAGE_MODIFIER int FieldOfView;
+extern __STORAGE_MODIFIER int              FieldOfView;
 
-extern __STORAGE_MODIFIER fixed_t rw_distance;
-extern __STORAGE_MODIFIER angle_t rw_normalangle;
+extern fixed_t          rw_distance;
+extern angle_t          rw_normalangle;
 
 // angle to line origin
-extern __STORAGE_MODIFIER int rw_angle1;
+extern int              rw_angle1;
 
-extern __STORAGE_MODIFIER visplane_t       *floorplane;
-extern __STORAGE_MODIFIER visplane_t       *ceilingplane;
+extern visplane_t       *floorplane;
+extern visplane_t       *ceilingplane;
 
 #endif

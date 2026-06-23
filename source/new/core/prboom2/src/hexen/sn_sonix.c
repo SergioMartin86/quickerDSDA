@@ -111,9 +111,9 @@ static struct
     "Wind", 0, 0}
 };
 
-static __STORAGE_MODIFIER int *SequenceData[SS_MAX_SCRIPTS];
+static int *SequenceData[SS_MAX_SCRIPTS];
 
-__STORAGE_MODIFIER int ActiveSequences;
+int ActiveSequences;
 seqnode_t *SequenceListHead;
 
 static void VerifySequencePtr(int *base, int *ptr)

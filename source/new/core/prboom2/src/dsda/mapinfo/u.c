@@ -37,9 +37,9 @@
 
 #include "u.h"
 
-static struct MapEntry* gamemapinfo;
-static struct MapEntry* lastmapinfo;
-static struct MapEntry* nextmapinfo;
+static __STORAGE_MODIFIER struct MapEntry* gamemapinfo;
+static __STORAGE_MODIFIER struct MapEntry* lastmapinfo;
+static __STORAGE_MODIFIER struct MapEntry* nextmapinfo;
 
 static struct MapEntry* dsda_UMapEntry(int gameepisode, int gamemap)
 {
@@ -212,13 +212,13 @@ int dsda_UInterMusic(int* music_index, int* music_lump) {
   return true;
 }
 
-extern __STORAGE_MODIFIER int finalestage;
-extern __STORAGE_MODIFIER int finalecount;
-extern const __STORAGE_MODIFIER char *finaletext;
-extern const __STORAGE_MODIFIER char *finaleflat;
-extern const __STORAGE_MODIFIER char *finalepatch;
-extern __STORAGE_MODIFIER int acceleratestage;
-extern __STORAGE_MODIFIER int midstage;
+extern int finalestage;
+extern int finalecount;
+extern const char* finaletext;
+extern const char* finaleflat;
+extern const char* finalepatch;
+extern int acceleratestage;
+extern int midstage;
 
 int dsda_UStartFinale(void) {
   if (!gamemapinfo)
@@ -530,9 +530,9 @@ int dsda_UBorderTexture(const char** border_texture) {
 }
 
 int dsda_UPrepareEntering(void) {
-  extern const __STORAGE_MODIFIER char *el_levelname;
-  extern const __STORAGE_MODIFIER char *el_levelpic;
-  extern const __STORAGE_MODIFIER char *el_author;
+  extern const char *el_levelname;
+  extern const char *el_levelpic;
+  extern const char *el_author;
 
   if (!nextmapinfo)
     return false;
@@ -556,9 +556,9 @@ int dsda_UPrepareEntering(void) {
 }
 
 int dsda_UPrepareFinished(void) {
-  extern const __STORAGE_MODIFIER char *lf_levelname;
-  extern const __STORAGE_MODIFIER char *lf_levelpic;
-  extern const __STORAGE_MODIFIER char *lf_author;
+  extern const char *lf_levelname;
+  extern const char *lf_levelpic;
+  extern const char *lf_author;
 
   if (!lastmapinfo)
     return false;

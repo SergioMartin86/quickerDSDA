@@ -566,10 +566,10 @@ cfg_input_def_t input_defs[] = {
   INPUT_SETTING("input_script_9", dsda_input_script_9, 0, -1, -1),
 };
 
-static int input_def_count = sizeof(input_defs) / sizeof(input_defs[0]);
-static int def_count = sizeof(cfg_defs) / sizeof(cfg_defs[0]);
+static __STORAGE_MODIFIER int input_def_count = sizeof(input_defs) / sizeof(input_defs[0]);
+static __STORAGE_MODIFIER int def_count = sizeof(cfg_defs) / sizeof(cfg_defs[0]);
 
-static __STORAGE_MODIFIER char *defaultfile; // CPhipps - static, const
+static __STORAGE_MODIFIER char* defaultfile; // CPhipps - static, const
 
 static __STORAGE_MODIFIER dboolean forget_config_file;
 

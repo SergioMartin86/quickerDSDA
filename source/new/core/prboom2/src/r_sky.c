@@ -45,12 +45,12 @@
 //
 // sky mapping
 //
-__STORAGE_MODIFIER int skyflatnum;
-__STORAGE_MODIFIER int skytexture;
-__STORAGE_MODIFIER int skytexturemid;
+int skyflatnum;
+int skytexture;
+int skytexturemid;
 
-__STORAGE_MODIFIER int skystretch;
-__STORAGE_MODIFIER fixed_t freelookviewheight;
+int skystretch;
+fixed_t freelookviewheight;
 
 //
 // R_InitSkyMap

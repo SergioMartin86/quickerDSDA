@@ -91,14 +91,14 @@ typedef struct vertexsplit_info_s
   byte validcount;
 } vertexsplit_info_t;
 
-static __STORAGE_MODIFIER vertexsplit_info_t * gl_vertexsplit = NULL;
+static vertexsplit_info_t * gl_vertexsplit = NULL;
 
 typedef struct splitsbysector_s
 {
   int numsplits;
   vertexsplit_info_t **splits;
 } splitsbysector_t;
-static __STORAGE_MODIFIER splitsbysector_t * gl_splitsbysector = NULL;
+static splitsbysector_t * gl_splitsbysector = NULL;
 
 //==========================================================================
 //
@@ -339,7 +339,7 @@ void gld_InitVertexData()
   pos = numvertexes * sizeof(vertexsplit_info_t);
   for(i = 0; i < numvertexes; i++)
   {
-    __STORAGE_MODIFIER int cnt = vt_sectorlists_size[i];
+    int cnt = vt_sectorlists_size[i];
     vertexsplit_info_t *vi = &gl_vertexsplit[i];
 
     vi->validcount = -1;

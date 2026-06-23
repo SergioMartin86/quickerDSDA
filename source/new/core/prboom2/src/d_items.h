@@ -80,6 +80,6 @@ extern __STORAGE_MODIFIER weaponinfo_t hexen_weaponinfo[HEXEN_NUMWEAPONS][NUMCLA
 
 // dynamically selected in global.c
 
-extern __STORAGE_MODIFIER weaponinfo_t *weaponinfo;
+extern __STORAGE_MODIFIER weaponinfo_t* weaponinfo;
 
 #endif

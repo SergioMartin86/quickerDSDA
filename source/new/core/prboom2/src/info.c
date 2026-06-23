@@ -1217,7 +1217,7 @@ __STORAGE_MODIFIER state_t doom_states[DOOM_NUMSTATES] = {
 //
 // This goes on for the next 3000+ lines...
 
-doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
+__STORAGE_MODIFIER doom_mobjinfo_t doom_mobjinfo[DOOM_NUMMOBJTYPES] = {
   {   // MT_PLAYER
     -1,   // doomednum
     S_PLAY,   // spawnstate

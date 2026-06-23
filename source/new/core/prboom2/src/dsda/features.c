@@ -23,9 +23,9 @@
 
 #include "features.h"
 
-static __STORAGE_MODIFIER uint64_t used_features;
+static uint64_t used_features;
 
-static __STORAGE_MODIFIER const char *feature_names[64] = {
+static const char* feature_names[64] = {
   [uf_menu] = "Menu",
   [uf_exhud] = "Extended HUD",
   [uf_advhud] = "Advanced HUD",

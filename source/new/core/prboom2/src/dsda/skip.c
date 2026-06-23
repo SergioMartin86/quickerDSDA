@@ -33,15 +33,15 @@
 
 #include "skip.h"
 
-static __STORAGE_MODIFIER dboolean skip_mode;
+static dboolean skip_mode;
 
-static __STORAGE_MODIFIER int demo_skiptics;
-static __STORAGE_MODIFIER dboolean skip_until_next_map;
-static __STORAGE_MODIFIER dboolean skip_until_end_of_map;
-static __STORAGE_MODIFIER dboolean skip_until_logictic;
-static __STORAGE_MODIFIER dboolean demo_warp_reached;
-static __STORAGE_MODIFIER int skip_until_map;
-static __STORAGE_MODIFIER int skip_until_episode;
+static int demo_skiptics;
+static dboolean skip_until_next_map;
+static dboolean skip_until_end_of_map;
+static dboolean skip_until_logictic;
+static dboolean demo_warp_reached;
+static int skip_until_map;
+static int skip_until_episode;
 
 dboolean dsda_SkipMode(void) {
   return skip_mode;
@@ -52,7 +52,7 @@ static void dsda_CacheSkipSetting(dboolean* old, dboolean* current) {
   *current = true;
 }
 
-static __STORAGE_MODIFIER dboolean old_fastdemo, old_nodrawers, old_nosfxparm, old_nomusicparm;
+static dboolean old_fastdemo, old_nodrawers, old_nosfxparm, old_nomusicparm;
 
 static void dsda_ApplySkipSettings(void) {
   dsda_CacheSkipSetting(&old_fastdemo, &fastdemo);
@@ -165,7 +165,7 @@ void dsda_EvaluateSkipModeDoCompleted(void) {
 
 void dsda_EvaluateSkipModeDoTeleportNewMap(void) {
   if (dsda_SkipMode()) {
-    static __STORAGE_MODIFIER int firstmap = 1;
+    static int firstmap = 1;
 
     demo_warp_reached = skip_until_next_map ||
       (
@@ -183,7 +183,7 @@ void dsda_EvaluateSkipModeDoTeleportNewMap(void) {
 
 void dsda_EvaluateSkipModeDoWorldDone(void) {
   if (dsda_SkipMode()) {
-    static __STORAGE_MODIFIER int firstmap = 1;
+    static int firstmap = 1;
 
     demo_warp_reached = skip_until_next_map ||
       (
@@ -205,8 +205,8 @@ void dsda_EvaluateSkipModeCheckDemoStatus(void) {
 }
 
 void dsda_HandleSkip(void) {
-  extern __STORAGE_MODIFIER int warpmap;
-  extern __STORAGE_MODIFIER int warpepisode;
+  extern int warpmap;
+  extern int warpepisode;
 
   dsda_arg_t* arg;
 

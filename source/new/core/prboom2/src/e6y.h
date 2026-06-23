@@ -68,7 +68,7 @@ extern __STORAGE_MODIFIER char demo_len_st[80];
 
 extern __STORAGE_MODIFIER int mouse_handler;
 
-extern __STORAGE_MODIFIER int gl_render_fov;
+extern int gl_render_fov;
 extern __STORAGE_MODIFIER float gl_render_ratio;
 extern __STORAGE_MODIFIER float gl_render_fovratio;
 extern __STORAGE_MODIFIER float gl_render_fovy;
@@ -78,11 +78,11 @@ void M_ChangeStretch(void);
 
 extern __STORAGE_MODIFIER camera_t walkcamera;
 
-extern __STORAGE_MODIFIER int PitchSign;
+extern int PitchSign;
 extern __STORAGE_MODIFIER angle_t viewpitch;
 extern __STORAGE_MODIFIER float skyscale;
 extern __STORAGE_MODIFIER float screen_skybox_zplane;
-extern __STORAGE_MODIFIER float maxNoPitch[];
+extern float maxNoPitch[];
 extern __STORAGE_MODIFIER float tan_pitch;
 extern __STORAGE_MODIFIER float skyUpAngle;
 extern __STORAGE_MODIFIER float skyUpShift;
@@ -158,7 +158,7 @@ enum
   PC_MAX
 };
 
-extern prboom_comp_t prboom_comp[];
+extern __STORAGE_MODIFIER prboom_comp_t prboom_comp[];
 
 int StepwiseSum(int value, int direction, int minval, int maxval, int defval);
 

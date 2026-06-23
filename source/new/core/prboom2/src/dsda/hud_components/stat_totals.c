@@ -31,7 +31,7 @@ typedef struct {
   const char* stat_separator;
 } local_component_t;
 
-static __STORAGE_MODIFIER local_component_t* local;
+static local_component_t* local;
 
 static void dsda_UpdateComponentText(char* str, size_t max_size) {
   int i;

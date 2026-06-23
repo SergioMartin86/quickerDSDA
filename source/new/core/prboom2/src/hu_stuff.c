@@ -65,7 +65,7 @@
 #include "dsda/settings.h"
 #include "dsda/stretch.h"
 
-static __STORAGE_MODIFIER player_t *plr;
+static player_t*  plr;
 
 typedef struct custom_message_s
 {
@@ -74,15 +74,15 @@ typedef struct custom_message_s
   const char *msg;
 } custom_message_t;
 
-static __STORAGE_MODIFIER custom_message_t custom_message[MAX_MAXPLAYERS];
-static __STORAGE_MODIFIER custom_message_t *custom_message_p;
+static custom_message_t custom_message[MAX_MAXPLAYERS];
+static custom_message_t *custom_message_p;
 
 //jff 2/16/98 status color change levels
-__STORAGE_MODIFIER int hud_ammo_red;      // ammo percent less than which status is red
-__STORAGE_MODIFIER int hud_ammo_yellow;   // ammo percent less is yellow more green
-__STORAGE_MODIFIER int hud_health_red;    // health amount less than which status is red
-__STORAGE_MODIFIER int hud_health_yellow; // health amount less than which status is yellow
-__STORAGE_MODIFIER int hud_health_green;  // health amount above is blue, below is green
+int hud_ammo_red;      // ammo percent less than which status is red
+int hud_ammo_yellow;   // ammo percent less is yellow more green
+int hud_health_red;    // health amount less than which status is red
+int hud_health_yellow; // health amount less than which status is yellow
+int hud_health_green;  // health amount above is blue, below is green
 
 void HU_InitThresholds(void)
 {
@@ -93,7 +93,7 @@ void HU_InitThresholds(void)
   hud_ammo_yellow = dsda_IntConfig(dsda_config_hud_ammo_yellow);
 }
 
-__STORAGE_MODIFIER dsda_string_t hud_title;
+dsda_string_t hud_title;
 
 static void HU_FetchTitle(void)
 {
@@ -123,16 +123,16 @@ typedef struct crosshair_s
   float target_screen_x, target_screen_y;
 } crosshair_t;
 
-static __STORAGE_MODIFIER crosshair_t crosshair;
+static crosshair_t crosshair;
 
-static __STORAGE_MODIFIER const char *crosshair_nam[HU_CROSSHAIRS] =
+static const char *crosshair_nam[HU_CROSSHAIRS] =
   { NULL, "CROSS1", "CROSS2", "CROSS3", "CROSS4", "CROSS5", "CROSS6", "CROSS7" };
 
-static __STORAGE_MODIFIER int hudadd_crosshair;
-static __STORAGE_MODIFIER int hudadd_crosshair_scale;
-static __STORAGE_MODIFIER int hudadd_crosshair_health;
-static __STORAGE_MODIFIER int hudadd_crosshair_target;
-static __STORAGE_MODIFIER int hudadd_crosshair_lock_target;
+static int hudadd_crosshair;
+static int hudadd_crosshair_scale;
+static int hudadd_crosshair_health;
+static int hudadd_crosshair_target;
+static int hudadd_crosshair_lock_target;
 
 void HU_InitCrosshair(void)
 {
@@ -305,8 +305,8 @@ void HU_AnnounceMap(void)
 {
   if (dsda_IntConfig(dsda_config_announce_map))
   {
-    static __STORAGE_MODIFIER int last_gamemap;
-    static __STORAGE_MODIFIER int last_gameepisode;
+    static int last_gamemap;
+    static int last_gameepisode;
 
     if (gamemap != last_gamemap || gameepisode != last_gameepisode)
     {
@@ -377,7 +377,7 @@ void HU_Drawer(void)
   V_EndUIDraw();
 }
 
-__STORAGE_MODIFIER char *secret_message;
+char* secret_message;
 
 static void HU_UpdateSecretMessage(const char* message)
 {

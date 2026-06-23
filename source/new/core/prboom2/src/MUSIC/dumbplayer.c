@@ -79,14 +79,15 @@ const music_player_t db_player =
 #include "lprintf.h"
 
 
-static __STORAGE_MODIFIER float db_delta;
-static __STORAGE_MODIFIER float db_volume;
-static __STORAGE_MODIFIER int db_looping;
-static __STORAGE_MODIFIER int db_playing = 0;
-static __STORAGE_MODIFIER int db_paused = 0;
-static __STORAGE_MODIFIER DUH_SIGRENDERER *dsren = NULL;
-static __STORAGE_MODIFIER DUH *duh = NULL;
-static __STORAGE_MODIFIER DUMBFILE *dfil = NULL;
+static float db_delta;
+static float db_volume;
+static int db_looping;
+static int db_playing = 0;
+static int db_paused = 0;
+
+static DUH_SIGRENDERER *dsren = NULL;
+static DUH *duh = NULL;
+static DUMBFILE *dfil = NULL;
 
 static const char *db_name (void)
 {

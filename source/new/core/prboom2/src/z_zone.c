@@ -74,9 +74,88 @@ typedef struct memblock {
   unsigned char tag;
 } memblock_t;
 
-static __STORAGE_MODIFIER const size_t HEADER_SIZE = sizeof(memblock_t);
+static const size_t HEADER_SIZE = sizeof(memblock_t);
 
 static __STORAGE_MODIFIER memblock_t *blockbytag[ZONE_MAX];
+
+/* ---- Increment 3: contiguous per-thread "thinker" arena ----
+ * Dynamic level objects (mobjs + the special thinkers) are bump-allocated from
+ * a single contiguous per-thread slab with a segregated (per exact 16-byte size
+ * class) free list, so the whole live dynamic set occupies one contiguous
+ * region. That contiguity is the foundation for the bulk zone-snapshot save/load
+ * path (a single memcpy + pointer relocation in place of the per-thinker field
+ * walk). Routing is gated by dsda_thinker_arena_active, flipped on in
+ * P_SetupLevel *after* the one-time map geometry is loaded and off before it,
+ * so only the dynamic objects (never the static geometry) land in the slab.
+ * Blocks keep the ordinary memblock_t header and blockbytag linkage, so the
+ * existing pointer-swizzling archive path works unchanged on top of this. */
+#ifndef DSDA_THINKER_ARENA_BYTES
+#define DSDA_THINKER_ARENA_BYTES ((size_t)32 * 1024 * 1024)
+#endif
+#define TA_ALIGN       16u
+#define TA_MAX_CLASSES 2048u   /* arena-eligible up to TA_MAX_CLASSES*TA_ALIGN = 32KB; larger falls back to malloc */
+
+__STORAGE_MODIFIER int dsda_thinker_arena_active;       /* routing flag (set in p_setup.c) */
+static __STORAGE_MODIFIER char       *ta_base;          /* slab base (malloc'd once per thread) */
+static __STORAGE_MODIFIER size_t      ta_high;          /* bump high-water mark (bytes used) */
+static __STORAGE_MODIFIER size_t      ta_peak;          /* max high-water seen (for reporting/sizing) */
+static __STORAGE_MODIFIER memblock_t *ta_free[TA_MAX_CLASSES]; /* segregated free lists, keyed by size class */
+
+/* Reclaim the whole slab in O(1): drop the bump pointer and all free lists. The
+ * caller must have already cleared every pointer into the slab (thinker list,
+ * sector/blockmap heads, block-zone pools). Used by the bulk state-load teardown
+ * to abandon the previous state's objects without walking them. The routing flag
+ * is left untouched so subsequent allocations keep using the slab. */
+void Z_ResetThinkerArena(void)
+{
+  ta_high = 0;
+  memset(ta_free, 0, sizeof(ta_free));
+}
+
+/* Reset the slab to empty and start routing dynamic allocations into it. Called
+ * after the geometry load, when no thinker objects are live. */
+void Z_BeginThinkerArena(void)
+{
+  Z_ResetThinkerArena();
+  dsda_thinker_arena_active = 1;
+}
+
+/* Stop routing into the slab (e.g. while (re)loading static geometry). */
+void Z_EndThinkerArena(void)
+{
+  dsda_thinker_arena_active = 0;
+}
+
+size_t Z_ThinkerArenaUsed(void) { return ta_high; }
+size_t Z_ThinkerArenaPeak(void) { return ta_peak; }
+
+static memblock_t *Z_ArenaCarve(size_t total, unsigned cls)
+{
+  memblock_t *b;
+  if (ta_free[cls])                 /* exact-size reuse: perfect for fixed-size structs */
+  {
+    b = ta_free[cls];
+    ta_free[cls] = b->next;
+    return b;
+  }
+  if (!ta_base)
+  {
+    ta_base = malloc(DSDA_THINKER_ARENA_BYTES);
+    if (!ta_base)
+      I_Error("Z_ArenaCarve: failed to reserve %lu-byte thinker arena", (unsigned long) DSDA_THINKER_ARENA_BYTES);
+  }
+  if (ta_high + total > DSDA_THINKER_ARENA_BYTES)
+    I_Error("Z_ArenaCarve: thinker arena exhausted (need %lu)", (unsigned long)(ta_high + total));
+  b = (memblock_t *)(ta_base + ta_high);
+  ta_high += total;
+  if (ta_high > ta_peak) ta_peak = ta_high;
+  return b;
+}
+
+static inline int Z_InArena(const void *block)
+{
+  return ta_base && (const char *)block >= ta_base && (const char *)block < ta_base + ta_high;
+}
 
 /* Z_Malloc
  * cph - the algorithm here was a very simple first-fit round-robin
@@ -91,11 +170,24 @@ static __STORAGE_MODIFIER memblock_t *blockbytag[ZONE_MAX];
 static void *Z_MallocTag(size_t size, int tag)
 {
   memblock_t *block = NULL;
+  size_t blocksize = size;
 
   if (!size)
     return NULL; // malloc(0) returns NULL
 
-  if (!(block = malloc(size + HEADER_SIZE)))
+  // Increment 3: route dynamic level objects into the contiguous thinker arena.
+  if (tag == ZONE_LEVEL && dsda_thinker_arena_active)
+  {
+    size_t rounded = (size + (TA_ALIGN - 1)) & ~(size_t)(TA_ALIGN - 1);
+    unsigned cls = (unsigned)(rounded / TA_ALIGN);
+    if (cls < TA_MAX_CLASSES)
+    {
+      block = Z_ArenaCarve(rounded + HEADER_SIZE, cls);
+      blocksize = rounded;   // capacity == class size, so re-free maps back to the same class
+    }
+  }
+
+  if (!block && !(block = malloc(blocksize + HEADER_SIZE)))
   {
     I_Error ("Z_Malloc: Failure trying to allocate %lu bytes", (unsigned long) size);
   }
@@ -113,7 +205,7 @@ static void *Z_MallocTag(size_t size, int tag)
     blockbytag[tag]->prev = block;
   }
 
-  block->size = size;
+  block->size = blocksize;
   block->signature = ZONE_SIGNATURE;
   block->tag = tag;           // tag
   block = (memblock_t *)((char *) block + HEADER_SIZE);
@@ -142,6 +234,15 @@ void Z_Free(void *p)
       blockbytag[block->tag] = block->next;
   block->prev->next = block->next;
   block->next->prev = block->prev;
+
+  // Increment 3: arena blocks return to their size-class free list, not the heap.
+  if (Z_InArena(block))
+  {
+    unsigned cls = (unsigned)(block->size / TA_ALIGN);
+    block->next = ta_free[cls];
+    ta_free[cls] = block;
+    return;
+  }
 
   free(block);
 }

@@ -25,12 +25,12 @@
 
 #include "sfx.h"
 
-__STORAGE_MODIFIER sfxinfo_t *S_sfx;
-__STORAGE_MODIFIER int num_sfx;
-static __STORAGE_MODIFIER int deh_soundnames_size;
-static __STORAGE_MODIFIER char** deh_soundnames;
-static __STORAGE_MODIFIER byte* sfx_state;
-static __STORAGE_MODIFIER int highest_index;
+sfxinfo_t* S_sfx;
+int num_sfx;
+static int deh_soundnames_size;
+static char** deh_soundnames;
+static byte* sfx_state;
+static int highest_index;
 
 static void dsda_ResetSFX(int from, int to) {
   int i;
@@ -42,7 +42,7 @@ static void dsda_ResetSFX(int from, int to) {
 }
 
 static void dsda_PrepAllocation(void) {
-  static __STORAGE_MODIFIER int first_allocation = true;
+  static int first_allocation = true;
 
   if (first_allocation) {
     sfxinfo_t* source = S_sfx;
@@ -132,7 +132,7 @@ sfxinfo_t* dsda_NewSFX(int* index) {
 
 void dsda_InitializeSFX(sfxinfo_t* source, int count) {
   int i;
-  extern __STORAGE_MODIFIER int raven;
+  extern int raven;
 
   num_sfx = count;
   highest_index = count - 1;
@@ -169,8 +169,8 @@ void dsda_FreeDehSFX(void) {
   sfx_state = NULL;
 }
 
-static __STORAGE_MODIFIER int dsda_parallel_sfx_limit;
-static __STORAGE_MODIFIER int dsda_parallel_sfx_window;
+static int dsda_parallel_sfx_limit;
+static int dsda_parallel_sfx_window;
 
 void dsda_InitParallelSFXFilter(void) {
   dsda_parallel_sfx_limit = dsda_IntConfig(dsda_config_parallel_sfx_limit);
@@ -178,7 +178,7 @@ void dsda_InitParallelSFXFilter(void) {
 }
 
 dboolean dsda_BlockSFX(sfxinfo_t *sfx) {
-  extern __STORAGE_MODIFIER int gametic;
+  extern int gametic;
 
   if (!dsda_parallel_sfx_limit) return false;
 

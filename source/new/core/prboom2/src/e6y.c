@@ -88,7 +88,7 @@ __STORAGE_MODIFIER int demo_tics_count;
 __STORAGE_MODIFIER char demo_len_st[80];
 
 __STORAGE_MODIFIER int mouse_handler;
-__STORAGE_MODIFIER int gl_render_fov = 90;
+int gl_render_fov = 90;
 
 __STORAGE_MODIFIER camera_t walkcamera;
 
@@ -101,6 +101,33 @@ __STORAGE_MODIFIER float skyUpShift;
 __STORAGE_MODIFIER float skyXShift;
 __STORAGE_MODIFIER float skyYShift;
 
+#ifdef _WIN32
+const char* WINError(void)
+{
+  static char *WinEBuff = NULL;
+  DWORD err = GetLastError();
+  char *ch;
+
+  if (WinEBuff)
+  {
+    LocalFree(WinEBuff);
+  }
+
+  if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+    NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+    (LPTSTR) &WinEBuff, 0, NULL) == 0)
+  {
+    return "Unknown error";
+  }
+
+  if ((ch = strchr(WinEBuff, '\n')) != 0)
+    *ch = 0;
+  if ((ch = strchr(WinEBuff, '\r')) != 0)
+    *ch = 0;
+
+  return WinEBuff;
+}
+#endif
 
 //--------------------------------------------------
 
@@ -124,7 +151,7 @@ void ParamsMatchingCheck()
     I_Error("Params are not matching: Can not being played back and recorded at the same time.");
 }
 
-prboom_comp_t prboom_comp[PC_MAX] = {
+__STORAGE_MODIFIER prboom_comp_t prboom_comp[PC_MAX] = {
   {0xffffffff, 0x02020615, 0, dsda_arg_force_monster_avoid_hazards},
   {0x00000000, 0x02040601, 0, dsda_arg_force_remove_slime_trails},
   {0x02020200, 0x02040801, 0, dsda_arg_force_no_dropoff},

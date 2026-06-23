@@ -40,8 +40,8 @@
 #include "r_main.h"
 #include "lprintf.h"
 
-__STORAGE_MODIFIER int sts_always_red;      //jff 2/18/98 control to disable status color changes
-__STORAGE_MODIFIER int sts_pct_always_gray; // killough 2/21/98: always gray %'s? bug or feature?
+int sts_always_red;      //jff 2/18/98 control to disable status color changes
+int sts_pct_always_gray; // killough 2/21/98: always gray %'s? bug or feature?
 
 //
 // STlib_init()
@@ -65,7 +65,7 @@ void STlib_initNum
   int x,
   int y,
   const patchnum_t* pl,
-  int *num,
+  int* num,
   dboolean* on,
   int     width )
 {
@@ -89,6 +89,7 @@ void STlib_initNum
  * Returns nothing
  *
  * jff 2/16/98 add color translation to digit output
+ * cphipps 10/99 - const pointer to colour trans table, made function static
  */
 static void STlib_drawNum
 ( st_number_t*  n,
@@ -97,7 +98,7 @@ static void STlib_drawNum
 {
 
   int   numdigits = n->width;
-  int num = *n->num;
+  int   num = *n->num;
 
   int   w = n->p[0].width;
   int   h = n->p[0].height;
@@ -194,7 +195,7 @@ void STlib_initPercent
   int x,
   int y,
   const patchnum_t* pl,
-  int *num,
+  int* num,
   dboolean* on,
   const patchnum_t* percent )
 {

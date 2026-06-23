@@ -67,7 +67,7 @@ struct MapList
 
 typedef void (*umapinfo_errorfunc)(const char *fmt, ...);	// this must not return!
 
-extern __STORAGE_MODIFIER struct MapList Maps;
+extern struct MapList Maps;
 
 int ParseUMapInfo(const unsigned char *buffer, size_t length, umapinfo_errorfunc err);
 void FreeMapList();

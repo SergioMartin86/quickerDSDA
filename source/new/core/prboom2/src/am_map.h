@@ -85,7 +85,7 @@ typedef struct map_line_s
   map_point_t point[2];
 } PACKEDATTR map_line_t;
 
-extern __STORAGE_MODIFIER array_t map_lines;
+extern array_t map_lines;
 
 #define MAPBITS 12
 #define FRACTOMAPBITS (FRACBITS-MAPBITS)
@@ -132,7 +132,7 @@ typedef struct
 } markpoint_t;
 
 extern markpoint_t *markpoints;
-extern __STORAGE_MODIFIER int markpointnum, markpointnum_max;
+extern int markpointnum, markpointnum_max;
 
 // end changes -- killough 2/22/98
 
@@ -155,7 +155,7 @@ typedef struct am_frame_s
 
   int precise;
 } am_frame_t;
-extern __STORAGE_MODIFIER am_frame_t am_frame;
+extern am_frame_t am_frame;
 
 typedef enum
 {
@@ -176,7 +176,7 @@ typedef enum
   map_trail_mode_max
 } map_trail_mode_t;
 
-extern __STORAGE_MODIFIER map_trail_mode_t map_trail_mode;
+extern map_trail_mode_t map_trail_mode;
 
 void AM_updatePlayerTrail(fixed_t x, fixed_t y);
 

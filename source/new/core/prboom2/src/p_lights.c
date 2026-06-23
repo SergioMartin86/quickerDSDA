@@ -913,7 +913,7 @@ dboolean EV_SpawnLight(line_t * line, byte * arg, lighttype_t type)
     return rtn;
 }
 
-static int PhaseTable[64] = {
+static __STORAGE_MODIFIER int PhaseTable[64] = {
     128, 112, 96, 80, 64, 48, 32, 32,
     16, 16, 16, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,

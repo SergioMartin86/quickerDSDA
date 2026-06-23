@@ -41,12 +41,12 @@
 
 #define IGNORE_VALUE -1
 
-const demostate_t (*demostates)[4];
-extern const demostate_t doom_demostates[][4];
+__STORAGE_MODIFIER const demostate_t (*demostates)[4];
+extern __STORAGE_MODIFIER const demostate_t doom_demostates[][4];
 extern const demostate_t heretic_demostates[][4];
 extern const demostate_t hexen_demostates[][4];
 
-__STORAGE_MODIFIER weaponinfo_t *weaponinfo;
+__STORAGE_MODIFIER weaponinfo_t* weaponinfo;
 
 __STORAGE_MODIFIER int g_maxplayers = 4;
 __STORAGE_MODIFIER int g_viewheight = 41 * FRACUNIT;
@@ -133,7 +133,7 @@ __STORAGE_MODIFIER const char* g_menu_flat;
 __STORAGE_MODIFIER int g_menu_save_page_size;
 __STORAGE_MODIFIER int g_menu_font_spacing;
 
-const __STORAGE_MODIFIER char *g_skyflatname;
+__STORAGE_MODIFIER const char* g_skyflatname;
 
 __STORAGE_MODIFIER dboolean hexen = false;
 __STORAGE_MODIFIER dboolean heretic = false;

@@ -68,7 +68,7 @@ void D_DoomMain(void);
 void D_AddFile (const char *file, wad_source_t source, void* const buffer, const size_t size);
 void AddIWAD(const char *iwad, void* const buffer, const size_t size);
 
-extern const __STORAGE_MODIFIER char *port_wad_file;
+extern __STORAGE_MODIFIER const char *port_wad_file;
 
 typedef struct
 {

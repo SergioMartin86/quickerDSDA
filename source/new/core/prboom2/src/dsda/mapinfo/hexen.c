@@ -71,11 +71,13 @@ typedef struct mapInfo_s {
   char songLump[10];
 } mapInfo_t;
 
-static __STORAGE_MODIFIER int MapCount = 98;
-static __STORAGE_MODIFIER mapInfo_t MapInfo[99];
-static __STORAGE_MODIFIER mapInfo_t *CurrentMap;
+static int MapCount = 98;
 
-static __STORAGE_MODIFIER const char *MapCmdNames[] = {
+static mapInfo_t MapInfo[99];
+
+static mapInfo_t *CurrentMap = MapInfo;
+
+static const char *MapCmdNames[] = {
   "SKY1",
   "SKY2",
   "DOUBLESKY",
@@ -244,7 +246,7 @@ int dsda_HexenResolveCLEV(int* clev, int* episode, int* map) {
   return true;
 }
 
-__STORAGE_MODIFIER dboolean partial_reset = false;
+dboolean partial_reset = false;
 
 int dsda_HexenResolveINIT(int* init) {
   if (!hexen)
@@ -351,7 +353,7 @@ int dsda_HexenSkyTexture(int* sky) {
 }
 
 int dsda_HexenPrepareInitNew(void) {
-  extern __STORAGE_MODIFIER int RebornPosition;
+  extern int RebornPosition;
 
   if (!hexen)
     return false;
@@ -541,8 +543,8 @@ int dsda_HexenMapLightning(int* lightning) {
 }
 
 int dsda_HexenApplyFadeTable(void) {
-  extern __STORAGE_MODIFIER dboolean LevelUseFullBright;
-  extern __STORAGE_MODIFIER const lighttable_t** colormaps;
+  extern dboolean LevelUseFullBright;
+  extern const lighttable_t** colormaps;
 
   int fade_lump;
 
@@ -602,8 +604,8 @@ int dsda_HexenAirControl(fixed_t* air_control) {
 }
 
 int dsda_HexenInitSky(void) {
-  extern __STORAGE_MODIFIER fixed_t Sky1ScrollDelta;
-  extern __STORAGE_MODIFIER fixed_t Sky2ScrollDelta;
+  extern fixed_t Sky1ScrollDelta;
+  extern fixed_t Sky2ScrollDelta;
 
   if (!hexen)
     return false;

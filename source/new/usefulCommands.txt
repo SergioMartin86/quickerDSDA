@@ -1,5 +1,0 @@
-nm newTester | grep -e " B " -e " b " -e " d " -e " D " > globals.txt
-
-find . \( -iname "*.c" -o -iname "*.h" -o -iname "*.cpp" -o -iname "*.hpp" \) -print0 | parallel -j 88 -0 python3 ./deglobalizer.py ../../build/globals.txt {}
-
-watch -n 1 ./static.sh

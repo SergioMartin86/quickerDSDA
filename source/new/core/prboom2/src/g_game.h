@@ -110,7 +110,7 @@ extern __STORAGE_MODIFIER int cpars[];      // hardcoded array size
 extern __STORAGE_MODIFIER char savedescription[SAVEDESCLEN];  // Description to save in savegame
 
 /* cph - compatibility level strings */
-extern __STORAGE_MODIFIER const char *comp_lev_str[];
+extern __STORAGE_MODIFIER const char * comp_lev_str[];
 
 // e6y
 // There is a new command-line switch "-shorttics".

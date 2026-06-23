@@ -49,10 +49,10 @@
 #define ST_Y      (200 - ST_HEIGHT)
 
 // e6y: wide-res
-extern __STORAGE_MODIFIER int ST_SCALED_HEIGHT;
-extern __STORAGE_MODIFIER int ST_SCALED_WIDTH;
+extern int ST_SCALED_HEIGHT;
+extern int ST_SCALED_WIDTH;
 extern int ST_SCALED_Y;
-extern __STORAGE_MODIFIER int ST_SCALED_OFFSETX;
+extern int ST_SCALED_OFFSETX;
 
 void ST_SetScaledWidth(void);
 void ST_LoadTextColors(void);
@@ -90,10 +90,10 @@ typedef enum
   FirstPersonState
 } st_stateenum_t;
 
-extern __STORAGE_MODIFIER int st_palette;    // cph 2006/04/06 - make palette visible
+extern int st_palette;    // cph 2006/04/06 - make palette visible
 
 // e6y: makes sense for wide resolutions
-extern __STORAGE_MODIFIER patchnum_t grnrock;
-extern __STORAGE_MODIFIER patchnum_t brdr_b;
+extern patchnum_t grnrock;
+extern patchnum_t brdr_b;
 
 #endif

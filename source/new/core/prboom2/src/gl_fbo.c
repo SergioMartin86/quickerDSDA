@@ -44,11 +44,12 @@
 #include "i_main.h"
 #include "lprintf.h"
 
-__STORAGE_MODIFIER dboolean gl_use_FBO = false;
-__STORAGE_MODIFIER GLuint glSceneImageFBOTexID = 0;
-__STORAGE_MODIFIER GLuint glDepthBufferFBOTexID = 0;
-__STORAGE_MODIFIER GLuint glSceneImageTextureFBOTexID = 0;
-__STORAGE_MODIFIER int SceneInTexture = false;
+dboolean gl_use_FBO = false;
+
+GLuint glSceneImageFBOTexID = 0;
+GLuint glDepthBufferFBOTexID = 0;
+GLuint glSceneImageTextureFBOTexID = 0;
+int SceneInTexture = false;
 static dboolean gld_CreateScreenSizeFBO(void);
 
 void gld_InitFBO(void)

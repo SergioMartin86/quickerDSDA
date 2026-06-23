@@ -99,7 +99,7 @@ __STORAGE_MODIFIER int clipammo[NUMAMMO] = { 10,  4,  20,  1, 0, 0}; // heretic 
 //
 
 // heretic
-static weapontype_t GetAmmoChange[] = {
+static __STORAGE_MODIFIER weapontype_t GetAmmoChange[] = {
     wp_goldwand,
     wp_crossbow,
     wp_blaster,
@@ -406,7 +406,7 @@ void P_GiveCard(player_t *player, card_t card)
 
 dboolean P_GivePower(player_t *player, int power)
 {
-  static const int tics[NUMPOWERS] = {
+  static __STORAGE_MODIFIER const int tics[NUMPOWERS] = {
     INVULNTICS, 1 /* strength */, INVISTICS,
     IRONTICS, 1 /* allmap */, INFRATICS,
     WPNLEV2TICS, FLIGHTTICS, 1 /* shield */, 1 /* health2 */,
@@ -828,6 +828,7 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
 
 static mobj_t *ActiveMinotaur(player_t * master);
 
+// killough 11/98: make static
 static void P_KillMobj(mobj_t *source, mobj_t *target)
 {
   mobjtype_t item;
@@ -2631,7 +2632,7 @@ void P_AutoUseHealth(player_t * player, int saveHealth)
 #define TXT_WRAITHVERGE_PIECE  "SEGMENT OF WRAITHVERGE"
 #define TXT_BLOODSCOURGE_PIECE "SEGMENT OF BLOODSCOURGE"
 
-const __STORAGE_MODIFIER char *TextKeyMessages[] = {
+__STORAGE_MODIFIER const char *TextKeyMessages[] = {
     TXT_KEY_STEEL,
     TXT_KEY_CAVE,
     TXT_KEY_AXE,
@@ -2923,19 +2924,19 @@ static void TryPickupWeaponPiece(player_t * player, pclass_t matchClass,
     dboolean checkAssembled;
     dboolean gaveWeapon;
     int gaveMana;
-    static const char *fourthWeaponText[] = {
+    static __STORAGE_MODIFIER const char *fourthWeaponText[] = {
         0,
         TXT_WEAPON_F4,
         TXT_WEAPON_C4,
         TXT_WEAPON_M4
     };
-    static const char *weaponPieceText[] = {
+    static __STORAGE_MODIFIER const char *weaponPieceText[] = {
         0,
         TXT_QUIETUS_PIECE,
         TXT_WRAITHVERGE_PIECE,
         TXT_BLOODSCOURGE_PIECE
     };
-    static int pieceValueTrans[] = {
+    static __STORAGE_MODIFIER int pieceValueTrans[] = {
         0,                      // 0: never
         WPIECE1 | WPIECE2 | WPIECE3,    // WPIECE1 (1)
         WPIECE2 | WPIECE3,      // WPIECE2 (2)
@@ -3077,7 +3078,7 @@ static void SetDormantArtifact(mobj_t * arti)
 
 static void TryPickupArtifact(player_t * player, artitype_t artifactType, mobj_t * artifact)
 {
-    static const char *artifactMessages[HEXEN_NUMARTIFACTS] = {
+    static __STORAGE_MODIFIER const char *artifactMessages[HEXEN_NUMARTIFACTS] = {
         NULL,
         TXT_ARTIINVULNERABILITY,
         TXT_ARTIHEALTH,

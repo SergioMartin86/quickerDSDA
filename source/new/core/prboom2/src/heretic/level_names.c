@@ -16,7 +16,7 @@
 
 // LevelNames from am_map
 
-const __STORAGE_MODIFIER char *LevelNames[] = {
+const char *LevelNames[] = {
     // EPISODE 1 - THE CITY OF THE DAMNED
     "E1M1:  THE DOCKS",
     "E1M2:  THE DUNGEONS",

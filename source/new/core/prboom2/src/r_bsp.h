@@ -34,9 +34,9 @@
 #ifndef __R_BSP__
 #define __R_BSP__
 
-extern __STORAGE_MODIFIER seg_t *curline;
-extern __STORAGE_MODIFIER side_t *sidedef;
-extern __STORAGE_MODIFIER line_t *linedef;
+extern __STORAGE_MODIFIER seg_t    *curline;
+extern __STORAGE_MODIFIER side_t   *sidedef;
+extern __STORAGE_MODIFIER line_t   *linedef;
 extern __STORAGE_MODIFIER sector_t *frontsector;
 extern __STORAGE_MODIFIER sector_t *backsector;
 

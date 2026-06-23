@@ -52,7 +52,7 @@ typedef struct musinfo_s
   int items[MAX_MUS_ENTRIES];
 } musinfo_t;
 
-extern __STORAGE_MODIFIER musicinfo_t *mus_playing;
+extern musicinfo_t *mus_playing;
 extern musinfo_t musinfo;
 
 void S_ParseMusInfo(const char *mapid);

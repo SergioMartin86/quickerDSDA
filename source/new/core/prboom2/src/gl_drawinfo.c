@@ -38,7 +38,7 @@
 #include "gl_intern.h"
 #include "lprintf.h"
 
-__STORAGE_MODIFIER GLDrawInfo gld_drawinfo;
+GLDrawInfo gld_drawinfo;
 
 //
 // gld_FreeDrawInfo

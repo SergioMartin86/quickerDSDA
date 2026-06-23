@@ -18,7 +18,7 @@
 #include "sounds.h"
 #include "info.h"
 
-const __STORAGE_MODIFIER char *heretic_sprnames[HERETIC_NUMSPRITES + 1] = {
+const char *heretic_sprnames[HERETIC_NUMSPRITES + 1] = {
     "IMPX","ACLO","PTN1","SHLD","SHD2","BAGH","SPMP","INVS","PTN2","SOAR",
     "INVU","PWBK","EGGC","EGGM","FX01","SPHL","TRCH","FBMB","XPL1","ATLP",
     "PPOD","AMG1","SPSH","LVAS","SLDG","SKH1","SKH2","SKH3","SKH4","CHDL",
@@ -35,7 +35,7 @@ const __STORAGE_MODIFIER char *heretic_sprnames[HERETIC_NUMSPRITES + 1] = {
     NULL
 };
 
-__STORAGE_MODIFIER state_t heretic_states[HERETIC_NUMSTATES] = {
+state_t heretic_states[HERETIC_NUMSTATES] = {
     {HERETIC_SPR_IMPX, 0, -1, NULL, HERETIC_S_NULL, 0, 0},      // HERETIC_S_NULL
     {HERETIC_SPR_ACLO, 4, 1050, A_FreeTargMobj, HERETIC_S_NULL, 0, 0},  // HERETIC_S_FREETARGMOBJ
     {HERETIC_SPR_PTN1, 0, 3, NULL, HERETIC_S_ITEM_PTN1_2, 0, 0},        // HERETIC_S_ITEM_PTN1_1
@@ -1247,7 +1247,7 @@ __STORAGE_MODIFIER state_t heretic_states[HERETIC_NUMSTATES] = {
 };
 
 
-__STORAGE_MODIFIER raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES] = {
+raven_mobjinfo_t heretic_mobjinfo[HERETIC_NUMMOBJTYPES] = {
 
     {                           // MT_MISC0
      81,                        // doomednum

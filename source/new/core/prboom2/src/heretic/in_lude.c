@@ -42,7 +42,7 @@
 
 #include "in_lude.h"
 
-extern __STORAGE_MODIFIER dboolean BorderNeedRefresh;
+extern dboolean BorderNeedRefresh;
 
 typedef enum
 {
@@ -66,48 +66,48 @@ static void IN_DrawTime(int x, int y, int h, int m, int s);
 static void IN_DrTextB(const char *text, int x, int y);
 
 // contains information passed into intermission
-static __STORAGE_MODIFIER wbstartstruct_t* wbs;
+static wbstartstruct_t* wbs;
 
-static __STORAGE_MODIFIER int prevmap;
-static __STORAGE_MODIFIER int nextmap;
-static __STORAGE_MODIFIER dboolean intermission;
-static __STORAGE_MODIFIER dboolean skipintermission;
-static __STORAGE_MODIFIER dboolean finalintermission;
-static __STORAGE_MODIFIER int interstate = 0;
-static __STORAGE_MODIFIER int intertime = -1;
-static __STORAGE_MODIFIER int oldintertime = 0;
-static __STORAGE_MODIFIER gametype_t gametype;
+static int prevmap;
+static int nextmap;
+static dboolean intermission;
+static dboolean skipintermission;
+static dboolean finalintermission;
+static int interstate = 0;
+static int intertime = -1;
+static int oldintertime = 0;
+static gametype_t gametype;
 
-static __STORAGE_MODIFIER int cnt;
+static int cnt;
 
-static __STORAGE_MODIFIER int hours;
-static __STORAGE_MODIFIER int minutes;
-static __STORAGE_MODIFIER int seconds;
+static int hours;
+static int minutes;
+static int seconds;
 
 // [crispy] Show total time on intermission
-static __STORAGE_MODIFIER int totalHours;
-static __STORAGE_MODIFIER int totalMinutes;
-static __STORAGE_MODIFIER int totalSeconds;
+static int totalHours;
+static int totalMinutes;
+static int totalSeconds;
 
-static __STORAGE_MODIFIER int slaughterboy;        // in DM, the player with the most kills
+static int slaughterboy;        // in DM, the player with the most kills
 
-static __STORAGE_MODIFIER int killPercent[MAX_MAXPLAYERS];
-static __STORAGE_MODIFIER int bonusPercent[MAX_MAXPLAYERS];
-static __STORAGE_MODIFIER int secretPercent[MAX_MAXPLAYERS];
+static int killPercent[MAX_MAXPLAYERS];
+static int bonusPercent[MAX_MAXPLAYERS];
+static int secretPercent[MAX_MAXPLAYERS];
 
-static __STORAGE_MODIFIER int FontBNumbers[10];
+static int FontBNumbers[10];
 
-static __STORAGE_MODIFIER int FontBLump;
-static __STORAGE_MODIFIER int patchFaceOkayBase;
-static __STORAGE_MODIFIER int patchFaceDeadBase;
+static int FontBLump;
+static int patchFaceOkayBase;
+static int patchFaceDeadBase;
 
-static __STORAGE_MODIFIER signed int totalFrags[MAX_MAXPLAYERS];
-static __STORAGE_MODIFIER fixed_t dSlideX[MAX_MAXPLAYERS];
-static __STORAGE_MODIFIER fixed_t dSlideY[MAX_MAXPLAYERS];
+static signed int totalFrags[MAX_MAXPLAYERS];
+static fixed_t dSlideX[MAX_MAXPLAYERS];
+static fixed_t dSlideY[MAX_MAXPLAYERS];
 
-static __STORAGE_MODIFIER const char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
+static const char *KillersText[] = { "K", "I", "L", "L", "E", "R", "S" };
 
-extern __STORAGE_MODIFIER const char *LevelNames[];
+extern const char *LevelNames[];
 
 typedef struct
 {
@@ -507,7 +507,7 @@ void IN_CheckForSkip(void)
 
 void IN_Drawer(void)
 {
-    static __STORAGE_MODIFIER int oldinterstate;
+    static int oldinterstate;
 
     if (!intermission)
     {
@@ -671,7 +671,7 @@ void IN_DrawSingleStats(void)
     const char *prev_level_name = NameForMap(prevmap);
     const char *next_level_name = NameForMap(nextmap);
     int x;
-    static __STORAGE_MODIFIER int sounds;
+    static int sounds;
 
     // [crispy] offset the stats for Ep.4 and up, to make room for level time
     int yoffset = 0;
@@ -779,7 +779,7 @@ void IN_DrawCoopStats(void)
     int x;
     int ypos;
 
-    static __STORAGE_MODIFIER int sounds;
+    static int sounds;
 
     IN_DrTextB("KILLS", 95, 35);
     IN_DrTextB("BONUS", 155, 35);
@@ -831,7 +831,7 @@ void IN_DrawDMStats(void)
     int xpos;
     int kpos;
 
-    static __STORAGE_MODIFIER int sounds;
+    static int sounds;
 
     xpos = 90;
     ypos = 55;

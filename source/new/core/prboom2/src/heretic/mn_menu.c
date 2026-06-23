@@ -30,15 +30,15 @@
 #define SFX_VOL_INDEX 1
 #define MUS_VOL_INDEX 3
 
-extern __STORAGE_MODIFIER int g_menu_save_page_size;
+extern int g_menu_save_page_size;
 
-static __STORAGE_MODIFIER int FontABaseLump;
-static __STORAGE_MODIFIER int FontAYellowBaseLump;
-static __STORAGE_MODIFIER int FontBBaseLump;
-static __STORAGE_MODIFIER int SkullBaseLump;
-static __STORAGE_MODIFIER int MenuTime;
+static int FontABaseLump;
+static int FontAYellowBaseLump;
+static int FontBBaseLump;
+static int SkullBaseLump;
+static int MenuTime;
 
-__STORAGE_MODIFIER dboolean mn_SuicideConsole;
+dboolean mn_SuicideConsole;
 
 static int MN_SafeFontALump(int offset)
 {
@@ -88,8 +88,8 @@ void MN_DrawHelp1(void);
 void MN_DrawHelp2(void);
 
 extern void M_ChangeMenu(menu_t *menu, menuactive_t mnact);
-extern __STORAGE_MODIFIER dboolean inhelpscreens;
-extern __STORAGE_MODIFIER menu_t ExtHelpDef;
+extern dboolean inhelpscreens;
+extern menu_t ExtHelpDef;
 extern void M_NewGame(int choice);
 extern void M_Options(int choice);
 extern void M_QuitDOOM(int choice);
@@ -229,7 +229,7 @@ enum
   rmain_end
 } rmain_e;
 
-__STORAGE_MODIFIER menuitem_t RavenMainMenu[]=
+menuitem_t RavenMainMenu[]=
 {
   {1,"M_NGAME", M_NewGame, 'n', "NEW GAME"},
   {1,"M_OPTION",M_Options, 'o', "OPTIONS"},
@@ -258,7 +258,7 @@ menuitem_t SaveLoadMenu[]=
   {1,"M_SAVEG", M_SaveGame,'s', "SAVE GAME"},
 };
 
-__STORAGE_MODIFIER menu_t SaveLoadDef =
+menu_t SaveLoadDef =
 {
   rsaveload_end,       // number of menu items
   &MainDef,           // previous menu screen
@@ -396,8 +396,8 @@ void MN_Ticker(void)
     MenuTime++;
 }
 
-extern menu_t *currentMenu;
-extern __STORAGE_MODIFIER short itemOn;
+extern menu_t* currentMenu;
+extern short itemOn;
 
 void MN_DrawMessage(const char* messageString)
 {
@@ -590,12 +590,12 @@ void MN_DrawSound(void)
   MN_DrawSlider(SoundDef.x - 8, SoundDef.y + ITEM_HEIGHT * MUS_VOL_INDEX, 16, snd_MusicVolume);
 }
 
-extern __STORAGE_MODIFIER char savegamestrings[10][SAVESTRINGSIZE];
+extern char savegamestrings[10][SAVESTRINGSIZE];
 
 static void MN_DrawFileSlots(int x, int y)
 {
   int i;
-  extern __STORAGE_MODIFIER char save_page_string[];
+  extern char save_page_string[];
 
   for (i = 0; i < g_menu_save_page_size; i++)
   {
@@ -620,8 +620,8 @@ void MN_DrawLoad(void)
     M_DrawDelVerify();
 }
 
-extern __STORAGE_MODIFIER int saveStringEnter;
-extern __STORAGE_MODIFIER int saveSlot;
+extern int saveStringEnter;
+extern int saveSlot;
 
 void MN_DrawSave(void)
 {

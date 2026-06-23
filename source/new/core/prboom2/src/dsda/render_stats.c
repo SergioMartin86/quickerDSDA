@@ -20,13 +20,13 @@
 
 #include "render_stats.h"
 
-static __STORAGE_MODIFIER dsda_render_stats_t frame_stats;
-static __STORAGE_MODIFIER dsda_render_stats_t interval_stats;
-static __STORAGE_MODIFIER int frame_count;
+static dsda_render_stats_t frame_stats;
+static dsda_render_stats_t interval_stats;
+static int frame_count;
 
-__STORAGE_MODIFIER dsda_render_stats_t dsda_render_stats;
-__STORAGE_MODIFIER dsda_render_stats_t dsda_render_stats_max;
-__STORAGE_MODIFIER int dsda_render_stats_fps = 35;
+dsda_render_stats_t dsda_render_stats;
+dsda_render_stats_t dsda_render_stats_max;
+int dsda_render_stats_fps = 35;
 
 static void dsda_UpdateMaxValues(dsda_render_stats_t* x, dsda_render_stats_t* y) {
   if (x->visplanes < y->visplanes)

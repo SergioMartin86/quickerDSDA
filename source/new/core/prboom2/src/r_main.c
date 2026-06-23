@@ -88,25 +88,25 @@ __STORAGE_MODIFIER int r_frame_count;
 
 __STORAGE_MODIFIER int validcount = 1;         // increment every time a check is made
 __STORAGE_MODIFIER int validcount2 = 1;
-const __STORAGE_MODIFIER lighttable_t *fixedcolormap;
-__STORAGE_MODIFIER int centerx, centery;
+__STORAGE_MODIFIER const lighttable_t *fixedcolormap;
+__STORAGE_MODIFIER int      centerx, centery;
 // e6y: wide-res
 __STORAGE_MODIFIER int wide_centerx;
 
-__STORAGE_MODIFIER fixed_t focallength;
-__STORAGE_MODIFIER fixed_t focallengthy;
-__STORAGE_MODIFIER fixed_t globaluclip, globaldclip;
-__STORAGE_MODIFIER fixed_t centerxfrac, centeryfrac;
-__STORAGE_MODIFIER fixed_t yaspectmul;
-__STORAGE_MODIFIER fixed_t viewheightfrac; //e6y: for correct cliping of things
-__STORAGE_MODIFIER fixed_t projection;
+__STORAGE_MODIFIER fixed_t  focallength;
+__STORAGE_MODIFIER fixed_t  focallengthy;
+__STORAGE_MODIFIER fixed_t  globaluclip, globaldclip;
+__STORAGE_MODIFIER fixed_t  centerxfrac, centeryfrac;
+__STORAGE_MODIFIER fixed_t  yaspectmul;
+__STORAGE_MODIFIER fixed_t  viewheightfrac; //e6y: for correct cliping of things
+__STORAGE_MODIFIER fixed_t  projection;
 // proff 11/06/98: Added for high-res
-__STORAGE_MODIFIER fixed_t projectiony;
-__STORAGE_MODIFIER fixed_t skyiscale;
-__STORAGE_MODIFIER fixed_t viewx, viewy, viewz;
-__STORAGE_MODIFIER angle_t viewangle;
-__STORAGE_MODIFIER fixed_t viewcos, viewsin;
-__STORAGE_MODIFIER fixed_t viewtancos, viewtansin;
+__STORAGE_MODIFIER fixed_t  projectiony;
+__STORAGE_MODIFIER fixed_t  skyiscale;
+__STORAGE_MODIFIER fixed_t  viewx, viewy, viewz;
+__STORAGE_MODIFIER angle_t  viewangle;
+__STORAGE_MODIFIER fixed_t  viewcos, viewsin;
+__STORAGE_MODIFIER fixed_t  viewtancos, viewtansin;
 __STORAGE_MODIFIER player_t *viewplayer;
 // e6y: Added for more precise flats drawing
 __STORAGE_MODIFIER fixed_t viewfocratio;
@@ -118,7 +118,7 @@ __STORAGE_MODIFIER int viewport[4];
 __STORAGE_MODIFIER float modelMatrix[16];
 __STORAGE_MODIFIER float projMatrix[16];
 
-extern __STORAGE_MODIFIER const lighttable_t **walllights;
+extern const lighttable_t **walllights;
 
 //
 // precalculated math tables
@@ -144,12 +144,12 @@ __STORAGE_MODIFIER angle_t *xtoviewangle;   // killough 2/8/98
 // killough 4/4/98: support dynamic number of them as well
 
 __STORAGE_MODIFIER int numcolormaps;
-const __STORAGE_MODIFIER lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
-const __STORAGE_MODIFIER lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
-const __STORAGE_MODIFIER lighttable_t *(*scalelight)[MAXLIGHTSCALE];
-const __STORAGE_MODIFIER lighttable_t *(*zlight)[MAXLIGHTZ];
-const __STORAGE_MODIFIER lighttable_t *fullcolormap;
-const __STORAGE_MODIFIER lighttable_t **colormaps;
+__STORAGE_MODIFIER const lighttable_t *(*c_scalelight)[LIGHTLEVELS_MAX][MAXLIGHTSCALE];
+__STORAGE_MODIFIER const lighttable_t *(*c_zlight)[LIGHTLEVELS_MAX][MAXLIGHTZ];
+__STORAGE_MODIFIER const lighttable_t *(*scalelight)[MAXLIGHTSCALE];
+__STORAGE_MODIFIER const lighttable_t *(*zlight)[MAXLIGHTZ];
+__STORAGE_MODIFIER const lighttable_t *fullcolormap;
+__STORAGE_MODIFIER const lighttable_t **colormaps;
 
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
@@ -213,7 +213,7 @@ PUREFUNC int R_ZDoomPointOnSide(fixed_t x, fixed_t y, const node_t *node)
   return (long long) y * node->dx >= (long long) x * node->dy;
 }
 
-int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
+__STORAGE_MODIFIER int (*R_PointOnSide)(fixed_t x, fixed_t y, const node_t *node);
 
 // killough 5/2/98: reformatted
 
@@ -261,7 +261,7 @@ PUREFUNC int R_ZDoomPointOnSegSide(fixed_t x, fixed_t y, const seg_t *line)
   return (long long) y * ldx >= (long long) x * ldy;
 }
 
-int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
+__STORAGE_MODIFIER int (*R_PointOnSegSide)(fixed_t x, fixed_t y, const seg_t *line);
 
 //
 // R_PointToAngle

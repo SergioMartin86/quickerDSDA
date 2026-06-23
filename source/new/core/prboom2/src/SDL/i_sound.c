@@ -72,7 +72,7 @@
 
 #include "dsda/settings.h"
 
-static __STORAGE_MODIFIER dboolean registered_non_rw = false;
+static dboolean registered_non_rw = false;
 
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
@@ -80,7 +80,7 @@ static __STORAGE_MODIFIER dboolean registered_non_rw = false;
 //  mixing buffer, and the samplerate of the raw data.
 
 // The actual output device.
-__STORAGE_MODIFIER int audio_fd;
+int audio_fd;
 
 typedef struct
 {
@@ -112,13 +112,13 @@ typedef struct
 channel_info_t channelinfo[MAX_CHANNELS];
 
 // Pitch to stepping lookup.
-__STORAGE_MODIFIER int steptable[256];
+int   steptable[256];
 
 // Volume lookups.
 //int   vol_lookup[128 * 256];
 
 // NSM
-static __STORAGE_MODIFIER int dumping_sound = 0;
+static int dumping_sound = 0;
 
 
 // lock for updating any params related to sfx
@@ -126,11 +126,11 @@ static __STORAGE_MODIFIER int dumping_sound = 0;
 // lock for updating any params related to music
 // SDL_mutex *musmutex;
 
-static __STORAGE_MODIFIER int pitched_sounds;
-__STORAGE_MODIFIER int snd_samplerate; // samples per second
-static __STORAGE_MODIFIER int snd_samplecount;
+static int pitched_sounds;
+int snd_samplerate; // samples per second
+static int snd_samplecount;
 
-static __STORAGE_MODIFIER const char *snd_midiplayer;
+static const char *snd_midiplayer;
 
 void I_InitSoundParams(void)
 {
@@ -167,7 +167,7 @@ typedef struct wav_data_s
 } wav_data_t;
 
 #define WAV_DATA_HASH_SIZE 32
-static __STORAGE_MODIFIER wav_data_t *wav_data_hash[WAV_DATA_HASH_SIZE];
+static wav_data_t *wav_data_hash[WAV_DATA_HASH_SIZE];
 
 static wav_data_t *GetWavData(int sfxid, const unsigned char *data, size_t len)
 {
@@ -691,7 +691,7 @@ static void I_UpdateSound(void *unused, uint8_t *stream, int len)
   // SDL_UnlockMutex (sfxmutex);
 }
 
-static __STORAGE_MODIFIER dboolean sound_was_initialized;
+static dboolean sound_was_initialized;
 
 void I_ShutdownSound(void)
 {
@@ -778,8 +778,8 @@ void I_SetSoundCap (void)
 // grabs len samples of audio (16 bit interleaved)
 unsigned char *I_GrabSound (int len)
 {
-  static __STORAGE_MODIFIER unsigned char *buffer = NULL;
-  static __STORAGE_MODIFIER size_t buffer_size = 0;
+  static unsigned char *buffer = NULL;
+  static size_t buffer_size = 0;
   size_t size;
 
   if (!dumping_sound)
@@ -812,10 +812,10 @@ void I_ResampleStream (void *dest, unsigned nsamp, void (*proc) (void *dest, uns
 
   short *sout = (short*)dest;
 
-  static __STORAGE_MODIFIER short *sin = NULL;
-  static __STORAGE_MODIFIER unsigned sinsamp = 0;
+  static short *sin = NULL;
+  static unsigned sinsamp = 0;
 
-  static __STORAGE_MODIFIER unsigned remainder = 0;
+  static unsigned remainder = 0;
   unsigned step = (sratein << 16) / (unsigned) srateout;
 
   unsigned nreq = (step * nsamp + remainder) >> 16;
@@ -871,6 +871,7 @@ static void PlaySong(int handle, int looping);
 
 // Some tracks are directly streamed from the RWops;
 // we need to free them in the end
+// static SDL_RWops *rwops_stream = NULL;
 
 // note that the "handle" passed around by s_sound is ignored
 // however, a handle is maintained for the individual music players
@@ -889,7 +890,7 @@ static const music_player_t *music_players[] =
 };
 #define NUM_MUS_PLAYERS ((int)(sizeof (music_players) / sizeof (music_player_t *) - 1))
 
-static __STORAGE_MODIFIER int music_player_was_init[NUM_MUS_PLAYERS];
+static int music_player_was_init[NUM_MUS_PLAYERS];
 
 #define PLAYER_VORBIS     "vorbis player"
 #define PLAYER_MAD        "mad mp3 player"
@@ -899,7 +900,7 @@ static __STORAGE_MODIFIER int music_player_was_init[NUM_MUS_PLAYERS];
 #define PLAYER_PORTMIDI   "portmidi midi player"
 
 // order in which players are to be tried
-__STORAGE_MODIFIER char music_player_order[NUM_MUS_PLAYERS][200] =
+char music_player_order[NUM_MUS_PLAYERS][200] =
 {
   PLAYER_VORBIS,
   PLAYER_MAD,
@@ -912,10 +913,10 @@ __STORAGE_MODIFIER char music_player_order[NUM_MUS_PLAYERS][200] =
 const char *midiplayers[midi_player_last + 1] = {
   "fluidsynth", "opl", "portmidi", NULL };
 
-static __STORAGE_MODIFIER int current_player = -1;
-static __STORAGE_MODIFIER const void *music_handle = NULL;
+static int current_player = -1;
+static const void *music_handle = NULL;
 
-static __STORAGE_MODIFIER void *mus2mid_conversion_data = NULL;
+static void *mus2mid_conversion_data = NULL;
 
 void I_ShutdownMusic(void)
 {
@@ -948,7 +949,7 @@ void I_InitMusic(void)
 }
 
 // Derived value (not saved, accounts for muted music)
-static __STORAGE_MODIFIER int music_volume;
+static int music_volume;
 
 void I_ResetMusicVolume(void)
 {

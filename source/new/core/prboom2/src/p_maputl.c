@@ -85,7 +85,7 @@ int PUREFUNC P_ZDoomPointOnLineSide(fixed_t x, fixed_t y, const line_t *line)
     ((long long) y - line->v1->y) * line->dx >= ((long long) x - line->v1->x) * line->dy;
 }
 
-int (*P_PointOnLineSide)(fixed_t x, fixed_t y, const line_t *line);
+__STORAGE_MODIFIER int (*P_PointOnLineSide)(fixed_t x, fixed_t y, const line_t *line);
 
 //
 // P_BoxOnLineSide
@@ -143,7 +143,7 @@ int PUREFUNC P_ZDoomPointOnDivlineSide(fixed_t x, fixed_t y, const divline_t *li
     (long long) y * line->dx >= (long long) x * line->dy;
 }
 
-int (*P_PointOnDivlineSide)(fixed_t x, fixed_t y, const divline_t *line);
+__STORAGE_MODIFIER int (*P_PointOnDivlineSide)(fixed_t x, fixed_t y, const divline_t *line);
 
 //
 // P_MakeDivline
@@ -377,9 +377,18 @@ void P_UnsetThingPosition (mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
+// Design B incr.1: when set, trust the caller-provided thing->subsector
+// (restored from the savestate) instead of recomputing it via R_PointInSubsector
+// (~20% of state-load time). subsector == R_PointInSubsector(x,y) for any
+// positioned thing, so this is exact. The savestate loader sets it around its
+// relink calls only.
+__STORAGE_MODIFIER int dsda_use_saved_subsector = 0;
+__STORAGE_MODIFIER int dsda_skip_secnode_build = 0;  // Design B incr.2a
+
 void P_SetThingPosition(mobj_t *thing)
 {                                                      // link into subsector
-  subsector_t *ss = thing->subsector = R_PointInSubsector(thing->x, thing->y);
+  subsector_t *ss = thing->subsector =
+    dsda_use_saved_subsector ? thing->subsector : R_PointInSubsector(thing->x, thing->y);
   if (!(thing->flags & MF_NOSECTOR))
     {
       // invisible things don't go into the sector links
@@ -407,9 +416,12 @@ void P_SetThingPosition(mobj_t *thing)
       // at sector_t->touching_thinglist) are broken. When a node is
       // added, new sector links are created.
 
-      P_CreateSecNodeList(thing,thing->x,thing->y);
-      thing->touching_sectorlist = sector_list; // Attach to Thing's mobj_t
-      sector_list = NULL; // clear for next time
+      if (!dsda_skip_secnode_build)
+      {
+        P_CreateSecNodeList(thing,thing->x,thing->y);
+        thing->touching_sectorlist = sector_list; // Attach to Thing's mobj_t
+        sector_list = NULL; // clear for next time
+      }
     }
 
   // link into blockmap
@@ -1134,7 +1146,19 @@ int P_GetSafeBlockY(int coord)
   return coord;
 }
 
+// e6y
+//
+// Intercepts memory table.  This is where various variables are located
+// in memory in Vanilla Doom.  When the intercepts table overflows, we
+// need to write to them.
+//
+// Almost all of the values to overwrite are 32-bit integers, except for
+// playerstarts, which is effectively an array of 16-bit integers and
+// must be treated differently.
 
+extern __STORAGE_MODIFIER fixed_t bulletslope;
+
+__STORAGE_MODIFIER intercepts_overrun_t intercepts_overrun[32] ;
 
 // hexen
 
@@ -1274,4 +1298,42 @@ static mobj_t *Hexen_RoughBlockCheck(mobj_t * mo, int index)
         }
     }
     return NULL;
+}
+
+/* deglobalizer: per-thread TLS pointer init */
+void __deglob_tls_init_p_maputl_c(void)
+{
+  // intercepts_overrun
+  intercepts_overrun[0] = (intercepts_overrun_t){4,   NULL,                          NULL};
+  intercepts_overrun[1] = (intercepts_overrun_t){4,   NULL, /* &earlyout, */         NULL};
+  intercepts_overrun[2] = (intercepts_overrun_t){4,   NULL, /* &intercept_p, */      NULL};
+  intercepts_overrun[3] = (intercepts_overrun_t){4,   &line_opening.lowfloor,        NULL};
+  intercepts_overrun[4] = (intercepts_overrun_t){4,   &line_opening.bottom,          NULL};
+  intercepts_overrun[5] = (intercepts_overrun_t){4,   &line_opening.top,             NULL};
+  intercepts_overrun[6] = (intercepts_overrun_t){4,   &line_opening.range,           NULL};
+  intercepts_overrun[7] = (intercepts_overrun_t){4,   NULL,                          NULL};
+  intercepts_overrun[8] = (intercepts_overrun_t){120, NULL, /* &activeplats, */      NULL};
+  intercepts_overrun[9] = (intercepts_overrun_t){8,   NULL,                          NULL};
+  intercepts_overrun[10] = (intercepts_overrun_t){4,   &bulletslope,                  NULL};
+  intercepts_overrun[11] = (intercepts_overrun_t){4,   NULL, /* &swingx, */           NULL};
+  intercepts_overrun[12] = (intercepts_overrun_t){4,   NULL, /* &swingy, */           NULL};
+  intercepts_overrun[13] = (intercepts_overrun_t){4,   NULL,                          NULL};
+  intercepts_overrun[14] = (intercepts_overrun_t){4,  &playerstarts[0][0].x,       &playerstarts[0][0].y};
+  intercepts_overrun[15] = (intercepts_overrun_t){4,  &playerstarts[0][0].angle,   &playerstarts[0][0].type};
+  intercepts_overrun[16] = (intercepts_overrun_t){4,  &playerstarts[0][0].options, &playerstarts[0][1].x};
+  intercepts_overrun[17] = (intercepts_overrun_t){4,  &playerstarts[0][1].y,       &playerstarts[0][1].angle};
+  intercepts_overrun[18] = (intercepts_overrun_t){4,  &playerstarts[0][1].type,    &playerstarts[0][1].options};
+  intercepts_overrun[19] = (intercepts_overrun_t){4,  &playerstarts[0][2].x,       &playerstarts[0][2].y};
+  intercepts_overrun[20] = (intercepts_overrun_t){4,  &playerstarts[0][2].angle,   &playerstarts[0][2].type};
+  intercepts_overrun[21] = (intercepts_overrun_t){4,  &playerstarts[0][2].options, &playerstarts[0][3].x};
+  intercepts_overrun[22] = (intercepts_overrun_t){4,  &playerstarts[0][3].y,       &playerstarts[0][3].angle};
+  intercepts_overrun[23] = (intercepts_overrun_t){4,  &playerstarts[0][3].type,    &playerstarts[0][3].options};
+  intercepts_overrun[24] = (intercepts_overrun_t){4,   NULL, /* &blocklinks, */       NULL};
+  intercepts_overrun[25] = (intercepts_overrun_t){4,   &bmapwidth,                    NULL};
+  intercepts_overrun[26] = (intercepts_overrun_t){4,   NULL, /* &blockmap, */         NULL};
+  intercepts_overrun[27] = (intercepts_overrun_t){4,   &bmaporgx,                     NULL};
+  intercepts_overrun[28] = (intercepts_overrun_t){4,   &bmaporgy,                     NULL};
+  intercepts_overrun[29] = (intercepts_overrun_t){4,   NULL, /* &blockmaplump, */     NULL};
+  intercepts_overrun[30] = (intercepts_overrun_t){4,   &bmapheight,                   NULL};
+  intercepts_overrun[31] = (intercepts_overrun_t){0,   NULL,                          NULL};
 }

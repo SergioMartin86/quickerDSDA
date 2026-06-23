@@ -144,7 +144,7 @@ void gld_MultisamplingSet(void)
 {
   if (gl_render_multisampling)
   {
-    extern __STORAGE_MODIFIER int map_use_multisampling;
+    extern int map_use_multisampling;
 
     int use_multisampling = map_use_multisampling || automap_off;
 
@@ -254,15 +254,15 @@ static int C_DECL dicmp_visible_subsectors_by_pic(const void *a, const void *b)
          (*((const subsector_t *const *)a))->sector->floorpic;
 }
 
-static __STORAGE_MODIFIER int visible_subsectors_count_prev = -1;
+static int visible_subsectors_count_prev = -1;
 void gld_ResetTexturedAutomap(void)
 {
   visible_subsectors_count_prev = -1;
 }
 
-static __STORAGE_MODIFIER int map_textured_trans;
-static __STORAGE_MODIFIER int map_textured_overlay_trans;
-static __STORAGE_MODIFIER int map_lines_overlay_trans;
+static int map_textured_trans;
+static int map_textured_overlay_trans;
+static int map_lines_overlay_trans;
 
 void gld_ResetAutomapTransparency(void)
 {
@@ -273,8 +273,8 @@ void gld_ResetAutomapTransparency(void)
 
 void gld_MapDrawSubsectors(player_t *plr, int fx, int fy, fixed_t mx, fixed_t my, int fw, int fh, fixed_t scale)
 {
-  static __STORAGE_MODIFIER subsector_t **visible_subsectors = NULL;
-  static __STORAGE_MODIFIER int visible_subsectors_size = 0;
+  static subsector_t **visible_subsectors = NULL;
+  static int visible_subsectors_size = 0;
   int visible_subsectors_count;
 
   int i;
@@ -305,6 +305,7 @@ void gld_MapDrawSubsectors(player_t *plr, int fx, int fy, fixed_t mx, fixed_t my
     }
   }
 
+  // Do not sort static visible_subsectors array at all
   // if there are no new visible subsectors.
   if (visible_subsectors_count != visible_subsectors_count_prev)
   {
@@ -874,7 +875,7 @@ void gld_DrawShaded(int x, int y, int width, int height, int shade)
 
 void gld_SetPalette(int palette)
 {
-  static __STORAGE_MODIFIER int last_palette = 0;
+  static int last_palette = 0;
 
   if (palette < 0)
     palette = last_palette;
@@ -886,10 +887,10 @@ void gld_SetPalette(int palette)
 }
 
 unsigned char *gld_ReadScreen(void)
-{ 
-  static __STORAGE_MODIFIER unsigned char *scr = NULL;
-  static __STORAGE_MODIFIER unsigned char *buffer = NULL;
-  static __STORAGE_MODIFIER int scr_size = 0;
+{ // NSM convert to static
+  static unsigned char *scr = NULL;
+  static unsigned char *buffer = NULL;
+  static int scr_size = 0;
 
   int src_row, dest_row, size, pixels_per_row;
 
@@ -1248,12 +1249,12 @@ static void gld_CalculateWallV(GLWall *wall, seg_t *seg, int peg,
 
 void gld_AddWall(seg_t *seg)
 {
-  extern __STORAGE_MODIFIER sector_t *poly_frontsector;
-  extern __STORAGE_MODIFIER dboolean poly_add_line;
+  extern sector_t *poly_frontsector;
+  extern dboolean poly_add_line;
   GLWall wall;
   GLTexture *temptex;
-  __STORAGE_MODIFIER sector_t *frontsector;
-  __STORAGE_MODIFIER sector_t *backsector;
+  sector_t *frontsector;
+  sector_t *backsector;
   sector_t ftempsec; // needed for R_FakeFlat
   sector_t btempsec; // needed for R_FakeFlat
   float lineheight, linelength;
@@ -1333,7 +1334,7 @@ void gld_AddWall(seg_t *seg)
   else /* twosided */
   {
     sector_t *fs, *bs;
-    __STORAGE_MODIFIER int toptexture, midtexture, bottomtexture;
+    int toptexture, midtexture, bottomtexture;
     fixed_t floor_height,ceiling_height;
     fixed_t max_floor, min_floor;
     fixed_t max_ceiling, min_ceiling;
@@ -2070,7 +2071,7 @@ static void gld_AddHealthBar(mobj_t* thing, GLSprite *sprite)
     {
       float sx2 = (float)thing->radius / 2.0f / MAP_SCALE;
       float sx1 = sx2 - (float)health_percent * (float)thing->radius / 100.0f / MAP_SCALE;
-      __STORAGE_MODIFIER float s.3 = -sx2;
+      float sx3 = -sx2;
 
       hbar.x1 = +(sx1 * cos_inv_yaw) + sprite->x;
       hbar.x2 = +(sx2 * cos_inv_yaw) + sprite->x;
@@ -2480,7 +2481,7 @@ static void gld_DrawItemsSortByTexture(GLDrawItemType itemtype)
 
 static void gld_DrawItemsSortSprites(GLDrawItemType itemtype)
 {
-  static __STORAGE_MODIFIER const float delta = 0.2f / MAP_COEFF;
+  static const float delta = 0.2f / MAP_COEFF;
   int i;
 
   if (scene_has_overlapped_sprites)

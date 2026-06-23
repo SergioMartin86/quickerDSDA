@@ -39,13 +39,13 @@
 /* The sky map is 256*128*4 maps. */
 #define ANGLETOSKYSHIFT         22
 
-extern __STORAGE_MODIFIER int skyflatnum;
-extern __STORAGE_MODIFIER int skytexture;
-extern __STORAGE_MODIFIER int skytexturemid;
+extern int skyflatnum;
+extern int skytexture;
+extern int skytexturemid;
 
 #define SKYSTRETCH_HEIGHT 228
-extern __STORAGE_MODIFIER int skystretch;
-extern __STORAGE_MODIFIER fixed_t freelookviewheight;
+extern int skystretch;
+extern fixed_t freelookviewheight;
 
 /* Called whenever the view size changes. */
 void R_InitSkyMap(void);

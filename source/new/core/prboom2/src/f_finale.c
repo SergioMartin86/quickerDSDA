@@ -59,11 +59,11 @@
 
 // Stage of animation:
 //  0 = text, 1 = art screen, 2 = character cast
-__STORAGE_MODIFIER int finalestage;
-__STORAGE_MODIFIER int finalecount;
-const __STORAGE_MODIFIER char *finaletext;
-const __STORAGE_MODIFIER char *finaleflat;
-const __STORAGE_MODIFIER char *finalepatch;
+int finalestage;
+int finalecount;
+const char*   finaletext;
+const char*   finaleflat;
+const char*   finalepatch;
 
 // defines for the end mission display text                     // phares
 
@@ -77,8 +77,8 @@ dboolean F_CastResponder (event_t *ev);
 void    F_CastDrawer (void);
 
 void WI_checkForAccelerate(void);    // killough 3/28/98: used to
-extern __STORAGE_MODIFIER int acceleratestage;          // accelerate intermission screens
-__STORAGE_MODIFIER int midstage;                 // whether we're in "mid-stage"
+extern int acceleratestage;          // accelerate intermission screens
+int midstage;                 // whether we're in "mid-stage"
 
 //
 // F_StartFinale
@@ -456,14 +456,14 @@ static const castinfo_t castorder_d1[] = {
 
 static const castinfo_t *castorder = castorder_d2;
 
-static __STORAGE_MODIFIER int castnum;
-static __STORAGE_MODIFIER int casttics;
-static __STORAGE_MODIFIER state_t *caststate;
-static __STORAGE_MODIFIER dboolean castdeath;
-static __STORAGE_MODIFIER int castframes;
-static __STORAGE_MODIFIER int castonmelee;
-static __STORAGE_MODIFIER dboolean castattacking;
-static const __STORAGE_MODIFIER char *castbackground;
+static int castnum;
+static int casttics;
+static state_t* caststate;
+static dboolean castdeath;
+static int castframes;
+static int castonmelee;
+static dboolean castattacking;
+static const char *castbackground;
 
 //
 // F_StartCast
@@ -720,10 +720,11 @@ void F_CastDrawer (void)
 //
 // F_BunnyScroll
 //
-static __STORAGE_MODIFIER const char* pfub1 = "PFUB1";
-static __STORAGE_MODIFIER const char* pfub2 = "PFUB2";
-static const __STORAGE_MODIFIER char *scrollpic1;
-static const __STORAGE_MODIFIER char *scrollpic2;
+static const char* pfub1 = "PFUB1";
+static const char* pfub2 = "PFUB2";
+
+static const char* scrollpic1;
+static const char* scrollpic2;
 
 static void F_StartScrollMusic(const char* music, dboolean loop_music)
 {
@@ -739,7 +740,7 @@ static void F_StartScrollMusic(const char* music, dboolean loop_music)
   }
 }
 
-static __STORAGE_MODIFIER dboolean end_patches_exist;
+static dboolean end_patches_exist;
 
 void F_StartScroll (const char* right, const char* left, const char* music, dboolean loop_music)
 {
@@ -764,8 +765,8 @@ void F_BunnyScroll (void)
 {
   char        name[10];
   int         stage;
-  static __STORAGE_MODIFIER int  laststage;
-  static __STORAGE_MODIFIER int  p1offset, p2width;
+  static int  laststage;
+  static int  p1offset, p2width;
 
   if (finalecount == 0)
   {

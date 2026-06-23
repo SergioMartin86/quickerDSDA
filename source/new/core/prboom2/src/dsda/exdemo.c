@@ -46,7 +46,7 @@ typedef struct {
   int is_signed;
 } exdemo_t;
 
-static __STORAGE_MODIFIER exdemo_t exdemo;
+static exdemo_t exdemo;
 
 #define DEMOEX_PORTNAME_LUMPNAME "PORTNAME"
 #define DEMOEX_PARAMS_LUMPNAME "CMDLINE"
@@ -75,7 +75,7 @@ static const filelump_t* DemoEx_LumpForName(const char* name, const wadinfo_t* h
 
 static char* DemoEx_LumpAsString(const char* name, const wadinfo_t* header) {
   char* str;
-  const char *lump_data;
+  const char* lump_data;
   const byte* buffer;
   const filelump_t* lump_info;
 
