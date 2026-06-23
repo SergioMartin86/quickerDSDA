@@ -274,38 +274,37 @@ typedef struct
 /* cph 2006/08/28 - move Prev[XYZ] fields to the end of the struct. Add any
  * other new fields to the end, and make sure you don't break savegames! */
 
+// Design B state-size reduction (quickerDSDA): mobj_t is reordered so every
+// field read by the headless compatibility-level-2 Doom2 simulation forms a
+// contiguous PREFIX [0, offsetof(mobj_t, snext)), and every field that is
+// render-only / Heretic-Hexen-only / respawn-only / transient (rebuilt or dead)
+// forms the TAIL. The savestate stores ONLY the prefix (see p_saveg.c); on load
+// the tail is zeroed and a few fields re-derived (info, tranmap). Field order
+// within each region is otherwise irrelevant (C accesses by name). DO NOT move a
+// field across the snext boundary without re-checking p_saveg.c's mobj save/load
+// and P_CanonicalizeMobj.
 typedef struct mobj_s
 {
-    // List: thinker links.
+    // ---- SAVED PREFIX: fields read by cl2 Doom2 simulation ----
+
+    // List: thinker links. (thinker MUST stay first: it is the thinker-list anchor.)
     thinker_t           thinker;
 
-    // Info for drawing: position.
+    // position
     fixed_t             x;
     fixed_t             y;
     fixed_t             z;
 
-    // More list: links in sector (if needed)
-    struct mobj_s*      snext;
-    struct mobj_s**     sprev; // killough 8/10/98: change to ptr-to-ptr
-
-    //More drawing info: to determine current sprite.
     angle_t             angle;  // orientation
-    spritenum_t         sprite; // used to find patch_t and flip value
-    int                 frame;  // might be ORed with FF_FULLBRIGHT
+    spritenum_t         sprite; // render, but hashed by the equivalence oracle -> kept
+    int                 frame;  // render, but hashed by the equivalence oracle -> kept
 
-    // Interaction info, by BLOCKMAP.
-    // Links in blocks (if needed).
-    struct mobj_s*      bnext;
-    struct mobj_s**     bprev; // killough 8/11/98: change to ptr-to-ptr
-
-    struct subsector_s* subsector;
+    struct subsector_s* subsector;   // saved as an index (Design B incr.1) to skip R_PointInSubsector
 
     // The closest interval over all contacted Sectors.
     fixed_t             floorz;
     fixed_t             ceilingz;
-
-    // killough 11/98: the lowest floor over all contacted Sectors.
-    fixed_t             dropoffz;
+    fixed_t             dropoffz;     // killough 11/98: lowest floor over contacted sectors
 
     // For movement checking.
     fixed_t             radius;
@@ -316,11 +315,7 @@ typedef struct mobj_s
     fixed_t             momy;
     fixed_t             momz;
 
-    // If == validcount, already checked.
-    int                 validcount;
-
     mobjtype_t          type;
-    mobjinfo_t*         info;   // &mobjinfo[mobj->type]
 
     int                 tics;   // state tic counter
     state_t*            state;
@@ -333,81 +328,75 @@ typedef struct mobj_s
     short               movecount;      // when 0, select a new dir
     short               strafecount;    // killough 9/8/98: monster strafing
 
-    // Thing being chased/attacked (or NULL),
-    // also the originator for missiles.
+    // Thing being chased/attacked (or NULL), also the originator for missiles.
     struct mobj_s*      target;
 
-    // Reaction time: if non 0, don't attack yet.
-    // Used by player to freeze a bit after teleporting.
-    short               reactiontime;
+    short               reactiontime;   // if non 0, don't attack yet
+    short               threshold;      // if >0, chase current target no matter what
+    short               pursuecount;    // killough 9/9/98: how long a monster pursues a target
+    short               gear;           // killough 11/98: torque simulation
 
-    // If >0, the current target will be chased no
-    // matter what (even if shot by another object)
-    short               threshold;
-
-    // killough 9/9/98: How long a monster pursues a target.
-    short               pursuecount;
-
-    short               gear; // killough 11/98: used in torque simulation
-
-    // Additional info record for player avatars only.
-    // Only valid if type == MT_PLAYER
+    // Additional info record for player avatars only. Only valid if type == MT_PLAYER
     struct player_s*    player;
 
-    // Player number last looked for.
-    short               lastlook;
+    short               lastlook;       // player number last looked for
 
-    // For nightmare respawn.
-    mapthing_t          spawnpoint;
+    struct mobj_s*      tracer;         // thing being chased/attacked for tracers
+    struct mobj_s*      lastenemy;      // last known enemy -- killough 2/15/98
 
-    // Thing being chased/attacked for tracers.
-    struct mobj_s*      tracer;
-
-    // new field: last known enemy -- killough 2/15/98
-    struct mobj_s*      lastenemy;
-
-    // killough 8/2/98: friction properties part of sectors,
-    // not objects -- removed friction properties from here
-    // e6y: restored friction properties here
-    // Friction values for the sector the object is in
+    // friction properties for the sector the object is in (e6y restored)
     int friction;                                           // phares 3/17/98
     int movefactor;
 
-    // a linked list of sectors where this object appears
-    struct msecnode_s* touching_sectorlist;                 // phares 3/14/98
+    uint64_t flags2;            // Heretic & MBF21 flags (kept: read as info->flags2 at cl2)
+    fixed_t gravity;            // zdoom/MBF21 per-mobj gravity (kept: read by P_GetGravity)
 
-    fixed_t             PrevX;
+    // ---- TRIMMED TAIL: NOT saved in the savestate (zeroed/rebuilt on load) ----
+    // Render-only, Heretic/Hexen-only, respawn-only, or transient (rebuilt by
+    // P_SetThingPosition / the secnode rebuild / P_AddThinker, or dead).
+
+    // sector + blockmap links: rebuilt by P_SetThingPosition
+    struct mobj_s*      snext;
+    struct mobj_s**     sprev; // killough 8/10/98: change to ptr-to-ptr
+    struct mobj_s*      bnext;
+    struct mobj_s**     bprev; // killough 8/11/98: change to ptr-to-ptr
+
+    int                 validcount;   // dead on mobj (only line/sector use validcount)
+
+    mobjinfo_t*         info;   // re-derived on load: &mobjinfo[type]
+
+    mapthing_t          spawnpoint;   // nightmare respawn only (not targeted)
+
+    struct msecnode_s* touching_sectorlist;  // rebuilt on load (Design B incr.2a)
+
+    fixed_t             PrevX;        // render interpolation
     fixed_t             PrevY;
     fixed_t             PrevZ;
 
     //e6y
-    angle_t             pitch;  // orientation
-    int index;
-    short patch_width;
+    angle_t             pitch;  // freelook (non-vanilla) / render
+    int index;                  // serialization scratch + P_AddThinker bookkeeping
+    short patch_width;          // render
 
-    int iden_nums;		// hi word stores thing num, low word identifier num
+    int iden_nums;		// written but never read
 
     // heretic
-    int damage;                 // For missiles
-    uint64_t flags2;           // Heretic & MBF21 flags
-    specialval_t special1;      // Special info
-    specialval_t special2;      // Special info
+    int damage;                 // heretic ripper missiles
+    specialval_t special1;      // heretic
+    specialval_t special2;      // heretic
 
     // hexen
-    fixed_t floorpic;           // contacted sec floorpic
-    fixed_t floorclip;          // value to use for floor clipping
-    int archiveNum;             // Identity during archive
-    short tid;                  // thing identifier
-    int special;                // special
-    int special_args[5];        // special arguments
+    fixed_t floorpic;           // hexen terrain
+    fixed_t floorclip;          // hexen foot clipping
+    int archiveNum;             // hexen archive identity (never read)
+    short tid;                  // hexen thing identifier
+    int special;                // hexen line special
+    int special_args[5];        // hexen ACS args
 
-    // zdoom
-    fixed_t gravity;
+    // zdoom render
     float alpha;
-
-    // misc
     byte color;
-    const byte* tranmap;
+    const byte* tranmap;        // re-derived/NULL on load
 
     // SEE WARNING ABOVE ABOUT POINTER FIELDS!!!
 } mobj_t;

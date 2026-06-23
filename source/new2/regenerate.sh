@@ -81,6 +81,13 @@ echo "[regen] 3d/5 apply canonical-serialization patches (Design A)"
 # p_saveg.c / dsda/save.c that rsync --delete wiped above.
 python3 "$here/apply_canonical_serialization.py" "$new2/prboom2/src"
 
+echo "[regen] 3e/5 apply mobj savestate-size trim (Design B state reduction)"
+# Reorder mobj_t so the cl2-Doom2 gameplay fields form a saved prefix and the
+# render/Heretic-Hexen/respawn/transient fields form an unsaved tail, and serialize
+# only the prefix (~34% smaller state). Generated as a diff against the canonical-
+# patched p_saveg.c + pristine p_mobj.h, so it applies right after step 3d.
+patch -p1 -d "$qd" < "$here/state_trim.patch"
+
 echo "[regen] 4/5 generate minimal-headless stubs (__headless_stubs.c)"
 # The kept simulation code references symbols from the removed display/sound/
 # non-Doom subsystems (source/new2/removed_files.txt, commented out of
