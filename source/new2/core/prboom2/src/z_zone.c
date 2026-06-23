@@ -101,12 +101,22 @@ static __STORAGE_MODIFIER size_t      ta_high;          /* bump high-water mark 
 static __STORAGE_MODIFIER size_t      ta_peak;          /* max high-water seen (for reporting/sizing) */
 static __STORAGE_MODIFIER memblock_t *ta_free[TA_MAX_CLASSES]; /* segregated free lists, keyed by size class */
 
+/* Reclaim the whole slab in O(1): drop the bump pointer and all free lists. The
+ * caller must have already cleared every pointer into the slab (thinker list,
+ * sector/blockmap heads, block-zone pools). Used by the bulk state-load teardown
+ * to abandon the previous state's objects without walking them. The routing flag
+ * is left untouched so subsequent allocations keep using the slab. */
+void Z_ResetThinkerArena(void)
+{
+  ta_high = 0;
+  memset(ta_free, 0, sizeof(ta_free));
+}
+
 /* Reset the slab to empty and start routing dynamic allocations into it. Called
  * after the geometry load, when no thinker objects are live. */
 void Z_BeginThinkerArena(void)
 {
-  ta_high = 0;
-  memset(ta_free, 0, sizeof(ta_free));
+  Z_ResetThinkerArena();
   dsda_thinker_arena_active = 1;
 }
 

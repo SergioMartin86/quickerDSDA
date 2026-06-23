@@ -1217,20 +1217,30 @@ void P_UnArchiveThinkers(void) {
   // killough 3/26/98: Load boss brain state
   P_LOAD_X(brain);
 
-  // remove all the current thinkers
-  for (th = thinkercap.next; th != &thinkercap; )
+  // Increment 3b: bulk teardown of the previous state's thinkers. All dynamic
+  // objects (mobjs, special thinkers, and the secnode pools) live in the
+  // contiguous thinker arena, so the old state is discarded in O(1) by clearing
+  // every pointer into the arena and resetting it -- no per-object walk, no
+  // per-object malloc free. This replaces the per-object P_RemoveMobj loop; its
+  // only observable side effect not reproduced here is the itemrespawnque push,
+  // which matters solely in respawn modes (not targeted by this core).
   {
-    thinker_t *next = th->next;
-    if (P_IsMobjThinker(th))
+    extern __STORAGE_MODIFIER mobj_t **blocklinks;
+    extern __STORAGE_MODIFIER int      blocklinks_count;
+    void P_FreeSecNodeList(void);
+    int _i;
+
+    P_InitThinkers();                                  // clear the thinker + class lists
+    for (_i = 0; _i < numsectors; _i++)                // clear sector thing/secnode heads
     {
-      P_RemoveMobj ((mobj_t *) th);
-      P_RemoveThinkerDelayed(th); // fix mobj leak
+      sectors[_i].thinglist = NULL;
+      sectors[_i].touching_thinglist = NULL;
     }
-    else
-      Z_Free (th);
-    th = next;
+    if (blocklinks)                                    // clear blockmap thing heads
+      memset(blocklinks, 0, (size_t) blocklinks_count * sizeof(*blocklinks));
+    P_FreeSecNodeList();                               // drop secnode pools (they live in the arena)
+    Z_ResetThinkerArena();                             // reclaim the whole slab in O(1)
   }
-  P_InitThinkers ();
 
   // killough 2/14/98: count number of thinkers by skipping through them
   {

@@ -65,6 +65,7 @@ char *Z_StrdupLevel(const char *s);
 /* Increment 3: contiguous per-thread thinker arena (see z_zone.c) */
 void   Z_BeginThinkerArena(void);
 void   Z_EndThinkerArena(void);
+void   Z_ResetThinkerArena(void);
 size_t Z_ThinkerArenaUsed(void);
 size_t Z_ThinkerArenaPeak(void);
 

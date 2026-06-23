@@ -213,6 +213,46 @@ def patch_psaveg(path):
         "          { msecnode_t *sl = NULL; int _i; /* incr.2a: rebuild touching_sectorlist (reverse preserves order) */\n"
         "            for (_i = sec_count - 1; _i >= 0; _i--) sl = P_AddSecnode(&sectors[sec_idx[_i]], mobj, sl);\n"
         "            mobj->touching_sectorlist = sl; }", 1)
+    # 8. Design B incr.3b: O(1) bulk teardown of the previous state on load
+    s = s.replace(
+        "  // remove all the current thinkers\n"
+        "  for (th = thinkercap.next; th != &thinkercap; )\n"
+        "  {\n"
+        "    thinker_t *next = th->next;\n"
+        "    if (P_IsMobjThinker(th))\n"
+        "    {\n"
+        "      P_RemoveMobj ((mobj_t *) th);\n"
+        "      P_RemoveThinkerDelayed(th); // fix mobj leak\n"
+        "    }\n"
+        "    else\n"
+        "      Z_Free (th);\n"
+        "    th = next;\n"
+        "  }\n"
+        "  P_InitThinkers ();",
+        "  // Increment 3b: bulk teardown of the previous state's thinkers. All dynamic\n"
+        "  // objects (mobjs, special thinkers, and the secnode pools) live in the\n"
+        "  // contiguous thinker arena, so the old state is discarded in O(1) by clearing\n"
+        "  // every pointer into the arena and resetting it -- no per-object walk, no\n"
+        "  // per-object malloc free. This replaces the per-object P_RemoveMobj loop; its\n"
+        "  // only observable side effect not reproduced here is the itemrespawnque push,\n"
+        "  // which matters solely in respawn modes (not targeted by this core).\n"
+        "  {\n"
+        "    extern __STORAGE_MODIFIER mobj_t **blocklinks;\n"
+        "    extern __STORAGE_MODIFIER int      blocklinks_count;\n"
+        "    void P_FreeSecNodeList(void);\n"
+        "    int _i;\n"
+        "\n"
+        "    P_InitThinkers();                                  // clear the thinker + class lists\n"
+        "    for (_i = 0; _i < numsectors; _i++)                // clear sector thing/secnode heads\n"
+        "    {\n"
+        "      sectors[_i].thinglist = NULL;\n"
+        "      sectors[_i].touching_thinglist = NULL;\n"
+        "    }\n"
+        "    if (blocklinks)                                    // clear blockmap thing heads\n"
+        "      memset(blocklinks, 0, (size_t) blocklinks_count * sizeof(*blocklinks));\n"
+        "    P_FreeSecNodeList();                               // drop secnode pools (they live in the arena)\n"
+        "    Z_ResetThinkerArena();                             // reclaim the whole slab in O(1)\n"
+        "  }", 1)
     open(path, "w").write(s)
     return True
 
@@ -324,12 +364,22 @@ static __STORAGE_MODIFIER size_t      ta_high;          /* bump high-water mark 
 static __STORAGE_MODIFIER size_t      ta_peak;          /* max high-water seen (for reporting/sizing) */
 static __STORAGE_MODIFIER memblock_t *ta_free[TA_MAX_CLASSES]; /* segregated free lists, keyed by size class */
 
+/* Reclaim the whole slab in O(1): drop the bump pointer and all free lists. The
+ * caller must have already cleared every pointer into the slab (thinker list,
+ * sector/blockmap heads, block-zone pools). Used by the bulk state-load teardown
+ * to abandon the previous state's objects without walking them. The routing flag
+ * is left untouched so subsequent allocations keep using the slab. */
+void Z_ResetThinkerArena(void)
+{
+  ta_high = 0;
+  memset(ta_free, 0, sizeof(ta_free));
+}
+
 /* Reset the slab to empty and start routing dynamic allocations into it. Called
  * after the geometry load, when no thinker objects are live. */
 void Z_BeginThinkerArena(void)
 {
-  ta_high = 0;
-  memset(ta_free, 0, sizeof(ta_free));
+  Z_ResetThinkerArena();
   dsda_thinker_arena_active = 1;
 }
 
@@ -450,6 +500,7 @@ def patch_zone(zone_c, zone_h):
             "/* Increment 3: contiguous per-thread thinker arena (see z_zone.c) */\n"
             "void   Z_BeginThinkerArena(void);\n"
             "void   Z_EndThinkerArena(void);\n"
+            "void   Z_ResetThinkerArena(void);\n"
             "size_t Z_ThinkerArenaUsed(void);\n"
             "size_t Z_ThinkerArenaPeak(void);\n", 1)
         open(zone_h, "w").write(h)
