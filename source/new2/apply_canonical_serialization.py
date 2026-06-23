@@ -30,7 +30,7 @@ static void P_CanonicalizeMobj(mobj_t *d)
   d->thinker.function = NULL;             // load sets P_MobjThinker unconditionally
   d->snext = NULL; d->sprev = NULL;       // sector/blockmap links: P_SetThingPosition
   d->bnext = NULL; d->bprev = NULL;
-  d->subsector = NULL;
+  /* subsector swizzled to an index in the mobj archive (Design B incr.1), not nulled */
   d->touching_sectorlist = NULL;
   d->info = NULL;                         // re-derived: &mobjinfo[type]
   d->tranmap = NULL;                      // re-derived from alpha
@@ -151,6 +151,46 @@ def patch_psaveg(path):
         "        _cz->source = NULL; /* re-derived on load via P_GetPushThing(affectee) */ }", 1)
     # 5. mobj canonicalize call
     s = s.replace(MOBJ_OLD, MOBJ_NEW, 1)
+    # 6. Design B incr.1: subsector cache (skip R_PointInSubsector on load)
+    s = s.replace(
+        "__STORAGE_MODIFIER byte *save_p;",
+        "extern __STORAGE_MODIFIER int dsda_use_saved_subsector;  /* Design B incr.1 (p_maputl.c) */\n"
+        "__STORAGE_MODIFIER byte *save_p;", 1)
+    s = s.replace(
+        "      mobj->state = (state_t *)(mobj->state - states);",
+        "      mobj->state = (state_t *)(mobj->state - states);\n"
+        "      mobj->subsector = (subsector_t *)(intptr_t)(mobj->subsector - subsectors); /* incr.1 */", 1)
+    s = s.replace(
+        "          mobj->state = states + (intptr_t) mobj->state;",
+        "          mobj->state = states + (intptr_t) mobj->state;\n"
+        "          mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */", 1)
+    s = s.replace(
+        "          P_SetThingPosition (mobj);",
+        "          dsda_use_saved_subsector = 1; /* incr.1: trust restored subsector */\n"
+        "          P_SetThingPosition (mobj);\n"
+        "          dsda_use_saved_subsector = 0;", 1)
+    open(path, "w").write(s)
+    return True
+
+
+def patch_maputl(path):
+    s = open(path).read()
+    if "dsda_use_saved_subsector" in s:
+        return False
+    s = s.replace(
+        "void P_SetThingPosition(mobj_t *thing)\n"
+        "{                                                      // link into subsector\n"
+        "  subsector_t *ss = thing->subsector = R_PointInSubsector(thing->x, thing->y);",
+        "// Design B incr.1: when set, trust the caller-provided thing->subsector\n"
+        "// (restored from the savestate) instead of recomputing it via R_PointInSubsector\n"
+        "// (~20% of state-load time). subsector == R_PointInSubsector(x,y) for any\n"
+        "// positioned thing, so this is exact. The savestate loader sets it around its\n"
+        "// relink calls only.\n"
+        "__STORAGE_MODIFIER int dsda_use_saved_subsector = 0;\n\n"
+        "void P_SetThingPosition(mobj_t *thing)\n"
+        "{                                                      // link into subsector\n"
+        "  subsector_t *ss = thing->subsector =\n"
+        "    dsda_use_saved_subsector ? thing->subsector : R_PointInSubsector(thing->x, thing->y);", 1)
     open(path, "w").write(s)
     return True
 
@@ -206,9 +246,11 @@ def main():
     a = patch_psaveg(os.path.join(root, "p_saveg.c"))
     t = patch_trims(os.path.join(root, "p_saveg.c"))
     b = patch_save(os.path.join(root, "dsda/save.c"))
+    m = patch_maputl(os.path.join(root, "p_maputl.c"))
     print(f"[canonical] p_saveg.c {'patched' if a else 'already-applied'}, "
           f"trims {t if t is not False else 'already-applied'}, "
-          f"save.c {'patched' if b else 'already-applied'}")
+          f"save.c {'patched' if b else 'already-applied'}, "
+          f"p_maputl.c {'patched' if m else 'already-applied'}")
 
 
 if __name__ == "__main__":

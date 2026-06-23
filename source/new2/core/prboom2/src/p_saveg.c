@@ -64,6 +64,7 @@
 
 #define SAVEGAMESIZE 0x20000
 
+extern __STORAGE_MODIFIER int dsda_use_saved_subsector;  /* Design B incr.1 (p_maputl.c) */
 __STORAGE_MODIFIER byte *save_p;
 __STORAGE_MODIFIER byte *savebuffer;
 static __STORAGE_MODIFIER int savegamesize;
@@ -120,11 +121,11 @@ static void P_CanonicalizeMobj(mobj_t *d)
   d->thinker.function = NULL;             // load sets P_MobjThinker unconditionally
   d->snext = NULL; d->sprev = NULL;       // sector/blockmap links: P_SetThingPosition
   d->bnext = NULL; d->bprev = NULL;
-  d->subsector = NULL;
+  /* subsector swizzled to an index in the mobj archive (Design B incr.1), not nulled */
   d->touching_sectorlist = NULL;
   d->info = NULL;                         // re-derived: &mobjinfo[type]
   d->tranmap = NULL;                      // re-derived from alpha
-  d->PrevX = 0; d->PrevY = 0; d->PrevZ = 0;  // render interpolation, reset each tic
+  d->PrevX = 0; d->PrevY = 0; d->PrevZ = 0;  // render interpolation (reset each tic), removes diff noise
 }
 
 static void P_CanonicalizeSpecialThinker(thinker_t *d)
@@ -1130,6 +1131,7 @@ void P_ArchiveThinkers(void) {
       P_SAVE_TYPE_REF(th, mobj, mobj_t);
 
       mobj->state = (state_t *)(mobj->state - states);
+      mobj->subsector = (subsector_t *)(intptr_t)(mobj->subsector - subsectors); /* incr.1 */
 
       // Example:
       // - Archvile is attacking a lost soul
@@ -1666,6 +1668,7 @@ void P_UnArchiveThinkers(void) {
           P_LOAD_P(mobj);
 
           mobj->state = states + (intptr_t) mobj->state;
+          mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */
 
           if (mobj->player)
             (mobj->player = &players[(size_t) mobj->player - 1]) -> mo = mobj;
@@ -1688,7 +1691,9 @@ void P_UnArchiveThinkers(void) {
           else
             mobj->tranmap = NULL;
 
+          dsda_use_saved_subsector = 1; /* incr.1: trust restored subsector */
           P_SetThingPosition (mobj);
+          dsda_use_saved_subsector = 0;
 
           // killough 2/28/98:
           // Fix for falling down into a wall after savegame loaded:

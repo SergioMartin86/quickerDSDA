@@ -377,9 +377,17 @@ void P_UnsetThingPosition (mobj_t *thing)
 //
 // killough 5/3/98: reformatted, cleaned up
 
+// Design B incr.1: when set, trust the caller-provided thing->subsector
+// (restored from the savestate) instead of recomputing it via R_PointInSubsector
+// (~20% of state-load time). subsector == R_PointInSubsector(x,y) for any
+// positioned thing, so this is exact. The savestate loader sets it around its
+// relink calls only.
+__STORAGE_MODIFIER int dsda_use_saved_subsector = 0;
+
 void P_SetThingPosition(mobj_t *thing)
 {                                                      // link into subsector
-  subsector_t *ss = thing->subsector = R_PointInSubsector(thing->x, thing->y);
+  subsector_t *ss = thing->subsector =
+    dsda_use_saved_subsector ? thing->subsector : R_PointInSubsector(thing->x, thing->y);
   if (!(thing->flags & MF_NOSECTOR))
     {
       // invisible things don't go into the sector links
