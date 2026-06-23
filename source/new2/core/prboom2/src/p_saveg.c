@@ -215,51 +215,50 @@ void P_ArchiveWorld (void)
     P_SAVE_X(sec->ceilingpic);
     P_SAVE_X(sec->lightlevel);
     P_SAVE_X(sec->special);
-    P_SAVE_X(sec->tag);
-    // [min-headless trim] P_SAVE_X(sec->seqType);  // render-only/zdoom field, irrelevant to Doom2 physics
+    // [min-headless trim] P_SAVE_X(sec->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->seqType);  // render-only/constant at headless Doom2 cl2
     P_SAVE_X(sec->flags);
 
     // zdoom
-    // [min-headless trim] P_SAVE_X(sec->gravity);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->damage);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->lightlevel_floor);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->lightlevel_ceiling);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->floor_rotation);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->ceiling_rotation);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->floor_xscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->floor_yscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->ceiling_xscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->ceiling_yscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->floor_xoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->floor_yoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->ceiling_xoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(sec->ceiling_yoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
+    // [min-headless trim] P_SAVE_X(sec->gravity);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->damage);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->lightlevel_floor);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->lightlevel_ceiling);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->floor_yoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(sec->ceiling_yoffs);  // render-only/constant at headless Doom2 cl2
   }
 
   for (i = 0, li = lines; i < numlines; i++, li++)
   {
     int j;
 
-    P_SAVE_X(li->flags);
+    // [min-headless trim] P_SAVE_X(li->flags);  // render-only/constant at headless Doom2 cl2
     P_SAVE_X(li->special);
-    P_SAVE_X(li->tag);
-    P_SAVE_BYTE(li->player_activations);
-    P_SAVE_ARRAY(li->special_args);
-
+    // [min-headless trim] P_SAVE_X(li->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_BYTE(li->player_activations);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_ARRAY(li->special_args);  // render-only/constant at headless Doom2 cl2
     // zdoom
-    // [min-headless trim] P_SAVE_X(li->automap_style);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(li->health);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_SAVE_X(li->alpha);  // render-only/zdoom field, irrelevant to Doom2 physics
+    // [min-headless trim] P_SAVE_X(li->automap_style);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(li->health);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_SAVE_X(li->alpha);  // render-only/constant at headless Doom2 cl2
     for (j = 0; j < 2; j++)
       if (li->sidenum[j] != NO_INDEX)
       {
         si = &sides[li->sidenum[j]];
 
-        // [min-headless trim] P_SAVE_X(si->textureoffset);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_SAVE_X(si->rowoffset);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_SAVE_X(si->toptexture);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_SAVE_X(si->bottomtexture);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_SAVE_X(si->midtexture);  // render-only/zdoom field, irrelevant to Doom2 physics
+        // [min-headless trim] P_SAVE_X(si->textureoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->rowoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->toptexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->bottomtexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_SAVE_X(si->midtexture);  // render-only/constant at headless Doom2 cl2
         if (map_format.zdoom)
         {
           P_SAVE_X(si->textureoffset_top);
@@ -305,25 +304,25 @@ void P_UnArchiveWorld (void)
     P_LOAD_X(sec->ceilingpic);
     P_LOAD_X(sec->lightlevel);
     P_LOAD_X(sec->special);
-    P_LOAD_X(sec->tag);
-    // [min-headless trim] P_LOAD_X(sec->seqType);  // render-only/zdoom field, irrelevant to Doom2 physics
+    // [min-headless trim] P_LOAD_X(sec->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->seqType);  // render-only/constant at headless Doom2 cl2
     P_LOAD_X(sec->flags);
 
     // zdoom
-    // [min-headless trim] P_LOAD_X(sec->gravity);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->damage);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->lightlevel_floor);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->lightlevel_ceiling);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->floor_rotation);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->ceiling_rotation);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->floor_xscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->floor_yscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->ceiling_xscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->ceiling_yscale);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->floor_xoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->floor_yoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->ceiling_xoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(sec->ceiling_yoffs);  // render-only/zdoom field, irrelevant to Doom2 physics
+    // [min-headless trim] P_LOAD_X(sec->gravity);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->damage);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->lightlevel_floor);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->lightlevel_ceiling);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_rotation);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_xscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_yscale);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->floor_yoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_xoffs);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(sec->ceiling_yoffs);  // render-only/constant at headless Doom2 cl2
     sec->ceilingdata = 0; //jff 2/22/98 now three thinker fields, not two
     sec->floordata = 0;
     sec->lightingdata = 0;
@@ -335,16 +334,15 @@ void P_UnArchiveWorld (void)
   {
     int j;
 
-    P_LOAD_X(li->flags);
+    // [min-headless trim] P_LOAD_X(li->flags);  // render-only/constant at headless Doom2 cl2
     P_LOAD_X(li->special);
-    P_LOAD_X(li->tag);
-    P_LOAD_BYTE(li->player_activations);
-    P_LOAD_ARRAY(li->special_args);
-
+    // [min-headless trim] P_LOAD_X(li->tag);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_BYTE(li->player_activations);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_ARRAY(li->special_args);  // render-only/constant at headless Doom2 cl2
     // zdoom
-    // [min-headless trim] P_LOAD_X(li->automap_style);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(li->health);  // render-only/zdoom field, irrelevant to Doom2 physics
-    // [min-headless trim] P_LOAD_X(li->alpha);  // render-only/zdoom field, irrelevant to Doom2 physics
+    // [min-headless trim] P_LOAD_X(li->automap_style);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(li->health);  // render-only/constant at headless Doom2 cl2
+    // [min-headless trim] P_LOAD_X(li->alpha);  // render-only/constant at headless Doom2 cl2
     if (li->alpha < 1.f)
       li->tranmap = dsda_TranMap(dsda_FloatToPercent(li->alpha));
 
@@ -353,11 +351,11 @@ void P_UnArchiveWorld (void)
       {
         side_t *si = &sides[li->sidenum[j]];
 
-        // [min-headless trim] P_LOAD_X(si->textureoffset);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_LOAD_X(si->rowoffset);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_LOAD_X(si->toptexture);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_LOAD_X(si->bottomtexture);  // render-only/zdoom field, irrelevant to Doom2 physics
-        // [min-headless trim] P_LOAD_X(si->midtexture);  // render-only/zdoom field, irrelevant to Doom2 physics
+        // [min-headless trim] P_LOAD_X(si->textureoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->rowoffset);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->toptexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->bottomtexture);  // render-only/constant at headless Doom2 cl2
+        // [min-headless trim] P_LOAD_X(si->midtexture);  // render-only/constant at headless Doom2 cl2
         // zdoom
         if (map_format.zdoom)
         {

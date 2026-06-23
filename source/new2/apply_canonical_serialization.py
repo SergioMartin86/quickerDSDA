@@ -310,6 +310,15 @@ TRIM_FIELDS = [
     # Sidedef textures/offsets: strictly graphical (render-only; collision is geometry).
     # Switches/scrolling mutate them but that is purely visual, never physics.
     "si->textureoffset", "si->rowoffset", "si->toptexture", "si->bottomtexture", "si->midtexture",
+    # Sector/line gameplay-state fields safe to omit at complevel 2 headless (per
+    # per-field mutation/read analysis):
+    #  sec->tag, li->tag, li->special_args : never mutated post level-load (constant).
+    #  li->flags : only ML_MAPPED (renderer) mutates it -> constant when headless.
+    #  li->player_activations : write-only statistics counter, never read by sim.
+    # NOTE: sec->lightlevel is render-only too, but the deep-equivalence oracle
+    # (getDeepStateHash) hashes it, so it is kept saved (like mobj sprite/frame).
+    "sec->tag",
+    "li->flags", "li->tag", "li->player_activations", "li->special_args",
 ]
 
 
@@ -319,12 +328,15 @@ def patch_trims(path):
         return False
     n = 0
     for fld in TRIM_FIELDS:
-        for macro in ("P_SAVE_X", "P_LOAD_X"):
+        # X for ints/fixed, BYTE for byte fields, ARRAY for fixed arrays — a field
+        # matches exactly one save macro + its load counterpart; the rest no-op.
+        for macro in ("P_SAVE_X", "P_LOAD_X", "P_SAVE_BYTE", "P_LOAD_BYTE",
+                      "P_SAVE_ARRAY", "P_LOAD_ARRAY"):
             # indent-agnostic: sector/line fields are at 4 spaces, sidedef at 8.
             pat = re.compile(r"^(\s*)" + re.escape(f"{macro}({fld});") + r"\s*$", re.M)
             s, c = pat.subn(
                 lambda m: f"{m.group(1)}// [min-headless trim] {macro}({fld});  "
-                          f"// render-only/zdoom field, irrelevant to Doom2 physics", s, count=1)
+                          f"// render-only/constant at headless Doom2 cl2", s, count=1)
             n += c
     open(path, "w").write(s)
     return n
