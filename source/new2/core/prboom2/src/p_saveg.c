@@ -117,16 +117,27 @@ void P_FreeSaveBuffer(void)
 // live object) with deterministic values. Everything zeroed here is rebuilt or
 // re-derived on load (P_AddThinker / P_SetThingPosition / &mobjinfo[type] / ...).
 
-static void P_CanonicalizeSpecialThinker(thinker_t *d)
-{
-  // List links rebuilt by P_AddThinker; function restored from the tc_* class byte,
-  // but ceiling/plat read NULL-vs-set as a stasis flag, so collapse to a 0/1 sentinel.
-  d->prev = NULL;
-  d->next = NULL;
-  d->cnext = NULL;
-  d->cprev = NULL;
-  d->function = d->function ? (think_t)(intptr_t)1 : NULL;
-}
+/* Design B: a special thinker's entire thinker_t header is rebuilt on load
+ * (P_AddThinker resets the list links + zeroes references; each load case sets
+ * its function). Save only the type-specific body [sizeof(thinker_t), sizeof],
+ * preceded by a 1-byte "active" flag carrying the only header bit that matters:
+ * ceiling/plat use a NULL function as a stasis marker. */
+#define P_SAVE_THINKER_BODY(x, ref, type) { \
+  byte _active = ((thinker_t *)(x))->function ? 1 : 0; \
+  size_t _bsz = sizeof(type) - sizeof(thinker_t); \
+  P_SAVE_BYTE(_active); \
+  CheckSaveGame(_bsz); \
+  memcpy(save_p, (char *)(x) + sizeof(thinker_t), _bsz); \
+  ref = (type *)(save_p - sizeof(thinker_t)); \
+  save_p += _bsz; }
+
+#define P_LOAD_THINKER_BODY(p) { \
+  byte _active; size_t _bsz = sizeof(*(p)) - sizeof(thinker_t); \
+  P_LOAD_BYTE(_active); \
+  memset((p), 0, sizeof(thinker_t)); \
+  memcpy((char *)(p) + sizeof(thinker_t), save_p, _bsz); \
+  save_p += _bsz; \
+  ((thinker_t *)(p))->function = _active ? (think_t)(intptr_t)1 : NULL; }
 
 void P_ArchivePlayers (void)
 {
@@ -801,8 +812,7 @@ void P_ArchiveThinkers(void) {
       ceiling_t *ceiling;
     ceiling:                               // killough 2/14/98
       P_SAVE_BYTE(tc_ceiling);
-      P_SAVE_TYPE_REF(th, ceiling, ceiling_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)ceiling);
+      P_SAVE_THINKER_BODY(th, ceiling, ceiling_t);
       ceiling->sector = (sector_t *)(intptr_t)(ceiling->sector->iSectorID);
       ceiling->list = NULL; /* re-created on load by P_AddActiveCeiling */
       continue;
@@ -812,8 +822,7 @@ void P_ArchiveThinkers(void) {
     {
       vldoor_t *door;
       P_SAVE_BYTE(tc_door);
-      P_SAVE_TYPE_REF(th, door, vldoor_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)door);
+      P_SAVE_THINKER_BODY(th, door, vldoor_t);
       door->sector = (sector_t *)(intptr_t)(door->sector->iSectorID);
       //jff 1/31/98 archive line remembered by door as well
       door->line = (line_t *) (door->line ? door->line-lines : -1);
@@ -824,8 +833,7 @@ void P_ArchiveThinkers(void) {
     {
       floormove_t *floor;
       P_SAVE_BYTE(tc_floor);
-      P_SAVE_TYPE_REF(th, floor, floormove_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)floor);
+      P_SAVE_THINKER_BODY(th, floor, floormove_t);
       floor->sector = (sector_t *)(intptr_t)(floor->sector->iSectorID);
       continue;
     }
@@ -835,8 +843,7 @@ void P_ArchiveThinkers(void) {
       plat_t *plat;
     plat:   // killough 2/14/98: added fix for original plat height above
       P_SAVE_BYTE(tc_plat);
-      P_SAVE_TYPE_REF(th, plat, plat_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)plat);
+      P_SAVE_THINKER_BODY(th, plat, plat_t);
       plat->sector = (sector_t *)(intptr_t)(plat->sector->iSectorID);
       plat->list = NULL; /* re-created on load by P_AddActivePlat */
       continue;
@@ -846,8 +853,7 @@ void P_ArchiveThinkers(void) {
     {
       lightflash_t *flash;
       P_SAVE_BYTE(tc_flash);
-      P_SAVE_TYPE_REF(th, flash, lightflash_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)flash);
+      P_SAVE_THINKER_BODY(th, flash, lightflash_t);
       flash->sector = (sector_t *)(intptr_t)(flash->sector->iSectorID);
       continue;
     }
@@ -856,8 +862,7 @@ void P_ArchiveThinkers(void) {
     {
       strobe_t *strobe;
       P_SAVE_BYTE(tc_strobe);
-      P_SAVE_TYPE_REF(th, strobe, strobe_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)strobe);
+      P_SAVE_THINKER_BODY(th, strobe, strobe_t);
       strobe->sector = (sector_t *)(intptr_t)(strobe->sector->iSectorID);
       continue;
     }
@@ -866,8 +871,7 @@ void P_ArchiveThinkers(void) {
     {
       glow_t *glow;
       P_SAVE_BYTE(tc_glow);
-      P_SAVE_TYPE_REF(th, glow, glow_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)glow);
+      P_SAVE_THINKER_BODY(th, glow, glow_t);
       glow->sector = (sector_t *)(intptr_t)(glow->sector->iSectorID);
       continue;
     }
@@ -876,8 +880,7 @@ void P_ArchiveThinkers(void) {
     {
       zdoom_glow_t *glow;
       P_SAVE_BYTE(tc_zdoom_glow);
-      P_SAVE_TYPE_REF(th, glow, zdoom_glow_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)glow);
+      P_SAVE_THINKER_BODY(th, glow, zdoom_glow_t);
       glow->sector = (sector_t *)(intptr_t)(glow->sector->iSectorID);
       continue;
     }
@@ -887,8 +890,7 @@ void P_ArchiveThinkers(void) {
     {
       fireflicker_t *flicker;
       P_SAVE_BYTE(tc_flicker);
-      P_SAVE_TYPE_REF(th, flicker, fireflicker_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)flicker);
+      P_SAVE_THINKER_BODY(th, flicker, fireflicker_t);
       flicker->sector = (sector_t *)(intptr_t)(flicker->sector->iSectorID);
       continue;
     }
@@ -897,8 +899,7 @@ void P_ArchiveThinkers(void) {
     {
       zdoom_flicker_t *flicker;
       P_SAVE_BYTE(tc_zdoom_flicker);
-      P_SAVE_TYPE_REF(th, flicker, zdoom_flicker_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)flicker);
+      P_SAVE_THINKER_BODY(th, flicker, zdoom_flicker_t);
       flicker->sector = (sector_t *)(intptr_t)(flicker->sector->iSectorID);
       continue;
     }
@@ -908,8 +909,7 @@ void P_ArchiveThinkers(void) {
     {
       elevator_t *elevator;         //jff 2/22/98
       P_SAVE_BYTE(tc_elevator);
-      P_SAVE_TYPE_REF(th, elevator, elevator_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)elevator);
+      P_SAVE_THINKER_BODY(th, elevator, elevator_t);
       elevator->sector = (sector_t *)(intptr_t)(elevator->sector->iSectorID);
       continue;
     }
@@ -917,77 +917,77 @@ void P_ArchiveThinkers(void) {
     if (th->function == dsda_UpdateSideScroller)
     {
       P_SAVE_BYTE(tc_scroll_side);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateFloorScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateCeilingScroller)
     {
       P_SAVE_BYTE(tc_scroll_ceiling);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateFloorCarryScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor_carry);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateZDoomFloorScroller)
     {
       P_SAVE_BYTE(tc_zdoom_scroll_floor);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateZDoomCeilingScroller)
     {
       P_SAVE_BYTE(tc_zdoom_scroll_ceiling);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateThruster)
     {
       P_SAVE_BYTE(tc_thrust);
-      { scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlSideScroller)
     {
       P_SAVE_BYTE(tc_scroll_side_control);
-      { control_scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, control_scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlFloorScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor_control);
-      { control_scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, control_scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlCeilingScroller)
     {
       P_SAVE_BYTE(tc_scroll_ceiling_control);
-      { control_scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, control_scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
     if (th->function == dsda_UpdateControlFloorCarryScroller)
     {
       P_SAVE_BYTE(tc_scroll_floor_carry_control);
-      { control_scroll_t* _cz; P_SAVE_TYPE_REF(th, _cz, control_scroll_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { control_scroll_t* _cz; P_SAVE_THINKER_BODY(th, _cz, control_scroll_t); }
       continue;
     }
 
@@ -996,15 +996,14 @@ void P_ArchiveThinkers(void) {
     if (th->function == T_Pusher)
     {
       P_SAVE_BYTE(tc_pusher);
-      { pusher_t* _cz; P_SAVE_TYPE_REF(th, _cz, pusher_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz);
-        _cz->source = NULL; /* re-derived on load via P_GetPushThing(affectee) */ }
+      { pusher_t* _cz; P_SAVE_THINKER_BODY(th, _cz, pusher_t);        _cz->source = NULL; /* re-derived on load via P_GetPushThing(affectee) */ }
       continue;
     }
 
     if (th->function == T_Friction)
     {
       P_SAVE_BYTE(tc_friction);
-      { friction_t* _cz; P_SAVE_TYPE_REF(th, _cz, friction_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { friction_t* _cz; P_SAVE_THINKER_BODY(th, _cz, friction_t); }
       continue;
     }
 
@@ -1012,8 +1011,7 @@ void P_ArchiveThinkers(void) {
     {
       light_t *light;
       P_SAVE_BYTE(tc_light);
-      P_SAVE_TYPE_REF(th, light, light_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)light);
+      P_SAVE_THINKER_BODY(th, light, light_t);
       light->sector = (sector_t *)(intptr_t)(light->sector->iSectorID);
       continue;
     }
@@ -1022,8 +1020,7 @@ void P_ArchiveThinkers(void) {
     {
       phase_t *phase;
       P_SAVE_BYTE(tc_phase);
-      P_SAVE_TYPE_REF(th, phase, phase_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)phase);
+      P_SAVE_THINKER_BODY(th, phase, phase_t);
       phase->sector = (sector_t *)(intptr_t)(phase->sector->iSectorID);
       continue;
     }
@@ -1032,8 +1029,7 @@ void P_ArchiveThinkers(void) {
     {
       acs_t *acs;
       P_SAVE_BYTE(tc_acs);
-      P_SAVE_TYPE_REF(th, acs, acs_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)acs);
+      P_SAVE_THINKER_BODY(th, acs, acs_t);
       P_ReplaceMobjWithIndex(&acs->activator);
       acs->line = (line_t *) (acs->line ? acs->line - lines : -1);
 
@@ -1044,8 +1040,7 @@ void P_ArchiveThinkers(void) {
     {
       pillar_t *pillar;
       P_SAVE_BYTE(tc_pillar);
-      P_SAVE_TYPE_REF(th, pillar, pillar_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)pillar);
+      P_SAVE_THINKER_BODY(th, pillar, pillar_t);
       pillar->sector = (sector_t *)(intptr_t)(pillar->sector->iSectorID);
       continue;
     }
@@ -1054,8 +1049,7 @@ void P_ArchiveThinkers(void) {
     {
       planeWaggle_t *floor_waggle;
       P_SAVE_BYTE(tc_floor_waggle);
-      P_SAVE_TYPE_REF(th, floor_waggle, planeWaggle_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)floor_waggle);
+      P_SAVE_THINKER_BODY(th, floor_waggle, planeWaggle_t);
       floor_waggle->sector = (sector_t *)(intptr_t)(floor_waggle->sector->iSectorID);
       continue;
     }
@@ -1064,8 +1058,7 @@ void P_ArchiveThinkers(void) {
     {
       planeWaggle_t *ceiling_waggle;
       P_SAVE_BYTE(tc_ceiling_waggle);
-      P_SAVE_TYPE_REF(th, ceiling_waggle, planeWaggle_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)ceiling_waggle);
+      P_SAVE_THINKER_BODY(th, ceiling_waggle, planeWaggle_t);
       ceiling_waggle->sector = (sector_t *)(intptr_t)(ceiling_waggle->sector->iSectorID);
       continue;
     }
@@ -1073,21 +1066,21 @@ void P_ArchiveThinkers(void) {
     if (th->function == T_RotatePoly)
     {
       P_SAVE_BYTE(tc_poly_rotate);
-      { polyevent_t* _cz; P_SAVE_TYPE_REF(th, _cz, polyevent_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { polyevent_t* _cz; P_SAVE_THINKER_BODY(th, _cz, polyevent_t); }
       continue;
     }
 
     if (th->function == T_MovePoly)
     {
       P_SAVE_BYTE(tc_poly_move);
-      { polyevent_t* _cz; P_SAVE_TYPE_REF(th, _cz, polyevent_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { polyevent_t* _cz; P_SAVE_THINKER_BODY(th, _cz, polyevent_t); }
       continue;
     }
 
     if (th->function == T_PolyDoor)
     {
       P_SAVE_BYTE(tc_poly_door);
-      { polydoor_t* _cz; P_SAVE_TYPE_REF(th, _cz, polydoor_t); P_CanonicalizeSpecialThinker((thinker_t*)_cz); }
+      { polydoor_t* _cz; P_SAVE_THINKER_BODY(th, _cz, polydoor_t); }
       continue;
     }
 
@@ -1095,8 +1088,7 @@ void P_ArchiveThinkers(void) {
     {
       quake_t *quake;
       P_SAVE_BYTE(tc_quake);
-      P_SAVE_TYPE_REF(th, quake, quake_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)quake);
+      P_SAVE_THINKER_BODY(th, quake, quake_t);
       P_ReplaceMobjWithIndex(&quake->location);
       continue;
     }
@@ -1105,8 +1097,7 @@ void P_ArchiveThinkers(void) {
     {
       ambient_source_t *ambient_source;
       P_SAVE_BYTE(tc_ambient_source);
-      P_SAVE_TYPE_REF(th, ambient_source, ambient_source_t);
-      P_CanonicalizeSpecialThinker((thinker_t*)ambient_source);
+      P_SAVE_THINKER_BODY(th, ambient_source, ambient_source_t);
       P_ReplaceMobjWithIndex(&ambient_source->mobj);
       continue;
     }
@@ -1231,41 +1222,41 @@ void P_UnArchiveThinkers(void) {
 
       if (tc == tc_mobj || tc == tc_mobj_marked) mobj_count++;
       save_p +=
-        tc == tc_ceiling        ? sizeof(ceiling_t)        :
-        tc == tc_door           ? sizeof(vldoor_t)         :
-        tc == tc_floor          ? sizeof(floormove_t)      :
-        tc == tc_plat           ? sizeof(plat_t)           :
-        tc == tc_flash          ? sizeof(lightflash_t)     :
-        tc == tc_strobe         ? sizeof(strobe_t)         :
-        tc == tc_glow           ? sizeof(glow_t)           :
-        tc == tc_zdoom_glow     ? sizeof(zdoom_glow_t)     :
-        tc == tc_elevator       ? sizeof(elevator_t)       :
-        tc == tc_scroll_side                ? sizeof(scroll_t)         :
-        tc == tc_scroll_floor               ? sizeof(scroll_t)         :
-        tc == tc_scroll_ceiling             ? sizeof(scroll_t)         :
-        tc == tc_scroll_floor_carry         ? sizeof(scroll_t)         :
-        tc == tc_zdoom_scroll_floor         ? sizeof(scroll_t)         :
-        tc == tc_zdoom_scroll_ceiling       ? sizeof(scroll_t)         :
-        tc == tc_thrust                     ? sizeof(scroll_t)         :
-        tc == tc_scroll_side_control        ? sizeof(control_scroll_t) :
-        tc == tc_scroll_floor_control       ? sizeof(control_scroll_t) :
-        tc == tc_scroll_ceiling_control     ? sizeof(control_scroll_t) :
-        tc == tc_scroll_floor_carry_control ? sizeof(control_scroll_t) :
-        tc == tc_pusher         ? sizeof(pusher_t)         :
-        tc == tc_flicker        ? sizeof(fireflicker_t)    :
-        tc == tc_zdoom_flicker  ? sizeof(zdoom_flicker_t)  :
-        tc == tc_friction       ? sizeof(friction_t)       :
-        tc == tc_light          ? sizeof(light_t)          :
-        tc == tc_phase          ? sizeof(phase_t)          :
-        tc == tc_acs            ? sizeof(acs_t)            :
-        tc == tc_pillar         ? sizeof(pillar_t)         :
-        tc == tc_floor_waggle   ? sizeof(planeWaggle_t)    :
-        tc == tc_ceiling_waggle ? sizeof(planeWaggle_t)    :
-        tc == tc_poly_rotate    ? sizeof(polyevent_t)      :
-        tc == tc_poly_move      ? sizeof(polyevent_t)      :
-        tc == tc_poly_door      ? sizeof(polydoor_t)       :
-        tc == tc_quake          ? sizeof(quake_t)          :
-        tc == tc_ambient_source ? sizeof(ambient_source_t) :
+        tc == tc_ceiling        ? (sizeof(ceiling_t) - sizeof(thinker_t) + 1)         :
+        tc == tc_door           ? (sizeof(vldoor_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_floor          ? (sizeof(floormove_t) - sizeof(thinker_t) + 1)       :
+        tc == tc_plat           ? (sizeof(plat_t) - sizeof(thinker_t) + 1)            :
+        tc == tc_flash          ? (sizeof(lightflash_t) - sizeof(thinker_t) + 1)      :
+        tc == tc_strobe         ? (sizeof(strobe_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_glow           ? (sizeof(glow_t) - sizeof(thinker_t) + 1)            :
+        tc == tc_zdoom_glow     ? (sizeof(zdoom_glow_t) - sizeof(thinker_t) + 1)      :
+        tc == tc_elevator       ? (sizeof(elevator_t) - sizeof(thinker_t) + 1)        :
+        tc == tc_scroll_side                ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_floor               ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_ceiling             ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_floor_carry         ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_zdoom_scroll_floor         ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_zdoom_scroll_ceiling       ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_thrust                     ? (sizeof(scroll_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_scroll_side_control        ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_scroll_floor_control       ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_scroll_ceiling_control     ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_scroll_floor_carry_control ? (sizeof(control_scroll_t) - sizeof(thinker_t) + 1)  :
+        tc == tc_pusher         ? (sizeof(pusher_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_flicker        ? (sizeof(fireflicker_t) - sizeof(thinker_t) + 1)     :
+        tc == tc_zdoom_flicker  ? (sizeof(zdoom_flicker_t) - sizeof(thinker_t) + 1)   :
+        tc == tc_friction       ? (sizeof(friction_t) - sizeof(thinker_t) + 1)        :
+        tc == tc_light          ? (sizeof(light_t) - sizeof(thinker_t) + 1)           :
+        tc == tc_phase          ? (sizeof(phase_t) - sizeof(thinker_t) + 1)           :
+        tc == tc_acs            ? (sizeof(acs_t) - sizeof(thinker_t) + 1)             :
+        tc == tc_pillar         ? (sizeof(pillar_t) - sizeof(thinker_t) + 1)          :
+        tc == tc_floor_waggle   ? (sizeof(planeWaggle_t) - sizeof(thinker_t) + 1)     :
+        tc == tc_ceiling_waggle ? (sizeof(planeWaggle_t) - sizeof(thinker_t) + 1)     :
+        tc == tc_poly_rotate    ? (sizeof(polyevent_t) - sizeof(thinker_t) + 1)       :
+        tc == tc_poly_move      ? (sizeof(polyevent_t) - sizeof(thinker_t) + 1)       :
+        tc == tc_poly_door      ? (sizeof(polydoor_t) - sizeof(thinker_t) + 1)        :
+        tc == tc_quake          ? (sizeof(quake_t) - sizeof(thinker_t) + 1)           :
+        tc == tc_ambient_source ? (sizeof(ambient_source_t) - sizeof(thinker_t) + 1)  :
         (tc == tc_mobj || tc == tc_mobj_marked) ? offsetof(mobj_t, snext) - offsetof(mobj_t, x) : /* Design B: saved window [x,snext) */
       0;
       if (tc == tc_mobj || tc == tc_mobj_marked) { int sc; memcpy(&sc, save_p, sizeof(int)); save_p += sizeof(int) + (size_t) sc * sizeof(int); } /* incr.2a */
@@ -1291,7 +1282,7 @@ void P_UnArchiveThinkers(void) {
       case tc_ceiling:
         {
           ceiling_t *ceiling = Z_MallocLevel (sizeof(*ceiling));
-          P_LOAD_P(ceiling);
+          P_LOAD_THINKER_BODY(ceiling);
           ceiling->sector = &sectors[(size_t)ceiling->sector];
           ceiling->sector->ceilingdata = ceiling; //jff 2/22/98
 
@@ -1306,7 +1297,7 @@ void P_UnArchiveThinkers(void) {
       case tc_door:
         {
           vldoor_t *door = Z_MallocLevel (sizeof(*door));
-          P_LOAD_P(door);
+          P_LOAD_THINKER_BODY(door);
           door->sector = &sectors[(size_t)door->sector];
 
           //jff 1/31/98 unarchive line remembered by door as well
@@ -1321,7 +1312,7 @@ void P_UnArchiveThinkers(void) {
       case tc_floor:
         {
           floormove_t *floor = Z_MallocLevel (sizeof(*floor));
-          P_LOAD_P(floor);
+          P_LOAD_THINKER_BODY(floor);
           floor->sector = &sectors[(size_t)floor->sector];
           floor->sector->floordata = floor; //jff 2/22/98
           floor->thinker.function = T_MoveFloor;
@@ -1332,7 +1323,7 @@ void P_UnArchiveThinkers(void) {
       case tc_plat:
         {
           plat_t *plat = Z_MallocLevel (sizeof(*plat));
-          P_LOAD_P(plat);
+          P_LOAD_THINKER_BODY(plat);
           plat->sector = &sectors[(size_t)plat->sector];
           plat->sector->floordata = plat; //jff 2/22/98
 
@@ -1347,7 +1338,7 @@ void P_UnArchiveThinkers(void) {
       case tc_flash:
         {
           lightflash_t *flash = Z_MallocLevel (sizeof(*flash));
-          P_LOAD_P(flash);
+          P_LOAD_THINKER_BODY(flash);
           flash->sector = &sectors[(size_t)flash->sector];
           flash->sector->lightingdata = flash;
           flash->thinker.function = T_LightFlash;
@@ -1358,7 +1349,7 @@ void P_UnArchiveThinkers(void) {
       case tc_strobe:
         {
           strobe_t *strobe = Z_MallocLevel (sizeof(*strobe));
-          P_LOAD_P(strobe);
+          P_LOAD_THINKER_BODY(strobe);
           strobe->sector = &sectors[(size_t)strobe->sector];
           strobe->sector->lightingdata = strobe;
           strobe->thinker.function = T_StrobeFlash;
@@ -1369,7 +1360,7 @@ void P_UnArchiveThinkers(void) {
       case tc_glow:
         {
           glow_t *glow = Z_MallocLevel (sizeof(*glow));
-          P_LOAD_P(glow);
+          P_LOAD_THINKER_BODY(glow);
           glow->sector = &sectors[(size_t)glow->sector];
           glow->sector->lightingdata = glow;
           glow->thinker.function = T_Glow;
@@ -1380,7 +1371,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_glow:
         {
           zdoom_glow_t *glow = Z_MallocLevel (sizeof(*glow));
-          P_LOAD_P(glow);
+          P_LOAD_THINKER_BODY(glow);
           glow->sector = &sectors[(size_t)glow->sector];
           glow->sector->lightingdata = glow;
           glow->thinker.function = T_ZDoom_Glow;
@@ -1391,7 +1382,7 @@ void P_UnArchiveThinkers(void) {
       case tc_flicker:           // killough 10/4/98
         {
           fireflicker_t *flicker = Z_MallocLevel (sizeof(*flicker));
-          P_LOAD_P(flicker);
+          P_LOAD_THINKER_BODY(flicker);
           flicker->sector = &sectors[(size_t)flicker->sector];
           flicker->sector->lightingdata = flicker;
           flicker->thinker.function = T_FireFlicker;
@@ -1402,7 +1393,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_flicker:
         {
           zdoom_flicker_t *flicker = Z_MallocLevel (sizeof(*flicker));
-          P_LOAD_P(flicker);
+          P_LOAD_THINKER_BODY(flicker);
           flicker->sector = &sectors[(size_t)flicker->sector];
           flicker->sector->lightingdata = flicker;
           flicker->thinker.function = T_ZDoom_Flicker;
@@ -1414,7 +1405,7 @@ void P_UnArchiveThinkers(void) {
       case tc_elevator:
         {
           elevator_t *elevator = Z_MallocLevel (sizeof(*elevator));
-          P_LOAD_P(elevator);
+          P_LOAD_THINKER_BODY(elevator);
           elevator->sector = &sectors[(size_t)elevator->sector];
           elevator->sector->floordata = elevator; //jff 2/22/98
           elevator->sector->ceilingdata = elevator; //jff 2/22/98
@@ -1426,7 +1417,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_side:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateSideScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1435,7 +1426,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateFloorScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1444,7 +1435,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_ceiling:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateCeilingScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1453,7 +1444,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor_carry:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateFloorCarryScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1462,7 +1453,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_scroll_floor:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateZDoomFloorScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1471,7 +1462,7 @@ void P_UnArchiveThinkers(void) {
       case tc_zdoom_scroll_ceiling:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateZDoomCeilingScroller;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1480,7 +1471,7 @@ void P_UnArchiveThinkers(void) {
       case tc_thrust:
         {
           scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->thinker.function = dsda_UpdateThruster;
           P_AddThinker(&scroll->thinker);
           break;
@@ -1489,7 +1480,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_side_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlSideScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1498,7 +1489,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlFloorScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1507,7 +1498,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_ceiling_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlCeilingScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1516,7 +1507,7 @@ void P_UnArchiveThinkers(void) {
       case tc_scroll_floor_carry_control:
         {
           control_scroll_t *scroll = Z_MallocLevel (sizeof(*scroll));
-          P_LOAD_P(scroll);
+          P_LOAD_THINKER_BODY(scroll);
           scroll->scroll.thinker.function = dsda_UpdateControlFloorCarryScroller;
           P_AddThinker(&scroll->scroll.thinker);
           break;
@@ -1525,7 +1516,7 @@ void P_UnArchiveThinkers(void) {
       case tc_pusher:   // phares 3/22/98: new Push/Pull effect thinkers
         {
           pusher_t *pusher = Z_MallocLevel (sizeof(pusher_t));
-          P_LOAD_P(pusher);
+          P_LOAD_THINKER_BODY(pusher);
           pusher->thinker.function = T_Pusher;
           pusher->source = P_GetPushThing(pusher->affectee);
           P_AddThinker(&pusher->thinker);
@@ -1535,7 +1526,7 @@ void P_UnArchiveThinkers(void) {
       case tc_friction:
         {
           friction_t *friction = Z_MallocLevel (sizeof(friction_t));
-          P_LOAD_P(friction);
+          P_LOAD_THINKER_BODY(friction);
           friction->thinker.function = T_Friction;
           P_AddThinker(&friction->thinker);
           break;
@@ -1544,7 +1535,7 @@ void P_UnArchiveThinkers(void) {
       case tc_light:
         {
           light_t *light = Z_MallocLevel(sizeof(*light));
-          P_LOAD_P(light);
+          P_LOAD_THINKER_BODY(light);
           light->sector = &sectors[(size_t)light->sector];
           light->thinker.function = T_Light;
           P_AddThinker(&light->thinker);
@@ -1554,7 +1545,7 @@ void P_UnArchiveThinkers(void) {
       case tc_phase:
         {
           phase_t *phase = Z_MallocLevel(sizeof(*phase));
-          P_LOAD_P(phase);
+          P_LOAD_THINKER_BODY(phase);
           phase->sector = &sectors[(size_t)phase->sector];
           phase->sector->lightingdata = phase;
           phase->thinker.function = T_Phase;
@@ -1565,7 +1556,7 @@ void P_UnArchiveThinkers(void) {
       case tc_acs:
         {
           acs_t *acs = Z_MallocLevel(sizeof(*acs));
-          P_LOAD_P(acs);
+          P_LOAD_THINKER_BODY(acs);
           acs->line = (intptr_t) acs->line != -1 ? &lines[(size_t) acs->line] : NULL;
           acs->thinker.function = T_InterpretACS;
           P_AddThinker(&acs->thinker);
@@ -1575,7 +1566,7 @@ void P_UnArchiveThinkers(void) {
       case tc_pillar:
         {
           pillar_t *pillar = Z_MallocLevel(sizeof(*pillar));
-          P_LOAD_P(pillar);
+          P_LOAD_THINKER_BODY(pillar);
           pillar->sector = &sectors[(size_t)pillar->sector];
           pillar->sector->floordata = pillar;
           pillar->thinker.function = T_BuildPillar;
@@ -1586,7 +1577,7 @@ void P_UnArchiveThinkers(void) {
       case tc_floor_waggle:
         {
           planeWaggle_t *waggle = Z_MallocLevel(sizeof(*waggle));
-          P_LOAD_P(waggle);
+          P_LOAD_THINKER_BODY(waggle);
           waggle->sector = &sectors[(size_t)waggle->sector];
           waggle->sector->floordata = waggle;
           waggle->thinker.function = T_FloorWaggle;
@@ -1597,7 +1588,7 @@ void P_UnArchiveThinkers(void) {
       case tc_ceiling_waggle:
         {
           planeWaggle_t *waggle = Z_MallocLevel(sizeof(*waggle));
-          P_LOAD_P(waggle);
+          P_LOAD_THINKER_BODY(waggle);
           waggle->sector = &sectors[(size_t)waggle->sector];
           waggle->sector->floordata = waggle;
           waggle->thinker.function = T_CeilingWaggle;
@@ -1608,7 +1599,7 @@ void P_UnArchiveThinkers(void) {
       case tc_poly_rotate:
         {
           polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
+          P_LOAD_THINKER_BODY(poly);
           poly->thinker.function = T_RotatePoly;
           P_AddThinker(&poly->thinker);
           break;
@@ -1617,7 +1608,7 @@ void P_UnArchiveThinkers(void) {
       case tc_poly_move:
         {
           polyevent_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
+          P_LOAD_THINKER_BODY(poly);
           poly->thinker.function = T_MovePoly;
           P_AddThinker(&poly->thinker);
           break;
@@ -1626,7 +1617,7 @@ void P_UnArchiveThinkers(void) {
       case tc_poly_door:
         {
           polydoor_t *poly = Z_MallocLevel(sizeof(*poly));
-          P_LOAD_P(poly);
+          P_LOAD_THINKER_BODY(poly);
           poly->thinker.function = T_PolyDoor;
           P_AddThinker(&poly->thinker);
           break;
@@ -1635,7 +1626,7 @@ void P_UnArchiveThinkers(void) {
       case tc_quake:
         {
           quake_t *quake = Z_MallocLevel(sizeof(*quake));
-          P_LOAD_P(quake);
+          P_LOAD_THINKER_BODY(quake);
           quake->thinker.function = dsda_UpdateQuake;
           P_AddThinker(&quake->thinker);
           break;
@@ -1644,7 +1635,7 @@ void P_UnArchiveThinkers(void) {
       case tc_ambient_source:
         {
           ambient_source_t *ambient_source = Z_MallocLevel(sizeof(*ambient_source));
-          P_LOAD_P(ambient_source);
+          P_LOAD_THINKER_BODY(ambient_source);
           ambient_source->thinker.function = dsda_UpdateAmbientSource;
           P_AddThinker(&ambient_source->thinker);
           break;
