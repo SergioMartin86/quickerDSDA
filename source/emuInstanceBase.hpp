@@ -497,32 +497,25 @@ class EmuInstanceBase
 
   inline size_t getStateSize() const
   {
-    // serializeState() pushes a length header + only the *effective* archive
-    // bytes + the local tick commands. The worst case is the full _stateSize
-    // buffer, so the reported (allocation) size must bound all three.
-    return sizeof(size_t) + _stateSize + sizeof(local_cmds);
+    // serializeState() pushes the full _stateSize archive buffer plus the
+    // local tick commands, so the reported state size must include both or
+    // callers under-allocate and the (de)serializer overruns its buffer.
+    return _stateSize + sizeof(local_cmds);
   }
 
   inline jaffar::InputParser *getInputParser() const { return _inputParser.get(); }
-
+  
   void serializeState(jaffarCommon::serializer::Base& s) const
   {
     headlessSetSaveStatePointer(_saveData, _stateSize);
     dsda_ArchiveAll();
-    // Only the effective archive bytes are meaningful (the archive is
-    // self-terminating); copying the full fixed _stateSize buffer was ~1 MB of
-    // wasted memmove per state. Push a length header + just the live bytes.
-    size_t effSize = headlessGetEffectiveSaveSize();
-    s.push(&effSize, sizeof(effSize));
-    s.push(_saveData, effSize);
+    s.push(_saveData, _stateSize);
     s.push(local_cmds, sizeof(local_cmds));
   }
 
-  void deserializeState(jaffarCommon::deserializer::Base& d)
+  void deserializeState(jaffarCommon::deserializer::Base& d) 
   {
-    size_t effSize;
-    d.pop(&effSize, sizeof(effSize));
-    d.pop(_saveData, effSize);
+    d.pop(_saveData, _stateSize);
     headlessSetSaveStatePointer(_saveData, _stateSize);
     dsda_UnArchiveAll();
     d.pop(local_cmds, sizeof(local_cmds));
