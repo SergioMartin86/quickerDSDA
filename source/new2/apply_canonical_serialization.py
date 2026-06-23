@@ -173,46 +173,17 @@ def patch_psaveg(path):
     s = s.replace(
         "extern __STORAGE_MODIFIER int dsda_use_saved_subsector;  /* Design B incr.1 (p_maputl.c) */\n",
         "extern __STORAGE_MODIFIER int dsda_use_saved_subsector;  /* Design B incr.1 (p_maputl.c) */\n"
-        "extern __STORAGE_MODIFIER int dsda_skip_secnode_build;   /* Design B incr.2a (p_maputl.c) */\n"
-        "extern msecnode_t* P_AddSecnode(sector_t* s, mobj_t* thing, msecnode_t* nextnode);  /* incr.2a: 64-bit return */\n", 1)
-    # 7a. SAVE: append the thing's touching-sector indices (list order)
-    s = s.replace(
-        "      P_CanonicalizeMobj(mobj);   // Design A: zero remaining raw pointer bytes\n",
-        "      P_CanonicalizeMobj(mobj);   // Design A: zero remaining raw pointer bytes\n"
-        "      { /* incr.2a: save touching-sector indices to skip the blockmap scan on load */\n"
-        "        mobj_t *live = (mobj_t *)th; const msecnode_t *m; int count = 0;\n"
-        "        for (m = live->touching_sectorlist; m; m = m->m_tnext) count++;\n"
-        "        P_SAVE_X(count);\n"
-        "        for (m = live->touching_sectorlist; m; m = m->m_tnext) { int si = (int)(m->m_sector - sectors); P_SAVE_X(si); }\n"
-        "      }\n", 1)
-    # 7b. count pre-pass: skip the variable-length sec list after each tc_mobj
-    s = s.replace(
-        "        tc == tc_mobj           ? sizeof(mobj_t)           :\n"
-        "      0;\n    }",
-        "        tc == tc_mobj           ? sizeof(mobj_t)           :\n"
-        "      0;\n"
-        "      if (tc == tc_mobj) { int sc; memcpy(&sc, save_p, sizeof(int)); save_p += sizeof(int) + (size_t) sc * sizeof(int); } /* incr.2a */\n    }", 1)
-    # 7c. LOAD: read the saved sec indices (before the marked-for-deletion break)
-    s = s.replace(
-        "          mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */\n",
-        "          mobj->subsector = subsectors + (intptr_t) mobj->subsector; /* incr.1 */\n"
-        "          int sec_count; int sec_idx[256]; /* incr.2a */\n"
-        "          P_LOAD_X(sec_count);\n"
-        "          if (sec_count < 0 || sec_count > 256) I_Error(\"P_UnArchiveThinkers: bad touching-sector count %d\", sec_count);\n"
-        "          { int _i; for (_i = 0; _i < sec_count; _i++) P_LOAD_X(sec_idx[_i]); }\n", 1)
+        "extern __STORAGE_MODIFIER int dsda_skip_secnode_build;   /* Design B incr.2a (p_maputl.c) */\n", 1)
     # 7d. LOAD: skip P_CreateSecNodeList + rebuild touching_sectorlist from saved indices
     s = s.replace(
         "          dsda_use_saved_subsector = 1; /* incr.1: trust restored subsector */\n"
         "          P_SetThingPosition (mobj);\n"
         "          dsda_use_saved_subsector = 0;",
         "          dsda_use_saved_subsector = 1; /* incr.1 */\n"
-        "          dsda_skip_secnode_build = 1;  /* incr.2a */\n"
+        "          dsda_skip_secnode_build = 1;  /* incr.2a: skip blockmap scan (dsda_UnArchiveMSecNodes rebuilds) */\n"
         "          P_SetThingPosition (mobj);\n"
         "          dsda_skip_secnode_build = 0;\n"
-        "          dsda_use_saved_subsector = 0;\n"
-        "          { msecnode_t *sl = NULL; int _i; /* incr.2a: rebuild touching_sectorlist (reverse preserves order) */\n"
-        "            for (_i = sec_count - 1; _i >= 0; _i--) sl = P_AddSecnode(&sectors[sec_idx[_i]], mobj, sl);\n"
-        "            mobj->touching_sectorlist = sl; }", 1)
+        "          dsda_use_saved_subsector = 0;", 1)
     # 8. Design B incr.3b: O(1) bulk teardown of the previous state on load
     s = s.replace(
         "  // remove all the current thinkers\n"
