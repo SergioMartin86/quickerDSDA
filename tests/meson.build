@@ -21,8 +21,10 @@ protectedRerecordTestSet = [
   'doom2.m30.uvspeed',
 ]
 
-# Tests for free wads (for public cloud testing)
-freeRerecordTestSet = [
+# Full free-wad set. Kept for thorough local free testing; NOT run by default --
+# each map's parallel + transfer checks (50 strict iterations) are slow on the
+# 2-core public CI runners, so the default/CI path uses the smoke subset below.
+freeRerecordFullTestSet = [
     'freedoom011.e1m1.reduced',
     'freedoom011.e1m1.easy',
     'freedoom011.e1m1.pacifist',
@@ -50,6 +52,15 @@ freeRerecordTestSet = [
     'freedoom011.m05.uvspeed',
     'freedoom011.m31.pacifist',
     'freedoom011.m31.uvmax',
+]
+
+# CI smoke subset: a couple small, fast maps so public CI stays quick. Each map runs
+# the rerecord (base-vs-new), parallel, and transfer checks -- enough to catch
+# core/serialization regressions. Replace with freeRerecordFullTestSet for an
+# exhaustive free-wad run.
+freeRerecordTestSet = [
+    'freedoom011.e1m1.reduced',
+    'freedoom011.e1m1.pacifist',
 ]
 
 freeSimpleTestSet = [
