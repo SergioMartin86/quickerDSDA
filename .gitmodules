@@ -1,6 +1,6 @@
 [submodule "extern/jaffarCommon"]
 	path = extern/jaffarCommon
-	url = https://github.com/SergioMartin86/jaffarCommon
+	url = https://github.com/ToolAssisted-run/jaffarCommon
 [submodule "source/base/core"]
 	path = source/base/core
 	url = https://github.com/TASEmulators/dsda-doom.git
